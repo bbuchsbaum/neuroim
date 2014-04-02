@@ -1,0 +1,27 @@
+\docType{methods}
+\name{eachSlice}
+\alias{eachSlice}
+\alias{eachSlice,BrainVolume,function,logical-method}
+\alias{eachSlice,BrainVolume,function,missing-method}
+\title{Generic functions to apply a function to each (2D) slice of an image}
+\usage{
+eachSlice(x, FUN, withIndex, ...)
+
+\S4method{eachSlice}{BrainVolume,function,missing}(x, FUN)
+
+\S4method{eachSlice}{BrainVolume,function,logical}(x, FUN, withIndex)
+}
+\arguments{
+  \item{x}{the object}
+
+  \item{FUN}{a \code{function} taking one or two arguments
+  (depending on the value of \code{withIndex}}
+
+  \item{withIndex}{whether the index of the slice is
+  supplied as the second argument to the function}
+}
+\description{
+Generic functions to apply a function to each (2D) slice of
+an image
+}
+

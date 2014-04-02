@@ -1,0 +1,119 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 2097
+'[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] ===================================\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] === History of inputs to 3dcalc ===\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] === Input a:\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] [ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] 3dcopy /Users/ziad/Programs/matlab/spm2/templates/EPI.mnc /Users/ziad/AFNI_Templates_Atlases/SPM_MNI_AVG_TEMPLATES/Post_Oct0606/MNI_sk_EPI\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] 3drefit -view +tlrc MNI_sk_EPI+orig.HEAD\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] === Input b:\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] [ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] ===================================\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] === History of inputs to 3dcalc ===\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] === Input a:\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] [ziad@eomer.nimh.nih.gov: Wed Oct 11 11:13:23 2006] 3dcopy avg152T1.mnc /Users/ziad/AFNI_Templates_Atlases/TT_Avg_Templates/Post_Oct0606/MNI_sk_avg152T1\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 11:13:23 2006] 3drefit -view +tlrc MNI_sk_avg152T1+orig.HEAD\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] === Input b:\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] [ziad@eomer.nimh.nih.gov: Wed Oct 11 13:22:27 2006] 3dSkullStrip -input avg152T1_mni+tlrc -prefix tt3 -shrink_fac 0.99 -shrink_fac_bot_lim 0.55 -o_ply tt3.ply -debug 1 -visual -interactive\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] ===================================\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:50:11 2006] 3dcalc -a MNI_sk_avg152T1+tlrc. -b tt3+tlrc. -expr 'a*step(b)' -prefix T1ns3\n[ziad@eomer.nimh.nih.gov: Wed Oct 11 13:53:08 2006] Drawing plugin COPY: Fill->Data Type->Func\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] ===================================\n[ziad@eomer.nimh.nih.gov: Thu Oct 12 16:57:02 2006] 3dcalc -a MNI_sk_EPI+tlrc -b avg152T1_mni_ns+tlrc -expr 'a*step(b)' -prefix MNI_EPI~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_ANAT~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'XYZ__oiGtcEQD659HGMQi4iIxw~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Thu Oct 12 16:57:02 2006~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 2 3 0 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 1 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+             90            126            -72
+
+type  = float-attribute
+name  = DELTA
+count = 3
+             -2             -2              2
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+             -2             -0              0             90             -0
+             -2              0            126             -0             -0
+              2            -72
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 2
+              0      0.8313726
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 1 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 91 109 91 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 1
+ 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 1
+              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 8
+'MINC[0]~
+
+type = string-attribute
+name = BRICK_KEYWORDS
+count = 1
+'~
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'MSB_FIRST~
+
+type = integer-attribute
+name = NOTES_COUNT
+count = 1
+ 1
+
+type = string-attribute
+name = NOTE_NUMBER_001
+count = 32
+'Dataset in MNI coordinate space~
+
+type = string-attribute
+name = NOTE_DATE_001
+count = 25
+'Thu Oct 12 16:57:02 2006~

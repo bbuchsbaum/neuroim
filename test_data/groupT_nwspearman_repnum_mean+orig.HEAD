@@ -1,0 +1,156 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 1025
+'[brad@despina.rotman-baycrest.on.ca: Wed Sep 21 15:27:11 2011] 3dttest -prefix groupT_nwspearman_repnum_mean -base1 0 -set2 1001/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1005/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1008/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1009/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1011/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1012/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1014/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1016/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1017/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1018/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1019/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1020/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1021/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1022/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1023/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1024/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii 1026/GLM_BASIC/glm_basic//nwspearman_repnum_mean.nii~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_FUNC~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'XYZ_LdH6vGl9QgLWxsT8ID5wQQ~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Wed Sep 21 15:27:11 2011~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 0 3 1 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 30
+'groupT_nwspearman_repnum_mean~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 8
+'zyxt+TT~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 0 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+          -89.5          125.5          -71.5
+
+type  = float-attribute
+name  = DELTA
+count = 3
+              3             -3              3
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+              3              0              0          -89.5              0
+             -3              0          125.5              0              0
+              3          -71.5
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+              3              0              0          -89.5              0
+             -3              0          125.5              0              0
+              3          -71.5
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 4
+     -0.2302521      0.1565826      -9.054255       7.321135
+
+type  = float-attribute
+name  = STAT_AUX
+count = 1
+             16
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 2 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 61 73 61 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 2
+ 3 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 2
+              0              0
+
+type = string-attribute
+name = BRICK_STATSYM
+count = 15
+'none;Ttest(16)~
+
+type  = float-attribute
+name  = FDRCURVE_000001
+count = 103
+    0.005891142     0.09048364      0.2134925      0.2305846      0.2522472
+      0.2760552      0.2993726      0.3247871      0.3512983       0.382477
+      0.4134543      0.4468273      0.4797775      0.5164043      0.5164683
+      0.5164683      0.5164683      0.5171197      0.5321445      0.5510501
+      0.5854923      0.6153394      0.6448879      0.6836247      0.7193814
+      0.7582759       0.797906      0.8317488      0.8662062      0.9041876
+      0.9426664      0.9793611       1.014029        1.04827       1.083384
+       1.117163        1.14117       1.175971       1.212693       1.247066
+       1.266878       1.290849       1.300523        1.32805       1.344189
+       1.366014       1.386905       1.412694       1.441154       1.455857
+       1.475745       1.480885       1.507934       1.528079       1.551424
+       1.554995        1.55671       1.573215       1.601028       1.629206
+       1.644225       1.676534       1.685664       1.702567       1.734938
+       1.769464       1.806596       1.852695       1.876033       1.884097
+       1.892161       1.900225       1.908289       1.916353       1.924417
+       1.925454       1.925454       1.925454       1.925454       1.925454
+       1.925454       1.925454       1.925454       2.188406       2.212951
+       2.237496       2.262041       2.286586       2.311131       2.335676
+       2.360221       2.384766       2.409311       2.433856         2.4584
+       2.482945        2.50749       2.532035        2.55658       2.581125
+        2.60567       2.630215        2.65476
+
+type  = float-attribute
+name  = MDFCURVE_000001
+count = 28
+      -5.028534      0.2010608      0.9990759      0.9984272      0.9977766
+      0.9972517      0.9962862      0.9946828      0.9928544       0.988804
+      0.9843619      0.9773056      0.9676193      0.9554449      0.9368445
+      0.9094001      0.8808844       0.839557      0.7949194      0.7417138
+      0.6771859      0.6143696      0.5551738      0.4942705      0.2915638
+   5.034603e-09   5.034604e-09              0
+
+type = string-attribute
+name = TEMPLATE_SPACE
+count = 5
+'ORIG~
+
+type = integer-attribute
+name = INT_CMAP
+count = 1
+ 0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'MSB_FIRST~

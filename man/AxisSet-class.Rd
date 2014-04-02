@@ -1,0 +1,14 @@
+\docType{class}
+\name{AxisSet-class}
+\alias{AxisSet-class}
+\title{Virtual base class representing an ordered set of named axes.}
+\description{
+Virtual base class representing an ordered set of named
+axes.
+}
+\section{Slots}{
+
+\describe{
+\item{\code{ndim}}{the number of axes (or dimensions)}
+}}
+

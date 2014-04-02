@@ -1,0 +1,46 @@
+\name{BrainSpace}
+\alias{BrainSpace}
+\title{Constructor function for \code{\linkS4class{BrainSpace}} class}
+\usage{
+BrainSpace(Dim, origin = NULL, spacing = NULL, axes = NULL,
+  trans = NULL)
+}
+\arguments{
+  \item{Dim}{a vector describing the dimensions of the
+  spatial grid}
+
+  \item{origin}{the coordinate origin of the image space}
+
+  \item{spacing}{the real-valued voxel dimensions (usually
+  in millimeters)}
+
+  \item{axes}{the image axes ordering (default is based on
+  the NIFTI standard, Left-Posterior-Inferior)}
+
+  \item{trans}{a matrix representing the coordinate
+  transformation associated with the image space (default
+  is based on the NIFTI standard, Left-Posterior-Inferior)}
+}
+\value{
+an instance of class \code{\linkS4class{BrainSpace}}
+}
+\description{
+Constructor function for \code{\linkS4class{BrainSpace}}
+class
+}
+\note{
+one should rarely need to create a new \code{BrainSpace}
+instance, as it will almost always be created automatically
+using information stored in an image header. Also, If one
+already has an existing image object, its \code{BrainSpace}
+instance can be easily extracted with the \code{space}
+method.
+}
+\examples{
+bspace <- BrainSpace(c(64,64,64), origin=c(0,0,0), spacing=c(2,2,2))
+print(bspace)
+origin(bspace)
+axes(bspace)
+trans(bspace)
+}
+

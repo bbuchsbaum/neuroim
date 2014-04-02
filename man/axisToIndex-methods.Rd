@@ -1,0 +1,29 @@
+\docType{methods}
+\name{axisToIndex}
+\alias{axisToIndex}
+\alias{axisToIndex,BrainSpace,numeric,numeric-method}
+\title{Generic function to convert 1-dimensional real axis coordinates along a single axis dimension to an 1D index along the same axis}
+\usage{
+axisToIndex(x, real, dimNum)
+
+\S4method{axisToIndex}{BrainSpace,numeric,numeric}(x, real, dimNum)
+}
+\arguments{
+  \item{x}{the object}
+
+  \item{real}{the axis coordinates}
+
+  \item{dimNum}{the dimension number of the axis (e.g.  1,
+  2, 3)}
+}
+\value{
+a vector of axis indices
+}
+\description{
+Generic function to convert 1-dimensional real axis
+coordinates along a single axis dimension to an 1D index
+along the same axis
+
+axisToIndex
+}
+

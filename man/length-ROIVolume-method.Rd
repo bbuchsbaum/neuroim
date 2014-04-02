@@ -1,0 +1,15 @@
+\docType{methods}
+\name{length,ROIVolume-method}
+\alias{length,ROIVolume-method}
+\title{length}
+\usage{
+\S4method{length}{ROIVolume}(x)
+}
+\arguments{
+  \item{x}{an \R object.  For replacement, a vector or
+  factor.}
+}
+\description{
+length
+}
+

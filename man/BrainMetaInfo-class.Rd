@@ -1,0 +1,53 @@
+\docType{class}
+\name{BrainMetaInfo-class}
+\alias{BrainMetaInfo}
+\alias{BrainMetaInfo-class}
+\title{This class contains meta information from an image}
+\usage{
+BrainMetaInfo(Dim, spacing, origin = rep(0, length(spacing)),
+  dataType = "FLOAT", label = "",
+  spatialAxes = OrientationList3D$AXIAL_LPI, additionalAxes = NullAxis)
+}
+\arguments{
+  \item{Dim}{image dimensions}
+
+  \item{spacing}{voxel dimensions}
+
+  \item{origin}{coordinate origin}
+
+  \item{dataType}{the type of the data (e.g. " FLOAT")}
+
+  \item{label}{name(s) of images}
+
+  \item{spatialAxes}{image axes for spatial dimensions
+  (x,y,z)}
+
+  \item{additionalAxes}{axes for dimensions > 3 (e.g. time,
+  color band, direction)}
+}
+\value{
+an instance of class \code{\linkS4class{BrainMetaInfo}}
+}
+\description{
+This class contains meta information from an image
+
+This class contains meta information from an image
+}
+\section{Slots}{
+
+\describe{
+\item{\code{dataType}}{the data type code, e.g. FLOAT}
+
+\item{\code{Dim}}{image dimensions}
+
+\item{\code{spatialAxes}}{image axes for spatial dimensions (x,y,z)}
+
+\item{\code{additionalAxes}}{axes for dimensions > 3 (e.g. time, color band, direction)}
+
+\item{\code{spacing}}{voxel dimensions}
+
+\item{\code{origin}}{coordinate origin}
+
+\item{\code{label}}{name(s) of images}
+}}
+

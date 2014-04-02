@@ -1,0 +1,26 @@
+\name{RegionSphere}
+\alias{RegionSphere}
+\title{Create A Spherical Region of Interest}
+\usage{
+RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = TRUE)
+}
+\arguments{
+  \item{bvol}{an image volume}
+
+  \item{centroid}{the center of the sphere in voxel space}
+
+  \item{radius}{the radius in real units (e.g. millimeters)
+  of the spherical ROI}
+
+  \item{fill}{optional value(s) to assign to data slot}
+
+  \item{nonzero}{keep only nonzero elements from
+  \code{bvol}}
+}
+\value{
+an instance of class \code{ROIVolume}
+}
+\description{
+Create A Spherical Region of Interest
+}
+

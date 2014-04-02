@@ -1,0 +1,22 @@
+\docType{methods}
+\name{writeElements}
+\alias{writeElements}
+\alias{writeElements,BinaryWriter,numeric-method}
+\title{Generic function to write a sequence of elements from an input source}
+\usage{
+writeElements(x, els)
+
+\S4method{writeElements}{BinaryWriter,numeric}(x, els)
+}
+\arguments{
+  \item{x}{the output channel}
+
+  \item{els}{the elements to write}
+}
+\description{
+Generic function to write a sequence of elements from an
+input source
+
+writeElements
+}
+

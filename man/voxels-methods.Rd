@@ -1,0 +1,26 @@
+\docType{methods}
+\name{voxels}
+\alias{voxels}
+\alias{voxels,Kernel-method}
+\title{extract voxel coordinates}
+\usage{
+voxels(x, ...)
+
+\S4method{voxels}{Kernel}(x, centerVoxel = NULL)
+}
+\arguments{
+  \item{x}{the object to extract voxels from}
+
+  \item{...}{addiitonal arguments to function}
+
+  \item{x}{the Kernel \code{\linkS4class{Kernel}} object}
+
+  \item{centerVoxel}{the absolute location of the center of
+  the voxel, default is (0,0,0)}
+}
+\description{
+extract voxel coordinates
+
+extract voxels from a \code{Kernel} object
+}
+

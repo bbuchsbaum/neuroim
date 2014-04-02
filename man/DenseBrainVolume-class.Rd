@@ -1,0 +1,30 @@
+\docType{class}
+\name{DenseBrainVolume-class}
+\alias{DenseBrainVolume}
+\alias{DenseBrainVolume-class}
+\title{DenseBrainVolume}
+\usage{
+DenseBrainVolume(data, space, source = NULL, label = "", indices = NULL)
+}
+\arguments{
+  \item{data}{a three-dimensional \code{array}}
+
+  \item{space}{an instance of class
+  \code{\linkS4class{BrainSpace}}}
+
+  \item{source}{an instance of class
+  \code{\linkS4class{BrainSource}}}
+
+  \item{label}{a \code{character} string}
+
+  \item{indices}{an optional 1-d index vector}
+}
+\value{
+\code{\linkS4class{DenseBrainVolume}} instance
+}
+\description{
+Three-dimensional brain image, backed by an \code{array}
+
+Construct a \code{\linkS4class{DenseBrainVolume}} instance
+}
+

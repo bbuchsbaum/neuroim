@@ -1,0 +1,28 @@
+\docType{class}
+\name{BrainVectorSource-class}
+\alias{BrainVectorSource}
+\alias{BrainVectorSource-class}
+\title{BrainVectorSource}
+\usage{
+BrainVectorSource(fileName, indices = NULL, mask = NULL)
+}
+\arguments{
+  \item{fileName}{name of the 4-dimensional image file}
+
+  \item{indices}{the subset of volume indices to load -- if
+  \code{NULL} then all volumes will be loaded}
+
+  \item{mask}{the subset of voxels that will be loaded}
+}
+\description{
+A class that is used to produce a
+\code{\linkS4class{BrainVector}} instance
+
+Construct a \code{\linkS4class{BrainVectorSource}} object
+}
+\section{Slots}{
+
+\describe{
+\item{\code{indices}}{the index vector of the volumes to be loaded}
+}}
+

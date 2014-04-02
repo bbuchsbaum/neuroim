@@ -1,0 +1,30 @@
+\docType{methods}
+\name{trans}
+\alias{trans}
+\alias{trans,BrainData-method}
+\alias{trans,BrainMetaInfo-method}
+\alias{trans,BrainSpace-method}
+\alias{trans,NIfTIMetaInfo-method}
+\title{Generic getter to extract image coordinate transformation}
+\usage{
+trans(x)
+
+\S4method{trans}{BrainMetaInfo}(x)
+
+\S4method{trans}{NIfTIMetaInfo}(x)
+
+\S4method{trans}{BrainSpace}(x)
+
+\S4method{trans}{BrainData}(x)
+}
+\arguments{
+  \item{x}{an object with a transformation}
+}
+\description{
+Generic getter to extract image coordinate transformation
+
+trans
+
+trans
+}
+

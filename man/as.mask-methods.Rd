@@ -1,0 +1,22 @@
+\docType{methods}
+\name{as.mask}
+\alias{as.mask}
+\alias{as.mask,BrainVolume,missing-method}
+\alias{as.mask,BrainVolume,numeric-method}
+\title{Convert to a LogicalBrainVolume}
+\usage{
+as.mask(x, indices)
+
+\S4method{as.mask}{BrainVolume,missing}(x)
+
+\S4method{as.mask}{BrainVolume,numeric}(x, indices)
+}
+\arguments{
+  \item{x}{the object to binarize}
+
+  \item{indices}{the indices to set to TRUE}
+}
+\description{
+Convert to a LogicalBrainVolume
+}
+

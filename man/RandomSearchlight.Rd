@@ -1,0 +1,16 @@
+\name{RandomSearchlight}
+\alias{RandomSearchlight}
+\title{Create an Random Searchlight iterator}
+\usage{
+RandomSearchlight(mask, radius)
+}
+\arguments{
+  \item{mask}{an image volume containing valid central
+  voxels for roving searchlight}
+
+  \item{radius}{in mm of spherical searchlight}
+}
+\description{
+Create an Random Searchlight iterator
+}
+

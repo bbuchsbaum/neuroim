@@ -1,0 +1,25 @@
+\docType{methods}
+\name{dataFile}
+\alias{dataFile}
+\alias{dataFile,BrainFileDescriptor,character-method}
+\title{Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.}
+\usage{
+dataFile(x, fileName)
+
+\S4method{dataFile}{BrainFileDescriptor,character}(x, fileName)
+}
+\arguments{
+  \item{x}{descriptor instance}
+
+  \item{fileName}{file name to be stripped of its
+  extension}
+}
+\value{
+the correct header name
+}
+\description{
+Generic function to get the name of the data file, given a
+file name and a \code{\linkS4class{BrainFileDescriptor}}
+instance.
+}
+

@@ -1,0 +1,21 @@
+\name{as}
+\alias{as}
+\title{conversion from ROIVolume to DenseBrainVolume}
+\description{
+conversion from ROIVolume to DenseBrainVolume
+
+conversion from DenseBrainVolume to array
+
+conversion from SparseBrainVolume to array
+
+conversion from SparseBrainVolume to numeric
+
+conversion from BrainVolume to LogicalBrainVolume
+
+conversion from DenseBrainVolume to LogicalBrainVolume
+
+conversion from ClusteredBrainVolume to LogicalBrainVolume
+
+conversion from BrainVolume to array
+}
+

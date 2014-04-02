@@ -1,0 +1,20 @@
+\name{ROIVolume}
+\alias{ROIVolume}
+\title{Create an instance of class ROIVolume}
+\usage{
+ROIVolume(vspace, coords, data = rep(length(indices), 1))
+}
+\arguments{
+  \item{vspace}{the volume \code{BrainSpace}}
+
+  \item{coords}{matrix of voxel coordinates}
+
+  \item{data}{the data values}
+}
+\value{
+an instance of class \code{ROIVolume}
+}
+\description{
+Create an instance of class ROIVolume
+}
+

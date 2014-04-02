@@ -1,0 +1,35 @@
+\docType{methods}
+\name{writeVolume}
+\alias{writeVolume}
+\alias{writeVolume,BrainVolume,character,character,missing-method}
+\alias{writeVolume,BrainVolume,character,missing,character-method}
+\alias{writeVolume,BrainVolume,character,missing,missing-method}
+\alias{writeVolume,ClusteredBrainVolume,character,missing,missing-method}
+\title{Generic function to write an image volume to disk}
+\usage{
+writeVolume(x, fileName, format, dataType)
+
+\S4method{writeVolume}{BrainVolume,character,missing,missing}(x, fileName)
+
+\S4method{writeVolume}{ClusteredBrainVolume,character,missing,missing}(x,
+  fileName)
+
+\S4method{writeVolume}{BrainVolume,character,character,missing}(x, fileName,
+  format)
+
+\S4method{writeVolume}{BrainVolume,character,missing,character}(x, fileName,
+  dataType)
+}
+\arguments{
+  \item{x}{an image object}
+
+  \item{fileName}{a file name}
+
+  \item{format}{file format string}
+
+  \item{dataType}{output data type}
+}
+\description{
+Generic function to write an image volume to disk
+}
+

@@ -1,0 +1,19 @@
+\docType{methods}
+\name{as.matrix,DenseBrainVector-method}
+\alias{as.matrix,DenseBrainVector-method}
+\alias{as.matrix,SparseBrainVector-method}
+\title{convert a DenseBrainVector to a matrix}
+\usage{
+\S4method{as.matrix}{DenseBrainVector}(x)
+
+\S4method{as.matrix}{SparseBrainVector}(x)
+}
+\arguments{
+  \item{x}{an \R object.}
+}
+\description{
+convert a DenseBrainVector to a matrix
+
+convert SparseBrainVector to matrix
+}
+

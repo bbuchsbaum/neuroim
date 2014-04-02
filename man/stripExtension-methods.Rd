@@ -1,0 +1,24 @@
+\docType{methods}
+\name{stripExtension}
+\alias{stripExtension}
+\alias{stripExtension,BrainFileDescriptor,character-method}
+\title{Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.}
+\usage{
+stripExtension(x, fileName)
+
+\S4method{stripExtension}{BrainFileDescriptor,character}(x, fileName)
+}
+\arguments{
+  \item{x}{descriptor instance}
+
+  \item{fileName}{file name to be stripped of its
+  extension}
+}
+\value{
+fileName without extension
+}
+\description{
+Generic function to strip extension from file name, given a
+\code{\linkS4class{BrainFileDescriptor}} instance.
+}
+

@@ -1,0 +1,22 @@
+\name{Layer}
+\alias{Layer}
+\title{create a Layer object}
+\usage{
+Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0))
+}
+\arguments{
+  \item{vol}{an image volume}
+
+  \item{colorMap}{a lookup table defining mapping from
+  image intensity values to colors}
+
+  \item{thresh}{a range (min,max) defining the threshold
+  window for determining image opacity}
+}
+\value{
+an object of class \code{Layer}
+}
+\description{
+create a Layer object
+}
+

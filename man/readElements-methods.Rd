@@ -1,0 +1,25 @@
+\docType{methods}
+\name{readElements}
+\alias{readElements}
+\alias{readElements,BinaryReader,numeric-method}
+\title{Generic function to read a sequence of elements from an input source}
+\usage{
+readElements(x, numElements)
+
+\S4method{readElements}{BinaryReader,numeric}(x, numElements)
+}
+\arguments{
+  \item{x}{the input channel}
+
+  \item{numElements}{the number of elements to read}
+}
+\value{
+the elements as a vector
+}
+\description{
+Generic function to read a sequence of elements from an
+input source
+
+readElements
+}
+

@@ -1,0 +1,26 @@
+\docType{methods}
+\name{fileMatches}
+\alias{fileMatches}
+\alias{fileMatches,BrainFileDescriptor,character-method}
+\title{Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
+Will test for match to either header file or data file}
+\usage{
+fileMatches(x, fileName)
+
+\S4method{fileMatches}{BrainFileDescriptor,character}(x, fileName)
+}
+\arguments{
+  \item{x}{object for which the file name is to matched to}
+
+  \item{fileName}{file name to be matched}
+}
+\value{
+TRUE for match, FALSE otherwise
+}
+\description{
+Generic function to test whether a file name conforms to
+the given \code{\linkS4class{BrainFileDescriptor}}
+instance. Will test for match to either header file or data
+file
+}
+

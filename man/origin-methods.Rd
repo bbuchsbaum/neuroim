@@ -1,0 +1,24 @@
+\docType{methods}
+\name{origin}
+\alias{origin}
+\alias{origin,BrainData-method}
+\alias{origin,BrainSpace-method}
+\title{Generic getter to extract image origin}
+\usage{
+origin(x)
+
+\S4method{origin}{BrainSpace}(x)
+
+\S4method{origin}{BrainData}(x)
+}
+\arguments{
+  \item{x}{an object with an origin}
+}
+\description{
+Generic getter to extract image origin
+
+origin
+
+origin
+}
+

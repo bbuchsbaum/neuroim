@@ -1,0 +1,24 @@
+\docType{methods}
+\name{lookup}
+\alias{lookup}
+\alias{lookup,IndexLookupVolume,numeric-method}
+\alias{lookup,SparseBrainVector,numeric-method}
+\title{Index Lookup operation}
+\usage{
+lookup(x, i, ...)
+
+\S4method{lookup}{IndexLookupVolume,numeric}(x, i)
+
+\S4method{lookup}{SparseBrainVector,numeric}(x, i)
+}
+\arguments{
+  \item{x}{the object to query}
+}
+\description{
+Index Lookup operation
+
+lookup
+
+lookup
+}
+

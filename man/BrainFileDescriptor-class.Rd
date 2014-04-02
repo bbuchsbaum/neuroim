@@ -1,0 +1,21 @@
+\docType{class}
+\name{BrainFileDescriptor-class}
+\alias{BrainFileDescriptor-class}
+\title{This class represents a neuroimaging file format}
+\description{
+This class represents a neuroimaging file format
+}
+\section{Slots}{
+
+\describe{
+\item{\code{fileFormat}}{the name of the file format (e.g. NIfTI)}
+
+\item{\code{headerEncoding}}{the file encoding of the header file (e.g. 'raw' for binary, 'gzip' for gz compressed')}
+
+\item{\code{headerExtension}}{the file extension for the header file (e.g. 'nii' for NIfTI single files)}
+
+\item{\code{dataEncoding}}{the file encoding for the data file}
+
+\item{\code{dataExtension}}{the file extension for the data file (e.g. 'nii' for NIfTI single files)}
+}}
+

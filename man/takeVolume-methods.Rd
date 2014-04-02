@@ -1,0 +1,25 @@
+\docType{methods}
+\name{takeVolume}
+\alias{takeVolume}
+\alias{takeVolume,BrainVector,numeric-method}
+\alias{takeVolume,SparseBrainVector,numeric-method}
+\title{Generic function to extract a volume from a four-dimensional image}
+\usage{
+takeVolume(x, i, ...)
+
+\S4method{takeVolume}{BrainVector,numeric}(x, i, merge = FALSE)
+
+\S4method{takeVolume}{SparseBrainVector,numeric}(x, i, merge = FALSE)
+}
+\arguments{
+  \item{x}{four-dimensional image}
+
+  \item{i}{the indices of the volume(s) to extract}
+}
+\description{
+Generic function to extract a volume from a
+four-dimensional image
+
+takeVolume extract volume from SparseBrainVector
+}
+

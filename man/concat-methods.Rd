@@ -1,0 +1,47 @@
+\docType{methods}
+\name{concat}
+\alias{concat}
+\alias{concat,BrainVector,BrainVector-method}
+\alias{concat,BrainVector,BrainVolume-method}
+\alias{concat,BrainVolume,BrainVector-method}
+\alias{concat,DenseBrainVolume,DenseBrainVolume-method}
+\alias{concat,SparseBrainVector,SparseBrainVector-method}
+\title{Concatenate two objects}
+\usage{
+concat(x, y, ...)
+
+\S4method{concat}{BrainVector,BrainVolume}(x, y, ...)
+
+\S4method{concat}{BrainVolume,BrainVector}(x, y, ...)
+
+\S4method{concat}{BrainVector,BrainVector}(x, y, ...)
+
+\S4method{concat}{DenseBrainVolume,DenseBrainVolume}(x, y, ...)
+
+\S4method{concat}{SparseBrainVector,SparseBrainVector}(x, y, ...)
+}
+\arguments{
+  \item{x}{the first object}
+
+  \item{y}{the second object}
+
+  \item{...}{additonal objects}
+
+  \item{x}{the first volume}
+
+  \item{y}{the second volume}
+
+  \item{...}{extra arguments of class BrainVolume or other
+  concatenable objects}
+}
+\description{
+Concatenate two objects
+
+concatenate two BrainVolumes
+
+concat
+}
+\note{
+dimensions of x and y must be equal
+}
+

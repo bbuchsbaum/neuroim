@@ -1,0 +1,28 @@
+\docType{class}
+\name{SparseBrainVectorSource-class}
+\alias{SparseBrainVectorSource}
+\alias{SparseBrainVectorSource-class}
+\title{SparseBrainVectorSource}
+\usage{
+SparseBrainVectorSource(metaInfo, indices, mask)
+}
+\arguments{
+  \item{metaInfo}{an object of class
+  \code{\linkS4class{BrainMetaInfo}}}
+
+  \item{indices}{a vector of 1D indices}
+
+  \item{mask}{a 3D \code{array} of type \code{logical}}
+}
+\description{
+A class that is used to produce a
+\code{\linkS4class{SparseBrainVector}} instance
+
+constructs a SparseBrainVectorSource object
+}
+\section{Slots}{
+
+\describe{
+\item{\code{mask}}{the subset of voxels that will be stored in memory}
+}}
+

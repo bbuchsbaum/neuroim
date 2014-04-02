@@ -1,0 +1,29 @@
+\name{makeVolume}
+\alias{makeVolume}
+\title{makeVolume}
+\usage{
+makeVolume(data = NULL, refvol, source = NULL, label = "",
+  indices = NULL)
+}
+\arguments{
+  \item{data}{a three-dimensional \code{array}}
+
+  \item{refvol}{an instance of class
+  \code{\linkS4class{BrainVolume}} containing the reference
+  space for the new volume.}
+
+  \item{label}{a \code{character} string}
+
+  \item{source}{an instance of class
+  \code{\linkS4class{BrainSource}}}
+
+  \item{indices}{an optional 1-d index vector}
+}
+\value{
+\code{\linkS4class{DenseBrainVolume}} instance
+}
+\description{
+Construct a \code{\linkS4class{BrainVolume}} instance,
+using default (dense) implementation
+}
+

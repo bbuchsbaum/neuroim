@@ -1,0 +1,39 @@
+\docType{class}
+\name{BrainVolume-class}
+\alias{BrainVolume}
+\alias{BrainVolume-class}
+\title{Three-dimensional brain image}
+\usage{
+BrainVolume(data, space, source = NULL, label = "", indices = NULL)
+}
+\arguments{
+  \item{data}{a three-dimensional \code{array}}
+
+  \item{space}{an instance of class
+  \code{\linkS4class{BrainSpace}}}
+
+  \item{source}{an instance of class
+  \code{\linkS4class{BrainSource}}}
+
+  \item{label}{a \code{character} string to identify
+  volume}
+
+  \item{indices}{an 1D vector that gives the linear indices
+  of the associated \code{data} vector}
+}
+\value{
+a \code{\linkS4class{DenseBrainVolume}} instance
+}
+\description{
+Three-dimensional brain image
+
+Construct a \code{\linkS4class{BrainVolume}} instance,
+using default (dense) implementation
+}
+\examples{
+bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
+dat <- array(rnorm(64*64*64), c(64,64,64))
+bvol <- BrainVolume(dat,bspace, label="test")
+print(bvol)
+}
+

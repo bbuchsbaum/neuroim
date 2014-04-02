@@ -1,0 +1,989 @@
+
+type = string-attribute
+name = HISTORY_NOTE
+count = 9412
+'[brad@bradley-buchsbaums-mac-pro.local: Wed Aug 11 19:33:37 2010] 3dDeconvolve -input /Users/brad/data2/video_pilot/1008/epi/rscan001.nii /Users/brad/data2/video_pilot/1008/epi/rscan002.nii /Users/brad/data2/video_pilot/1008/epi/rscan003.nii /Users/brad/data2/video_pilot/1008/epi/rscan004.nii /Users/brad/data2/video_pilot/1008/epi/rscan005.nii /Users/brad/data2/video_pilot/1008/epi/rscan006.nii /Users/brad/data2/video_pilot/1008/epi/rscan007.nii /Users/brad/data2/video_pilot/1008/epi/rscan008.nii /Users/brad/data2/video_pilot/1008/epi/rscan009.nii -mask /Users/brad/data2/video_pilot/1008/epi/global_mask.nii -polort 5 -num_stimts 108 -num_glt 28 -stim_file 1 Ballet_reg.1D -stim_file 2 Brando_reg.1D -stim_file 3 CarChase_reg.1D -stim_file 4 Carlin_reg.1D -stim_file 5 flatworm_reg.1D -stim_file 6 Jordan_reg.1D -stim_file 7 McEnroe_reg.1D -stim_file 8 Model_reg.1D -stim_file 9 origami_reg.1D -stim_file 10 PlanetEarth3_reg.1D -stim_file 11 PlanetEarth7_reg.1D -stim_file 12 rose_reg.1D -stim_file 13 Ballet:1_reg.1D -stim_file 14 Brando:1_reg.1D -stim_file 15 CarChase:1_reg.1D -stim_file 16 Carlin:1_reg.1D -stim_file 17 flatworm:1_reg.1D -stim_file 18 Jordan:1_reg.1D -stim_file 19 McEnroe:1_reg.1D -stim_file 20 Model:1_reg.1D -stim_file 21 origami:1_reg.1D -stim_file 22 PlanetEarth3:1_reg.1D -stim_file 23 PlanetEarth7:1_reg.1D -stim_file 24 rose:1_reg.1D -stim_file 25 Ballet:2_reg.1D -stim_file 26 Brando:2_reg.1D -stim_file 27 CarChase:2_reg.1D -stim_file 28 Carlin:2_reg.1D -stim_file 29 flatworm:2_reg.1D -stim_file 30 Jordan:2_reg.1D -stim_file 31 McEnroe:2_reg.1D -stim_file 32 Model:2_reg.1D -stim_file 33 origami:2_reg.1D -stim_file 34 PlanetEarth3:2_reg.1D -stim_file 35 PlanetEarth7:2_reg.1D -stim_file 36 rose:2_reg.1D -stim_file 37 Run1_Nuisance#1_reg.1D -stim_file 38 Run1_Nuisance#2_reg.1D -stim_file 39 Run1_Nuisance#3_reg.1D -stim_file 40 Run1_Nuisance#4_reg.1D -stim_file 41 Run1_Nuisance#5_reg.1D -stim_file 42 Run2_Nuisance#1_reg.1D -stim_file 43 Run2_Nuisance#2_reg.1D -stim_file 44 Run2_Nuisance#3_reg.1D -stim_file 45 Run2_Nuisance#4_reg.1D -stim_file 46 Run2_Nuisance#5_reg.1D -stim_file 47 Run3_Nuisance#1_reg.1D -stim_file 48 Run3_Nuisance#2_reg.1D -stim_file 49 Run3_Nuisance#3_reg.1D -stim_file 50 Run3_Nuisance#4_reg.1D -stim_file 51 Run3_Nuisance#5_reg.1D -stim_file 52 Run4_Nuisance#1_reg.1D -stim_file 53 Run4_Nuisance#2_reg.1D -stim_file 54 Run4_Nuisance#3_reg.1D -stim_file 55 Run4_Nuisance#4_reg.1D -stim_file 56 Run4_Nuisance#5_reg.1D -stim_file 57 Run5_Nuisance#1_reg.1D -stim_file 58 Run5_Nuisance#2_reg.1D -stim_file 59 Run5_Nuisance#3_reg.1D -stim_file 60 Run5_Nuisance#4_reg.1D -stim_file 61 Run5_Nuisance#5_reg.1D -stim_file 62 Run6_Nuisance#1_reg.1D -stim_file 63 Run6_Nuisance#2_reg.1D -stim_file 64 Run6_Nuisance#3_reg.1D -stim_file 65 Run6_Nuisance#4_reg.1D -stim_file 66 Run6_Nuisance#5_reg.1D -stim_file 67 Run7_Nuisance#1_reg.1D -stim_file 68 Run7_Nuisance#2_reg.1D -stim_file 69 Run7_Nuisance#3_reg.1D -stim_file 70 Run7_Nuisance#4_reg.1D -stim_file 71 Run7_Nuisance#5_reg.1D -stim_file 72 Run8_Nuisance#1_reg.1D -stim_file 73 Run8_Nuisance#2_reg.1D -stim_file 74 Run8_Nuisance#3_reg.1D -stim_file 75 Run8_Nuisance#4_reg.1D -stim_file 76 Run8_Nuisance#5_reg.1D -stim_file 77 Run9_Nuisance#1_reg.1D -stim_file 78 Run9_Nuisance#2_reg.1D -stim_file 79 Run9_Nuisance#3_reg.1D -stim_file 80 Run9_Nuisance#4_reg.1D -stim_file 81 Run9_Nuisance#5_reg.1D -stim_file 82 Run1_Motion#1_reg.1D -stim_file 83 Run1_Motion#2_reg.1D -stim_file 84 Run1_Motion#3_reg.1D -stim_file 85 Run2_Motion#1_reg.1D -stim_file 86 Run2_Motion#2_reg.1D -stim_file 87 Run2_Motion#3_reg.1D -stim_file 88 Run3_Motion#1_reg.1D -stim_file 89 Run3_Motion#2_reg.1D -stim_file 90 Run3_Motion#3_reg.1D -stim_file 91 Run4_Motion#1_reg.1D -stim_file 92 Run4_Motion#2_reg.1D -stim_file 93 Run4_Motion#3_reg.1D -stim_file 94 Run5_Motion#1_reg.1D -stim_file 95 Run5_Motion#2_reg.1D -stim_file 96 Run5_Motion#3_reg.1D -stim_file 97 Run6_Motion#1_reg.1D -stim_file 98 Run6_Motion#2_reg.1D -stim_file 99 Run6_Motion#3_reg.1D -stim_file 100 Run7_Motion#1_reg.1D -stim_file 101 Run7_Motion#2_reg.1D -stim_file 102 Run7_Motion#3_reg.1D -stim_file 103 Run8_Motion#1_reg.1D -stim_file 104 Run8_Motion#2_reg.1D -stim_file 105 Run8_Motion#3_reg.1D -stim_file 106 Run9_Motion#1_reg.1D -stim_file 107 Run9_Motion#2_reg.1D -stim_file 108 Run9_Motion#3_reg.1D -stim_label 1 Ballet -stim_label 2 Brando -stim_label 3 CarChase -stim_label 4 Carlin -stim_label 5 flatworm -stim_label 6 Jordan -stim_label 7 McEnroe -stim_label 8 Model -stim_label 9 origami -stim_label 10 PlanetEarth3 -stim_label 11 PlanetEarth7 -stim_label 12 rose -stim_label 13 Ballet:1 -stim_label 14 Brando:1 -stim_label 15 CarChase:1 -stim_label 16 Carlin:1 -stim_label 17 flatworm:1 -stim_label 18 Jordan:1 -stim_label 19 McEnroe:1 -stim_label 20 Model:1 -stim_label 21 origami:1 -stim_label 22 PlanetEarth3:1 -stim_label 23 PlanetEarth7:1 -stim_label 24 rose:1 -stim_label 25 Ballet:2 -stim_label 26 Brando:2 -stim_label 27 CarChase:2 -stim_label 28 Carlin:2 -stim_label 29 flatworm:2 -stim_label 30 Jordan:2 -stim_label 31 McEnroe:2 -stim_label 32 Model:2 -stim_label 33 origami:2 -stim_label 34 PlanetEarth3:2 -stim_label 35 PlanetEarth7:2 -stim_label 36 rose:2 -stim_label 37 Run1_Nuisance#1 -stim_label 38 Run1_Nuisance#2 -stim_label 39 Run1_Nuisance#3 -stim_label 40 Run1_Nuisance#4 -stim_label 41 Run1_Nuisance#5 -stim_label 42 Run2_Nuisance#1 -stim_label 43 Run2_Nuisance#2 -stim_label 44 Run2_Nuisance#3 -stim_label 45 Run2_Nuisance#4 -stim_label 46 Run2_Nuisance#5 -stim_label 47 Run3_Nuisance#1 -stim_label 48 Run3_Nuisance#2 -stim_label 49 Run3_Nuisance#3 -stim_label 50 Run3_Nuisance#4 -stim_label 51 Run3_Nuisance#5 -stim_label 52 Run4_Nuisance#1 -stim_label 53 Run4_Nuisance#2 -stim_label 54 Run4_Nuisance#3 -stim_label 55 Run4_Nuisance#4 -stim_label 56 Run4_Nuisance#5 -stim_label 57 Run5_Nuisance#1 -stim_label 58 Run5_Nuisance#2 -stim_label 59 Run5_Nuisance#3 -stim_label 60 Run5_Nuisance#4 -stim_label 61 Run5_Nuisance#5 -stim_label 62 Run6_Nuisance#1 -stim_label 63 Run6_Nuisance#2 -stim_label 64 Run6_Nuisance#3 -stim_label 65 Run6_Nuisance#4 -stim_label 66 Run6_Nuisance#5 -stim_label 67 Run7_Nuisance#1 -stim_label 68 Run7_Nuisance#2 -stim_label 69 Run7_Nuisance#3 -stim_label 70 Run7_Nuisance#4 -stim_label 71 Run7_Nuisance#5 -stim_label 72 Run8_Nuisance#1 -stim_label 73 Run8_Nuisance#2 -stim_label 74 Run8_Nuisance#3 -stim_label 75 Run8_Nuisance#4 -stim_label 76 Run8_Nuisance#5 -stim_label 77 Run9_Nuisance#1 -stim_label 78 Run9_Nuisance#2 -stim_label 79 Run9_Nuisance#3 -stim_label 80 Run9_Nuisance#4 -stim_label 81 Run9_Nuisance#5 -stim_label 82 Run1_Motion#1 -stim_label 83 Run1_Motion#2 -stim_label 84 Run1_Motion#3 -stim_label 85 Run2_Motion#1 -stim_label 86 Run2_Motion#2 -stim_label 87 Run2_Motion#3 -stim_label 88 Run3_Motion#1 -stim_label 89 Run3_Motion#2 -stim_label 90 Run3_Motion#3 -stim_label 91 Run4_Motion#1 -stim_label 92 Run4_Motion#2 -stim_label 93 Run4_Motion#3 -stim_label 94 Run5_Motion#1 -stim_label 95 Run5_Motion#2 -stim_label 96 Run5_Motion#3 -stim_label 97 Run6_Motion#1 -stim_label 98 Run6_Motion#2 -stim_label 99 Run6_Motion#3 -stim_label 100 Run7_Motion#1 -stim_label 101 Run7_Motion#2 -stim_label 102 Run7_Motion#3 -stim_label 103 Run8_Motion#1 -stim_label 104 Run8_Motion#2 -stim_label 105 Run8_Motion#3 -stim_label 106 Run9_Motion#1 -stim_label 107 Run9_Motion#2 -stim_label 108 Run9_Motion#3 -TR_times 1 -gltsym glt_FNuisance.txt -gltsym glt_FMotion.txt -gltsym glt_main_video.txt -gltsym glt_main_rep_video.txt -gltsym glt_ballet_diff.txt -gltsym glt_ballet_rep_diff.txt -gltsym glt_brando_diff.txt -gltsym glt_brando_rep_diff.txt -gltsym glt_carchase_diff.txt -gltsym glt_carchase_rep_diff.txt -gltsym glt_carlin_diff.txt -gltsym glt_carlin_rep_diff.txt -gltsym glt_flatworm_diff.txt -gltsym glt_flatworm_rep_diff.txt -gltsym glt_jordan_diff.txt -gltsym glt_jordan_rep_diff.txt -gltsym glt_mcenroe_diff.txt -gltsym glt_mcenroe_rep_diff.txt -gltsym glt_model_diff.txt -gltsym glt_model_rep_diff.txt -gltsym glt_origami_diff.txt -gltsym glt_origami_rep_diff.txt -gltsym glt_planet3_diff.txt -gltsym glt_planet3_rep_diff.txt -gltsym glt_planet7_diff.txt -gltsym glt_planet7_rep_diff.txt -gltsym glt_rose_diff.txt -gltsym glt_rose_rep_diff.txt -glt_label 1 FNuisance -glt_label 2 FMotion -glt_label 3 main_video -glt_label 4 main_rep_video -glt_label 5 ballet_diff -glt_label 6 ballet_rep_diff -glt_label 7 brando_diff -glt_label 8 brando_rep_diff -glt_label 9 carchase_diff -glt_label 10 carchase_rep_diff -glt_label 11 carlin_diff -glt_label 12 carlin_rep_diff -glt_label 13 flatworm_diff -glt_label 14 flatworm_rep_diff -glt_label 15 jordan_diff -glt_label 16 jordan_rep_diff -glt_label 17 mcenroe_diff -glt_label 18 mcenroe_rep_diff -glt_label 19 model_diff -glt_label 20 model_rep_diff -glt_label 21 origami_diff -glt_label 22 origami_rep_diff -glt_label 23 planet3_diff -glt_label 24 planet3_rep_diff -glt_label 25 planet7_diff -glt_label 26 planet7_rep_diff -glt_label 27 rose_diff -glt_label 28 rose_rep_diff -fout -rout -tout -cbucket coefout -bucket statout -jobs 7 -float\n[brad@bradley-buchsbaums-mac-pro.local: Wed Aug 11 19:33:37 2010] Output prefix: statout\n[brad@bradley-buchsbaums-mac-pro.local: Wed Nov 10 13:44:54 2010] 3dbucket -prefix tmp 'statout+orig[1..25]'\n[brad@bradley-buchsbaums-mac-pro.local: Wed Nov 10 13:45:25 2010] 3dcopy tmp+orig statout+orig~
+
+type = string-attribute
+name = TYPESTRING
+count = 15
+'3DIM_HEAD_FUNC~
+
+type = string-attribute
+name = IDCODE_STRING
+count = 27
+'XYZ_eRwHXlTmsp9jHFni1yl15A~
+
+type = string-attribute
+name = IDCODE_DATE
+count = 25
+'Wed Nov 10 13:45:25 2010~
+
+type = integer-attribute
+name = SCENE_DATA
+count = 8
+ 0 11 1 -999 -999
+ -999 -999 -999
+
+type = string-attribute
+name = LABEL_1
+count = 5
+'zyxt~
+
+type = string-attribute
+name = LABEL_2
+count = 5
+'zyxt~
+
+type = string-attribute
+name = DATASET_NAME
+count = 5
+'zyxt~
+
+type = integer-attribute
+name = ORIENT_SPECIFIC
+count = 3
+ 0 2 4
+
+type  = float-attribute
+name  = ORIGIN
+count = 3
+      -111.3336       111.3281      -49.87746
+
+type  = float-attribute
+name  = DELTA
+count = 3
+       2.343866       -2.34375       3.990197
+
+type  = float-attribute
+name  = IJK_TO_DICOM
+count = 12
+       2.343866              0              0      -111.3336              0
+       -2.34375              0       111.3281              0              0
+       3.990197      -49.87746
+
+type  = float-attribute
+name  = IJK_TO_DICOM_REAL
+count = 12
+       2.343866              0              0      -111.3336              0
+       -2.34375              0       111.3281              0              0
+       3.990197      -49.87746
+
+type  = float-attribute
+name  = BRICK_STATS
+count = 50
+              0         381.39      -21.14899       31.63216      -17.07944
+       29.11785              0       0.267473              0       847.8488
+      -47.38882       41.73625      -22.56584       31.31703              0
+      0.2969509              0       980.7567      -30.20242        30.0332
+      -15.35098       22.26268              0      0.1759022              0
+       495.6269      -38.02296       47.87735      -28.15325       36.67808
+              0      0.3668334              0           1000       -21.6814
+        30.2326      -10.05273       25.84262              0        0.22337
+              0       667.8409      -21.77218       37.32438      -14.65119
+       31.52962              0      0.2997834              0       994.1169
+
+type = integer-attribute
+name = DATASET_RANK
+count = 8
+ 3 25 0 0 0
+ 0 0 0
+
+type = integer-attribute
+name = DATASET_DIMENSIONS
+count = 5
+ 96 96 26 0 0
+
+type = integer-attribute
+name = BRICK_TYPES
+count = 25
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+ 3 3 3 3 3
+
+type  = float-attribute
+name  = BRICK_FLOAT_FACS
+count = 25
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+              0              0              0              0              0
+
+type = string-attribute
+name = BRICK_LABS
+count = 345
+'Full_Fstat~Ballet#0_Coef~Ballet#0_Tstat~Ballet_R^2~Ballet_Fstat~Brando#0_Coef~Brando#0_Tstat~Brando_R^2~Brando_Fstat~CarChase#0_Coef~CarChase#0_Tstat~CarChase_R^2~CarChase_Fstat~Carlin#0_Coef~Carlin#0_Tstat~Carlin_R^2~Carlin_Fstat~flatworm#0_Coef~flatworm#0_Tstat~flatworm_R^2~flatworm_Fstat~Jordan#0_Coef~Jordan#0_Tstat~Jordan_R^2~Jordan_Fstat~
+
+type  = float-attribute
+name  = BRICK_STATAUX
+count = 89
+              0              4              2            108           2322
+              2              3              1           2322              3
+              7              2            0.5           1161              4
+              4              2              1           2322              6
+              3              1           2322              7              7
+              2            0.5           1161              8              4
+              2              1           2322             10              3
+              1           2322             11              7              2
+            0.5           1161             12              4              2
+              1           2322             14              3              1
+           2322             15              7              2            0.5
+           1161             16              4              2              1
+           2322             18              3              1           2322
+             19              7              2            0.5           1161
+             20              4              2              1           2322
+             22              3              1           2322             23
+              7              2            0.5           1161             24
+              4              2              1           2322
+
+type = string-attribute
+name = BRICK_STATSYM
+count = 292
+'Ftest(108,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322);none;Ttest(2322);Beta(0.5,1161);Ftest(1,2322)~
+
+type  = float-attribute
+name  = FDRCURVE_000000
+count = 103
+     0.03825858    0.004652008       1.243965       1.450856       1.797593
+       2.244631       2.746813       3.273784       3.808239       4.340485
+       4.866135       5.382765       5.889096       6.384933        6.87026
+       7.345364       7.810719       8.174776       8.174778        8.17478
+       8.174782       8.174784       8.174785       8.174787       8.174788
+       8.174789       8.174791       8.174793       8.174795       8.174797
+       8.174798         8.1748       8.174802       8.174804       8.174805
+       8.174807       8.174809        8.17481       8.174812       8.174813
+       8.174815       8.174817       8.174818        8.17482       8.174822
+       8.174824       8.174826       8.174827       8.174829        8.17483
+       8.174832       8.174834       8.174835       8.174837       8.174839
+       8.174841       8.174842       8.174844       8.174846       8.174848
+       8.174849        8.17485       8.174852       8.174854       8.174856
+       8.174858       8.174859       8.174861       8.174862       8.174865
+       8.174866       8.174868        8.17487        8.17487       8.174873
+       8.174874       8.174876       8.174877       8.174879       8.174881
+       8.174883       8.174885       8.174886       8.174888        8.17489
+       8.174891       8.174893       8.174894       8.174896       8.174898
+         8.1749       8.174901       8.174903       8.174905       8.174907
+       8.174909        8.17491       8.174911       8.174913       8.174915
+       8.174916       8.174918        8.17493
+
+type  = float-attribute
+name  = FDRCURVE_000001
+count = 103
+      0.8552814       0.209443       1.243966       1.765056        2.64486
+       3.622117        4.58731       5.510921       6.386303        7.21505
+        8.00094       8.174778        8.17478       8.174781       8.174783
+       8.174784       8.174786       8.174787       8.174788        8.17479
+       8.174791       8.174793       8.174794       8.174796       8.174797
+       8.174799         8.1748       8.174802       8.174803       8.174805
+       8.174807       8.174808       8.174809        8.17481       8.174812
+       8.174813       8.174815       8.174816       8.174818        8.17482
+       8.174821       8.174822       8.174824       8.174826       8.174827
+       8.174828       8.174829       8.174831       8.174833       8.174834
+       8.174835       8.174837       8.174839        8.17484       8.174841
+       8.174843       8.174845       8.174846       8.174848       8.174849
+        8.17485       8.174852       8.174853       8.174854       8.174856
+       8.174858       8.174859       8.174861       8.174862       8.174864
+       8.174865       8.174867       8.174868        8.17487       8.174871
+       8.174872       8.174873       8.174875       8.174877       8.174878
+        8.17488       8.174881       8.174883       8.174884       8.174886
+       8.174888       8.174889       8.174891       8.174891       8.174893
+       8.174894       8.174896       8.174897       8.174899       8.174901
+       8.174902       8.174904       8.174905       8.174907       8.174908
+        8.17491       8.174911        8.17493
+
+type  = float-attribute
+name  = FDRCURVE_000003
+count = 103
+   0.0001367862     0.08637416      0.3661384      0.3898029      0.4167316
+      0.4452711      0.4766523      0.5096366       0.543875      0.5813812
+      0.6221834       0.664426      0.7084427      0.7559329      0.8042415
+      0.8555724      0.9090378      0.9647065       1.022404       1.082006
+       1.144381       1.208338       1.273554       1.341284       1.408726
+       1.478937       1.552507       1.627929        1.70231       1.777835
+       1.854737       1.932917         2.0116       2.092013       2.174535
+       2.257649        2.34043       2.424745        2.50878       2.593437
+        2.67826       2.762558       2.846996       2.934266       3.019144
+       3.105403       3.192605       3.281254        3.36983       3.458905
+       3.547148       3.635375       3.723409       3.811105       3.898708
+       3.986825       4.075329        4.16323       4.249686       4.339154
+       4.426487       4.515517       4.604533       4.692887       4.780867
+       4.868614       4.956502       5.044762        5.13285       5.220416
+       5.306733       5.395474       5.484959       5.572921       5.660727
+       5.748545        5.83657       5.924326       6.012354       6.100492
+       6.188883       6.276348        6.36387       6.452691       6.539778
+       6.628164       6.716125       6.804021       6.890836       6.977292
+        7.06379       7.151613       7.238353       7.324903       7.411796
+       7.498039       7.545066       7.545149       7.545233       7.545316
+       7.545399       7.545483       7.549222
+
+type  = float-attribute
+name  = FDRCURVE_000004
+count = 103
+   6.016484e-08   0.0003315807      0.3700824      0.7167234       0.929176
+       1.118974       1.295862         1.4595       1.620551       1.770641
+       1.914736       2.052603       2.189114       2.319268       2.446873
+       2.568074       2.686347       2.799973       2.910943       3.019407
+       3.125671       3.230429       3.332983       3.433316       3.531436
+       3.626954       3.720464       3.811481       3.900861       3.989017
+       4.075799        4.16049        4.24308       4.326208       4.406411
+       4.486316       4.566153       4.643863       4.721345        4.79655
+       4.870444       4.943685       5.016398       5.088686       5.158585
+        5.22855       5.296401       5.364952       5.433904       5.501711
+       5.568253       5.633677       5.699492       5.763473       5.827466
+       5.890272       5.952516       6.015518       6.077803       6.138758
+       6.199118       6.258797       6.318722       6.377633       6.436827
+       6.494985       6.552881       6.610046       6.667538       6.724341
+       6.780632       6.835819       6.890566       6.945038       6.998458
+       7.051829       7.106008       7.159393       7.212212       7.264644
+       7.316516       7.368112       7.419431       7.470584       7.521537
+       7.545101       7.545225        7.54535       7.545473       7.545598
+       7.545722       7.545846        7.54597       7.546095       7.546219
+       7.546343       7.546467       7.546591       7.546715       7.546839
+       7.546964       7.547088       7.549216
+
+type  = float-attribute
+name  = FDRCURVE_000005
+count = 103
+   0.0001397028      0.7963355      0.3700824       0.724948      0.9426843
+       1.137385       1.318641       1.486819       1.650464       1.803411
+       1.950028       2.091573       2.230559       2.362832       2.490712
+       2.613935       2.734029         2.8482       2.962214       3.070116
+       3.177847       3.284132       3.387991       3.489402        3.58636
+       3.683768       3.777135       3.868176       3.958308       4.047668
+       4.133647       4.218105       4.302081       4.384157       4.465597
+       4.546663        4.62568       4.703569       4.779912       4.855142
+       4.928878       5.002713       5.075199       5.146136       5.216242
+       5.284897       5.353628       5.422564       5.490941       5.557508
+       5.623108       5.689056       5.753013       5.817776       5.880362
+       5.942804       6.004961       6.067444       6.128128       6.188857
+       6.247613       6.307593       6.366207       6.424859          6.483
+       6.539982       6.596959       6.653816       6.710057        6.76631
+       6.820851       6.874977       6.928882       6.982049       7.034438
+       7.087417       7.140703       7.192455       7.244126       7.295381
+       7.345939       7.396554       7.447037         7.4966       7.545037
+       7.545158       7.545278       7.545398       7.545518       7.545638
+       7.545758       7.545878       7.545999       7.546119       7.546239
+       7.546359       7.546479       7.546599        7.54672        7.54684
+       7.546959        7.54708       7.549216
+
+type  = float-attribute
+name  = FDRCURVE_000007
+count = 103
+   0.0001457467      0.1173184      0.4075353      0.4416677      0.4786632
+      0.5210727      0.5668023      0.6203825      0.6766965      0.7368522
+      0.8014539      0.8701956      0.9419299       1.016842        1.09602
+       1.179906       1.268681       1.358435       1.451817       1.548439
+       1.646747       1.748596       1.854725       1.958876       2.065839
+       2.176747       2.285933       2.396901       2.509706       2.624827
+       2.738905       2.853848       2.971123       3.084948       3.200099
+       3.314998       3.431915       3.548359       3.666856       3.784957
+       3.902462       4.020084       4.138525       4.255876        4.37511
+       4.492299       4.609281        4.72728       4.845045       4.962441
+       5.081571       5.200653       5.320727       5.439153       5.558048
+       5.677855       5.796552        5.91383       6.033393       6.151577
+       6.269067       6.386674       6.506024       6.624672       6.742263
+       6.861215       6.979524       7.097185        7.21548       7.333664
+       7.451727       7.553289       7.553469       7.553648       7.553827
+       7.554006       7.554185       7.554364       7.554543       7.554722
+       7.554901        7.55508       7.555259       7.555439       7.555617
+       7.555796       7.555975       7.556155       7.556334        7.55646
+        7.55646        7.55646        7.55646        7.55646        7.55646
+        7.55646        7.55646        7.55646        7.55646        7.55646
+        7.55646        7.55646        7.55646
+
+type  = float-attribute
+name  = FDRCURVE_000008
+count = 103
+   5.965774e-08    0.001526658      0.4111693       1.457601       2.146154
+       2.722921       3.222239         3.6692        4.07831       4.456749
+        4.80544       5.138454       5.455533       5.758623       6.046337
+       6.321591       6.589063       6.846601       7.096141       7.338975
+       7.553217        7.55337       7.553523       7.553676       7.553828
+       7.553982       7.554134       7.554287        7.55444       7.554593
+       7.554746       7.554899       7.555052       7.555205       7.555358
+       7.555511       7.555664       7.555817       7.555969       7.556123
+       7.556275       7.556393       7.556394       7.556393       7.556393
+       7.556394       7.556394       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556394       7.556393       7.556393       7.556394
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556394       7.556393
+       7.556394       7.556393       7.556394       7.556393       7.556394
+       7.556393       7.556394       7.556393       7.556393       7.556393
+       7.556394       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556394       7.556393       7.556393
+       7.556393       7.556394       7.556393       7.556393       7.556393
+       7.556394       7.556394       7.556393
+
+type  = float-attribute
+name  = FDRCURVE_000009
+count = 103
+   0.0001385253       4.183592      0.4111693       1.591989       2.357368
+        2.99323       3.533081       4.017866       4.458805       4.859622
+       5.237861       5.593907       5.929406       6.248441       6.552511
+       6.844289       7.124577       7.395454       7.553269       7.553433
+       7.553598       7.553764       7.553929       7.554094       7.554259
+       7.554425       7.554589       7.554755        7.55492       7.555085
+       7.555251       7.555416       7.555581       7.555746       7.555911
+       7.556077       7.556242       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556394       7.556394       7.556393       7.556394
+       7.556394       7.556394       7.556394       7.556394       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556394       7.556393       7.556393
+       7.556393       7.556393       7.556394       7.556394       7.556393
+       7.556393       7.556393       7.556394       7.556394       7.556394
+       7.556394       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556394       7.556394       7.556394       7.556393
+       7.556393       7.556393       7.556393       7.556393       7.556393
+       7.556393       7.556393       7.556393
+
+type  = float-attribute
+name  = FDRCURVE_000011
+count = 103
+   0.0001612819      0.1026058      0.3407959      0.3687208      0.3996029
+      0.4327018      0.4691161      0.5099482      0.5526227      0.6001149
+       0.647877      0.6994495      0.7545904      0.8123724      0.8760496
+      0.9412428         1.0095        1.08089       1.152311       1.228724
+       1.307605       1.387969       1.470094       1.555225       1.639376
+       1.729005       1.821156       1.913333       2.008039        2.10468
+       2.202609       2.300687       2.402423       2.505631       2.610086
+       2.715396       2.819668       2.923066       3.029684       3.135179
+       3.242422        3.34726       3.453828       3.558071       3.664208
+       3.769568       3.875952       3.982274       4.088976       4.195922
+       4.304168       4.410614         4.5172       4.624528       4.731563
+       4.837416       4.943855       5.049816       5.155632       5.262515
+       5.367739       5.472705        5.57904       5.682073       5.788066
+       5.894041       5.997243       6.099927       6.202918       6.307902
+        6.41309       6.517697        6.62212       6.725917       6.830683
+       6.934184       7.035834       7.138845       7.242188       7.345068
+       7.448436       7.529045       7.529066       7.529088       7.529109
+        7.52913       7.529152       7.529174       7.529195       7.529216
+       7.529238        7.52926       7.529281       7.529303       7.529324
+       7.529346       7.529367       7.529388        7.52941       7.529431
+       7.529453       7.529474         7.5295
+
+type  = float-attribute
+name  = FDRCURVE_000012
+count = 103
+   5.973927e-08   0.0007426146      0.3451955      0.9287176       1.316517
+       1.656842       1.973407       2.267218       2.548911       2.814008
+       3.060157       3.297266       3.518993       3.729191       3.933005
+       4.127567        4.31815       4.500426       4.678258       4.848384
+       5.014177       5.174988       5.332989       5.484442       5.632574
+       5.778118        5.92112       6.058214       6.192723       6.326463
+       6.458517       6.587306       6.714808       6.839932       6.961065
+       7.080539       7.198757       7.315377        7.43153       7.529049
+       7.529057       7.529064       7.529071       7.529079       7.529086
+       7.529093       7.529101       7.529108       7.529115       7.529122
+        7.52913       7.529137       7.529144       7.529151       7.529159
+       7.529166       7.529173       7.529181       7.529188       7.529195
+       7.529202        7.52921       7.529217       7.529224       7.529232
+       7.529239       7.529246       7.529254       7.529261       7.529268
+       7.529276       7.529283        7.52929       7.529297       7.529305
+       7.529312       7.529319       7.529326       7.529333       7.529341
+       7.529348       7.529356       7.529363        7.52937       7.529377
+       7.529385       7.529392       7.529399       7.529407       7.529414
+       7.529421       7.529428       7.529436       7.529443        7.52945
+       7.529458       7.529465       7.529472        7.52948       7.529487
+       7.529494       7.529501       7.529511
+
+type  = float-attribute
+name  = FDRCURVE_000013
+count = 103
+   0.0001387146       1.862677      0.3451955      0.9621041       1.372932
+       1.732178       2.066054       2.375584        2.67086       2.943101
+       3.201761       3.443826       3.670825       3.887933       4.096891
+       4.299503       4.492439        4.68012       4.859405       5.033403
+       5.201218       5.365552       5.524526       5.677056       5.829105
+       5.976065       6.116786        6.25542       6.394236       6.529471
+       6.661867       6.791874       6.919147       7.041559       7.164363
+        7.28344       7.403134       7.520192       7.529055       7.529062
+       7.529069       7.529076       7.529084        7.52909       7.529097
+       7.529105       7.529111       7.529119       7.529126       7.529133
+        7.52914       7.529147       7.529154       7.529161       7.529168
+       7.529176       7.529182        7.52919       7.529197       7.529203
+       7.529211       7.529218       7.529225       7.529233       7.529239
+       7.529246       7.529253        7.52926       7.529267       7.529274
+       7.529282       7.529289       7.529296       7.529303        7.52931
+       7.529317       7.529324       7.529331       7.529338       7.529346
+       7.529352        7.52936       7.529367       7.529374       7.529381
+       7.529388       7.529395       7.529402       7.529409       7.529416
+       7.529424        7.52943       7.529438       7.529445       7.529452
+       7.529459       7.529466       7.529473        7.52948       7.529487
+       7.529494       7.529501       7.529511
+
+type  = float-attribute
+name  = FDRCURVE_000015
+count = 103
+   0.0001260511     0.09778896      0.5247142      0.5573061       0.593075
+      0.6319824       0.674789      0.7197034      0.7672224         0.8181
+       0.871617      0.9281524      0.9870647       1.049178       1.111503
+       1.176859       1.244232       1.314313       1.385696       1.458368
+       1.533875       1.610162       1.688405        1.76906        1.85061
+       1.933745       2.017444       2.102888       2.189446       2.277294
+        2.36481       2.453606       2.543247       2.633271       2.724618
+        2.81502       2.906149       2.997996       3.089267       3.182764
+       3.275011       3.366524       3.460409       3.554879        3.64954
+        3.74457       3.840555       3.935779       4.030792       4.126334
+        4.22314       4.319188       4.414033       4.510201       4.606049
+       4.701756       4.798257       4.896213       4.992666       5.089972
+       5.186488       5.283747        5.38015       5.477723       5.574075
+       5.671153       5.768637       5.865286       5.963312       6.061764
+       6.158203       6.255025       6.353087       6.450113       6.548184
+        6.64617       6.743825       6.840354       6.938745        7.03555
+       7.134128       7.232867       7.329772       7.427982       7.525484
+       7.587842       7.588408       7.588975       7.589542        7.59008
+        7.59008        7.59008       7.590079        7.59008        7.59008
+        7.59008        7.59008        7.59008        7.59008        7.59008
+       7.590079        7.59008        7.59008
+
+type  = float-attribute
+name  = FDRCURVE_000016
+count = 103
+   6.135281e-08     0.00134146      0.5292757       1.538315       2.150707
+       2.662504       3.106845       3.507093       3.877664       4.220851
+       4.541459       4.844402       5.134481       5.409619       5.673608
+       5.928363       6.174955       6.412786       6.644092       6.867504
+       7.085718       7.299998       7.507244       7.588284       7.589337
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590086
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590086       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590086
+       7.590086       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590086
+       7.590086       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087
+
+type  = float-attribute
+name  = FDRCURVE_000017
+count = 103
+   0.0001424613       3.597454      0.5292757        1.64132       2.314573
+       2.869259       3.347491       3.780057       4.175396       4.540768
+       4.882216       5.204613       5.509703       5.799893       6.079714
+       6.346385       6.604134       6.852035       7.092604       7.326784
+       7.553306       7.588614       7.589762       7.590087       7.590086
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590086       7.590087       7.590087       7.590086
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590086
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590086
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590087       7.590087       7.590087       7.590087
+       7.590087       7.590086       7.590087       7.590087       7.590086
+       7.590087       7.590087       7.590087
+
+type  = float-attribute
+name  = FDRCURVE_000019
+count = 103
+   0.0001267274      0.1237663       0.365001      0.4010583      0.4411253
+      0.4871525      0.5354676      0.5882279      0.6479863      0.7095404
+      0.7780325      0.8478925      0.9227737       1.001153       1.083481
+       1.168457       1.257912       1.349184       1.444754       1.545794
+        1.64677       1.752692       1.859898       1.969745       2.081696
+       2.194262       2.308619       2.424968       2.544207       2.665279
+       2.787443        2.91036       3.033959       3.157258       3.280912
+       3.405178       3.531717        3.65831       3.782754       3.909842
+       4.035468       4.163633       4.291142       4.416316       4.541307
+       4.670034       4.794847       4.923849       5.051273       5.176402
+       5.303733       5.431639        5.55848       5.684991       5.811339
+       5.937017       6.063971       6.191539       6.319858       6.445572
+       6.572278       6.697943       6.823242       6.949553       7.073888
+       7.198773       7.324074       7.449032       7.478415       7.478988
+        7.47956       7.480133       7.480705       7.481277       7.481849
+       7.482422       7.482994       7.483566       7.484138       7.484711
+       7.485283       7.485855       7.486428          7.487       7.487573
+       7.488145       7.488717       7.488813       7.488812       7.488812
+       7.488812       7.488812       7.488813       7.488812       7.488812
+       7.488812       7.488813       7.488813       7.488813       7.488813
+       7.488813       7.488813       7.488813
+
+type  = float-attribute
+name  = FDRCURVE_000020
+count = 103
+   5.979546e-08   0.0003999048      0.3691829       0.763045       1.002326
+       1.213863       1.403311       1.587381        1.76266       1.930503
+       2.087812       2.240193       2.386286       2.530544        2.66983
+       2.805388       2.936528       3.063901       3.187204       3.307357
+       3.423909       3.539745       3.652927        3.76163       3.868873
+       3.974965       4.077643       4.179644         4.2797       4.375812
+       4.469495       4.563495       4.657408        4.74587        4.83666
+       4.926836       5.014233       5.098885       5.183381       5.267135
+       5.350079       5.432369       5.512733       5.593011       5.670698
+       5.748104        5.82498       5.899327       5.974312       6.049277
+       6.122961         6.1966       6.269811       6.342206       6.412964
+        6.48238       6.552332       6.621696       6.689067       6.756165
+       6.822508       6.889359       6.955128       7.019592       7.083554
+       7.147607       7.210841       7.274427       7.337328       7.399104
+       7.461001       7.478022       7.478083       7.478146       7.478207
+       7.478269       7.478331       7.478393       7.478455       7.478517
+       7.478579       7.478641       7.478703       7.478765       7.478826
+       7.478889       7.478951       7.479012       7.479074       7.479136
+       7.479198        7.47926       7.479322       7.479384       7.479445
+       7.479507        7.47957       7.479632       7.479693       7.479755
+       7.479817       7.479879       7.488813
+
+type  = float-attribute
+name  = FDRCURVE_000021
+count = 103
+   0.0001388451      0.9672604      0.3691829      0.7740476       1.020088
+       1.236153       1.434223       1.622652       1.801195       1.972168
+       2.135364       2.290084       2.441059       2.587617       2.729362
+       2.866989       3.001592       3.129476       3.253942       3.375473
+       3.495424       3.612889       3.724222       3.834949       3.944535
+        4.04917         4.1542        4.25836       4.356037       4.451919
+       4.547432        4.64384       4.733805       4.825896       4.917823
+       5.006419        5.09273       5.177657       5.262385       5.346326
+       5.429471       5.510705       5.591694       5.669973       5.747889
+        5.82516       5.899951       5.975193       6.050425       6.124301
+       6.198005       6.271199       6.343496       6.414355       6.483633
+       6.553341       6.622488       6.689606       6.756369       6.822326
+       6.888732       6.954032       7.017978       7.081336       7.144917
+       7.207419       7.270283       7.332364       7.393816       7.454482
+       7.478012       7.478068       7.478125       7.478181       7.478238
+       7.478295       7.478351       7.478408       7.478465       7.478521
+       7.478578       7.478634       7.478691       7.478747       7.478805
+       7.478861       7.478918       7.478974       7.479031       7.479087
+       7.479144       7.479201       7.479258       7.479314       7.479371
+       7.479427       7.479484       7.479541       7.479597       7.479654
+       7.479711       7.479767       7.488813
+
+type  = float-attribute
+name  = FDRCURVE_000023
+count = 103
+   0.0001798011     0.08877757      0.4263126      0.4534623      0.4819609
+      0.5139919      0.5496929      0.5859447       0.625808      0.6668096
+      0.7104308      0.7576302      0.8061168      0.8572448      0.9104162
+      0.9643517       1.022643       1.081504       1.143258       1.205942
+        1.27166       1.337916       1.406737       1.476491       1.548105
+       1.620476       1.692233       1.767352       1.844201       1.922701
+       2.001057       2.079893       2.160372        2.24285       2.323654
+       2.408549       2.491672       2.574842       2.660895       2.746477
+       2.833642       2.919763       3.006131       3.093699       3.182347
+       3.269536       3.358137       3.445812       3.533957       3.623734
+       3.712595       3.801086       3.890028       3.979628       4.069542
+       4.158091       4.247513       4.336977       4.427068       4.516323
+       4.607182       4.695457       4.786029        4.87584       4.966371
+       5.056091       5.146222       5.237123       5.326668       5.416054
+       5.506858       5.597517       5.687863       5.777917       5.868735
+       5.960226       6.050452       6.141128       6.230863       6.320897
+       6.410653        6.50009       6.590544       6.680562        6.76977
+       6.858862       6.948287       7.036828       7.127193       7.216074
+        7.30673       7.395635       7.484879       7.569829       7.569932
+       7.570035       7.570138       7.570242       7.570345       7.570448
+       7.570551       7.570654        7.57893
+
+type  = float-attribute
+name  = FDRCURVE_000024
+count = 103
+   5.967892e-08   0.0002764254      0.4308369      0.7589995       0.952394
+       1.120762       1.275833       1.420028       1.556638       1.684542
+       1.809649       1.931547       2.046841       2.158115       2.267999
+       2.373828       2.477578        2.57675       2.676323        2.77164
+       2.866171       2.958152       3.047347       3.135889       3.221542
+       3.306427       3.389714       3.470765       3.550375       3.629551
+       3.707089        3.78279       3.857286       3.930334       4.004363
+       4.076495       4.146599       4.216222       4.285229       4.353099
+       4.420009       4.486216       4.551695       4.617028       4.679687
+       4.743872       4.806278         4.8683       4.930163       4.990395
+       5.050474       5.110001       5.169746       5.228572       5.286393
+       5.343047       5.399704       5.456575       5.512268        5.56785
+       5.622633         5.6778       5.731774       5.785706       5.839297
+       5.892254       5.945468       5.997997        6.04962       6.101479
+       6.151902       6.201921       6.252623       6.302385       6.352131
+       6.400836       6.449654       6.497758       6.546304       6.594455
+       6.642164       6.689414       6.736085       6.782319       6.828638
+       6.874449       6.919979       6.965787       7.010285       7.055063
+       7.100567       7.144973       7.189077       7.233235       7.277558
+       7.321446       7.365001       7.407889       7.450472        7.49339
+       7.535802       7.569863       7.578961
+
+type  = float-attribute
+name  = MDFCURVE_000000
+count = 66
+            -15        0.20231      0.9990082      0.1314141      0.1298179
+      0.1280809      0.1263305      0.1248232      0.1230963      0.1214451
+      0.1196008      0.1178273      0.1158656       0.113754      0.1119553
+      0.1106832       0.108663      0.1069068      0.1052016      0.1034443
+      0.1014281     0.09947976     0.09750602     0.09541249     0.09333546
+     0.09145342     0.08942375     0.08736597     0.08515844     0.08341014
+     0.08119394     0.07894026     0.07713659     0.07508612     0.07264896
+     0.07051726     0.06838198      0.0660787      0.0637028     0.06164901
+     0.05928339     0.05697115     0.05457783     0.05220509     0.05010983
+     0.04798656     0.04582401     0.04335794     0.04102879     0.03828893
+     0.03548259       0.032901     0.03060919     0.02781499     0.02500248
+     0.02234142     0.01957249     0.01699308     0.01414308     0.01124002
+    0.008430439    0.005708767    0.003481765    0.001742539    0.000645956
+              0
+
+type  = float-attribute
+name  = MDFCURVE_000001
+count = 66
+            -15        0.20231      0.9990084      0.1314141      0.1298179
+      0.1280809      0.1263305      0.1248232      0.1230964      0.1214452
+      0.1196008      0.1178273      0.1158656       0.113754      0.1119553
+      0.1106832       0.108663      0.1069068      0.1052017      0.1034443
+      0.1014281     0.09947975     0.09750603     0.09541249     0.09333546
+     0.09145342     0.08942376     0.08736595     0.08515844     0.08341014
+     0.08119395     0.07894026     0.07713661     0.07508612     0.07264896
+     0.07051726     0.06838197     0.06607869     0.06370281       0.061649
+     0.05928341     0.05697114     0.05457783     0.05220512     0.05010983
+     0.04798656     0.04582401     0.04335793     0.04102878     0.03828892
+     0.03548258     0.03290098     0.03060918     0.02781498     0.02500247
+     0.02234143     0.01957248     0.01699307     0.01414307     0.01124001
+    0.008430446     0.00570876     0.00348176     0.00174251   0.0006459467
+              0
+
+type  = float-attribute
+name  = MDFCURVE_000003
+count = 74
+            -15      0.2007669      0.9990602      0.9256177      0.9243832
+      0.9229583      0.9216204      0.9202132      0.9188216      0.9174013
+      0.9163434      0.9148691      0.9126716      0.9110916      0.9091867
+      0.9072462      0.9062566      0.9047475      0.9033494      0.9014439
+      0.8998299        0.89819      0.8959423      0.8939508      0.8916885
+      0.8893276      0.8874627      0.8849999      0.8822725      0.8794376
+      0.8760744      0.8735019      0.8702066      0.8668904      0.8642332
+       0.861106      0.8563663      0.8518962      0.8465649      0.8423277
+       0.837278      0.8311803      0.8255744      0.8204804      0.8142126
+      0.8085517      0.8017275      0.7936363      0.7852784      0.7761827
+      0.7663273      0.7559875      0.7443546      0.7315099      0.7192072
+      0.7047095      0.6903939      0.6744759      0.6563529      0.6342651
+        0.60935      0.5808928      0.5474466      0.5117371       0.471948
+      0.4294216      0.3819827      0.3272156      0.2639211      0.1954286
+      0.1330322     0.06500733     0.01868263              0
+
+type  = float-attribute
+name  = MDFCURVE_000004
+count = 74
+            -15      0.2007679      0.9990641      0.9259287      0.9246994
+      0.9232805      0.9219483      0.9205468      0.9191612      0.9177466
+      0.9166932       0.915225      0.9130368      0.9114634      0.9095661
+      0.9076341      0.9066486      0.9051456      0.9037534      0.9018559
+      0.9002487      0.8986154      0.8963773       0.894394      0.8921411
+      0.8897896      0.8879333      0.8854804      0.8827644      0.8799411
+      0.8765927      0.8740302      0.8707491      0.8674465      0.8648005
+      0.8616866      0.8569664      0.8525144       0.847206      0.8429865
+      0.8379579      0.8318819      0.8263029      0.8212306      0.8149892
+      0.8093514      0.8025546      0.7944961      0.7861751       0.777117
+      0.7673035      0.7570049      0.7454222      0.7326303      0.7203794
+      0.7059393      0.6916837      0.6758322      0.6577827      0.6357415
+      0.6109722      0.5826238      0.5493118      0.5137354      0.4740843
+      0.4317029         0.3844       0.329759      0.2665497      0.1981257
+      0.1356099     0.06720528     0.02016491              0
+
+type  = float-attribute
+name  = MDFCURVE_000005
+count = 74
+            -15      0.2007679      0.9990641      0.9259286      0.9246994
+      0.9232805      0.9219483      0.9205468      0.9191613      0.9177466
+      0.9166931      0.9152249      0.9130368      0.9114634      0.9095661
+      0.9076341      0.9066486      0.9051456      0.9037534      0.9018559
+      0.9002487      0.8986154      0.8963773       0.894394       0.892141
+      0.8897896      0.8879333      0.8854805      0.8827644      0.8799411
+      0.8765927      0.8740302      0.8707491      0.8674465      0.8648005
+      0.8616867      0.8569664      0.8525143       0.847206      0.8429865
+      0.8379579      0.8318819      0.8263029      0.8212306      0.8149892
+      0.8093515      0.8025546      0.7944961      0.7861751      0.7771169
+      0.7673033      0.7570049      0.7454222      0.7326303      0.7203794
+      0.7059393      0.6916837      0.6758322      0.6577827      0.6357415
+      0.6109722      0.5826238      0.5493118      0.5137354      0.4740843
+      0.4317029         0.3844       0.329759      0.2665497      0.1981257
+      0.1356099     0.06720534     0.02016491              0
+
+type  = float-attribute
+name  = MDFCURVE_000007
+count = 74
+            -15      0.2003141      0.9990603      0.9294415      0.9280752
+      0.9269403      0.9260021      0.9246668      0.9236928      0.9224684
+      0.9209659      0.9196634      0.9182793      0.9165201      0.9151473
+      0.9138112      0.9120753      0.9098645      0.9081075      0.9063377
+      0.9048464      0.9029831      0.9004238       0.897525      0.8954192
+      0.8928584      0.8900827      0.8876407      0.8848417      0.8814976
+      0.8781919      0.8751535      0.8724103      0.8698241      0.8655403
+      0.8613453        0.85761      0.8539475      0.8494568      0.8449428
+      0.8398217      0.8340137       0.828083       0.820505      0.8136719
+      0.8051404      0.7954313      0.7884246      0.7800705      0.7695682
+      0.7593166      0.7484897      0.7367455      0.7236711       0.708948
+      0.6945564      0.6763332      0.6580082      0.6352323      0.6108508
+      0.5830836      0.5561756      0.5256549      0.4905488      0.4528221
+      0.4096786      0.3588524      0.3081942      0.2456466      0.1866532
+      0.1206606     0.06325173     0.01504415              0
+
+type  = float-attribute
+name  = MDFCURVE_000008
+count = 74
+            -15      0.2003132      0.9990635      0.9296819      0.9283205
+      0.9271894      0.9262544      0.9249235      0.9239529      0.9227327
+      0.9212353      0.9199377      0.9185579      0.9168049      0.9154363
+      0.9141051      0.9123752      0.9101716      0.9084208      0.9066565
+      0.9051708       0.903314      0.9007633      0.8978745      0.8957759
+      0.8932236      0.8904573      0.8880239      0.8852344      0.8819019
+      0.8786074      0.8755794      0.8728455      0.8702679      0.8659991
+      0.8618182      0.8580954      0.8544481      0.8499702      0.8454726
+      0.8403679      0.8345819      0.8286718      0.8211175      0.8143109
+       0.805806        0.79613      0.7891477      0.7808209      0.7703552
+       0.760138      0.7493494      0.7376434      0.7246131      0.7099437
+       0.695605      0.6774363      0.6591797      0.6364802      0.6121744
+      0.5845155      0.5576814       0.527254      0.4922731      0.4546613
+      0.4116378       0.360936      0.3103658      0.2478957      0.1889006
+      0.1228169     0.06511801     0.01626951              0
+
+type  = float-attribute
+name  = MDFCURVE_000009
+count = 74
+            -15      0.2003132      0.9990635      0.9296819      0.9283205
+      0.9271894      0.9262545      0.9249235      0.9239529      0.9227327
+      0.9212353      0.9199377      0.9185579      0.9168049      0.9154364
+      0.9141051      0.9123752      0.9101716      0.9084208      0.9066566
+      0.9051708       0.903314      0.9007633      0.8978745      0.8957759
+      0.8932236      0.8904574      0.8880239      0.8852344      0.8819019
+      0.8786075      0.8755794      0.8728455      0.8702679      0.8659991
+      0.8618183      0.8580955      0.8544483      0.8499702      0.8454727
+      0.8403679      0.8345819      0.8286719      0.8211175      0.8143109
+       0.805806        0.79613      0.7891478      0.7808209      0.7703552
+       0.760138      0.7493494      0.7376434      0.7246131      0.7099438
+       0.695605      0.6774363      0.6591797      0.6364802      0.6121745
+      0.5845156      0.5576814       0.527254      0.4922731      0.4546613
+      0.4116378       0.360936      0.3103658      0.2478958      0.1889007
+       0.122817     0.06511807     0.01626962              0
+
+type  = float-attribute
+name  = MDFCURVE_000011
+count = 74
+            -15      0.2005674      0.9990528      0.9283914      0.9270752
+      0.9261714      0.9251083      0.9233752      0.9217303      0.9206399
+      0.9188617      0.9167569      0.9145292      0.9128532      0.9112725
+      0.9101073      0.9083087      0.9067278        0.90481       0.903271
+      0.9014372      0.8997591      0.8981663      0.8959435      0.8929275
+      0.8900927      0.8865475      0.8833762      0.8808641      0.8787443
+      0.8762494      0.8731651      0.8691322      0.8666317      0.8630171
+      0.8592565      0.8563378      0.8530279      0.8488455       0.845397
+      0.8409374      0.8362028      0.8313913      0.8268225      0.8225228
+      0.8169332      0.8104669      0.8047208      0.7994037      0.7915595
+      0.7838789      0.7746187      0.7649253      0.7535168      0.7416972
+      0.7269479      0.7133124      0.6962415      0.6818556      0.6633722
+      0.6406835      0.6154861      0.5895166      0.5594254      0.5248778
+      0.4817091      0.4317794      0.3746658      0.3112306      0.2386582
+      0.1622041     0.08787455     0.02591336              0
+
+type  = float-attribute
+name  = MDFCURVE_000012
+count = 74
+            -15      0.2006266      0.9990569      0.9286897      0.9273788
+      0.9264777      0.9254189      0.9236941      0.9220453      0.9209642
+      0.9191978      0.9171029      0.9148821      0.9132127       0.911639
+      0.9104803      0.9086885      0.9071095      0.9052008      0.9036673
+       0.901845      0.9000926       0.898587      0.8963695      0.8933676
+      0.8905092      0.8870034      0.8838447      0.8813568      0.8792413
+      0.8767465      0.8736767      0.8696676      0.8671184      0.8635655
+      0.8598353      0.8569211      0.8536235      0.8494536      0.8459519
+      0.8415334      0.8368704      0.8320735      0.8275274      0.8232309
+      0.8175629      0.8111483      0.8054579      0.8001692      0.7922615
+      0.7847524      0.7754172      0.7658079      0.7542937      0.7424945
+      0.7280309      0.7141079      0.6974285      0.6830369      0.6645029
+      0.6418594       0.616662      0.5905341      0.5605555      0.5262688
+      0.4828488      0.4326262      0.3756865      0.3122055      0.2402613
+      0.1632048     0.08863033     0.02482989              0
+
+type  = float-attribute
+name  = MDFCURVE_000013
+count = 74
+            -15      0.2006266      0.9990569      0.9286896      0.9273788
+      0.9264777      0.9254189      0.9236941      0.9220454      0.9209642
+      0.9191978      0.9171029      0.9148821      0.9132127      0.9116391
+      0.9104803      0.9086886      0.9071096      0.9052008      0.9036673
+       0.901845      0.9000926       0.898587      0.8963695      0.8933675
+      0.8905092      0.8870034      0.8838447      0.8813568      0.8792413
+      0.8767464      0.8736767      0.8696676      0.8671184      0.8635655
+      0.8598353      0.8569211      0.8536234      0.8494536      0.8459519
+      0.8415334      0.8368704      0.8320735      0.8275273      0.8232309
+      0.8175629      0.8111483      0.8054579      0.8001693      0.7922615
+      0.7847524      0.7754172      0.7658079      0.7542937      0.7424945
+      0.7280309      0.7141079      0.6974285      0.6830369      0.6645027
+      0.6418594       0.616662       0.590534      0.5605555      0.5262688
+      0.4828488      0.4326263      0.3756865      0.3122055      0.2402612
+      0.1632048     0.08863035     0.02482989              0
+
+type  = float-attribute
+name  = MDFCURVE_000015
+count = 73
+            -15      0.2022551      0.9990148      0.9384696      0.9376197
+      0.9365154       0.935396       0.934113      0.9327969      0.9320511
+      0.9311432      0.9299977      0.9282875       0.926675      0.9255247
+      0.9237589      0.9216027       0.919941      0.9182402      0.9164627
+      0.9147494      0.9125255      0.9102924      0.9083762      0.9055047
+      0.9029754      0.8998632       0.897504      0.8951137      0.8922674
+      0.8885642      0.8856484      0.8820087       0.877646      0.8733701
+      0.8693628      0.8646041      0.8599765      0.8547323      0.8494537
+      0.8437983      0.8374502      0.8319778      0.8254055      0.8177133
+      0.8090498      0.7999061      0.7909484      0.7805043      0.7700354
+      0.7595305      0.7469252      0.7330949      0.7191804      0.7035307
+      0.6867841      0.6681259      0.6471392      0.6207562      0.5940627
+      0.5651349      0.5326216      0.4954435      0.4569489      0.4137151
+      0.3665174      0.3134578      0.2588524      0.1994037      0.1374384
+     0.07810149     0.02795202              0
+
+type  = float-attribute
+name  = MDFCURVE_000016
+count = 73
+            -15      0.2022739      0.9990167      0.9385866      0.9377383
+      0.9366361      0.9355187      0.9342381      0.9329245      0.9321796
+      0.9312738      0.9301279      0.9284216      0.9268129      0.9256654
+      0.9239024      0.9217502       0.920092      0.9183889      0.9166191
+      0.9149103      0.9126865      0.9104619      0.9085473      0.9056815
+      0.9031505      0.9000522      0.8976919      0.8953044      0.8924665
+      0.8887715      0.8858576       0.882223       0.877872      0.8735712
+      0.8696073      0.8648572       0.860235      0.8550029      0.8497366
+      0.8440613      0.8377468      0.8322899      0.8257025      0.8180423
+      0.8094002      0.8002633      0.7912993      0.7809126      0.7704428
+      0.7599106      0.7473931      0.7335482      0.7196668      0.7040704
+      0.6872728      0.6685008      0.6477311      0.6212946      0.5947697
+      0.5659227      0.5331967      0.4962614      0.4576252      0.4142293
+       0.367383      0.3143183      0.2597613      0.2000901      0.1380531
+      0.0785175     0.02774605              0
+
+type  = float-attribute
+name  = MDFCURVE_000017
+count = 73
+            -15      0.2022739      0.9990166      0.9385866      0.9377382
+       0.936636      0.9355187       0.934238      0.9329244      0.9321796
+      0.9312738      0.9301278      0.9284216      0.9268129      0.9256654
+      0.9239023      0.9217503      0.9200919      0.9183888      0.9166191
+      0.9149103      0.9126865      0.9104618      0.9085473      0.9056814
+      0.9031504      0.9000521      0.8976918      0.8953043      0.8924664
+      0.8887715      0.8858576       0.882223       0.877872      0.8735711
+      0.8696072      0.8648571       0.860235      0.8550029      0.8497366
+      0.8440612      0.8377467      0.8322899      0.8257025      0.8180422
+      0.8094001      0.8002632      0.7912992      0.7809126      0.7704427
+      0.7599105      0.7473931      0.7335483      0.7196668      0.7040704
+      0.6872728      0.6685007       0.647731      0.6212946      0.5947697
+      0.5659227      0.5331966      0.4962614      0.4576252      0.4142293
+      0.3673829      0.3143183      0.2597612      0.2000902      0.1380532
+     0.07851753     0.02774611              0
+
+type  = float-attribute
+name  = MDFCURVE_000019
+count = 74
+            -15      0.2012445      0.9990426      0.9523078      0.9512556
+       0.950562      0.9497563      0.9489006      0.9479348      0.9468116
+      0.9456063      0.9444036       0.943478      0.9425565      0.9411739
+      0.9398547      0.9383665        0.93743      0.9362847      0.9347245
+      0.9333286      0.9322352      0.9310569      0.9299359      0.9284363
+       0.927291      0.9253402      0.9230042      0.9208584      0.9188458
+      0.9162471      0.9139986      0.9117382      0.9095006      0.9069669
+      0.9043462      0.9014348      0.8976388      0.8938416      0.8903797
+      0.8873984      0.8839754      0.8779379      0.8740109      0.8691705
+      0.8625159      0.8555272      0.8492998      0.8428789      0.8363289
+      0.8274727      0.8193233      0.8095502      0.7969055      0.7860968
+      0.7738167      0.7580185      0.7414418      0.7224189      0.7015395
+      0.6779532       0.650844      0.6218438      0.5861417      0.5452154
+      0.4972516      0.4406725      0.3788822      0.3120679      0.2401164
+       0.164559     0.08763906     0.02621773              0
+
+type  = float-attribute
+name  = MDFCURVE_000020
+count = 74
+            -15      0.2012439      0.9990467      0.9525176      0.9514701
+      0.9507794      0.9499773      0.9491253      0.9481637      0.9470454
+      0.9458455      0.9446482      0.9437265      0.9428093      0.9414326
+      0.9401193      0.9386377      0.9377052      0.9365649      0.9350115
+      0.9336218      0.9325333      0.9313602      0.9302441      0.9287512
+      0.9276109      0.9256688      0.9233429      0.9212068      0.9192028
+      0.9166154       0.914377      0.9121263      0.9098991      0.9073762
+      0.9047674      0.9018684      0.8980905       0.894311      0.8908618
+      0.8878939      0.8844864      0.8784765      0.8745657      0.8697464
+      0.8631206      0.8561634      0.8499629      0.8435705      0.8370495
+      0.8282351      0.8201181      0.8103884      0.7978005      0.7870375
+      0.7748115      0.7590815      0.7425772       0.723637      0.7028556
+      0.6793747      0.6523672      0.6234851       0.587927      0.5471495
+      0.4993647      0.4429716      0.3813478      0.3146583      0.2427701
+      0.1671483     0.08994116     0.02773631              0
+
+type  = float-attribute
+name  = MDFCURVE_000021
+count = 74
+            -15      0.2012439      0.9990467      0.9525176      0.9514701
+      0.9507794      0.9499773      0.9491253      0.9481636      0.9470454
+      0.9458455      0.9446481      0.9437265      0.9428092      0.9414326
+      0.9401193      0.9386376      0.9377052      0.9365649      0.9350115
+      0.9336219      0.9325333      0.9313601      0.9302441      0.9287512
+      0.9276109      0.9256688      0.9233429      0.9212068      0.9192028
+      0.9166154      0.9143769      0.9121262      0.9098991      0.9073763
+      0.9047674      0.9018684      0.8980905       0.894311      0.8908618
+      0.8878939      0.8844864      0.8784765      0.8745657      0.8697464
+      0.8631206      0.8561634      0.8499629      0.8435704      0.8370495
+      0.8282351      0.8201182      0.8103884      0.7978004      0.7870375
+      0.7748116      0.7590815      0.7425772       0.723637      0.7028556
+      0.6793746      0.6523672       0.623485       0.587927      0.5471495
+      0.4993647      0.4429716      0.3813477      0.3146582        0.24277
+      0.1671482     0.08994085     0.02773622              0
+
+type  = float-attribute
+name  = MDFCURVE_000023
+count = 73
+            -15      0.2027698      0.9990587      0.9240398      0.9231198
+      0.9217402      0.9205274      0.9195608      0.9187341      0.9172272
+      0.9159679      0.9150302      0.9129871      0.9117758      0.9098725
+      0.9082502      0.9065704      0.9045486      0.9030654      0.9015571
+      0.8994097      0.8977201      0.8956646      0.8934933      0.8916777
+      0.8890732      0.8867484      0.8848898      0.8830525      0.8808251
+      0.8781139      0.8755054      0.8723763      0.8694772      0.8664018
+      0.8623941      0.8580436      0.8537695      0.8502171      0.8456136
+      0.8401647      0.8355332      0.8299299      0.8238443      0.8173655
+      0.8105214      0.8035094      0.7951334      0.7860757      0.7769625
+      0.7666411      0.7563642      0.7440146      0.7303795      0.7162389
+      0.7008773      0.6831518      0.6639947      0.6422402       0.620627
+      0.5927598      0.5632425      0.5302019        0.49139      0.4478678
+      0.3984426      0.3444343      0.2834534      0.2195411      0.1477498
+     0.07999703     0.02521604              0
+
+type  = float-attribute
+name  = MDFCURVE_000024
+count = 73
+            -15      0.2027695      0.9990613      0.9242506      0.9233329
+      0.9219574      0.9207479      0.9197841      0.9189595       0.917457
+      0.9162012       0.915266      0.9132286      0.9120201      0.9101226
+      0.9085048      0.9068301      0.9048135      0.9033332      0.9018304
+      0.8996888      0.8980039      0.8959541      0.8937891      0.8919783
+      0.8893809      0.8870629      0.8852093      0.8833768       0.881156
+      0.8784524      0.8758509      0.8727302      0.8698395      0.8667727
+      0.8627757      0.8584384      0.8541752      0.8506327       0.846042
+      0.8406167      0.8359895      0.8304029      0.8243332      0.8178723
+       0.811048      0.8040546       0.795702      0.7866688      0.7775803
+       0.767304      0.7570447      0.7447256      0.7311276      0.7170265
+      0.7017065      0.6840301      0.6649255        0.64323      0.6216769
+      0.5938809      0.5644383       0.531478      0.4927601      0.4493342
+      0.4000096      0.3460808      0.2852129      0.2213046       0.149414
+     0.08145085     0.02615148              0
+
+type = string-attribute
+name = BYTEORDER_STRING
+count = 10
+'LSB_FIRST~
+
+type = string-attribute
+name = BRICK_KEYWORDS
+count = 25
+'~~~~~~~~~~~~~~~~~~~~~~~~~

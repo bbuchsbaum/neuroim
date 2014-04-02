@@ -1,0 +1,36 @@
+\docType{methods}
+\name{indexToGrid}
+\alias{indexToGrid}
+\alias{indexToGrid,BrainSlice,index-method}
+\alias{indexToGrid,BrainSpace,index-method}
+\alias{indexToGrid,BrainVector,index-method}
+\alias{indexToGrid,BrainVolume,index-method}
+\title{Generic function to convert 1D indices to N-dimensional grid coordinates}
+\usage{
+indexToGrid(x, idx)
+
+\S4method{indexToGrid}{BrainSlice,index}(x, idx)
+
+\S4method{indexToGrid}{BrainSpace,index}(x, idx)
+
+\S4method{indexToGrid}{BrainVector,index}(x, idx)
+
+\S4method{indexToGrid}{BrainVolume,index}(x, idx)
+}
+\arguments{
+  \item{x}{the object}
+
+  \item{idx}{the 1D indices}
+}
+\value{
+a matrix of grid coordinates
+}
+\description{
+Generic function to convert 1D indices to N-dimensional
+grid coordinates
+
+indexToGrid
+
+indexToGrid
+}
+

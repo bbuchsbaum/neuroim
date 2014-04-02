@@ -1,0 +1,14 @@
+\docType{methods}
+\name{as.numeric,SparseBrainVolume-method}
+\alias{as.numeric,SparseBrainVolume-method}
+\title{Convert SparseBrainVolume to numeric}
+\usage{
+\S4method{as.numeric}{SparseBrainVolume}(x)
+}
+\arguments{
+  \item{x}{object to be coerced or tested.}
+}
+\description{
+Convert SparseBrainVolume to numeric
+}
+

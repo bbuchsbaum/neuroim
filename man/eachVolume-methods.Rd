@@ -1,0 +1,46 @@
+\docType{methods}
+\name{eachVolume}
+\alias{eachVolume}
+\alias{eachVolume,BrainBucket,function,logical-method}
+\alias{eachVolume,BrainBucket,function,missing-method}
+\alias{eachVolume,BrainVector,function,logical-method}
+\alias{eachVolume,BrainVector,function,missing-method}
+\alias{eachVolume,SparseBrainVector,function,logical-method}
+\alias{eachVolume,SparseBrainVector,function,missing-method}
+\title{Generic function to apply a function to each volume of a four-dimensional image}
+\usage{
+eachVolume(x, FUN, withIndex, ...)
+
+\S4method{eachVolume}{BrainVector,function,missing}(x, FUN, ...)
+
+\S4method{eachVolume}{BrainBucket,function,missing}(x, FUN, ...)
+
+\S4method{eachVolume}{BrainBucket,function,logical}(x, FUN, withIndex, ...)
+
+\S4method{eachVolume}{BrainVector,function,logical}(x, FUN, withIndex, ...)
+
+\S4method{eachVolume}{SparseBrainVector,function,logical}(x, FUN,
+  withIndex = FALSE, ...)
+
+\S4method{eachVolume}{SparseBrainVector,function,missing}(x, FUN, ...)
+}
+\arguments{
+  \item{x}{four-dimensional image}
+
+  \item{FUN}{a \code{function} taking one or two arguments
+  (depending on the value of \code{withIndex}}
+
+  \item{withIndex}{whether the index of the volume supplied
+  as the second argument to the function}
+}
+\description{
+Generic function to apply a function to each volume of a
+four-dimensional image
+
+eachVolume
+
+eachVolume
+
+eachVolume
+}
+

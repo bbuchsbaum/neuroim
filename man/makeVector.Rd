@@ -1,0 +1,27 @@
+\name{makeVector}
+\alias{makeVector}
+\title{makeVector}
+\usage{
+makeVector(data, refdata, source = NULL, label = "")
+}
+\arguments{
+  \item{data}{a four-dimensional \code{array}}
+
+  \item{refdata}{an instance of class
+  \code{\linkS4class{BrainVector}} or
+  \code{\linkS4class{BrainVolume}} containing the reference
+  space for the new vector.}
+
+  \item{label}{a \code{character} string}
+
+  \item{source}{an instance of class
+  \code{\linkS4class{BrainSource}}}
+}
+\value{
+\code{\linkS4class{DenseBrainVector}} instance
+}
+\description{
+Construct a \code{\linkS4class{BrainVector}} instance,
+using default (dense) implementation
+}
+

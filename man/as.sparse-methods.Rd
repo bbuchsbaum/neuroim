@@ -1,0 +1,21 @@
+\docType{methods}
+\name{as.sparse}
+\alias{as.sparse}
+\alias{as.sparse,DenseBrainVector,numeric-method}
+\title{Convert to sparse representation}
+\usage{
+as.sparse(x, mask, ...)
+
+\S4method{as.sparse}{DenseBrainVector,numeric}(x, mask)
+}
+\arguments{
+  \item{x}{the object to sparsify}
+
+  \item{mask}{the elements to retain}
+}
+\description{
+Convert to sparse representation
+
+convert a DenseBrainVector to a SparseBrainVector
+}
+

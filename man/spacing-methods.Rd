@@ -1,0 +1,28 @@
+\docType{methods}
+\name{spacing}
+\alias{spacing}
+\alias{spacing,BrainData-method}
+\alias{spacing,BrainSpace-method}
+\title{Generic function to extract the voxel dimensions of an image}
+\usage{
+spacing(x)
+
+\S4method{spacing}{BrainData}(x)
+
+\S4method{spacing}{BrainSpace}(x)
+}
+\arguments{
+  \item{x}{the object}
+}
+\value{
+a numeric vector
+}
+\description{
+Generic function to extract the voxel dimensions of an
+image
+
+spacing
+
+spacing
+}
+
