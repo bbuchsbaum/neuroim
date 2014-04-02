@@ -1,6 +1,5 @@
-#' display BrainVolume
-#' 
-#' @export
+
+#' image
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
           def=function(x, slice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {    
@@ -71,8 +70,6 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
           })
 
 #' image
-#' 
-#' @export 
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "Overlay"),
           def=function(x, zpos, axis=3) {  
@@ -84,8 +81,6 @@ setMethod(f="image", signature=signature(x = "Overlay"),
           })
 
 #' image
-#' 
-#' @export 
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "Layer"),
           def=function(x, zpos, axis=3) {  

@@ -221,7 +221,7 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 #' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing"),
-		def=function(x, FUN, ...) {
+		def=function(x, FUN, withIndex, ...) {
 			lapply(1:nrow(x@data), function(i) FUN(takeVolume(x, i), ...))					
 		})
 
@@ -229,8 +229,8 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 
 #' @export  
 #' @rdname eachSeries-methods 
-setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function"),
-          def=function(x, FUN, withIndex=FALSE) {
+setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical"),
+          def=function(x, FUN, withIndex=FALSE, ...) {
             ret <- list()
             if (withIndex) {
               idx <- indices(x)
@@ -474,7 +474,7 @@ setMethod(f="as.list", signature=signature(x = "SparseBrainVector"), def=functio
 			
 })
 
-#' @export
+
 setMethod("show",
           signature=signature(object="SparseBrainVector"),
           def=function(object) {

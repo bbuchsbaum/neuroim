@@ -223,7 +223,6 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL)
 #' conversion from DenseBrainVolume to array
 #' @rdname as-methods
 #' @name as
-#' @export
 setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
 
@@ -231,7 +230,6 @@ setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 #' conversion from SparseBrainVolume to array
 #' @rdname as-methods
 #' @name as
-#' @export
 setAs(from="SparseBrainVolume", to="array", def=function(from) {
   vals <- as.numeric(from@data)
   array(vals, dim(from))
@@ -241,7 +239,6 @@ setAs(from="SparseBrainVolume", to="array", def=function(from) {
 #' conversion from SparseBrainVolume to numeric
 #' @rdname as-methods
 #' @name as
-#' @export
 setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
   as.numeric(from@data)
 })
@@ -258,13 +255,11 @@ setMethod(f="as.numeric", signature=signature(x = "SparseBrainVolume"), def=func
 #' conversion from BrainVolume to LogicalBrainVolume
 #' @rdname as-methods
 #' @name as
-#' @export
 setAs(from="BrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
 })
 
 #' conversion from DenseBrainVolume to LogicalBrainVolume
-#' @export
 #' @name as
 #' @rdname as-methods    
 setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
@@ -274,7 +269,6 @@ setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 #' conversion from ClusteredBrainVolume to LogicalBrainVolume
 #' @name as
 #' @rdname as-methods
-#' @export
 setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
   data = from@clusters
   indices <- which(from@mask == TRUE)
@@ -284,10 +278,11 @@ setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
 #' conversion from BrainVolume to array
 #' @rdname as-methods
 #' @name as
-#' @export
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
-#' @export
+#' show
+#' @name show
+#' @rdname show-methods
 setMethod(f="show", signature=signature("BrainVolume"),
           def=function(object) {
             sp <- space(object)
@@ -682,8 +677,7 @@ setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="
           })
           
 
-#' partition a ClusteredBrainVolume into K spatial disjoint components for every existing partition in the volume
-#' @name partition
+#' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
 #' @rdname partition-methods
 #' @export
 setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 

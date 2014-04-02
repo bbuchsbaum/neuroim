@@ -1,6 +1,7 @@
 \docType{methods}
 \name{partition}
 \alias{partition}
+\alias{partition,ClusteredBrainVolume,numeric,matrix-method}
 \title{partition}
 \usage{
 partition(x, K, features, ...)
@@ -19,7 +20,8 @@ partition(x, K, features, ...)
 \description{
 partition
 
-partition a ClusteredBrainVolume into K spatial disjoint
-components for every existing partition in the volume
+partition a \code{ClusteredBrainVolume} into K spatial
+disjoint components for every existing partition in the
+volume
 }
 

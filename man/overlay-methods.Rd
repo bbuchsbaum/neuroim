@@ -1,11 +1,24 @@
 \docType{methods}
-\name{overlay,Layer,Layer-method}
+\name{overlay}
+\alias{overlay}
 \alias{overlay,Layer,Layer-method}
-\title{overlay}
+\title{overlay two objects}
 \usage{
+overlay(x, y, ...)
+
 \S4method{overlay}{Layer,Layer}(x, y)
 }
+\arguments{
+  \item{x}{the underlay object}
+
+  \item{y}{the overlay object}
+
+  \item{...}{additional arguments for class-specific
+  implementations}
+}
 \description{
+overlay two objects
+
 overlay
 }
 

@@ -214,6 +214,7 @@ setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridTo
 #' @param x four-dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the volume supplied as the second argument to the function
+#' @param ... additional arguments
 #' @export 
 #' @rdname eachVolume-methods
 setGeneric(name="eachVolume", def=function(x, FUN, withIndex, ...) standardGeneric("eachVolume"))
@@ -384,6 +385,11 @@ if (!isGeneric("image"))
 if (!isGeneric("as.raster"))
   setGeneric("as.raster", function(x, ...) standardGeneric("as.raster"))
 
-if (!isGeneric("overlay"))
-  setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
+#' overlay two objects
+#' @param x the underlay object
+#' @param y the overlay object
+#' @param ... additional arguments for class-specific implementations
+#' @export 
+#' @rdname overlay-methods
+setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
 

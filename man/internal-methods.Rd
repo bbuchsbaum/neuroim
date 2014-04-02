@@ -1,0 +1,67 @@
+\name{.isExtension}
+\alias{.concat4D}
+\alias{.extract.array}
+\alias{.getDataCode}
+\alias{.getDataSize}
+\alias{.getDataStorage}
+\alias{.getEndian}
+\alias{.getRStorage}
+\alias{.gridToIndex}
+\alias{.gridToIndex3D}
+\alias{.indexToGrid}
+\alias{.isExtension}
+\alias{.matrixToQuatern}
+\alias{.niftiExt}
+\title{.isExtension}
+\usage{
+.isExtension(fname, extension)
+
+.concat4D(x, y, ...)
+
+.extract.array(x, ..., drop = FALSE, indices = list(...))
+
+.gridToIndex3D(dimensions, vmat)
+
+.gridToIndex(dimensions, vmat)
+
+.indexToGrid(idx, array.dim)
+
+.getRStorage(dataType)
+
+.getDataStorage(code)
+
+.getDataCode(dataType)
+
+.getDataSize(dataType)
+
+.getEndian(conn)
+
+.niftiExt(filetype)
+
+.matrixToQuatern(mat)
+}
+\description{
+.isExtension
+
+.concat4D
+
+.extract.array
+
+.gridToIndex3D
+
+.gridToIndex
+
+.indexToGrid
+
+.getRStorage
+
+.getDataStorage
+
+.getDataCode
+
+.getDataSize
+
+.getEndian
+}
+\keyword{internal}
+

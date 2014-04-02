@@ -1,6 +1,4 @@
-#' splitScale
 
-#' 
 #' @export
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="function"),
@@ -20,7 +18,6 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
 #' 
 #' @export
 #' @rdname splitScale-methods
-#' @aliases splitScale,matrix,factor,logical,logical,ANY-method
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="logical", scale="logical"),
           def=function(x, f, center=TRUE, scale=TRUE) {
             if (length(f) != nrow(x)) {
@@ -37,17 +34,26 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
             out
           })
 
+
 #' @export
+#' @rdname splitScale-methods
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="missing", scale="missing"),
           def=function(x, f) {
             callGeneric(x,f, TRUE, TRUE)
           })
 
+
+#' .isExtension
+#' @rdname internal-methods
+#' @keywords internal
 .isExtension <- function(fname, extension) {
   last <- substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
   return(last==extension)
 }
 
+#' .concat4D
+#' @rdname internal-methods
+#' @keywords internal
 .concat4D <- function(x,y, ...) {
 	rest <- list(...)
 	
@@ -82,8 +88,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 }
 
- 
-## based on code from R.utils, extract.array
+#' .extract.array 
+#' @rdname internal-methods
+#' @keywords internal
 .extract.array <- function(x, ..., drop=FALSE, indices=list(...)) {
   nindices <- length(indices)
   if (nindices == 0) {
@@ -120,7 +127,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   eval(expr)
 }
 
-
+#' .gridToIndex3D
+#' @rdname internal-methods
+#' @keywords internal
 .gridToIndex3D <- function(dimensions, vmat) {
 	stopifnot(length(dimensions) == 3)
 	slicedim = dimensions[1]*dimensions[2]
@@ -130,8 +139,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 			})	
 }
 
-
-
+#' .gridToIndex
+#' @rdname internal-methods
+#' @keywords internal
 .gridToIndex <- function(dimensions, vmat) {
 	D <- Reduce("*", dimensions, accumulate=TRUE)
 	apply(vmat, 1, function(vox) {
@@ -142,8 +152,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 }
 
-
-
+#' .indexToGrid
+#' @rdname internal-methods
+#' @keywords internal
 .indexToGrid <- function(idx, array.dim) {
 	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
 	rank = length(array.dim)
@@ -162,7 +173,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 }
 
-
+#' .getRStorage
+#' @rdname internal-methods
+#' @keywords internal
 .getRStorage <- function(dataType) {
   if (any(toupper(dataType) == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
     "integer"
@@ -195,8 +208,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 #}
 	
 
-
-
+#' .getDataStorage
+#' @rdname internal-methods
+#' @keywords internal
 .getDataStorage <- function(code) {
   if (code == 0) {
     return("UNKNOWN")
@@ -217,6 +231,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   }
 }
 
+#' .getDataCode
+#' @rdname internal-methods
+#' @keywords internal
 .getDataCode <- function(dataType) {
   if (dataType == "UNKNOWN") {
     return(0)
@@ -237,6 +254,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   }
 }
 
+#' .getDataSize
+#' @rdname internal-methods
+#' @keywords internal
 .getDataSize <- function(dataType) {
   if (dataType == "BINARY") {
     return(1)
@@ -267,7 +287,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   stop(paste("unrecognized data type: ", dataType))
 }
 
-
+#' .getEndian
+#' @rdname internal-methods
+#' @keywords internal
 .getEndian <- function(conn) {
   #try little endian
   endian <- "little"
@@ -286,7 +308,9 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   return(endian)
 }
 
-
+#' @rdname internal-methods
+#' @name .niftiExt
+#' @keywords internal
 .niftiExt <- function(filetype) {
 
   extensions <- list()
@@ -309,7 +333,8 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   return(extensions)
 }
 
-
+#' @rdname internal-methods
+#' @keywords internal
 .matrixToQuatern <- function(mat) {
   xd <- sqrt(drop(crossprod(mat[1:3,1])))
   yd <- sqrt(drop(crossprod(mat[1:3,2])))

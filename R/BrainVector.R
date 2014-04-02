@@ -200,20 +200,25 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	
 }
 
-
+#' extract names of \code{BrainBucketSource} instance
+#' @rdname names-methods
 #' @export
 setMethod("names", signature=c("BrainBucketSource"),
 		def=function(x) {
 			x@metaInfo@label[x@indices]
 		})
 
+#' extract names of \code{BrainBucket} instance
+#' @rdname names-methods
 #' @export
 setMethod("names", signature=c("BrainBucket"),
 		def=function(x) {
 			x@labels
 		})
 
+#' Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)
 #' @export
+#' @rdname length-methods
 setMethod("length", signature=c("BrainVector"),
 		def=function(x) {
 			dim(x)[4]
@@ -385,7 +390,7 @@ setAs("DenseBrainVector", "array", function(from) from@.Data)
 setAs("BrainVector", "array", function(from) from[,,,])
 
 
-#' @export
+
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
 		def=function(object) {
@@ -398,7 +403,7 @@ setMethod(f="show",
 		})
 
 
-#' @export
+
 setMethod("show",
 		signature=signature(object="BrainVector"),
 		def=function(object) {
@@ -415,7 +420,7 @@ setMethod("show",
 #' @rdname eachVolume-methods
 #' @export
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
-		def=function(x, FUN, ...) {
+		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt], ...))				
 		})
 
@@ -423,7 +428,7 @@ setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", w
 #' @rdname eachVolume-methods
 #' @export
 setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing"),
-		def=function(x, FUN, ...) {
+		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]], ...))				
 		})
 

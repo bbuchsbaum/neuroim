@@ -16,7 +16,6 @@ setMethod(f="ndim", signature=signature(x = "BrainData"),
 #' 
 #' @export
 #' @rdname dim-methods
-#' @aliases dim,BrainData,ANY-method
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
 
@@ -39,12 +38,14 @@ setMethod(f="spacing",signature= signature(x = "BrainData"),
             spacing(sp)
           })
 
-
+#' convert \code{BrainData} instance to matrix
 #' @export
 setMethod(f="as.matrix", signature=signature(x = "BrainData"), def=function(x) as(x, "matrix"))
 
+#' convert \code{BrainData} instance to array
 #' @export
 setMethod(f="as.array", signature=signature(x = "BrainData"), def=function(x) as(x, "array"))
 
+#' convert \code{BrainData} instance to vector
 #' @export
 setMethod(f="as.vector", signature=signature(x = "BrainData"), def=function(x) as(x, "vector"))

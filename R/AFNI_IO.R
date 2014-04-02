@@ -1,14 +1,15 @@
 
-
-
+#' @keywords internal
 parseIntAttribute <- function(line){ 
 	as.integer(str_split(str_trim(paste(line, collapse=" ")), "\\s+")[[1]])
 }
-	
+
+#' @keywords internal
 parseFloatAttribute <- function(line){ 
 	as.numeric(str_split(str_trim(paste(line, collapse=" ")), "\\s+")[[1]])
 }
 	
+#' @keywords internal
 parseStringAttribute <- function(line) {
 	
 	res <- str_split(line, "~")[[1]]
@@ -20,7 +21,7 @@ parseStringAttribute <- function(line) {
 	}
 }
 	
-
+#' @keywords internal
 parseElement <- function(inputLines) {
 	atype <- str_trim(str_split(inputLines[[1]], "=")[[1]])[2]	
 	name <- str_trim(str_split(inputLines[[2]], "=")[[1]])[2]	

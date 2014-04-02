@@ -119,7 +119,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 }
 
 
-#' @export
+
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")

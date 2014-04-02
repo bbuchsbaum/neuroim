@@ -119,27 +119,30 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
 
-#' @export
+
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(print(object@axis))
 		})
 
+#' print a \code{NamedAxis} instance
 #' @export
+#' @rdname print-methods
 setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
-#' @export
+
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i@axis), "\n")
 		})
 
-
+#' print a \code{AxisSet2D} instance
 #' @export
+#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(x@i@axis, "-", x@j@axis)
@@ -147,7 +150,7 @@ setMethod(f="print", signature=signature("AxisSet2D"),
 
 
 
-#' @export
+
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -155,14 +158,16 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 			cat("Axis 2:", object@j@axis, "\n")
 		})
 
+#' print a \code{AxisSet3D} instance
 #' @export
+#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(x@i@axis, " -- ", x@j@axis, " -- ", x@k@axis)
 		})
 
 
-#' @export
+
 setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -172,7 +177,7 @@ setMethod(f="show", signature=signature("AxisSet3D"),
 		})
 
 
-#' @export
+
 setMethod(f="show", signature=signature("AxisSet4D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")

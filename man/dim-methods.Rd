@@ -1,6 +1,5 @@
 \docType{methods}
 \name{dim,BrainData-method}
-\alias{dim,BrainData,ANY-method}
 \alias{dim,BrainData-method}
 \alias{dim,BrainSpace,ANY-method}
 \alias{dim,BrainSpace-method}

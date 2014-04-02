@@ -129,7 +129,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
   centroid <- as.integer(centroid)
-  
+  mcentroid <- ((centroid-1) * vspacing + vspacing/2)
  
   dvals <- apply(grid, 1, function(gvals) {
     coord <- (gvals-1) * vspacing + vspacing/2
@@ -215,9 +215,8 @@ Searchlight <- function(mask, radius) {
 }
 
 #' conversion from ROIVolume to DenseBrainVolume
-#' @rdname as-methods
 #' @name as
-#' @export
+#' @rdname as-methods
 setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
   dat <- array(0, dim(from@space))
   dat[from@coords] <- from@data
@@ -257,7 +256,7 @@ setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missin
             x@data[i]
           })
   
-#' @export
+
  setMethod(f="show", signature=signature(object = "ROIVolume"),
 		  function (object) {
 			  cat("\n\n\tROIVolume", "\n")

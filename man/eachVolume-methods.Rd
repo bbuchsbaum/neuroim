@@ -11,9 +11,9 @@
 \usage{
 eachVolume(x, FUN, withIndex, ...)
 
-\S4method{eachVolume}{BrainVector,function,missing}(x, FUN, ...)
+\S4method{eachVolume}{BrainVector,function,missing}(x, FUN, withIndex, ...)
 
-\S4method{eachVolume}{BrainBucket,function,missing}(x, FUN, ...)
+\S4method{eachVolume}{BrainBucket,function,missing}(x, FUN, withIndex, ...)
 
 \S4method{eachVolume}{BrainBucket,function,logical}(x, FUN, withIndex, ...)
 
@@ -22,7 +22,8 @@ eachVolume(x, FUN, withIndex, ...)
 \S4method{eachVolume}{SparseBrainVector,function,logical}(x, FUN,
   withIndex = FALSE, ...)
 
-\S4method{eachVolume}{SparseBrainVector,function,missing}(x, FUN, ...)
+\S4method{eachVolume}{SparseBrainVector,function,missing}(x, FUN, withIndex,
+  ...)
 }
 \arguments{
   \item{x}{four-dimensional image}
@@ -32,6 +33,8 @@ eachVolume(x, FUN, withIndex, ...)
 
   \item{withIndex}{whether the index of the volume supplied
   as the second argument to the function}
+
+  \item{...}{additional arguments}
 }
 \description{
 Generic function to apply a function to each volume of a

@@ -102,14 +102,14 @@ setClass("BaseMetaInfo")
 #' @name NullMetaInfo-class
 setClass("NullMetaInfo", contains=c("BaseMetaInfo"))
 
-#' @export
+
 setMethod(f="show",
 		signature=signature(object="BaseMetaInfo"),
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 		})
 
-#' @export
+
 setMethod(f="show",
 		signature=signature(object="NullMetaInfo"),
 			def=function(object) {
@@ -171,7 +171,7 @@ setClass("FileMetaInfo",
 		contains=c("BrainMetaInfo"))
 
 #' This class contains meta information for a NIfTI image file
-#' @name NifTIMetaInfo-class
+#' @name NIfTIMetaInfo-class
 #' @slot nifti_header a list of attributes specific to the NIfTI file format 
 #' @export	
 setClass("NIfTIMetaInfo",

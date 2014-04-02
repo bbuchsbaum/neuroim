@@ -21,7 +21,5 @@ been scaled
 }
 \description{
 Generic function to summarize subsets of an object
-
-splitScale
 }
 

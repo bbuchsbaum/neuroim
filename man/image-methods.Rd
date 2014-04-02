@@ -3,7 +3,7 @@
 \alias{image,BrainVolume-method}
 \alias{image,Layer-method}
 \alias{image,Overlay-method}
-\title{display BrainVolume}
+\title{image}
 \usage{
 \S4method{image}{BrainVolume}(x, slice, col = heat.colors(128, alpha = 1),
   zero.col = "#00000000")
@@ -27,7 +27,7 @@
   or similar functions.}
 }
 \description{
-display BrainVolume
+image
 
 image
 
