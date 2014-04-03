@@ -1,8 +1,12 @@
+\docType{methods}
 \name{mergePartitions}
 \alias{mergePartitions}
+\alias{mergePartitions,ClusteredBrainVolume,numeric,matrix-method}
 \title{mergePartitions}
 \usage{
 mergePartitions(x, K, features, ...)
+
+\S4method{mergePartitions}{ClusteredBrainVolume,numeric,matrix}(x, K, features)
 }
 \arguments{
   \item{x}{the object to merge}
@@ -16,5 +20,7 @@ mergePartitions(x, K, features, ...)
 }
 \description{
 mergePartitions
+
+merge partititons in a ClusteredBrainVolume
 }
 

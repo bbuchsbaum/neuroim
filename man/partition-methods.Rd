@@ -18,6 +18,8 @@ partition(x, K, features, ...)
   partition}
 
   \item{...}{additional arguments}
+
+  \item{method}{clustering method}
 }
 \description{
 partition

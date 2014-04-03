@@ -281,7 +281,6 @@ setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
 #' show
-#' @name show
 #' @rdname show-methods
 setMethod(f="show", signature=signature("BrainVolume"),
           def=function(object) {
@@ -403,9 +402,6 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
           })
 
 #' split values by factor apply function and then fill in new volume
-#' @param x the volume to operate on
-#' @param fac the factor used to split the volume
-#' @param FUN the function to apply to each split
 #' @note FUN can return one value per category or one value per voxel
 #' @export splitFill
 #' @rdname splitFill-methods
@@ -609,6 +605,8 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
           })
 
 #' tesselate a LogicalBrainVolume into K spatial disjoint components
+#' @param features use addiitonal feature set to tesselate volume
+#' @param spatialWeight weight voxels according to distance
 #' @rdname tesselate-methods
 setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
           def=function(x, K, features=NULL, spatialWeight=4) {
@@ -630,7 +628,6 @@ setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"
             kgrid <- kmeans(voxgrid, centers=K, iter.max=100)
             ClusteredBrainVolume(x, kgrid$cluster)
           })
-
 
 
 #' get number of clusters in a ClusteredBrainVolume
@@ -661,7 +658,7 @@ setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", feat
 
 
 #' merge partititons in a ClusteredBrainVolume
-#' @rdname mergePartitions-method
+#' @rdname mergePartitions-methods
 #' @export
 setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
           def=function(x, K, features) {

@@ -1,6 +1,6 @@
 \docType{methods}
-\name{show}
-\alias{show}
+\name{show,BrainVolume-method}
+\alias{show,BrainVolume-method}
 \title{show}
 \usage{
 \S4method{show}{BrainVolume}(object)

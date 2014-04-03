@@ -162,8 +162,12 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
-#' Generic function to extract a value
-setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("value"))
+# Generic function to extract a value
+# @param object
+# @param x
+# @param y
+# @param ... additional arguments
+# setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("value"))
 
 #' Generic function to convert 1D indices to N-dimensional grid coordinates
 #' @param x the object
@@ -281,6 +285,7 @@ setGeneric(name="as.mask", def=function(x, indices) standardGeneric("as.mask"))
 #' tesselate
 #' @param x the object to tesselate
 #' @param K the number of partitions
+#' @param ... extra arguments
 #' @export 
 #' @rdname tesselate-methods
 setGeneric(name="tesselate", def=function(x, K, ...) standardGeneric("tesselate"))

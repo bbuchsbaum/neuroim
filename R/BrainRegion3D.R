@@ -312,7 +312,6 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
 
 
 #' extract voxels from a \code{Kernel} object
-#' @param x the Kernel \code{\linkS4class{Kernel}} object
 #' @param centerVoxel the absolute location of the center of the voxel, default is (0,0,0)
 #' @rdname voxels-methods
 #' @export

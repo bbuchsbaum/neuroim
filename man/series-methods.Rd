@@ -23,6 +23,10 @@ series(x, i, ...)
   \item{i}{the series index}
 
   \item{...}{additional arguments}
+
+  \item{j}{index of second dimension}
+
+  \item{k}{index of third dimension}
 }
 \description{
 Extract vector series from object

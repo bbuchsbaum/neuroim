@@ -22,6 +22,8 @@ loadData(x, ...)
 
   \item{...}{additional arguments}
 
+  \item{mmap}{use memory-mapped file}
+
   \item{key}{the name or index of the bucket to load}
 }
 \value{

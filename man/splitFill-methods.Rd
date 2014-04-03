@@ -14,12 +14,6 @@ splitFill(x, fac, FUN)
   \item{fac}{the factor to split by}
 
   \item{FUN}{the function to summarize the the clusters}
-
-  \item{x}{the volume to operate on}
-
-  \item{fac}{the factor used to split the volume}
-
-  \item{FUN}{the function to apply to each split}
 }
 \value{
 a new object where the original values have been replaced

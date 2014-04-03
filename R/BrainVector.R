@@ -119,13 +119,18 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 
 #' Load data from a \code{\linkS4class{BrainVectorSource}}
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
+#' @param mmap use memory-mapped file
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x, mmap=FALSE) {		
 			
 			meta <- x@metaInfo
+      
+      if (mmap) {
+        stop("memory mapping not implemented")
+      }
 			if (mmap && (.Platform$endian != meta@endian)) {
-				stop("cannot create memory mapped file when image endianness does not equal OS endianess: set mmap to FALSE")
+				stop("cannot create memory mapped file when image endianness does not equal OS endianess")
 			}
 			
 			if (mmap && .isExtension(meta@dataFile, ".gz")) {

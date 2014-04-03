@@ -13,8 +13,6 @@ voxels(x, ...)
 
   \item{...}{addiitonal arguments to function}
 
-  \item{x}{the Kernel \code{\linkS4class{Kernel}} object}
-
   \item{centerVoxel}{the absolute location of the center of
   the voxel, default is (0,0,0)}
 }

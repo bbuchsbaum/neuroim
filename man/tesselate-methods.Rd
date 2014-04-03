@@ -13,6 +13,13 @@ tesselate(x, K, ...)
   \item{x}{the object to tesselate}
 
   \item{K}{the number of partitions}
+
+  \item{...}{extra arguments}
+
+  \item{features}{use addiitonal feature set to tesselate
+  volume}
+
+  \item{spatialWeight}{weight voxels according to distance}
 }
 \description{
 tesselate
