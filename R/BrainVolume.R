@@ -375,9 +375,6 @@ loadVolume  <- function(fileName, index=1) {
 
 
 #' concatenate two BrainVolumes
-#' @param x the first volume
-#' @param y the second volume
-#' @param ... extra arguments of class BrainVolume or other concatenable objects
 #' @note dimensions of x and y must be equal
 #' @export concat
 #' @rdname concat-methods
@@ -577,6 +574,7 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 
 #' apply a kernel function to a BrainVolume
 #' @rdname map-methods
+#' @param mask restrict application of kernel to maksed area
 #' @export
 setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
           def=function(x, m, mask=NULL) {          
@@ -587,6 +585,10 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
             zdim <- dim(x)[3]
             
             if (!is.null(mask)) {
+              if (!all.equal(dim(mask), dim(vol))) {
+                stop(paste("mask must have same dimensions as input volume"))
+              }
+              # TODO check that mask is same shape as volume
               grid <- indexToGrid(mask, which(mask != 0))
             } else {
               grid <- as.matrix(expand.grid(i=hwidth[1]:(xdim - hwidth[1]), j=hwidth[2]:(ydim - hwidth[2]), k=hwidth[3]:(zdim - hwidth[3])))
@@ -678,6 +680,7 @@ setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="
           
 
 #' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
+#' @param method clustering method
 #' @rdname partition-methods
 #' @export
 setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
@@ -708,16 +711,18 @@ setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeri
             
 #' find connected components in BrainVolume
 #' @export
+#' @param threshold threshold defining lower intensity bound for image mask
+#' @param clusterTable return clusterTable
+#' @param localMaxima return table of local maxima
+#' @param localMaximaDistance the distance used to define minum distance between local maxima 
 #' @rdname connComp-methods
 setMethod(f="connComp", signature=signature(x="BrainVolume"), 
-	def=function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
+	def=function(x, threshold=0, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)
 		stopifnot(any(mask))
 	
 		comps <- connComp3D(mask)
 		
-		
-	
 		grid <- as.data.frame(indexToGrid(mask, which(mask>0)))
 		colnames(grid) <- c("x", "y", "z")
 		locations <- split(grid, comps$index[comps$index>0])

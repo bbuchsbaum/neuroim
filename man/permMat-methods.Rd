@@ -13,6 +13,8 @@ permMat(x, ...)
 }
 \arguments{
   \item{x}{the object}
+
+  \item{...}{additional arguments}
 }
 \description{
 extract permutation matrix

@@ -2,3 +2,5 @@ neuroim.Rproj
 run_unit.R
 test_data
 workspace.R
+^.*\.Rproj$
+^\.Rproj\.user$

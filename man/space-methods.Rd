@@ -13,6 +13,8 @@ space(x, ...)
 }
 \arguments{
   \item{x}{the object to query}
+
+  \item{...}{additional arguments}
 }
 \value{
 an object representing the geometric space of the image

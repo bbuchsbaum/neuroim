@@ -9,5 +9,7 @@ This class represents an axis with a name attribute
 
 \describe{
 \item{\code{axis}}{the name of the axis}
+
+\item{\code{direction}}{of axis (-1,+1)}
 }}
 

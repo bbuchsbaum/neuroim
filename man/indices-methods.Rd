@@ -17,8 +17,6 @@ indices(x)
 }
 \arguments{
   \item{x}{the object to extract indices}
-
-  \item{x}{an ROIVolume}
 }
 \description{
 Extract indices

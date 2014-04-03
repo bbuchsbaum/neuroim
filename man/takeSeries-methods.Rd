@@ -7,7 +7,9 @@ takeSeries(x, indices, ...)
 \arguments{
   \item{x}{a four dimensional image}
 
-  \item{i}{the indices of the series' to extract}
+  \item{indices}{the indices of the series' to extract}
+
+  \item{...}{additional arguments}
 }
 \description{
 Generic function to extract a set of series from a 4D image

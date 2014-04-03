@@ -22,6 +22,8 @@ eachSeries(x, FUN, withIndex, ...)
 
   \item{withIndex}{whether the index of the series is
   supplied as the second argument to the function}
+
+  \item{...}{additional arguments}
 }
 \description{
 Generic functions to apply a function to each series of a

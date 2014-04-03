@@ -57,7 +57,8 @@ setMethod(f="space", signature=signature(x="IndexLookupVolume"),
 
 #' coords
 #' 
-#' @export coords   
+#' @export coords  
+#' @param i the index in to the lookup volume 
 #' @rdname coords-methods       
 setMethod(f="coords", signature(x="IndexLookupVolume"),
           def=function(x,i) {

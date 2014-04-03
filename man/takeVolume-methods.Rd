@@ -15,6 +15,10 @@ takeVolume(x, i, ...)
   \item{x}{four-dimensional image}
 
   \item{i}{the indices of the volume(s) to extract}
+
+  \item{...}{additional arguments}
+
+  \item{merge}{concatenate extracted volumes}
 }
 \description{
 Generic function to extract a volume from a

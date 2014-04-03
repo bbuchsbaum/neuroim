@@ -19,6 +19,8 @@ eachSlice(x, FUN, withIndex, ...)
 
   \item{withIndex}{whether the index of the slice is
   supplied as the second argument to the function}
+
+  \item{...}{additional arguments}
 }
 \description{
 Generic functions to apply a function to each (2D) slice of

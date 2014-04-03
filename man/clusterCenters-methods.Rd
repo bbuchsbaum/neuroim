@@ -10,6 +10,10 @@ clusterCenters(x, features, FUN)
 }
 \arguments{
   \item{x}{the object to extract cluster centers from}
+
+  \item{features}{additional features}
+
+  \item{FUN}{a user-supplied function}
 }
 \description{
 clusterCenters

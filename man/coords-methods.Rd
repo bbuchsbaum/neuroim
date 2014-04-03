@@ -17,12 +17,12 @@ coords(x, ...)
 \arguments{
   \item{x}{the object to extract coordinates from}
 
-  \item{x}{an ROIVolume object}
+  \item{...}{additional arguments}
+
+  \item{i}{the index in to the lookup volume}
 }
 \description{
 Extract coordinates
-
-coords
 
 coords
 

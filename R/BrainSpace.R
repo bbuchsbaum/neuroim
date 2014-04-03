@@ -69,10 +69,6 @@ setMethod(f="show", signature=signature("BrainSpace"),
 )
 
 #' add dimension to \code{\linkS4class{BrainSpace}}
-#' 
-#' function is used to add a dimension to a \code{\linkS4class{BrainSpace}} object
-#' @param x an \code{\linkS4class{BrainSpace}} object
-#' @param n the size of the dimension to be added
 #' @export
 #' @rdname addDim-methods
 setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
@@ -119,7 +115,6 @@ setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 #' bounds
 #' 
 #' @export
-#' @param x an object of type \code{BrainSpace}
 #' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {

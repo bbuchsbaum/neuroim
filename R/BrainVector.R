@@ -118,7 +118,6 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 
 
 #' Load data from a \code{\linkS4class{BrainVectorSource}}
-#' @param x an instance of class \code{\linkS4class{BrainVectorSource}}
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
@@ -225,7 +224,7 @@ setMethod("length", signature=c("BrainVector"),
 		})
 
 #' Load data from a \code{\linkS4class{BrainBucketSource}}
-#' @param x an instance of class \code{\linkS4class{BrainBucketSource}}
+#' @param key the name or index of the bucket to load
 #' @return an instance of class \code{\linkS4class{BrainVolume}} 
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=signature("BrainBucketSource"), 
@@ -460,6 +459,7 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 
 
 #' @rdname takeVolume-methods
+#' @param merge concatenate extracted volumes
 #' @export
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
@@ -576,6 +576,8 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 
 
 #' @rdname series-methods
+#' @param j index of second dimension
+#' @param k index of third dimension
 #' @export
 setMethod("series", signature(x="BrainVector", i="numeric"),
 		def=function(x,i, j, k) {	

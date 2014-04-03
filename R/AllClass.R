@@ -14,6 +14,7 @@ setClass("Base", contains=c("VIRTUAL"))
 #' This class represents an axis with a name attribute
 #' @name NamedAxis-class
 #' @slot axis the name of the axis
+#' @slot direction of axis (-1,+1)
 #' @export 
 setClass("NamedAxis", representation=
 				representation(axis="character", direction="numeric"))
@@ -484,7 +485,7 @@ setClass("ROIVolume",
 #' @name Kernel-class
 #' @slot width the width in voxels of the kernel
 #' @slot weights the kernel weights
-#' @slot voxmat the relative voxel coordinates of the kernel
+#' @slot voxels the relative voxel coordinates of the kernel
 #' @slot coords the relative real coordinates of the kernel
 #' @export
 setClass("Kernel", 

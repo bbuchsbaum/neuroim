@@ -13,6 +13,10 @@ lookup(x, i, ...)
 }
 \arguments{
   \item{x}{the object to query}
+
+  \item{i}{the index to lookup}
+
+  \item{...}{additional arguments}
 }
 \description{
 Index Lookup operation

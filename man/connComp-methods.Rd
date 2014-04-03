@@ -6,13 +6,23 @@
 \usage{
 connComp(x, ...)
 
-\S4method{connComp}{BrainVolume}(x, threshold = 0, coords = TRUE,
-  clusterTable = TRUE, localMaxima = TRUE, localMaximaDistance = 15)
+\S4method{connComp}{BrainVolume}(x, threshold = 0, clusterTable = TRUE,
+  localMaxima = TRUE, localMaximaDistance = 15)
 }
 \arguments{
   \item{x}{the image object}
 
   \item{...}{additonal arguments}
+
+  \item{threshold}{threshold defining lower intensity bound
+  for image mask}
+
+  \item{clusterTable}{return clusterTable}
+
+  \item{localMaxima}{return table of local maxima}
+
+  \item{localMaximaDistance}{the distance used to define
+  minum distance between local maxima}
 }
 \description{
 Find connected components

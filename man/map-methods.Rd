@@ -12,6 +12,11 @@ map(x, m, ...)
   \item{x}{the object that is mapped}
 
   \item{m}{the mapping object}
+
+  \item{...}{additional arguments}
+
+  \item{mask}{restrict application of kernel to maksed
+  area}
 }
 \description{
 Generic function to apply a function to an object

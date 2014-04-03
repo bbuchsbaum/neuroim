@@ -19,6 +19,10 @@ series(x, i, ...)
 }
 \arguments{
   \item{x}{the object}
+
+  \item{i}{the series index}
+
+  \item{...}{additional arguments}
 }
 \description{
 Extract vector series from object

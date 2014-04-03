@@ -20,11 +20,9 @@ loadData(x, ...)
 \arguments{
   \item{x}{a data source}
 
-  \item{x}{an instance of class
-  \code{\linkS4class{BrainVectorSource}}}
+  \item{...}{additional arguments}
 
-  \item{x}{an instance of class
-  \code{\linkS4class{BrainBucketSource}}}
+  \item{key}{the name or index of the bucket to load}
 }
 \value{
 an instance of class \code{\linkS4class{BrainVector}}

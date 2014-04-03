@@ -1,0 +1,14 @@
+\docType{methods}
+\name{as.vector,BrainData,ANY-method}
+\alias{as.vector,BrainData,ANY-method}
+\title{convert \code{BrainData} instance to vector}
+\usage{
+\S4method{as.vector}{BrainData,ANY}(x)
+}
+\arguments{
+  \item{x}{an \R object.}
+}
+\description{
+convert \code{BrainData} instance to vector
+}
+

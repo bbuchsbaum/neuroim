@@ -11,6 +11,8 @@ mergePartitions(x, K, features, ...)
 
   \item{features}{the features used to define the
   partition}
+
+  \item{...}{additional arguments}
 }
 \description{
 mergePartitions

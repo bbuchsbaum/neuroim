@@ -224,7 +224,6 @@ setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
 })
 
 #' indices
-#' @param x an ROIVolume
 #' @rdname indices-methods
 #' @export 
 setMethod("indices", signature(x="ROIVolume"),
@@ -233,9 +232,7 @@ setMethod("indices", signature(x="ROIVolume"),
 		  })
             
 
-#' coords
-#' 
-#' @param x an ROIVolume object
+
 #' @export
 #' @rdname coords-methods
 setMethod(f="coords", signature=signature(x="ROIVolume"),

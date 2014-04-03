@@ -14,8 +14,6 @@ bounds(x)
 }
 \arguments{
   \item{x}{the object with \code{bounds} property}
-
-  \item{x}{an object of type \code{BrainSpace}}
 }
 \description{
 Generic function to extract the spatial bounds (origin +

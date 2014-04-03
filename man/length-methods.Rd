@@ -1,0 +1,16 @@
+\docType{methods}
+\name{length,BrainVector-method}
+\alias{length,BrainVector-method}
+\title{Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)}
+\usage{
+\S4method{length}{BrainVector}(x)
+}
+\arguments{
+  \item{x}{an \R object.  For replacement, a vector or
+  factor.}
+}
+\description{
+Get length of \code{BrainVector}. This is the numbe rof
+volumes in the volume vector (e.g. the 4th image dimension)
+}
+

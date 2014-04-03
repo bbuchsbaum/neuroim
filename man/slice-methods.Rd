@@ -19,6 +19,8 @@ slice(x, zlevel, along, orientation, ...)
 
   \item{orientation}{the target orientation of the 2D
   slice}
+
+  \item{...}{additional arguments}
 }
 \description{
 extract a 2D slice from an image volume

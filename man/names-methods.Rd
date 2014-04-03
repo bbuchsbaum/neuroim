@@ -1,0 +1,19 @@
+\docType{methods}
+\name{names,BrainBucketSource-method}
+\alias{names,BrainBucket-method}
+\alias{names,BrainBucketSource-method}
+\title{extract names of \code{BrainBucketSource} instance}
+\usage{
+\S4method{names}{BrainBucketSource}(x)
+
+\S4method{names}{BrainBucket}(x)
+}
+\arguments{
+  \item{x}{an \R object.}
+}
+\description{
+extract names of \code{BrainBucketSource} instance
+
+extract names of \code{BrainBucket} instance
+}
+

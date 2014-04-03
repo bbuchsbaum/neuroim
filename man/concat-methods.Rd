@@ -25,14 +25,7 @@ concat(x, y, ...)
 
   \item{y}{the second object}
 
-  \item{...}{additonal objects}
-
-  \item{x}{the first volume}
-
-  \item{y}{the second volume}
-
-  \item{...}{extra arguments of class BrainVolume or other
-  concatenable objects}
+  \item{...}{additional objects}
 }
 \description{
 Concatenate two objects

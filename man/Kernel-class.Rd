@@ -12,7 +12,7 @@ A class representing an image kernel
 
 \item{\code{weights}}{the kernel weights}
 
-\item{\code{voxmat}}{the relative voxel coordinates of the kernel}
+\item{\code{voxels}}{the relative voxel coordinates of the kernel}
 
 \item{\code{coords}}{the relative real coordinates of the kernel}
 }}

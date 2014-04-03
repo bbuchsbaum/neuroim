@@ -22,6 +22,8 @@ dropDim(x, dimnum)
 }
 \arguments{
   \item{x}{a dimensioned object}
+
+  \item{dimnum}{the index of the dimension to drop}
 }
 \description{
 Generic function to drop a dimension from an object

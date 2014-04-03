@@ -12,6 +12,8 @@ as.sparse(x, mask, ...)
   \item{x}{the object to sparsify}
 
   \item{mask}{the elements to retain}
+
+  \item{...}{additional arguments}
 }
 \description{
 Convert to sparse representation

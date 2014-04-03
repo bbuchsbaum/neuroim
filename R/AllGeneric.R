@@ -3,6 +3,7 @@ roxygen <- function() NULL
 
 #' Generic function to load data from a data source
 #' @param x a data source
+#' @param ... additional arguments
 #' @export 
 #' @rdname loadData-methods
 setGeneric(name="loadData", def=function(x, ...) standardGeneric("loadData"))
@@ -10,6 +11,7 @@ setGeneric(name="loadData", def=function(x, ...) standardGeneric("loadData"))
 #' Generic function to apply a function to an object
 #' @param x the object that is mapped
 #' @param m the mapping object
+#' @param ... additional arguments
 #' @export 
 #' @rdname map-methods
 setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
@@ -17,6 +19,7 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 
 #' Generic function to extract the number of dimensions of an object
 #' @param x n-dimensional object
+#' @param ... additional arguments
 #' @export 
 #' @rdname ndim-methods
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
@@ -30,12 +33,14 @@ setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 
 #' Generic function to drop a dimension from an object
 #' @param x a dimensioned object
+#' @param dimnum the index of the dimension to drop
 #' @export 
 #' @rdname dropDim-methods
 setGeneric(name="dropDim", def=function(x, dimnum) standardGeneric("dropDim"))
 
 #' Generic function to extract the \code{space} member variable
 #' @param x the object to query
+#' @param ... additional arguments
 #' @return an object representing the geometric space of the image
 #' @export space
 #' @rdname space-methods
@@ -222,6 +227,7 @@ setGeneric(name="eachVolume", def=function(x, FUN, withIndex, ...) standardGener
 #' Generic function to extract a volume from a four-dimensional image
 #' @param x four-dimensional image
 #' @param i the indices of the volume(s) to extract
+#' @param ... additional arguments
 #' @export 
 #' @rdname takeVolume-methods
 setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolume"))
@@ -231,6 +237,7 @@ setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolum
 #' @param x the object
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the slice is supplied as the second argument to the function
+#' @param ... additional arguments
 #' @export 
 #' @rdname eachSlice-methods
 setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneric("eachSlice"))
@@ -240,6 +247,7 @@ setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneri
 #' @param x a four dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the series is supplied as the second argument to the function
+#' @param ... additional arguments
 #' @export 
 #' @rdname eachSeries-methods
 setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGeneric("eachSeries"))
@@ -247,7 +255,8 @@ setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGener
 
 #' Generic function to extract a set of series from a 4D image
 #' @param x a four dimensional image
-#' @param i the indices of the series' to extract
+#' @param indices the indices of the series' to extract
+#' @param ... additional arguments
 #' @export 
 #' @rdname takeSeries-methods
 setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("takeSeries"))
@@ -256,6 +265,7 @@ setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("tak
 #' Convert to sparse representation
 #' @param x the object to sparsify
 #' @param mask the elements to retain
+#' @param ... additional arguments
 #' @export
 #' @rdname as.sparse-methods
 setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.sparse"))
@@ -279,6 +289,7 @@ setGeneric(name="tesselate", def=function(x, K, ...) standardGeneric("tesselate"
 #' @param x the object to partition
 #' @param K the number of partitions
 #' @param features the features used to define the partition
+#' @param ... additional arguments
 #' @export 
 #' @rdname partition-methods
 setGeneric(name="partition", def=function(x, K, features, ...) standardGeneric("partition"))
@@ -287,6 +298,7 @@ setGeneric(name="partition", def=function(x, K, features, ...) standardGeneric("
 #' @param x the object to merge
 #' @param K the number of merged partitions
 #' @param features the features used to define the partition
+#' @param ... additional arguments
 #' @export 
 #' @rdname mergePartitions-methods
 setGeneric(name="mergePartitions", def=function(x, K, features, ...) standardGeneric("mergePartitions"))
@@ -299,17 +311,25 @@ setGeneric(name="numClusters", def=function(x) standardGeneric("numClusters"))
 
 #' clusterCenters
 #' @param x the object to extract cluster centers from
+#' @param features additional features
+#' @param FUN a user-supplied function
 #' @export 
 #' @rdname clusterCenters-methods
 setGeneric(name="clusterCenters", def=function(x, features, FUN) standardGeneric("clusterCenters"))
 
 
-
+#' pick
+#' @param x the object to pick from
+#' @param mask a mask object
+#' @param ... addiitonal arguments
+#' @export
+#' @rdname pick-methods
 setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
 
 #' Extract coordinates
 #' @param x the object to extract coordinates from
+#' @param ... additional arguments
 #' @export 
 #' @rdname coords-methods
 setGeneric(name="coords", def=function(x, ...) standardGeneric("coords"))
@@ -322,12 +342,16 @@ setGeneric(name="indices", def=function(x) standardGeneric("indices"))
 
 #' Index Lookup operation
 #' @param x the object to query
+#' @param i the index to lookup
+#' @param ... additional arguments
 #' @export 
 #' @rdname lookup-methods
 setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 
 #' Extract vector series from object
 #' @param x the object
+#' @param i the series index
+#' @param ... additional arguments
 #' @export 
 #' @rdname series-methods
 setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))   
@@ -337,6 +361,7 @@ setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))
 #' @param zlevel coordinate (in voxel units) along the sliced axis
 #' @param along the axis along which to slice
 #' @param orientation the target orientation of the 2D slice
+#' @param ... additional arguments
 #' @export 
 #' @rdname slice-methods
 setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standardGeneric("slice"))   
@@ -344,6 +369,7 @@ setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standa
 
 #' extract permutation matrix
 #' @param x the object
+#' @param ... additional arguments
 #' @export 
 #' @rdname permMat-methods
 setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))   
@@ -351,7 +377,7 @@ setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))
 #' Concatenate two objects
 #' @param x the first object
 #' @param y the second object
-#' @param ... additonal objects
+#' @param ... additional objects
 #' @export 
 #' @rdname concat-methods
 setGeneric(name="concat", def=function(x,y, ...) standardGeneric("concat"))

@@ -16,6 +16,8 @@ ndim(x, ...)
 }
 \arguments{
   \item{x}{n-dimensional object}
+
+  \item{...}{additional arguments}
 }
 \description{
 Generic function to extract the number of dimensions of an
