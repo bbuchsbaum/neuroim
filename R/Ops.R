@@ -7,16 +7,21 @@ roxygen()
 #' @include BrainVolume.R
 roxygen()
 
+
+checkDim <- function(e1,e2) {
+  if (!all(dim(e1) == dim(e2))) {
+    stop("cannot perform arithmetic operation on arguments with different dimensions")
+  }
+  
+  if (!all(spacing(e1) == spacing(e2))) {
+    stop("arguments have different voxel dimensions")
+  }
+  
+}
+
 setMethod(f="Arith", signature=signature(e1="SparseBrainVolume", e2="SparseBrainVolume"),
           def=function(e1, e2) {
-            if (!all(dim(e1) == dim(e2))) {
-              stop("cannot perform arithmetic operation on arguments with different dimensions")
-            }
-            
-            if (!all(spacing(e1) == spacing(e2))) {
-              stop("arguments have different voxel dimensions")
-            }
-            
+            checkDim(e1,e2)          
             res <- callGeneric(e1@data,e2@data)   
             new("SparseBrainVolume", data=res, source=e1@source, space=space(e1))
              
@@ -25,13 +30,7 @@ setMethod(f="Arith", signature=signature(e1="SparseBrainVolume", e2="SparseBrain
 
 setMethod(f="Arith", signature=signature(e1="ROIVolume", e2="ROIVolume"),
           def=function(e1, e2) {
-            if (!all(dim(e1) == dim(e2))) {
-              stop("cannot perform arithmetic operation on arguments with different dimensions")
-            }
-            
-            if (!all(spacing(e1) == spacing(e2))) {
-              stop("arguments have different voxel dimensions")
-            }
+            checkDim(e1,e2)
             
             idx1 <- gridToIndex(e1@space, e1@coords)
             idx2 <- gridToIndex(e2@space, e2@coords)
@@ -53,9 +52,7 @@ setMethod(f="Arith", signature=signature(e1="ROIVolume", e2="ROIVolume"),
 
 setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
           def=function(e1, e2) {
-            if (!all(dim(e1) == dim(e2))) {
-              stop("cannot perform operation on argument with different dimensions")
-            }
+            checkDim(e1,e2)  
             
             ret <- callGeneric(e1@.Data,e2@.Data)
             bv <- DenseBrainVolume(ret, space(e1))
@@ -65,9 +62,8 @@ setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
 
 setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
           def=function(e1, e2) {
-            if (!all(dim(e1) == dim(e2))) {
-              stop("cannot perform operation on argument with different dimensions")
-            }
+            
+      checkDim(e1,e2)  
             
 			if (inherits(e1, "DenseBrainVector") && inherits(e2, "DenseBrainVector")) {
             	ret <- callGeneric(e1@.Data,e2@.Data)
@@ -85,7 +81,7 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
 				
 			}
      
-          })
+})
  
 
  setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVolume"),
