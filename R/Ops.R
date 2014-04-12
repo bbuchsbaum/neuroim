@@ -117,9 +117,9 @@ setMethod(f="Summary", signature=signature(x="SparseBrainVector"),
 
 
 setMethod(f="Summary", signature=signature(x="SparseBrainVolume", na.rm="ANY"),
-          def=function(x, ..., na.rm) {
-            callGeneric(x@data)
-          })
+    def=function(x, ..., na.rm) {
+      callGeneric(x@data)
+    })
   
 
 #setMethod("sum", signature()

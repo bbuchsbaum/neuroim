@@ -1,3 +1,7 @@
+#' @import stringr
+NULL
+
+
 
 #' @keywords internal
 parseIntAttribute <- function(line){ 

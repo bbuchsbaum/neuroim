@@ -1,3 +1,8 @@
+#' @import hash
+#' @importFrom Matrix sparseVector
+#' @importFrom yaImpute ann
+NULL
+
 #' @include AllClass.R
 {}
 #' @include BrainVector.R
@@ -161,7 +166,7 @@ SparseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) 
     stop(paste("length of 'data' must equal length of 'indices'"))
   }
   
-  sv <- sparseVector(x=data, i=indices, length=prod(dim(space)))
+  sv <- Matrix::sparseVector(x=data, i=indices, length=prod(dim(space)))
   if (is.null(source)) {
     meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
     source <- new("BrainSource", metaInfo=meta)
@@ -361,7 +366,7 @@ BrainVolumeSource <- function(input, index=1) {
 #' @param index the index of the volume (e.g. if the file is 4-dimensional)
 #' @return an instance of the class \code{\linkS4class{BrainVolume}}
 #' @examples
-#' fname <- paste0(system.file(package="neuroim"), "/data/clusvol.nii")
+#' fname <- system.file("extdata", "global_mask.nii", package="neuroim")
 #' x <- loadVolume(fname)
 #' print(dim(x))
 #' space(x)

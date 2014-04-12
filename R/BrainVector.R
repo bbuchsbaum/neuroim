@@ -61,6 +61,7 @@ makeVector <- function(data, refdata, source=NULL, label="") {
 #' @export BrainVector
 #' @rdname BrainVector-class
 BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
+  
 	if (prod(dim(space)) != length(data)) {
 		stop("dimensions of data argument do not match dimensions of space argument")
 	}
@@ -85,9 +86,6 @@ BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
 #' @export DenseBrainVector
 #' @rdname DenseBrainVector-class
 DenseBrainVector <- function(data, space, source=NULL, label="") {
-	if (ndim(space) != 4) {
-		stop("DenseBrainVector: data space must be 4-dimensional")
-	} 
 	
 	if (is.matrix(data)) {
 		splen <- prod(dim(space)[1:3])
@@ -96,9 +94,16 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 		} else if (nrow(data) == splen) {
 			data
 		}
+    
+    if (length(dim(space)) == 3) {
+      ## add 4th dim to space arg
+      space <- addDim(space, ncol(data))
+    }
 
 		dim(data) <- dim(space)
 	}
+  
+  
 	
 	if (is.null(source)) {
 		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
@@ -156,6 +161,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			
 			reader <- dataReader(meta, 0)	
 			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+      
 			## bit of a hack to deal with scale factors
 			if (.hasSlot(meta, "slope")) {
         
@@ -376,13 +382,13 @@ loadVolumeList <- function(fileNames, mask=NULL) {
 	}
 }
 
-
+#' extract labeled volume from \code{BrainBucket}
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "character", j = "missing"),
 		def=function(x, i) {
 			loadData(x@source, i)
 		})
 
-
+#' extract indexed volume from \code{BrainBucket}
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "numeric", j = "missing"),
 		def=function(x, i) {
 			loadData(x@source, i)

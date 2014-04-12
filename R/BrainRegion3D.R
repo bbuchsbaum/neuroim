@@ -1,3 +1,5 @@
+#' @import iterators
+
 #' @include AllClass.R
 {}
 #' @include AllGeneric.R
@@ -247,7 +249,8 @@ setMethod(f="length", signature=signature(x="ROIVolume"),
             length(x@data)
 		})
 
-#' @export 
+#' extract data from \code{ROIVolume}
+#' @param j index for second dimension (missing)
 setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]

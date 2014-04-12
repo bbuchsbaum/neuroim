@@ -1,5 +1,11 @@
+#' @import grid
+NULL
+
 
 #' image
+#' @param slice the voxel index of the slice to display
+#' @param col a color map
+#' @param zero.col the color to use when the value is 0 (e.g background color)
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
           def=function(x, slice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {    
@@ -28,7 +34,7 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0)) {
 #' 
 #' @export 
 #' @param x the layer to convert
-#' @param zpos the z axis??
+#' @param zpos the z coordinate 
 #' @param thresh the threshold range
 #' @param axis the axis index (1,2,3)
 #' @rdname as.raster-methods
@@ -70,6 +76,8 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
           })
 
 #' image
+#' @param zpos the z coordinate
+#' @param axis the axis index
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "Overlay"),
           def=function(x, zpos, axis=3) {  

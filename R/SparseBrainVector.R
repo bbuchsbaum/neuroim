@@ -164,8 +164,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 
 #' indices
 #' @export
-#' @rdname indices-methods   
-#' @aliases indices,SparseBrainVector,ANY-method        
+#' @rdname indices-methods          
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
             indices(x@map)
@@ -364,28 +363,44 @@ setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
             lookup(x@map, i)
           })
 
-  
+#' extract data from SparseBrainVector
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param m index for dimension 4
+#' @param ... additional arguments
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i, 1:(dim(x)[2]))
 		  }
   )
 
-
+#' extract data from SparseBrainVector
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param m index for dimension 4
+#' @param ... additional arguments
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, 1:(dim(x)[1]), 1:(dim(x)[2]))
 		  }
   )
   
-
+#' extract data from SparseBrainVector
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param m index for dimension 4
+#' @param ... additional arguments
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "numeric"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i:(dim(x)[1]), j)
 		  }
   )
 
-
+#' extract data from SparseBrainVector
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param m index for dimension 4
+#' @param ... additional arguments
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
           def=function (x, i, j, k, m, ..., drop=TRUE) {
 		    if (missing(k)) k = 1:(dim(x)[3])
@@ -480,7 +495,8 @@ setMethod("show",
           def=function(object) {
             cat("an instance of class",  class(object), "\n\n")
             cat("   dimensions: ", dim(object), "\n")
-            cat("   voxel spacing: ", spacing(object))
+            cat("   voxel spacing: ", spacing(object), "\n")
+            cat("   cardinality: ", length(object@map@indices))
             cat("\n\n")
             
           })

@@ -1,4 +1,5 @@
 #' @include AllGeneric.R
+#' @import methods
 roxygen()
 
 
@@ -145,7 +146,7 @@ setClass("BrainMetaInfo",
 
 #' This class contains meta information from an image data file
 #'
-#' @name FileMetaInfo-class
+#' @rdname FileMetaInfo-class
 #' @slot headerFile name of the file containing meta information
 #' @slot dataFile name of the file containing data
 #' @slot fileDescriptor descriptor of image file format
@@ -172,7 +173,7 @@ setClass("FileMetaInfo",
 		contains=c("BrainMetaInfo"))
 
 #' This class contains meta information for a NIfTI image file
-#' @name NIfTIMetaInfo-class
+#' @rdname FileMetaInfo-class
 #' @slot nifti_header a list of attributes specific to the NIfTI file format 
 #' @export	
 setClass("NIfTIMetaInfo",
@@ -181,7 +182,7 @@ setClass("NIfTIMetaInfo",
 
 
 #' This class contains meta information for a AFNI image file
-#' @name AFNIMetaInfo-class  
+#' @rdname FileMetaInfo-class  
 #' @slot afni_header a list of attributes specific to the AFNI file format 
 #' @export
 setClass("AFNIMetaInfo",

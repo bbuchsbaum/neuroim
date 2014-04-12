@@ -149,8 +149,6 @@ setMethod(f="print", signature=signature("AxisSet2D"),
 		})
 
 
-
-
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")

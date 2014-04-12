@@ -61,7 +61,7 @@ setMethod(f="show", signature=signature("BrainSpace"),
 							object@spacing[length(object@spacing)], "\n"))
 			cat("  Origin         :", paste(paste(object@origin[1:(length(object@origin)-1)], " X ", collapse=" "), 
 							object@origin[length(object@origin)], "\n"))
-			cat("  Axes           :", paste(object@axes@i@axis, object@axes@j@axis, object@axes@k@axis, "\n"))
+			#cat("  Axes           :", paste(object@axes@i@axis, object@axes@j@axis, object@axes@k@axis, "\n"))
 			cat("  Coordinate Transform :", object@trans, "\n")
 			
 			
@@ -87,7 +87,12 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 			Dind <- 1:(length(D)-1)		
 			
 			### doesn't drop dimension in transformation matrix...
-			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], dropDim(axes(x)), trans(x))
+      ### brain vector's don't have th axis and tese are incorrectly dropped
+      if (ndim(x) == 4) {
+			  BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x), trans(x))
+      } else {
+        BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], dropDim(axes(x)), trans(x))
+      }
 		})
 
 #' dim
