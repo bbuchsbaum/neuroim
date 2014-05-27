@@ -1,5 +1,13 @@
 roxygen <- function() NULL
 
+#' Generic function to print an object 
+#' @param x the object to print
+#' @param ... additional arguments
+#' @export 
+#' @rdname print-methods
+setGeneric(name="print", def=function(x, ...) standardGeneric("print"))
+
+
 
 #' Generic function to load data from a data source
 #' @param x a data source

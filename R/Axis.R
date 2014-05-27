@@ -1,7 +1,7 @@
 #' @include AllGeneric.R
-roxygen()
+NULL
 #' @include AllClass.R
-roxygen()
+NULL
 
 
 None <- new("NamedAxis", axis="None")
@@ -16,8 +16,6 @@ ANT_POST   <- new("NamedAxis", axis="Anterior-to-Posterior", direction=c(0,-1,0)
 POST_ANT   <- new("NamedAxis", axis="Posterior-to-Anterior", direction=c(0,1,0))
 INF_SUP    <- new("NamedAxis", axis="Inferior-to-Superior", direction=c(0,0,1))
 SUP_INF    <- new("NamedAxis", axis="Superior-to-Inferior", direction=c(0,0,-1))
-
-
 
 
 matchAxis <- function(firstAxis) {
@@ -48,21 +46,14 @@ AxisSet3D <- function(i, j, k) {
 }
 
 
-#' permMat
+#' @title permMat
 #' @export
 #' @rdname permMat-methods
 setMethod(f="permMat", signature=signature(x = "AxisSet2D"),
-          def=function(x) { 
+          def=function(x, ...) { 
             cbind(x@i@direction, x@j@direction)
           })
 
-#' permMat
-#' @export
-#' @rdname permMat-methods
-setMethod(f="permMat", signature=signature(x = "AxisSet3D"),
-          def=function(x) { 
-            cbind(x@i@direction, x@j@direction, x@k@direction)
-          })
 
 #' dropDim
 #' @export
@@ -83,7 +74,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="numeric"),
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="missing"),
-          def=function(x) {
+          def=function(x, dimnum) {
             AxisSet1D(x@i)
           })
 
@@ -108,15 +99,19 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
-          def=function(x) {
-            AxisSet2D(x@i, x@j)
-          })
-          
-          
-          
-#' @rdname ndim-methods
+           def=function(x, dimnum) {
+             AxisSet2D(x@i, x@j)
+           })
+           
+       
+
+#' ndim          
 #' @export
-setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
+#' @rdname ndim-methods
+setMethod(f="ndim",signature=signature(x= "AxisSet"), 
+          def=function(x, ...) { 
+            x@ndim 
+          })
 
 
 
@@ -278,7 +273,7 @@ OrientationList3D <- list(
 #' given three named axes return AxisSet3D singleton
 #' @param axis1 the first axis
 #' @param axis2 the second axis
-#' @param axis3 the thrid axis	
+#' @param axis3 the third axis	
 #' @export 
 matchAnatomy3D <- function(axis1, axis2, axis3) {
 	for (orient in OrientationList3D) {
@@ -295,7 +290,7 @@ matchAnatomy3D <- function(axis1, axis2, axis3) {
 #' given two named axes return AxisSet2D singleton
 #' @param axis1 the first axis
 #' @param axis2 the second axis
-#' @export matchAnatomy2D 
+#' @export  
 matchAnatomy2D <- function(axis1, axis2) {
 	for (orient in OrientationList2D) {
 		if (identical(orient@i,axis1) && identical(orient@j,axis2)) {

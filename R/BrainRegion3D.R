@@ -46,13 +46,16 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 #' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
 #' @param centroid the center of the cube in voxel space
 #' @param surround the number of voxels on either side of the central voxel
-#' @param fill optional value(s) to assign to data slot
-#' @param nonzero keep only nonzero elements from \code{bvol}
+#' @param fill optional value(s) to assign to data slot. 
+#' @param nonzero keep only nonzero elements from \code{bvol}. If \code{bvol} is A \code{BrainSpace} then this argument is ignored.
 #' @return an instance of class \code{ROIVolume}
 #' @examples
 #'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
 #'  cube <- RegionCube(sp1, c(5,5,5), 3)
 #'  vox = coords(cube)
+#'  cube2 <- RegionCube(sp1, c(5,5,5), 3, fill=5)
+#'  
+#'  
 #' @export
 RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
   if (is.matrix(centroid)) {
