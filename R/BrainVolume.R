@@ -30,9 +30,11 @@ NULL
 #' dat <- array(rnorm(64*64*64), c(64,64,64))
 #' bvol <- BrainVolume(dat,bspace, label="test")
 #' bvol2 <- makeVolume(dat, bvol)
+#' all.equal(as.array(bvol),as.array(bvol2))
 #' data <- 1:10
 #' indices = seq(1,1000, length.out=10)
-#' bvol3 <- makeVolume()
+#' bvol3 <- makeVolume(data,bvol,indices=indices)
+#' sum(bvol3) == sum(data)
 #' @export makeVolume
 makeVolume <- function(data=NULL, refvol, source=NULL, label="", indices=NULL) {
   if (is.null(data)) {
@@ -78,6 +80,12 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	if (length(dim(space)) != 3) {
 		stop("DenseBrainVolume: space argument must have three dimensions")
 	} 
+  
+  if (is.matrix(data)) {
+    if (nrow(data) == 1 || ncol(data) == 1) {
+      data <- as.vector(data)
+    }
+  }
 	
 	if (length(data) == prod(dim(space)) && is.vector(data)) {
 		dim(data) <- dim(space)
@@ -168,6 +176,14 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
 #' @param indices a 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export SparseBrainVolume
+#' @examples
+#' data <- 1:10
+#' indices = seq(1,1000, length.out=10)
+#' bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
+#' sparsevol <- SparseBrainVolume(data,bspace,indices=indices)
+#' densevol <- BrainVolume(data,bspace,indices=indices)
+#' sum(sparsevol) == sum(densevol)
+#' 
 #' @rdname SparseBrainVolume-class
 SparseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
   if (length(indices) != length(data)) {
@@ -175,6 +191,7 @@ SparseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) 
   }
   
   sv <- Matrix::sparseVector(x=data, i=indices, length=prod(dim(space)))
+  
   if (is.null(source)) {
     meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
     source <- new("BrainSource", metaInfo=meta)
@@ -306,7 +323,7 @@ setMethod(f="show", signature=signature("BrainVolume"),
             cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
                                             sp@origin[length(sp@origin)], "\n"))
             cat("  Axes           :", paste(sp@axes@i@axis, sp@axes@j@axis,sp@axes@k@axis), "\n")
-            cat("  Coordinate Transform :", sp@trans, "\n")
+            cat("  Coordinate Transform :", zapsmall(sp@trans), "\n")
                        
           }
 )
@@ -315,6 +332,7 @@ setMethod(f="show", signature=signature("BrainVolume"),
 #' load a BrainVolume
 #' @export loadData
 #' @rdname loadData-methods
+## TODO reduce code duplication with loadData#BrainVectorSource
 setMethod(f="loadData", signature=c("BrainVolumeSource"), 
 		def=function(x) {
 			

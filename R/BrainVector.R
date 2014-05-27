@@ -7,6 +7,7 @@
 #' @include SparseBrainVector.R
 {}
 
+## TODO ought to be able to easily create BrainVector from list of vols
 
 
 .BrainVectorFromMatrix <- function(data, space) {
@@ -52,16 +53,24 @@ makeVector <- function(data, refdata, source=NULL, label="") {
 #' 
 #' constructor function for virtual class \code{\linkS4class{BrainVector}}
 #' 
-#' @param data the image data
-#' @param space a \code{\linkS4class{BrainSpace}} object
+#' @param data the image data which can be a \code{matrix}, a 4d \code{array}, or a list of \code{BrainVolumes}. 
+#'        If the latter, the geometric space of the data \code{BrainSpace} will be inferred from the constituent volumes, 
+#'        which must all be identical.
+#' @param space a \code{\linkS4class{BrainSpace}} object. Does not ned to be included if \code{data} argument is a list of \code{BrainVolumes}
 #' @param mask an optional \code{array} of type \code{logical}
 #' @param source an optional \code{\linkS4class{BrainSource}} object
 #' @param label a label of type \code{character} 
 #' @return a concrete instance of \code{\linkS4class{BrainVector}} class 
 #' @export BrainVector
 #' @rdname BrainVector-class
-BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
-  
+BrainVector <- function(data, space=NULL, mask=NULL, source=NULL, label="") {
+  if (is.list(data)) {
+    space <- space(data[[1]])
+    space <- addDim(space, length(data))
+    data <- do.call(cbind, lapply(data, function(x) as.vector(x)))
+      
+  }
+    
 	if (prod(dim(space)) != length(data)) {
 		stop("dimensions of data argument do not match dimensions of space argument")
 	}
@@ -173,7 +182,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 				
 			#arr <- abind(datlist, along=4)			
 			
-      bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
+      bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes, trans(meta))
 			DenseBrainVector(arr[,,,ind], bspace, x)
 			
 		})
@@ -414,15 +423,25 @@ setMethod(f="show",
 
 
 
-setMethod("show",
-		signature=signature(object="BrainVector"),
-		def=function(object) {
-			cat("an instance of class",  class(object), "\n\n")
-			cat("   dimensions: ", dim(object), "\n")
-			cat("   voxel spacing: ", spacing(object))
-			cat("\n\n")
-			
-		})
+
+#' show
+#' @rdname show-methods
+setMethod(f="show", signature=signature("BrainVector"),
+          def=function(object) {
+            sp <- space(object)
+            cat("BrainVector\n")
+            cat("  Type           :", class(object), "\n")
+            cat("  Dimension      :", dim(object), "\n")
+            cat("  Spacing        :", paste(paste(sp@spacing[1:(length(sp@spacing)-1)], " X ", collapse=" "), 
+                                            sp@spacing[length(sp@spacing)], "\n"))
+            cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
+                                            sp@origin[length(sp@origin)], "\n"))
+            cat("  Axes           :", paste(sp@axes@i@axis, sp@axes@j@axis,sp@axes@k@axis), "\n")
+            cat("  Coordinate Transform :", zapsmall(sp@trans), "\n")
+            
+          }
+)
+
 
 
 #' eachVolume
@@ -575,6 +594,7 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 #' @export
 setMethod("series", signature(x="BrainVector", i="matrix"),
 		def=function(x,i) {
+      ## TODO not necessary, has to be matrix based on type of i arg...
 			if (!is.matrix(i) && length(i) == 3) {
 				i <- matrix(i, 1, 3)
 			}
@@ -645,6 +665,21 @@ setAs(from="DenseBrainVector", to="matrix",
 			return(data)
 			
 		})
+
+
+#' convert a BrainVector to a \code{list} of volumes
+#' 
+#' @rdname as.list-methods
+#' @export 
+setMethod(f="as.list", signature=signature(x = "BrainVector"), def=function(x) {
+  out = list()
+  for (i in 1:dim(x)[4]) {
+    out[[i]] <- takeVolume(x,i)
+  }
+  
+  out
+})
+
 
 #' convert a DenseBrainVector to a matrix
 #' 
@@ -734,7 +769,6 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 #' @export writeVector
 #' @rdname writeVector-methods
 #' @aliases writeVector,BrainVector,character,missing,character,ANY-method
-### THIS FAILS WHEN THE SUPPLIED SPACE IS COPIED FROM A BRAINVECTOR INSTANCE -- FIX ?????
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="character"),
 		def=function(x, fileName, dataType) {
 			write.nifti.vector(x, fileName, dataType)   

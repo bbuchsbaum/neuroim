@@ -21,8 +21,7 @@
 #' origin(bspace)
 #' axes(bspace)
 #' trans(bspace)
-#' 
-BrainSpace <- function(Dim=, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
+BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 	
 	if (is.null(spacing)) {
 		spacing <- rep(1, min(length(Dim), 3))
@@ -263,6 +262,14 @@ setMethod(f="origin", signature=signature(x = "BrainData"),
 			origin(space(x))
 		})
 
+#' space
+#' 
+#' @export
+#' @rdname space-methods
+setMethod(f="space", signature=signature(x = "BrainSpace"),
+          def=function(x) {
+           x
+          })
 
 #' trans
 #' 

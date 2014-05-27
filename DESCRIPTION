@@ -14,6 +14,7 @@ Description: neuroim is a collection of data structures that represent
     ANALYZE7.5 and NIFTI files and limited support for reading AFNI files.
 Version: 0.0.3
 Date: 2014-04-01
+Suggests: testthat
 Depends:
     R (>= 3.0.0),
     stringr,
