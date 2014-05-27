@@ -22,7 +22,7 @@
 #' axes(bspace)
 #' trans(bspace)
 #' 
-BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
+BrainSpace <- function(Dim=, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 	
 	if (is.null(spacing)) {
 		spacing <- rep(1, min(length(Dim), 3))

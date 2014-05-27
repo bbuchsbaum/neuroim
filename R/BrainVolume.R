@@ -19,12 +19,20 @@ NULL
 #' makeVolume
 #' 
 #' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
-#' @param data a three-dimensional \code{array}
+#' @param data an optional one- or three-dimensional \code{vector} or \code{array}
 #' @param refvol an instance of class \code{\linkS4class{BrainVolume}} containing the reference space for the new volume.
-#' @param label a \code{character} string
-#' @param source an instance of class \code{\linkS4class{BrainSource}}
-#' @param indices an optional 1-d index vector
+#' @param label an optional \code{character} string
+#' @param source an optional instance of class \code{\linkS4class{BrainSource}}
+#' @param indices an optional 1d vector of indices in to the 3d space
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @examples
+#' bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
+#' dat <- array(rnorm(64*64*64), c(64,64,64))
+#' bvol <- BrainVolume(dat,bspace, label="test")
+#' bvol2 <- makeVolume(dat, bvol)
+#' data <- 1:10
+#' indices = seq(1,1000, length.out=10)
+#' bvol3 <- makeVolume()
 #' @export makeVolume
 makeVolume <- function(data=NULL, refvol, source=NULL, label="", indices=NULL) {
   if (is.null(data)) {
