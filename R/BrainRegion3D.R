@@ -43,22 +43,32 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 
   
 #' Create A Cuboid Region of Interest
-#' @param bvol an image volume
+#' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
 #' @param centroid the center of the cube in voxel space
 #' @param surround the number of voxels on either side of the central voxel
 #' @param fill optional value(s) to assign to data slot
 #' @param nonzero keep only nonzero elements from \code{bvol}
 #' @return an instance of class \code{ROIVolume}
+#' @examples
+#'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
+#'  cube <- RegionCube(sp1, c(5,5,5), 3)
+#'  vox = coords(cube)
 #' @export
 RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
   if (is.matrix(centroid)) {
     centroid <- drop(centroid)
   }
+  
   if (length(centroid) != 3) {
     stop("RegionCube: centroid must have length of 3 (x,y,z coordinates)")
   }
+  
   if (surround < 0) {
     stop("'surround' argument cannot be negative")
+  }
+  
+  if (is(bvol, "BrainSpace")) {
+    fill = 1
   }
   
   grid <- .makeCubicGrid(bvol,centroid,surround)
@@ -76,6 +86,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
     seq_along(vals)
   }
   
+  ### add central voxel
   new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[keep, ])
   
 }
@@ -113,12 +124,16 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
 
 
 #' Create A Spherical Region of Interest
-#' @param bvol an image volume
+#' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius in real units (e.g. millimeters) of the spherical ROI
 #' @param fill optional value(s) to assign to data slot
 #' @param nonzero keep only nonzero elements from \code{bvol}
 #' @return an instance of class \code{ROIVolume}
+#' @examples
+#'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
+#'  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
+#'  vox = coords(cube)
 #' @export
 RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
   if (is.matrix(centroid)) {
@@ -127,23 +142,29 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
   if (length(centroid) != 3) {
     stop("RegionSphere: centroid must have length of 3 (x,y,z coordinates)")
   }
+  
+  if (is(bvol, "BrainSpace")) {
+    fill = 1
+  }
+  
   bspace <- space(bvol)
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
   centroid <- as.integer(centroid)
   mcentroid <- ((centroid-1) * vspacing + vspacing/2)
  
+  grid <- .makeSphericalGrid(bvol, centroid, radius)
+   
   dvals <- apply(grid, 1, function(gvals) {
     coord <- (gvals-1) * vspacing + vspacing/2
     sqrt(sum((coord - mcentroid)^2))
   })
   
   idx <- which(dvals <= radius)
-  
-  
+   
   vals <- if (!is.null(fill)) {
     rep(fill, length(idx))
-  } else {
+  } else {    
     ## coercion to numeric shouldn't be necessary here.
     as.numeric(bvol[grid[idx,]])
   }   
@@ -154,7 +175,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
     seq_along(vals)
   }
   
-  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[idx[keep], ])
+  new("ROIVolume", space = bspace, data = vals[keep], coords = grid[idx[keep], ])
 }
 
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
