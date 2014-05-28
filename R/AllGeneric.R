@@ -7,6 +7,11 @@ roxygen <- function() NULL
 #' @rdname print-methods
 setGeneric(name="print", def=function(x, ...) standardGeneric("print"))
 
+#' Generic function to extract data values of object 
+#' @param x the object to get values from
+#' @export 
+#' @rdname values-methods
+setGeneric(name="values", def=function(x, ...) standardGeneric("values"))
 
 
 #' Generic function to load data from a data source

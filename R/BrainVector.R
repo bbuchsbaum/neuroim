@@ -182,7 +182,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 				
 			#arr <- abind(datlist, along=4)			
 			
-      bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes, trans(meta))
+      bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)),meta@spacing, meta@origin, meta@spatialAxes, trans(meta))
 			DenseBrainVector(arr[,,,ind], bspace, x)
 			
 		})
@@ -338,7 +338,7 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	idx <- bsource@indices
 	
 	D <- c(meta@Dim[1:3], length(idx))
-	bspace <- BrainSpace(D, meta@origin, meta@spacing, meta@spatialAxes)
+	bspace <- BrainSpace(D, meta@spacing, meta@origin, meta@spatialAxes)
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
 }
 
@@ -496,7 +496,7 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 			## this is VERY slow
 			
 			xs <- space(x)
-			bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
+			bspace <- BrainSpace(dim(x)[1:3], spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
 			
 			makevol <- function(i) {				
 				BrainVolume(x@.Data[,,,i], bspace)

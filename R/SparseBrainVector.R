@@ -55,7 +55,7 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 	}
 	
   if (!inherits(mask, "LogicalBrainVolume")) {
-    mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
+    mspace <- BrainSpace(dim(mask),  metaInfo@spacing, metaInfo@origin, metaInfo@spatialAxes)
     mask <- LogicalBrainVolume(mask, mspace)  	
   }
 	
@@ -157,7 +157,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			#}
 			
 			arr <- do.call(rbind, datlist)		
-			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
+			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@spacing, meta@origin, meta@spatialAxes)
 			SparseBrainVector(arr, bspace, x@mask)
 			
 		})
@@ -340,7 +340,7 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
             d2 <- dim(y)
             
             ndim <- c(d1[1:3], d1[4] + d2[4])
-            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),  axes(x@space), trans(x@space))
+            nspace <- BrainSpace(ndim, spacing(x@space),  origin(x@space), axes(x@space), trans(x@space))
   
             
             ret <- SparseBrainVector(ndat, nspace, mask=x@mask)

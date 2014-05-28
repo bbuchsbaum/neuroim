@@ -171,9 +171,9 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
 #' Construct a \code{\linkS4class{SparseBrainVolume}} instance
 #' @param data a numeric vector 
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param indices a index vector indicating the 1-d coordinates of the data values
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @param label a \code{character} string
-#' @param indices a 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export SparseBrainVolume
 #' @examples
@@ -185,7 +185,7 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
 #' sum(sparsevol) == sum(densevol)
 #' 
 #' @rdname SparseBrainVolume-class
-SparseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
+SparseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") {
   if (length(indices) != length(data)) {
     stop(paste("length of 'data' must equal length of 'indices'"))
   }
@@ -354,7 +354,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			close(reader)
 			arr <- array(dat, meta@Dim[1:3])
 			
-			bspace <- BrainSpace(meta@Dim[1:3], meta@origin, meta@spacing, meta@spatialAxes, trans(meta))
+			bspace <- BrainSpace(meta@Dim[1:3], meta@spacing, meta@origin, meta@spatialAxes, trans(meta))
 			DenseBrainVolume(arr, bspace, x)
 					
 		})

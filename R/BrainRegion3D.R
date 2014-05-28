@@ -15,7 +15,7 @@
 #' @name ROIVolume
 #' @export
 ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
-  new("ROIVolume", space=vspace, data=data, coords=coords)
+  new("ROIVolume", space=vspace, coords=coords, data=data)
 }
   
 
@@ -57,7 +57,7 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 #'  
 #'  
 #' @export
-RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
+RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   if (is.matrix(centroid)) {
     centroid <- drop(centroid)
   }
@@ -70,7 +70,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
     stop("'surround' argument cannot be negative")
   }
   
-  if (is(bvol, "BrainSpace")) {
+  if (is(bvol, "BrainSpace") && is.null(fill)) {
     fill = 1
   }
   
@@ -122,7 +122,6 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
   ## as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))[which(dvals <= radius),]
   grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
   
-  
 }
 
 
@@ -138,7 +137,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
 #'  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
 #'  vox = coords(cube)
 #' @export
-RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
+RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   if (is.matrix(centroid)) {
     centroid <- drop(centroid)
   }
@@ -146,7 +145,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
     stop("RegionSphere: centroid must have length of 3 (x,y,z coordinates)")
   }
   
-  if (is(bvol, "BrainSpace")) {
+  if (is.null(fill) && is(bvol, "BrainSpace")) {
     fill = 1
   }
   
@@ -248,6 +247,15 @@ setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
   dat[from@coords] <- from@data
   ovol <- DenseBrainVolume(dat, from@space, from@source)
 })
+
+#' values
+#' @rdname values-methods
+#' @export 
+setMethod("values", signature(x="ROIVolume"),
+          function(x) {
+             x@data
+          })
+
 
 #' indices
 #' @rdname indices-methods
