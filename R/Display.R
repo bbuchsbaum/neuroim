@@ -2,51 +2,67 @@
 NULL
 
 
+
+sliceData <- function(vol, slice, axis=3) {
+  imslice <- switch(axis,
+                    "1"=vol[slice,,],
+                    "2"=vol[,slice,],
+                    "3"=vol[,,slice])
+  
+  imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])    
+}
+
+mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {
+  vrange <- range(imslice)
+  imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
+  dim(imcols) <- dim(imslice)
+  
+  imcols[imslice == 0] <- zero.col
+  imcols
+}
+
 #' image
 #' @param slice the voxel index of the slice to display
 #' @param col a color map
 #' @param zero.col the color to use when the value is 0 (e.g background color)
+#' @param axis the index of the z axis (1, 2, or 3)
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
-          def=function(x, slice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {    
-            imslice <- t(x[,,slice])
-            vrange <- range(imslice)
-            imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
-            dim(imcols) <- dim(imslice)
+          def=function(x, slice, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    
+            imslice <- sliceData(x, slice, axis)
+            imcols <- mapToColors(imslice, col, zero.col)
             ras <- as.raster(imcols)
             ras[imslice == 0] <- zero.col
             
             grid.newpage()
-            grid.raster(ras)
+            grid.raster(ras, ...)
           })
 
 #' create a Layer object
 #' @param vol an image volume
 #' @param colorMap a lookup table defining mapping from image intensity values to colors
 #' @param thresh a range (min,max) defining the threshold window for determining image opacity
+#' @param axis the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)
 #' @return an object of class \code{Layer}
 #' @export
-Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0)) {
-  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh)
+Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000") {
+  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col)
 }
+
+
 
 #' as.raster
 #' 
 #' @export 
 #' @param x the layer to convert
-#' @param zpos the z coordinate 
+#' @param zpos the z coordinate in coordinate space
 #' @param thresh the threshold range
 #' @param axis the axis index (1,2,3)
 #' @rdname as.raster-methods
 setMethod(f="as.raster", signature=signature(x = "Layer"),
           def=function(x, zpos, thresh=c(0,0), axis=3) {  
             slice <- axisToIndex(space(x@vol), zpos, axis)
-            imslice <- switch(axis,
-                   "1"=x@vol[slice,,],
-                   "2"=x@vol[,slice,],
-                   "3"=x@vol[,,slice])
-            
-            imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])          
+            imslice <- sliceData(x@vol, slice, axis)     
             vrange <- range(imslice)
             
             lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@colorMap) -1) + 1
@@ -57,14 +73,22 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
               thresh <- c(-Inf, thresh)
             }
                       
-            if (diff(thresh) > 0)
+            imcols[imslice == 0] <- x@zero.col
+            
+            if (diff(thresh) > 0) {
               imcols[(imslice >= thresh[1] & imslice <= thresh[2])] <- "#00000000"
+            }
+            
+            
               
             dim(imcols) <- dim(imslice)
             ras <- as.raster(imcols)
             #ras[imslice == 0] <- zero.col            
             ras
           })
+
+
+
 
 #' overlay
 #' 
@@ -75,16 +99,31 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
             new("Overlay", layers=list(x,y))  
           })
 
+
+#' @export 
+#' @rdname overlay-methods
+setMethod(f="+", signature=signature(e1 = "Overlay", e2="Layer"),
+          def=function(e1, e2) {  
+            new("Overlay", layers=c(e1@layers, e2))
+          })
+
+#' @export 
+#' @rdname overlay-methods
+setMethod(f="+", signature=signature(e1 = "Layer", e2="Layer"),
+          def=function(e1, e2) {  
+            new("Overlay", layers=list(e1, e2))
+          })
+
 #' image
 #' @param zpos the z coordinate
 #' @param axis the axis index
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "Overlay"),
           def=function(x, zpos, axis=3) {  
-            grid.newpage()
+            #grid.newpage()
             for (layer in x@layers) {
               ras <- as.raster(layer, zpos, layer@thresh, axis=axis) 
-              grid.raster(ras)
+              grid.raster(ras, interpolate=TRUE)
             }             
           })
 
@@ -93,9 +132,37 @@ setMethod(f="image", signature=signature(x = "Overlay"),
 setMethod(f="image", signature=signature(x = "Layer"),
           def=function(x, zpos, axis=3) {  
             ras <- as.raster(x, zpos, x@thresh,axis=axis)      
-            grid.newpage()
+            #grid.newpage()
             grid.raster(ras, interpolate=TRUE)
           })
-            
+
+
+#' imageGrid
+#' @rdname imageGrid
+imageGrid <- function(layer, gridDim=c(3,3), zstart, zend, panelSize=3, panelUnit="inches", interpolate=FALSE, fontCol="red") {
+  slices <- seq(zstart, zend, length.out=prod(gridDim))
+  grid.newpage()
+  layout <- grid.layout(gridDim[1], gridDim[2], widths=rep(unit(panelSize, panelUnit), gridDim[2]),  
+                                                heights=rep(unit(panelSize, panelUnit), gridDim[1]))
+  
+  grid.rect(unit(0, "npc"), y=unit(0, "npc"), just=c("left", "bottom"), gp=gpar(fill="black"))
+  pushViewport(viewport(layout=layout))
+  
+  scount = 1
+  for (i in 1:gridDim[1]) {
+    for (j in 1:gridDim[2]) {
+      pushViewport(viewport(layout.pos.col=j, layout.pos.row=i))
+      ras <- as.raster(layer, slices[scount], layer@thresh, layer@axis)
+      
+      grid.raster(ras, interpolate=interpolate)
+      grid.text(paste(round(slices[scount])), x=unit(.15, "npc"), y=unit(.1, "npc"), 
+                just="centre", gp=gpar(fontsize=14, col=fontCol))
+      popViewport()
+      scount = scount+1
+    }
+      
+  }
+  
+}
           
 

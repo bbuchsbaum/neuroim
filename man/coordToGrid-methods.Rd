@@ -3,12 +3,15 @@
 \name{coordToGrid}
 \alias{coordToGrid}
 \alias{coordToGrid,BrainSpace,matrix-method}
+\alias{coordToGrid,BrainSpace,numeric-method}
 \alias{coordToGrid,BrainVolume,matrix-method}
 \title{Generic function to convert N-dimensional real world coordinates to grid coordinates}
 \usage{
 coordToGrid(x, coords)
 
 \S4method{coordToGrid}{BrainSpace,matrix}(x, coords)
+
+\S4method{coordToGrid}{BrainSpace,numeric}(x, coords)
 
 \S4method{coordToGrid}{BrainVolume,matrix}(x, coords)
 }
@@ -22,6 +25,8 @@ a matrix of grid coordinates
 }
 \description{
 Generic function to convert N-dimensional real world coordinates to grid coordinates
+
+coordToGrid
 
 coordToGrid
 }

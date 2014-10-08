@@ -3,12 +3,15 @@
 \name{coordToIndex}
 \alias{coordToIndex}
 \alias{coordToIndex,BrainSpace,matrix-method}
+\alias{coordToIndex,BrainSpace,numeric-method}
 \alias{coordToIndex,BrainVolume,matrix-method}
 \title{Generic function to convert N-dimensional real world coordinates to 1D indices}
 \usage{
 coordToIndex(x, coords)
 
 \S4method{coordToIndex}{BrainSpace,matrix}(x, coords)
+
+\S4method{coordToIndex}{BrainSpace,numeric}(x, coords)
 
 \S4method{coordToIndex}{BrainVolume,matrix}(x, coords)
 }
@@ -22,6 +25,8 @@ a vector of indices
 }
 \description{
 Generic function to convert N-dimensional real world coordinates to 1D indices
+
+coordToIndex
 
 coordToIndex
 }

@@ -6,8 +6,8 @@
 \alias{image,Overlay-method}
 \title{image}
 \usage{
-\S4method{image}{BrainVolume}(x, slice, col = heat.colors(128, alpha = 1),
-  zero.col = "#00000000")
+\S4method{image}{BrainVolume}(x, slice, col = gray((0:255)/255, alpha = 1),
+  zero.col = "#000000", axis = 3, ...)
 
 \S4method{image}{Overlay}(x, zpos, axis = 3)
 
@@ -20,6 +20,8 @@
 
 \item{zero.col}{the color to use when the value is 0 (e.g background color)}
 
+\item{axis}{the index of the z axis (1, 2, or 3)}
+
 \item{zpos}{the z coordinate}
 
 \item{axis}{the axis index}
@@ -31,6 +33,10 @@
     its components \code{x$x} and \code{x$y} are used for \code{x}
     and \code{y}, respectively. If the list has component \code{z} this
     is used for \code{z}.}
+
+\item{...}{\link{graphical parameters} for \code{\link{plot}} may also be
+    passed as arguments to this function, as can the plot aspect ratio
+    \code{asp} and \code{axes} (see \code{\link{plot.window}}).}
 }
 \description{
 image

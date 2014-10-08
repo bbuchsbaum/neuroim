@@ -5,18 +5,18 @@
 \alias{SparseBrainVolume-class}
 \title{SparseBrainVolume}
 \usage{
-SparseBrainVolume(data, space, source = NULL, label = "", indices = NULL)
+SparseBrainVolume(data, space, indices = NULL, source = NULL, label = "")
 }
 \arguments{
 \item{data}{a numeric vector}
 
 \item{space}{an instance of class \code{\linkS4class{BrainSpace}}}
 
+\item{indices}{a index vector indicating the 1-d coordinates of the data values}
+
 \item{source}{an instance of class \code{\linkS4class{BrainSource}}}
 
 \item{label}{a \code{character} string}
-
-\item{indices}{a 1-d index vector}
 }
 \value{
 \code{\linkS4class{DenseBrainVolume}} instance

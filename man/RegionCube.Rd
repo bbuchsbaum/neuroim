@@ -3,7 +3,7 @@
 \alias{RegionCube}
 \title{Create A Cuboid Region of Interest}
 \usage{
-RegionCube(bvol, centroid, surround, fill = NULL, nonzero = TRUE)
+RegionCube(bvol, centroid, surround, fill = NULL, nonzero = FALSE)
 }
 \arguments{
 \item{bvol}{an \code{BrainVolume} or \code{BrainSpace} instance}

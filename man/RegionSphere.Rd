@@ -3,7 +3,7 @@
 \alias{RegionSphere}
 \title{Create A Spherical Region of Interest}
 \usage{
-RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = TRUE)
+RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = FALSE)
 }
 \arguments{
 \item{bvol}{an \code{BrainVolume} or \code{BrainSpace} instance}

@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{the layer to convert}
 
-\item{zpos}{the z coordinate}
+\item{zpos}{the z coordinate in coordinate space}
 
 \item{thresh}{the threshold range}
 

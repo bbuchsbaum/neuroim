@@ -3,7 +3,8 @@
 \alias{Layer}
 \title{create a Layer object}
 \usage{
-Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0))
+Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0),
+  axis = 3, zero.col = "#000000")
 }
 \arguments{
 \item{vol}{an image volume}
@@ -11,6 +12,8 @@ Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0))
 \item{colorMap}{a lookup table defining mapping from image intensity values to colors}
 
 \item{thresh}{a range (min,max) defining the threshold window for determining image opacity}
+
+\item{axis}{the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)}
 }
 \value{
 an object of class \code{Layer}

@@ -114,9 +114,8 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 		meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
 		source <- new("BrainSource", metaInfo=meta)	
 	}
-		
-  
-  	new("SparseBrainVector", source=source, space=space, mask=mask, data=data, map=IndexLookupVolume(space(mask), as.integer(which(mask))))
+	 
+	new("SparseBrainVector", source=source, space=space, mask=mask, data=data, map=IndexLookupVolume(space(mask), as.integer(which(mask))))
   
 }
 

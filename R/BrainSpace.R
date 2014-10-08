@@ -123,8 +123,9 @@ setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {
       direc <- diag(trans(x))
-      direc <- direc[1:(length(direc)-1)]
-			mat <- cbind(origin(x), origin(x)+(spacing(x)*dim(x)*direc))
+      direc <- sign(direc[1:(length(direc)-1)])
+			#mat <- cbind(x@origin, x@origin+(spacing(x)*dim(x)*direc))
+			mat <- cbind(x@origin, x@origin+(spacing(x)*dim(x)))
 			return(mat)
 		}
 )

@@ -258,6 +258,8 @@ setMethod(f="loadData", signature=signature("BrainBucketSource"),
 				
 				key <- labs[key]							
 			}
+      
+      
 			
 			ret <- lapply(key, function(k) {				
 				haskey <- exists(k, envir=x@cache, inherits=FALSE)
@@ -265,8 +267,7 @@ setMethod(f="loadData", signature=signature("BrainBucketSource"),
 					idx <- which(names(x) == k) 
 					vol <- loadData(x@sourceList[[idx]])
 					assign(k, vol, envir=x@cache)
-				} else {
-					
+				} else {					
 					vol <- get(k, envir=x@cache, inherits=FALSE)
 				}		
 				attr(vol, "label") <- k
@@ -322,6 +323,48 @@ BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 	new("BrainBucketSource", metaInfo=metaInfo, indices=indices, sourceList=sourceList, cache=new.env(hash=TRUE))	
 }
 
+#' BrainBucket
+#' 
+#' Constructor function for \code{\linkS4class{BrainBucket}} class
+#' 
+#' @param volumeList a named list of \code{\linkS4class{BrainVolume}} instances
+#' @export BrainBucket
+#' @rdname BrainBucket-class
+#' 
+BrainBucket <- function(volumeList) {
+  
+  isvol <- sapply(volumeList, function(vol) inherits(vol, "BrainVolume"))
+  
+  if (length(volumeList) < 1 || any(!isvol)){
+    stop("BrainBucket: 'volumeList' must be a nonempty list of instances of or extending 'BrainVolume'")
+  }
+  
+  vnames <- names(volumeList)
+  if (is.null(vnames)) {
+    vnames <- paste0("V", 1:length(volumeList))
+  } else if (any(vnames == "")) {
+    whichEmpty <- which(vnames == "")
+    vnames[whichEmpty] <- paste0("V", whichEmpty)
+  }
+  
+  sp <- space(volumeList[[1]])
+  D <- c(dim(sp), length(volumeList))
+  
+  meta <- BrainMetaInfo(D, spacing(sp), origin=origin(sp), dataType="FLOAT", label="", spatialAxes=axes(sp))
+  
+  sourceList <- lapply(1:length(volumeList), function(i) { 
+    volumeList[[i]]@source
+  })
+  
+  bsource <- new("BrainBucketSource", metaInfo=meta, indices=1:length(volumeList), sourceList=sourceList, cache=new.env(hash=TRUE))
+  
+  new("BrainBucket", source=bsource,space=addDim(sp, length(volumeList)), labels=vnames,data=volumeList)
+}
+  
+  
+
+
+
 #' loadBucket
 #' 
 #' load a BrainBucket object from file
@@ -339,6 +382,8 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	
 	D <- c(meta@Dim[1:3], length(idx))
 	bspace <- BrainSpace(D, meta@spacing, meta@origin, meta@spatialAxes)
+  
+  ## TODO chceck: does not actually provide data ....
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
 }
 
@@ -399,13 +444,14 @@ setMethod(f="[[", signature=signature(x="BrainBucket", i = "character", j = "mis
 
 #' extract indexed volume from \code{BrainBucket}
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "numeric", j = "missing"),
-		def=function(x, i) {
+		def=function(x, i) {    
 			loadData(x@source, i)
 		})
 
 
 
 setAs("DenseBrainVector", "array", function(from) from@.Data)
+
 setAs("BrainVector", "array", function(from) from[,,,])
 
 
@@ -563,7 +609,6 @@ loadVector  <- function(fileName, indices=NULL, mask=NULL) {
 #          function(x) {
 #             t(colMeans(x, dims=2))
 #           })
-
 
 
 #' @rdname concat-methods
