@@ -70,7 +70,7 @@ setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFil
 
 #' Generic function to map values from one set to another using a user-supplied lookup table
 #' @param x the object to map values from
-#' @param lookup the lookup table
+#' @param lookup the lookup table. The first column is the "key" the second column is the "value".
 #' @return a new object where the original values have been filled in with the values in the lookup table
 #' @export 
 #' @rdname fill-methods
