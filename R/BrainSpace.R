@@ -205,6 +205,28 @@ setMethod(f="coordToGrid", signature=signature(x="BrainSpace", coords="numeric")
           })
 
 
+#' gridToCoord
+#' 
+#' @export 
+#' @rdname gridToCoord-methods
+setMethod(f="gridToCoord", signature=signature(x="BrainSpace", coords="matrix"),
+          def=function(x, coords) {
+            input <- t(cbind(coords-1, rep(1, nrow(coords)))) 
+            ret <- t(trans(x) %*% input)
+            ret[,1:3,drop=FALSE]
+            
+          })
+
+#' gridToCoord
+#' 
+#' @export 
+#' @rdname gridToCoord-methods
+setMethod(f="gridToCoord", signature=signature(x="BrainVolume", coords="matrix"),
+          def=function(x, coords) {
+            callGeneric(space(x), coords)
+            
+          })
+
 
 #' gridToIndex
 #' 

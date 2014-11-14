@@ -214,6 +214,16 @@ setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coord
 #' @rdname coordToGrid-methods
 setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
+#' Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
+#' @param x the object
+#' @param coords a matrix of grid coordinates
+#' @return a matrix of real coordinates
+#' @export 
+#' @rdname gridToCoord-methods
+setGeneric(name="gridToCoord",   def=function(x, coords) standardGeneric("gridToCoord"))
+
+
+
 #' Generic function to convert 1-dimensional real axis coordinates along a single axis dimension to an 1D index along the same axis
 #' @param x the object
 #' @param real the axis coordinates

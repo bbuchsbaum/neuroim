@@ -424,6 +424,7 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
             }
             
             out <- DenseBrainVolume(array(0, dim(x)), space(x))
+            
             for (i in 1:nrow(lookup)) {
               idx <- which(x == lookup[i,1])
               out[idx] <- lookup[i,2]             
