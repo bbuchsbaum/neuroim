@@ -246,10 +246,11 @@ setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridTo
 #' @param x four-dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the volume supplied as the second argument to the function
+#' @param mask an image mask indicating subset of volume elements to apply function over
 #' @param ... additional arguments
 #' @export 
 #' @rdname eachVolume-methods
-setGeneric(name="eachVolume", def=function(x, FUN, withIndex, ...) standardGeneric("eachVolume"))
+setGeneric(name="eachVolume", def=function(x, FUN, withIndex, mask, ...) standardGeneric("eachVolume"))
 
 #' Generic function to extract a volume from a four-dimensional image
 #' @param x four-dimensional image
@@ -278,6 +279,16 @@ setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneri
 #' @export 
 #' @rdname eachSeries-methods
 setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGeneric("eachSeries"))
+
+#' Generic functions to scale (center and/or normalize by standard deviation) each series of a 4D image
+#' That is, if the 4th dimension is 'time' each series is a 1D time series.
+#' @param x a four dimensional image
+#' @param center a \code{logical} value indicating whether series should be centered
+#' @param scale a \code{logical} value indicating whether series should be divided by standard deviation
+#' @export 
+#' @rdname scaleSeries-methods
+setGeneric(name="scaleSeries", def=function(x, center, scale) standardGeneric("scaleSeries"))
+
 
 
 #' Generic function to extract a set of series from a 4D image

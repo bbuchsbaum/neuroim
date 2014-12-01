@@ -191,9 +191,9 @@ RandomSearchlight <- function(mask, radius) {
   mask.idx <- which(mask != 0)
   grid <- indexToGrid(mask, mask.idx)
 
+  prog <- function() { sum(done)/length(mask.idx) }
   
   nextEl <- function() {
-    print(sum(done))
     if (!all(done[mask.idx])) {
       center <- .resample(which(!done[mask.idx]), 1)
       done[center] <<- TRUE
@@ -208,7 +208,7 @@ RandomSearchlight <- function(mask, radius) {
       stop('StopIteration')
     }
   }
-  obj <- list(nextElem=nextEl)
+  obj <- list(nextElem=nextEl, progress=prog)
   class(obj) <- c("RandomSearchlight", 'abstractiter', 'iter')
   obj
 }
@@ -218,8 +218,11 @@ RandomSearchlight <- function(mask, radius) {
 #' @param radius in mm of spherical searchlight
 #' @export
 Searchlight <- function(mask, radius) {
-	grid <- indexToGrid(mask, which(mask != 0))
+  mask.idx <- which(mask != 0)
+	grid <- indexToGrid(mask, mask.idx)
 	index <- 0
+  
+	prog <- function() { index/length(mask.idx) }
   
 	nextEl <- function() {
 		if (index < nrow(grid)) { 
@@ -233,7 +236,7 @@ Searchlight <- function(mask, radius) {
 		}
 	}
 	
-	obj <- list(nextElem=nextEl)
+	obj <- list(nextElem=nextEl, progress=prog)
   class(obj) <- c("Searchlight", 'abstractiter', 'iter')
 	obj
 			

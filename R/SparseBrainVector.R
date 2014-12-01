@@ -202,8 +202,8 @@ setMethod(f="coords", signature=signature(x="SparseBrainVector"),
 #' 
 #' @export
 #' @rdname eachVolume-methods
-setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical"),
-		def=function(x, FUN, withIndex=FALSE, ...) {
+setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical", mask="missing"),
+		def=function(x, FUN, withIndex=FALSE, mask, ...) {
 			lapply(1:nrow(x@data), function(i) {
 				if (withIndex) {
 					FUN(takeVolume(x, i), i,...)
@@ -214,14 +214,26 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 		})
 
 
+
+
 #' eachVolume
 #' 
 #' @export
 #' @rdname eachVolume-methods
-setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing"),
+setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing", mask="missing"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:nrow(x@data), function(i) FUN(takeVolume(x, i), ...))					
 		})
+
+#' eachVolume
+#' 
+#' @export
+#' @rdname eachVolume-methods
+setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing", mask="LogicalBrainVolume"),
+          def=function(x, FUN, withIndex, mask, ...) {
+            mask.idx <- which(mask > 0)
+            lapply(1:nrow(x@data), function(i) FUN(takeVolume(x, i)[mask.idx], ...))					
+          })
 
   
 

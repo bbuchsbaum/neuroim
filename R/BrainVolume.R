@@ -156,11 +156,12 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
   clus.split <- split(clus.idx, clusters)
   clus.names <- names(clus.split)
   clusterMap <- hash()
+  
   for (i in 1:length(clus.split)) {
     clusterMap[[clus.names[[i]]]] <- clus.split[[clus.names[[i]]]]
-    
   }
-  new("ClusteredBrainVolume", mask=mask, clusters=clusters, labelMap=labelMap, clusterMap=clusterMap, source=source, space=space)
+  
+  new("ClusteredBrainVolume", mask=mask, clusters=as.integer(clusters), labelMap=labelMap, clusterMap=clusterMap, source=source, space=space)
 }
   
   

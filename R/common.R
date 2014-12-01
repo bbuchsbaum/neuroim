@@ -1,6 +1,45 @@
 #' @import abind
 NULL
 
+#' @export  
+#' @param voxmat an N by 3 matrix of voxel coordinates
+#' @param mat an N by M matrix of values where M is the number of volumes to create (e.g. one volume per column in \code{mat})
+#' @param mask a reference volume defining the geometry of the output volumes. This can either be of type \code{BrainSpace} or \code{BrainVolume}
+#' @param default the value that will be used for voxels not contained within voxmat (defualt is \code{NA})
+#' @return a \code{list} of \code{BrainVolume} instances, one for each column of \code{mat}
+matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
+  if (nrow(voxmat) != nrow(mat)) {
+    stop("mismatching dimensions: nrow(voxmat) must equal nrow(mat)")
+  }
+  lapply(1:ncol(mat), function(i) {
+    vol <- array(default, dim(mask))   
+    vol[voxmat] <- mat[,i]
+    
+    if (is(mask, "BrainSpace")) {
+      BrainVolume(vol, mask)
+    } else {
+      BrainVolume(vol, space(mask))
+    }
+  })
+}  
+
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="missing"),
+          def=function(x, fac) {
+            if (length(fac) != nrow(x)) {
+              stop(paste("x must be same length as factor used for splitting rows"))
+            }
+            
+            out <- do.call(rbind, lapply(levels(fac), function(lev) {
+              keep <- fac == lev
+              colMeans(x[keep,])
+            }))
+            
+            row.names(out) <- levels(fac)           
+            out
+          })
+
 #' @export
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="function"),

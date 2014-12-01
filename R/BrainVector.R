@@ -494,15 +494,41 @@ setMethod(f="show", signature=signature("BrainVector"),
 #' 
 #' @rdname eachVolume-methods
 #' @export
-setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
-		def=function(x, FUN, withIndex, ...) {
+setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="missing"),
+		def=function(x, FUN, withIndex, mask, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt], ...))				
 		})
+
+#' eachVolume
+#' 
+#' @rdname eachVolume-methods
+#' @export
+setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="BrainVolume"),
+          def=function(x, FUN, withIndex, mask, ...) {
+            mask.idx <- which(mask > 0)
+            lapply(1:(dim(x)[4]), function(tt) {
+              vals <- x[,,,tt]
+              FUN(vals[mask.idx], ...)
+            })
+          })
+
+#' eachVolume
+#' 
+#' @rdname eachVolume-methods
+#' @export
+setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="missing"),
+          def=function(x, FUN, withIndex, mask, ...) {   
+            lapply(1:(dim(x)[4]), function(tt) {
+              vals <- x[,,,tt]
+              FUN(vals, ...)
+            })
+          })
+
 
 
 #' @rdname eachVolume-methods
 #' @export
-setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing"),
+setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing",mask="missing"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]], ...))				
 		})
@@ -571,7 +597,7 @@ setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", w
 			NY <- dim(x)[2]
 			NZ <- dim(x)[3]
 			ret <- vector("list", prod(NX, NY, NZ))
-			
+			index <- 1
 			for (i in 1:NZ) {
 				for (j in 1:NY) {
 					for (k in 1:NX) {
@@ -625,6 +651,17 @@ setMethod(f="concat", signature=signature(x="BrainVolume", y="BrainVector"),
   def=function(x,y, ...) {
     .concat4D(x,y,...)			
   })
+
+#' @rdname scaleSeries-methods
+#' @export
+setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="logical", scale="logical"),
+          def=function(x, center=TRUE, scale=TRUE) {
+            M <- as.matrix(x)
+            Ms <- scale(t(M), center, scale)
+            BrainVector(Ms, space(x))
+             		
+          })
+
 
 
 #' @rdname concat-methods
