@@ -395,7 +395,7 @@ setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 #' @rdname series-methods
 setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))   
 
-#' extract a 2D slice from an image volume
+#' Extract a 2D slice from an image volume
 #' @param x the object
 #' @param zlevel coordinate (in voxel units) along the sliced axis
 #' @param along the axis along which to slice
@@ -406,7 +406,7 @@ setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))
 setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standardGeneric("slice"))   
 
 
-#' extract permutation matrix
+#' Extract permutation matrix
 #' @param x the object
 #' @param ... additional arguments
 #' @export 

@@ -121,7 +121,6 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 	
 	new("DenseBrainVector", .Data=data, source=source, space=space)
 	
-	
 }
 
 
@@ -178,12 +177,13 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			    arr <- arr*meta@slope
         }
 			}
+      
 			close(reader)
 				
 			#arr <- abind(datlist, along=4)			
 			
       bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)),meta@spacing, meta@origin, meta@spatialAxes, trans(meta))
-			DenseBrainVector(arr[,,,ind], bspace, x)
+			DenseBrainVector(arr[,,,ind,drop=FALSE], bspace, x)
 			
 		})
 
@@ -203,16 +203,19 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	
 	metaInfo <- readHeader(fileName)
 	
-	if ( length(metaInfo@Dim) != 4) {
-		stop(paste("file must be 4-dimensional, and it's not: ", paste(metaInfo@Dim, collapse= ",")))
-	}
+  if (length(metaInfo@Dim) == 2) {
+    stop(paste("cannot load BrainVector with only two dimensions: ", paste(metaInfo@Dim, collapse=" ")))  
+  }
 	
-	if (is.null(indices)) {
+  if ( length(metaInfo@Dim) == 3) {
+		indices <- 1
+    metaInfo@Dim <- c(metaInfo@Dim,1)
+	} else if (length(metaInfo@Dim) == 4 && is.null(indices)) {
 		indices=seq(1, metaInfo@Dim[4])
 	}
 	
 	if (is.null(mask)) {
-		new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
+		new("BrainVectorSource", metaInfo=metaInfo, indices=as.integer(indices))		
 	} else {
 		SparseBrainVectorSource(metaInfo, indices, mask)		
 	}

@@ -46,7 +46,7 @@ AxisSet3D <- function(i, j, k) {
 }
 
 
-#' @title permMat
+#' permMat
 #' @export
 #' @rdname permMat-methods
 setMethod(f="permMat", signature=signature(x = "AxisSet2D"),

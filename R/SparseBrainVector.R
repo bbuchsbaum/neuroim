@@ -472,6 +472,29 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 			  }											
 		  })
 
+#' takeVolume
+#' extract volume from SparseBrainVector
+#' 
+#' @export
+#' @rdname takeVolume-methods
+setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
+          def=function(x, i, merge=FALSE) {
+            idx <- which(x@mask > 0)      
+            bspace <- dropDim(space(x))
+             
+            res <- do.call(rbind, lapply(i, function(i) x@data[i,]))
+            
+            if (length(res) > 1 && merge) {
+              res <- do.call("concat", res)				
+            }
+            
+            if (length(res) == 1) {
+              res[[1]]
+            } else {
+              res
+            }											
+          })
+
   
 
 #' @export

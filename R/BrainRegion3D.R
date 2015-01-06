@@ -213,6 +213,8 @@ RandomSearchlight <- function(mask, radius) {
   obj
 }
 
+
+
 #' Create an exhaustive searchlight iterator
 #' @param mask an image volume containing valid central voxels for roving searchlight
 #' @param radius in mm of spherical searchlight
