@@ -217,7 +217,7 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	if (is.null(mask)) {
 		new("BrainVectorSource", metaInfo=metaInfo, indices=as.integer(indices))		
 	} else {
-		SparseBrainVectorSource(metaInfo, indices, mask)		
+		SparseBrainVectorSource(metaInfo, as.integer(indices), mask)		
 	}
 	
 }

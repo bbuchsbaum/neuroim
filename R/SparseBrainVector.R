@@ -35,7 +35,7 @@
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
   
 	
-	stopifnot(length(dim(metaInfo)) == 4)
+	stopifnot(length(dim(metaInfo)) >= 3)
 	stopifnot(all(indices >= 1 & indices <= dim(metaInfo)[4]))
 	
 	D <- dim(metaInfo)[1:3]
@@ -130,7 +130,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			
 			### considerable code duplication with BrainVectorSource#loadData
 			meta <- x@metaInfo
-			stopifnot(length(meta@Dim) == 4)
+			#stopifnot(length(meta@Dim) == 4)
 			
 			meta <- x@metaInfo
 			nels <- prod(meta@Dim[1:3]) 		
