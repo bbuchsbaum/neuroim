@@ -60,7 +60,7 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", FUN="function"),
           def=function(x, fac, FUN) {
-            if (length(fac) != prod(dim(x)[1:3]) {
+            if (length(fac) != prod(dim(x)[1:3])) {
               stop(paste("fac must have as many elements as the number of voxels"))
             }
             
