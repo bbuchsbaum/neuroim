@@ -136,6 +136,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			nels <- prod(meta@Dim[1:3]) 		
 			
 			ind <- x@indices
+			M <- x@mask > 0
 			
 			reader <- dataReader(meta, offset=0)		
 			dat4D <- readElements(reader, prod(meta@Dim[1:4]))
