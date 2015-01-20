@@ -136,7 +136,6 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			nels <- prod(meta@Dim[1:3]) 		
 			
 			ind <- x@indices
-			M <- x@mask > 0
 			
 			reader <- dataReader(meta, offset=0)		
 			dat4D <- readElements(reader, prod(meta@Dim[1:4]))
@@ -442,35 +441,9 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 				vals
 			}
 			           
-          })
+})
 
-#' takeVolume
-#' extract volume from SparseBrainVector
-#' 
-#' @export
-#' @rdname takeVolume-methods
- setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
-		  def=function(x, i, merge=FALSE) {
-			  idx <- which(x@mask > 0)
-			  
-			  bspace <- dropDim(space(x))
-			  
-			  makevol <- function(i) {				  
-				  bv <- BrainVolume(x@data[i,], bspace, indices=idx)
-			  }
-			  
-			  res <- lapply(i, makevol)
-			  
-			  if (length(res) > 1 && merge) {
-				  res <- do.call("concat", res)				
-			  }
-			  
-			  if (length(res) == 1) {
-				  res[[1]]
-			  } else {
-				  res
-			  }											
-		  })
+
 
 #' takeVolume
 #' extract volume from SparseBrainVector
@@ -482,14 +455,15 @@ setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"
             idx <- which(x@mask > 0)      
             bspace <- dropDim(space(x))
              
-            res <- do.call(rbind, lapply(i, function(i) x@data[i,]))
+            res <- lapply(i, function(i) x@data[i,])
             
+            ## todo merge is broken
             if (length(res) > 1 && merge) {
               res <- do.call("concat", res)				
             }
             
             if (length(res) == 1) {
-              res[[1]]
+              BrainVolume(res[[1]], bspace, indices=idx)
             } else {
               res
             }											

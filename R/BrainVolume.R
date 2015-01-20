@@ -659,7 +659,7 @@ setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"
             }
     
             kgrid <- kmeans(voxgrid, centers=K, iter.max=100)
-            ClusteredBrainVolume(x, kgrid$cluster)
+            ClusteredBrainVolume(x, kgrid$cluster, kgrid$centers)
           })
 
 

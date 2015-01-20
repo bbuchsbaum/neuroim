@@ -46,15 +46,36 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
           def=function(x, fac, FUN) {
             if (length(fac) != nrow(x)) {
               stop(paste("x must be same length as split variable"))
-            }
-            
+            }        
             out <- do.call(rbind, lapply(levels(fac), function(lev) {
               keep <- fac == lev
               apply(x[keep,], 2, FUN)
             }))
+            
             row.names(out) <- levels(fac)           
             out
           })
+
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", FUN="function"),
+          def=function(x, fac, FUN) {
+            if (length(fac) != prod(dim(x)[1:3]) {
+              stop(paste("fac must have as many elements as the number of voxels"))
+            }
+            
+            out <- do.call(rbind, lapply(levels(fac), function(lev) {
+              idx <- which(fac == lev)
+              mat <- series(x, idx)
+              apply(mat, 2, FUN)
+            }))
+            
+            row.names(out) <- levels(fac)           
+            out
+          })
+
+
+
 
 #' 
 #' @export
