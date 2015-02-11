@@ -114,13 +114,20 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   
   
   if (all(sapply(vlist, length) == 0)) {
-    stop(paste("invalid sphere for centroid", centroid, " with radius",
+    stop(paste("invalid sphere for centroid", paste(centroid, collapse=" "), " with radius",
                radius))
   }
 
   ## should be: need to add dvals
   ## as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))[which(dvals <= radius),]
   grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
+  
+  dvals <- apply(grid, 1, function(gvals) {
+    coord <- (gvals-1) * vspacing + vspacing/2
+    sqrt(sum((coord - mcentroid)^2))
+  })
+  
+  grid[which(dvals <= radius),]
   
 }
 
@@ -157,18 +164,18 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
  
   grid <- .makeSphericalGrid(bvol, centroid, radius)
    
-  dvals <- apply(grid, 1, function(gvals) {
-    coord <- (gvals-1) * vspacing + vspacing/2
-    sqrt(sum((coord - mcentroid)^2))
-  })
+  #dvals <- apply(grid, 1, function(gvals) {
+  #  coord <- (gvals-1) * vspacing + vspacing/2
+  #  sqrt(sum((coord - mcentroid)^2))
+  #})
   
-  idx <- which(dvals <= radius)
+  #idx <- which(dvals <= radius)
    
   vals <- if (!is.null(fill)) {
-    rep(fill, length(idx))
+    rep(fill, nrow(grid))
   } else {    
     ## coercion to numeric shouldn't be necessary here.
-    as.numeric(bvol[grid[idx,]])
+    as.numeric(bvol[grid])
   }   
   
   keep <- if (nonzero) {
@@ -177,7 +184,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
     seq_along(vals)
   }
   
-  new("ROIVolume", space = bspace, data = vals[keep], coords = grid[idx[keep], ])
+  new("ROIVolume", space = bspace, data = vals[keep], coords = grid[keep, ])
 }
 
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
@@ -190,6 +197,8 @@ RandomSearchlight <- function(mask, radius) {
   done <- array(FALSE, dim(mask))
   mask.idx <- which(mask != 0)
   grid <- indexToGrid(mask, mask.idx)
+  
+
 
   prog <- function() { sum(done)/length(mask.idx) }
   
@@ -213,6 +222,43 @@ RandomSearchlight <- function(mask, radius) {
   obj
 }
 
+#' Create a searchlight iterator that samples regions from within a mask.
+#' Searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
+#' It is in the latter sense that this is a bootstrap resampling scheme.
+#' @param mask an image volume containing valid central voxels for roving searchlight
+#' @param radius in mm of spherical searchlight
+#' @param iter the total number of searchlights to sample (default is 100)
+#' @export
+BootstrapSearchlight <- function(mask, radius, iter=100) {
+  mask.idx <- which(mask != 0)
+  grid <- indexToGrid(mask, mask.idx)
+  index <- 0
+  
+  sample.idx <- sample(1:nrow(grid))
+  
+  prog <- function() { index/length(mask.idx) }
+  
+  nextEl <- function() {
+    if (index <= iter & length(sample.idx) > 0) { 
+      index <<- index + 1
+      
+      cenidx <- sample.idx[1]
+      sample.idx <<- sample.idx[-1]
+      
+      search <- RegionSphere(mask, grid[cenidx,], radius, nonzero=TRUE) 
+      vox <- search@coords
+      attr(vox, "center") <- grid[index,]
+      vox
+    } else {
+      stop('StopIteration')
+    }
+  }
+  
+  obj <- list(nextElem=nextEl, progress=prog)
+  class(obj) <- c("BootstrapSearchlight", 'abstractiter', 'iter')
+  obj
+  
+}
 
 
 #' Create an exhaustive searchlight iterator
