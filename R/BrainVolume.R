@@ -120,14 +120,22 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' 
 #' Construct a \code{\linkS4class{ClusteredBrainVolume}} instance
 #' @param mask an instance of class \code{\linkS4class{LogicalBrainVolume}}
-#' @param clusters a vector of clusters ids
-#' @param labelMap as \code{list} that maps from cluster id to a cluster label
-#' @param source an instance of class \code{\linkS4class{BrainSource}}
-#' @param label a \code{character} string
+#' @param clusters a vector of clusters ids with length equal to number of nonzero voxels in mask \code{mask}
+#' @param labelMap an optional \code{list} that maps from cluster id to a cluster label, e.g. (1 -> "FFA", 2 -> "PPA")
+#' @param source an optional instance of class \code{\linkS4class{BrainSource}}
+#' @param label an optional \code{character} string used to label of the volume
 #' @return \code{\linkS4class{ClusteredBrainVolume}} instance 
 #' @export ClusteredBrainVolume
+#' @examples
+#' 
+#' bspace <- BrainSpace(c(16,16,16), spacing=c(1,1,1))
+#' grid <- indexToGrid(bspace, 1:(16*16*16))
+#' kres <- kmeans(grid, centers=10)
+#' mask <- BrainVolume(rep(1, 16^3),bspace)
+#' clusvol <- ClusteredBrainVolume(mask, kres$cluster)
 #' @rdname ClusteredBrainVolume-class
 ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, label="") {
+  mask <- as(mask, "LogicalBrainVolume")
   space <- space(mask)
   ids <- sort(unique(clusters)) 
   

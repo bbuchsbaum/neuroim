@@ -1,12 +1,14 @@
 #' @import abind
 NULL
 
-#' @export  
+#' matrixToVolumeList
+#' converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
 #' @param voxmat an N by 3 matrix of voxel coordinates
 #' @param mat an N by M matrix of values where M is the number of volumes to create (e.g. one volume per column in \code{mat})
 #' @param mask a reference volume defining the geometry of the output volumes. This can either be of type \code{BrainSpace} or \code{BrainVolume}
 #' @param default the value that will be used for voxels not contained within voxmat (defualt is \code{NA})
 #' @return a \code{list} of \code{BrainVolume} instances, one for each column of \code{mat}
+#' @export  
 matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   if (nrow(voxmat) != nrow(mat)) {
     stop("mismatching dimensions: nrow(voxmat) must equal nrow(mat)")
@@ -135,11 +137,12 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 	new.dim <- c(D, NVOLS)
 	
-	nspace <- BrainSpace(new.dim, origin(x@space), spacing(x@space),
-			axes(x@space), trans(x@space))
+	nspace <- BrainSpace(new.dim, origin=origin(x@space), spacing=spacing(x@space),
+			axes=axes(x@space), trans=trans(x@space))
 	
 	ret <- DenseBrainVector(ndat, nspace)
 	
+  ## TODO fix me ridiculously slow
 	if (length(rest) > 0) {
 		for (i in seq_along(rest)) {
 			ret <- concat(ret, rest[[i]])

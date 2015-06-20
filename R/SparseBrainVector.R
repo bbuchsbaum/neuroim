@@ -75,6 +75,13 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 #' @param source the data source -- an instance of class \code{\linkS4class{BrainSource}}
 #' @param label associated sub-image labels
 #' @export 
+#' @examples 
+#' 
+#' bspace <- BrainSpace(c(10,10,10,100), c(1,1,1))
+#' mask <- array(rnorm(10*10*10) > .5, c(10,10,10))
+#' mat <- matrix(rnorm(sum(mask)), 100, sum(mask))
+#' svec <- SparseBrainVector(mat, bspace,mask)
+#' length(indices(svec)) == sum(mask)
 #' @rdname SparseBrainVector-class 	
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
@@ -108,7 +115,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 		space <- addDim(space, nrow(data))
 	}
 				
-  	stopifnot(ndim(space) == 4)
+  stopifnot(ndim(space) == 4)
 	
 	if (is.null(source)) {
 		meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
@@ -161,9 +168,8 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			
 		})
 
-#' indices
 #' @export
-#' @rdname indices-methods          
+#' @rdname SparseBrainVector-class
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
             indices(x@map)
@@ -457,24 +463,26 @@ setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"
             bspace <- dropDim(space(x))
              
             res <- lapply(i, function(i) x@data[i,])
-            
-            ## todo merge is broken
+       
             if (length(res) > 1 && merge) {
-              res <- do.call("concat", res)				
-            }
-            
-            if (length(res) == 1) {
-              BrainVolume(res[[1]], bspace, indices=idx)
+              res <- do.call("cbind", res)			
+              SparseBrainVector(res, bspace, x@mask)
             } else {
-              res
-            }											
+              if (length(res) == 1) {
+                BrainVolume(res[[1]], bspace, indices=idx)
+              } else {
+                lapply(res, function(x) BrainVolume(x, bspace, indices=idx))
+              }
+            }
           })
-
-  
 
 #' @export
 setAs(from="SparseBrainVector", to="matrix",
 		  function(from) {
+		    ## TODO this should return a dense matrix
+		    ## ind <- indices(from)
+		    ## out <- matrix(dim(from)[4]), length(ind))
+		    ## out[, ind] <- from@data
 			  from@data			  
 		  })
 

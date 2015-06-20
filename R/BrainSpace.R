@@ -88,9 +88,9 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 			### doesn't drop dimension in transformation matrix...
       ### brain vector's don't have th axis and tese are incorrectly dropped
       if (ndim(x) == 4) {
-			  BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x), trans(x))
+			  BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=axes(x), trans=trans(x))
       } else {
-        BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], dropDim(axes(x)), trans(x))
+        BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x)), trans=trans(x))
       }
 		})
 

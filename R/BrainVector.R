@@ -568,8 +568,10 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 #' @export
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
-			## this is VERY slow
-			
+			## TODO this is VERY slow
+			## TODO should be renamed "volSlice"
+		  
+		  
 			xs <- space(x)
 			bspace <- BrainSpace(dim(x)[1:3], spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
 			
@@ -584,6 +586,7 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 			}
 			
 			if (length(res) == 1) {
+			  ## TODO should be consistent, e.g. always return list
 				res[[1]]
 			} else {
 				res
