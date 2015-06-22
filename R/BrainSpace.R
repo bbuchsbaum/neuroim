@@ -130,8 +130,7 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		}
 )
 
-#' indexToGrid
-#' 
+ 
 #' @export indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
@@ -140,8 +139,7 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
             t(sapply(idx, .indexToGrid, array.dim))            
           })
 
-#' indexToCoord
-#' 
+ 
 #' @export 
 #' @rdname indexToCoord-methods
 setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
@@ -228,8 +226,7 @@ setMethod(f="gridToCoord", signature=signature(x="BrainVolume", coords="matrix")
           })
 
 
-#' gridToIndex
-#' 
+
 #' @export 
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="matrix"),
@@ -239,8 +236,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="matrix"),
 			.gridToIndex3D(dim(x), coords)
 		})
 
-#' gridToIndex
-#' 
+ 
 #' @export 
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="numeric"),

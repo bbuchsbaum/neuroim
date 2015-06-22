@@ -27,8 +27,7 @@ BrainSlice <- function(data, space, indices=NULL) {
 	}
 }
 
-#' gridToIndex
-#' 
+
 #' @export
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"),
@@ -41,8 +40,7 @@ setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"
 		})
 
 
-#' indexToGrid
-#' 
+
 #' @export
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x = "BrainSlice", idx="index"),

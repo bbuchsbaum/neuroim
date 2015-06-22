@@ -1,4 +1,5 @@
 #' @import hash
+#' @import assertthat
 #' @importFrom Matrix sparseVector
 #' @importFrom yaImpute ann
 NULL
@@ -513,6 +514,7 @@ setMethod(f="indexToCoord", signature=signature(x="BrainVolume", idx="index"),
 #' @rdname coordToIndex-methods
 setMethod(f="coordToIndex", signature=signature(x="BrainVolume", coords="matrix"),
           def=function(x, coords) {
+            assert_that(ncol(coords) == 3)
             callGeneric(space(x), coords)
           })
 
@@ -538,6 +540,7 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
           def=function(x, coords) {
+            assert_that(ncol(coords) == 3)
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
@@ -547,6 +550,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 #' @rdname gridToIndex-methods
   setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="numeric"),
 		  def=function(x, coords) {
+		    assert_that(length(coords) == 3)
 			  array.dim <- dim(x)
 			  .gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
 		  })
@@ -610,7 +614,8 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
-#' apply a kernel function to a BrainVolume
+#' apply a kernel function to a \code{\linkS4class{BrainVolume}}
+#' 
 #' @rdname map-methods
 #' @param mask restrict application of kernel to maksed area
 #' @export
@@ -874,50 +879,89 @@ setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x
 			LogicalBrainVolume(vals, space(x))
 })
 
-#' extract data from SparseBrainVolume
+#' extract data from \code{\linkS4class{SparseBrainVolume}}
 #' @param i index for dimension 1
 #' @param j index for dimension 2
 #' @param k index for dimension 3
 #' @param ... additional arguments
 #' @rdname SparseBrainVolume-class
-setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "numeric"),
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "numeric", drop="ANY"),
           def=function (x, i, j, k, ..., drop=TRUE) {  
-            callGeneric(x, i, 1:(dim(x)[2]))
-          }
-)
+            if (missing(k)) {
+              print("k missing")
+              k <- seq(1, dim(x)[3])
+            }
+            
+            n <- length(i) * length(j) * length(k)
+          
+            out <- vector(mode="list", length=)
+            count <- 1
+            for (ki in k) {
+              for (ji in j) {
+                for (ii in i) {
+                 # print(count)
+                  out[[count]] <- c(ii,ji,ki)
+                  count <- count + 1
+                }
+              }
+            }
+            ind <- gridToIndex(x, do.call(rbind, out))
+            x@data[ind]
+            
+        })
 
 
-#' extract data from SparseBrainVolume
+#' extract data from \code{\linkS4class{SparseBrainVolume}}
 #' @param i index for dimension 1
 #' @param j index for dimension 2
 #' @param k index for dimension 3
 #' @param ... additional arguments
 #' @rdname SparseBrainVolume-class
-setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "missing"),
-          def=function (x, i, j, k, ..., drop=TRUE) {  
-            callGeneric(x, i, 1:(dim(x)[2]))
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "missing", drop="missing"),
+          def=function (x, i, j, k, ..., drop) {  
+            if (missing(k) && nargs() == 4) {
+              x@data[i]
+            } else {
+              callGeneric(x, i=i,  seq(1,dim(x)[2]), k, drop)
+            } 
+         }
+)
+
+#' extract data from \code{\linkS4class{SparseBrainVolume}}
+#' @param i matrix of voxel coordinates
+#' @rdname SparseBrainVolume-class
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "matrix", j="missing", drop="ANY"),
+          def=function (x, i, j, ..., drop=TRUE) {  
+            ind <- gridToIndex(x,i)
+            x@data[ind]
           }
 )
 
-#' extract data from SparseBrainVector
+#' extract data from \code{\linkS4class{SparseBrainVolume}}
+#' @param i index for dimension 1
 #' @param j index for dimension 2
 #' @param k index for dimension 3
 #' @param ... additional arguments
 #' @rdname SparseBrainVolume-class
-setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "missing"),
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "missing", drop="ANY"),
           def=function (x, i, j, k, ..., drop=TRUE) {  
-            callGeneric(x, 1:(dim(x)[1]), 1:(dim(x)[2]))
+            if (missing(k)) {
+              x@data
+            } else {
+              callGeneric(x, seq(1, dim(x)[1]), seq(1, dim(x)[2]), k, ...)
+            }
           }
 )
 
-#' extract data from SparseBrainVolume
+#' extract data from \code{\linkS4class{SparseBrainVolume}}
+#' @param i index for dimension 1
 #' @param j index for dimension 2
 #' @param k index for dimension 3
 #' @param ... additional arguments
 #' @rdname SparseBrainVolume-class
-setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "numeric"),
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "numeric", drop="ANY"),
           def=function (x, i, j, k,  ..., drop=TRUE) {  
-            callGeneric(x, i:(dim(x)[1]), j)
+            callGeneric(x, seq(1, dim(x)[1]), j, k,...)
           }
 )
 
