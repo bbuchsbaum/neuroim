@@ -38,13 +38,16 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
             grid.raster(ras, ...)
           })
 
-#' create a Layer object
-#' @param vol an image volume
-#' @param colorMap a lookup table defining mapping from image intensity values to colors
-#' @param thresh a range (min,max) defining the threshold window for determining image opacity
+#' Layer
+#' 
+#' create a \code{\linkS4class{Layer}} object
+#' @param vol volume instance of \code{\linkS4class{BrainVolume}}
+#' @param colorMap a lookup table defining mapping from image intensity values to colors.
+#' @param thresh a range (min,max) defining the threshold window for determining image opacity.
 #' @param axis the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)
 #' @return an object of class \code{Layer}
 #' @export
+#' @rdname Layer
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000") {
   new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col)
 }

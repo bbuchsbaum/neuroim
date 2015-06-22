@@ -130,7 +130,7 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 #}
 
 
-#' Load data from a \code{\linkS4class{BrainVectorSource}}
+#' loadData
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 #' @param mmap use memory-mapped file
 #' @rdname loadData-methods
@@ -189,22 +189,36 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 
 
 
-
+#' BrainVectorSource
+#' 
 #' Construct a \code{\linkS4class{BrainVectorSource}} object
+#' 
 #' @param fileName name of the 4-dimensional image file
-#' @param indices the subset of volume indices to load -- if \code{NULL} then all volumes will be loaded
-#' @param mask the subset of voxels that will be loaded
-#' @rdname BrainVectorSource-class
-#' @export BrainVectorSource
+#' @param indices the subset of integer volume indices to load -- if \code{NULL} then all volumes will be loaded
+#' @param mask image volume indicating the subset of voxels that will be loaded. If provided, function returns \code{\linkS4class{SparseBrainVectorSource}}
+#' @return a instance deriving from \code{\linkS4class{BrainVectorSource}}
+#' 
+#' @details 
+#' 
+#' If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
+#'
+#' @rdname BrainVectorSource
+#' @export 
 BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
-	stopifnot(is.character(fileName))
-	stopifnot(file.exists(fileName))
+	assert_that(is.character(fileName))
+	assert_that(file.exists(fileName))
 	
 	
 	metaInfo <- readHeader(fileName)
 	
+	if (!is.null(indices) && max(indices) > 1) {
+	  assert_that(length(dim(metaInfo)) == 4)
+	  assert_that(max(indices) <= dim(metaInfo)[4])
+	  assert_that(min(indices) > 0)
+	}
+	
   if (length(metaInfo@Dim) == 2) {
-    stop(paste("cannot load BrainVector with only two dimensions: ", paste(metaInfo@Dim, collapse=" ")))  
+    stop(paste("cannot create BrainVector with only two dimensions: ", paste(metaInfo@Dim, collapse=" ")))  
   }
 	
   if ( length(metaInfo@Dim) == 3) {
@@ -214,6 +228,7 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 		indices=seq(1, metaInfo@Dim[4])
 	}
 	
+
 	if (is.null(mask)) {
 		new("BrainVectorSource", metaInfo=metaInfo, indices=as.integer(indices))		
 	} else {

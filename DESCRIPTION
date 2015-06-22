@@ -2,6 +2,7 @@ Package: neuroim
 Imports:
     Matrix,
     yaImpute,
+    assertthat
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
 Title: neuroim: R software for reading, writing and representing brain imaging

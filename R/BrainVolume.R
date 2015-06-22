@@ -327,13 +327,12 @@ setMethod(f="show", signature=signature("BrainVolume"),
             cat("BrainVolume\n")
             cat("  Type           :", class(object), "\n")
             cat("  Dimension      :", dim(object), "\n")
-            cat("  Spacing        :", paste(paste(sp@spacing[1:(length(sp@spacing)-1)], " X ", collapse=" "), 
+            cat("  Spacing        :", paste(paste(signif(sp@spacing[1:(length(sp@spacing)-1)],2), " X ", collapse=" "), 
                                             sp@spacing[length(sp@spacing)], "\n"))
-            cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
+            cat("  Origin         :", paste(paste(signif(sp@origin[1:(length(sp@origin)-1)],2), " X ", collapse=" "), 
                                             sp@origin[length(sp@origin)], "\n"))
             cat("  Axes           :", paste(sp@axes@i@axis, sp@axes@j@axis,sp@axes@k@axis), "\n")
-            cat("  Coordinate Transform :", zapsmall(sp@trans), "\n")
-                       
+           
           }
 )
 
@@ -369,6 +368,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 		})
 
 #' Constructor for BrainVolumeSource
+#' 
 #' @param input the input file name
 #' @param index the image subvolume index
 #' @export 
@@ -399,7 +399,8 @@ BrainVolumeSource <- function(input, index=1) {
 #' load an image volume from a file
 #' @param fileName the name of the file to load
 #' @param index the index of the volume (e.g. if the file is 4-dimensional)
-#' @return an instance of the class \code{\linkS4class{BrainVolume}}
+#' @return an instance of the class \code{\linkS4class{DenseBrainVolume}}
+#' 
 #' @examples
 #' fname <- system.file("extdata", "global_mask.nii", package="neuroim")
 #' x <- loadVolume(fname)
@@ -861,11 +862,16 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 
 #' as.logical
 #' 
-#' Convert BrainVolume to logical vector
-#' @rdname as.logical-methods
+#' Convert BrainVolume to \code{linkS4class{LogicalBrainVolume}}
+#' 
+#' the image values will be converted to using R base function \code{as.logical} and wrapped in \code{LogicalBrainVolume}
+#' 
+#' @return an instance of \code{linkS4class{LogicalBrainVolume}}
+#' @rdname BrainVolume-methods
 #' @export 
 setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x) {
-			as.logical(as.vector(x))			
+			vals <- as.logical(as.vector(x))	
+			LogicalBrainVolume(vals, space(x))
 })
 
 
