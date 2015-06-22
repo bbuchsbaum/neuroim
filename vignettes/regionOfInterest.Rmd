@@ -84,6 +84,8 @@ We may want to convert a region of interest to a BrainVolume instance. But we do
     
     all(dim(sparsevol) == dim(MNI_SPACE_1MM))
     
+    
+    
 ```
 
 

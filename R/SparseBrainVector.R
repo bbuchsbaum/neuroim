@@ -419,34 +419,34 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j =
 #' @param m index for dimension 4
 #' @param ... additional arguments
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
-          def=function (x, i, j, k, m, ..., drop=TRUE) {
-		    if (missing(k)) k = 1:(dim(x)[3])
-            if (missing(m)) m = 1:(dim(x)[4])
-			
-			vmat <- as.matrix(expand.grid(i,j,k,m))
-			ind <- .gridToIndex(dim(x)[1:3], vmat[,1:3,drop=FALSE])
-			
-			
-			mapped <- cbind(lookup(x, ind), m)
-			
-			
-			
-			vals <- unlist(apply(mapped, 1, function(i) {
-						if (i[1] == 0) { 
-							0
-						} else {
-							x@data[i[2], i[1]]
-							#x@data[i[1],i[2]]
-						}
-			}))
-			
-			dim(vals) <- c(length(i),length(j),length(k),length(m))
-			
-			if (drop) {
-				drop(vals)
-			} else {
-				vals
-			}
+          def = function (x, i, j, k,..., drop = TRUE) {
+            if (missing(k))
+              k = 1:(dim(x)[3])
+             
+            vmat <- as.matrix(expand.grid(i,j,k,m))
+            ind <- .gridToIndex(dim(x)[1:3], vmat[,1:3,drop = FALSE])
+            
+            
+            mapped <- cbind(lookup(x, ind), m)
+            
+            
+            
+            vals <- unlist(apply(mapped, 1, function(i) {
+              if (i[1] == 0) {
+                0
+              } else {
+                x@data[i[2], i[1]]
+                #x@data[i[1],i[2]]
+              }
+            }))
+            
+            dim(vals) <- c(length(i),length(j),length(k),length(m))
+            
+            if (drop) {
+              drop(vals)
+            } else {
+              vals
+            }
 			           
 })
 
@@ -497,7 +497,7 @@ setMethod(f="as.matrix", signature=signature(x = "SparseBrainVector"), def=funct
 
 #' as.list
 #' 
-#' convert SparseBrainVector to list of DenseBrainVolumes
+#' convert SparseBrainVector to list of \code{\linkS4class{DenseBrainVolume}}
 #' @rdname as.list-methods
 #' @export
 setMethod(f="as.list", signature=signature(x = "SparseBrainVector"), def=function(x) {

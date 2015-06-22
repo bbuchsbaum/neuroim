@@ -874,6 +874,54 @@ setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x
 			LogicalBrainVolume(vals, space(x))
 })
 
+#' extract data from SparseBrainVolume
+#' @param i index for dimension 1
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param ... additional arguments
+#' @rdname SparseBrainVolume-class
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "numeric"),
+          def=function (x, i, j, k, ..., drop=TRUE) {  
+            callGeneric(x, i, 1:(dim(x)[2]))
+          }
+)
+
+
+#' extract data from SparseBrainVolume
+#' @param i index for dimension 1
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param ... additional arguments
+#' @rdname SparseBrainVolume-class
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "missing"),
+          def=function (x, i, j, k, ..., drop=TRUE) {  
+            callGeneric(x, i, 1:(dim(x)[2]))
+          }
+)
+
+#' extract data from SparseBrainVector
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param ... additional arguments
+#' @rdname SparseBrainVolume-class
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "missing"),
+          def=function (x, i, j, k, ..., drop=TRUE) {  
+            callGeneric(x, 1:(dim(x)[1]), 1:(dim(x)[2]))
+          }
+)
+
+#' extract data from SparseBrainVolume
+#' @param j index for dimension 2
+#' @param k index for dimension 3
+#' @param ... additional arguments
+#' @rdname SparseBrainVolume-class
+setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "numeric"),
+          def=function (x, i, j, k,  ..., drop=TRUE) {  
+            callGeneric(x, i:(dim(x)[1]), j)
+          }
+)
+
+
 
             
             
