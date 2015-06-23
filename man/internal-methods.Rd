@@ -22,7 +22,7 @@
 
 .extract.array(x, ..., drop = FALSE, indices = list(...))
 
-.gridToIndex3D(dimensions, vmat)
+.gridToIndex3D(dimensions, voxmat)
 
 .gridToIndex(dimensions, vmat)
 
@@ -55,7 +55,7 @@
 
 .indexToGrid
 
-.getRStorage
+.indexToGrid
 
 .getDataStorage
 
@@ -65,5 +65,6 @@
 
 .getEndian
 }
+\keyword{.getRStorage}
 \keyword{internal}
 

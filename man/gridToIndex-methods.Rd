@@ -32,11 +32,5 @@ a vector of indices
 }
 \description{
 Generic function to convert N-dimensional grid coordinate to 1D indices
-
-gridToIndex
-
-gridToIndex
-
-gridToIndex
 }
 

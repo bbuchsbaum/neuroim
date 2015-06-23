@@ -40,7 +40,7 @@ connComp3D <- function(mask) {
 	
 	nextlabel <- 1
 	
-	grid <-  t(sapply(which(mask>0), .indexToGrid, dim(mask)))
+	grid <-  .indexToGrid(which(mask>0), dim(mask))
   
 	for (i in 1:NROW(grid)) {
 		vox <- grid[i,]

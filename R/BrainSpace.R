@@ -136,7 +136,7 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
             array.dim <- dim(x)          
-            t(sapply(idx, .indexToGrid, array.dim))            
+            .indexToGrid(idx, array.dim)        
           })
 
  

@@ -45,22 +45,7 @@ setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x = "BrainSlice", idx="index"),
 		def=function(x, idx) {            
-			adim <- dim(x)
-			idx <- as.integer(idx)          
-			rank <- 2
-			
-			wh1 <- idx-1
-			wh <-1 + wh1 %% adim[1]
-			
-			denom <- adim[1]                      
-			nextd1 <- wh1%/%denom
-			wh2 <- 1 + nextd1%%adim[2]
-			
-			ret <- cbind(wh,wh2)[,,drop=T]
-			names(ret) <- c("i", "j")
-			
-			ret
-			
+			.indexToGrid(idx, dim(x))
 		})
 
 

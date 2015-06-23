@@ -1,24 +1,7 @@
-
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-NumericMatrix testCpp(IntegerVector idx, IntegerVector array_dim) {
-  NumericMatrix omat(idx.size(), array_dim.size());
-  
-  for (int i=0; i<array_dim.size(); i++) {
-    omat(0,i) = 3;
-  }
-  return omat;
-}
-  
-//stopifnot(length(dimensions) == 3)
-//slicedim = dimensions[1]*dimensions[2]
 
-//apply(vmat, 1, function(vox) {
-//  (slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
-//})	
-  
   
 // [[Rcpp::export]]
 IntegerVector gridToIndex3DCpp(IntegerVector array_dim, NumericMatrix voxmat) {
@@ -42,7 +25,7 @@ NumericMatrix indexToGridCpp(IntegerVector idx, IntegerVector array_dim) {
   
   for(int i = 0; i < N; i++) {
     int wh1 = idx(i)-1;
-    int tmp = wh1 % array_dim(0);
+    int tmp = 1 + wh1 % array_dim(0);
     IntegerVector wh = IntegerVector(rank, tmp);
     if (rank >= 2) {
       int denom = 1;
@@ -53,31 +36,11 @@ NumericMatrix indexToGridCpp(IntegerVector idx, IntegerVector array_dim) {
       }
     }
     
-    for (int k=0; k<rank; k++) {
-      omat(i,k) = wh(k);
-    }
-    
+    omat.row(i) = wh;
+   
   }
   
   return omat;
 
 }
 
-
-/*
-  stopifnot(all(idx > 0 & idx <= prod(array.dim)))
-  rank = length(array.dim)
-  wh1 = idx-1
-wh = 1 + wh1 %% array.dim[1]
-wh = rep(wh, rank)
-  if (rank >=2) {
-    denom = 1
-    for (i in 2:rank) {
-      denom = denom * array.dim[i-1]
-      nextd1 = wh1 %/% denom
-      wh[i] = 1 + nextd1%%array.dim[i]
-    }
-  }
-  wh
- 
-*/

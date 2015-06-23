@@ -424,7 +424,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
               k = 1:(dim(x)[3])
              
             vmat <- as.matrix(expand.grid(i,j,k,m))
-            ind <- .gridToIndex(dim(x)[1:3], vmat[,1:3,drop = FALSE])
+            ind <- .gridToIndex3D(dim(x)[1:3], vmat[,1:3,drop = FALSE])
             
             
             mapped <- cbind(lookup(x, ind), m)

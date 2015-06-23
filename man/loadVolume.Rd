@@ -12,7 +12,7 @@ loadVolume(fileName, index = 1)
 \item{index}{the index of the volume (e.g. if the file is 4-dimensional)}
 }
 \value{
-an instance of the class \code{\linkS4class{BrainVolume}}
+an instance of the class \code{\linkS4class{DenseBrainVolume}}
 }
 \description{
 load an image volume from a file

@@ -29,9 +29,5 @@ a matrix of grid coordinates
 }
 \description{
 Generic function to convert 1D indices to N-dimensional grid coordinates
-
-indexToGrid
-
-indexToGrid
 }
 

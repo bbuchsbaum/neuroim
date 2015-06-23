@@ -4,9 +4,27 @@
 \name{SparseBrainVolume-class}
 \alias{SparseBrainVolume}
 \alias{SparseBrainVolume-class}
+\alias{[,SparseBrainVolume,matrix,missing,ANY-method}
+\alias{[,SparseBrainVolume,missing,missing,ANY-method}
+\alias{[,SparseBrainVolume,missing,numeric,ANY-method}
+\alias{[,SparseBrainVolume,numeric,missing,missing-method}
+\alias{[,SparseBrainVolume,numeric,numeric,ANY-method}
 \title{SparseBrainVolume}
 \usage{
 SparseBrainVolume(data, space, indices = NULL, source = NULL, label = "")
+
+\S4method{[}{SparseBrainVolume,numeric,numeric,ANY}(x, i, j, k, ...,
+  drop = TRUE)
+
+\S4method{[}{SparseBrainVolume,numeric,missing,missing}(x, i, j, k, ..., drop)
+
+\S4method{[}{SparseBrainVolume,matrix,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{SparseBrainVolume,missing,missing,ANY}(x, i, j, k, ...,
+  drop = TRUE)
+
+\S4method{[}{SparseBrainVolume,missing,numeric,ANY}(x, i, j, k, ...,
+  drop = TRUE)
 }
 \arguments{
 \item{data}{a numeric vector}
@@ -18,6 +36,40 @@ SparseBrainVolume(data, space, indices = NULL, source = NULL, label = "")
 \item{source}{an instance of class \code{\linkS4class{BrainSource}}}
 
 \item{label}{a \code{character} string}
+
+\item{i}{index for dimension 1}
+
+\item{j}{index for dimension 2}
+
+\item{k}{index for dimension 3}
+
+\item{...}{additional arguments}
+
+\item{i}{index for dimension 1}
+
+\item{j}{index for dimension 2}
+
+\item{k}{index for dimension 3}
+
+\item{...}{additional arguments}
+
+\item{i}{matrix of voxel coordinates}
+
+\item{i}{index for dimension 1}
+
+\item{j}{index for dimension 2}
+
+\item{k}{index for dimension 3}
+
+\item{...}{additional arguments}
+
+\item{i}{index for dimension 1}
+
+\item{j}{index for dimension 2}
+
+\item{k}{index for dimension 3}
+
+\item{...}{additional arguments}
 }
 \value{
 \code{\linkS4class{DenseBrainVolume}} instance
@@ -26,6 +78,16 @@ SparseBrainVolume(data, space, indices = NULL, source = NULL, label = "")
 Three-dimensional brain image, backed by a \code{sparseVector} for \code{Matrix} package
 
 Construct a \code{\linkS4class{SparseBrainVolume}} instance
+
+extract data from \code{\linkS4class{SparseBrainVolume}}
+
+extract data from \code{\linkS4class{SparseBrainVolume}}
+
+extract data from \code{\linkS4class{SparseBrainVolume}}
+
+extract data from \code{\linkS4class{SparseBrainVolume}}
+
+extract data from \code{\linkS4class{SparseBrainVolume}}
 }
 \examples{
 data <- 1:10

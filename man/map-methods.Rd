@@ -22,6 +22,6 @@ map(x, m, ...)
 \description{
 Generic function to apply a function to an object
 
-apply a kernel function to a BrainVolume
+apply a kernel function to a \code{\linkS4class{BrainVolume}}
 }
 

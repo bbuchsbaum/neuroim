@@ -13,6 +13,6 @@
 \description{
 convert a BrainVector to a \code{list} of volumes
 
-convert SparseBrainVector to list of DenseBrainVolumes
+convert SparseBrainVector to list of \code{\linkS4class{DenseBrainVolume}}
 }
 

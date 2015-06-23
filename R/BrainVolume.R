@@ -542,7 +542,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
           def=function(x, coords) {
             assert_that(ncol(coords) == 3)
             array.dim <- dim(x)
-            .gridToIndex(dim(x), coords)
+            .gridToIndex3D(dim(x), coords)
           })
   
 
@@ -552,7 +552,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 		  def=function(x, coords) {
 		    assert_that(length(coords) == 3)
 			  array.dim <- dim(x)
-			  .gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
+			  .gridToIndex3D(dim(x), matrix(coords, nrow=1, byrow=TRUE))
 		  })
 
  

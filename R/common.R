@@ -195,13 +195,16 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 #' .gridToIndex3D
 #' @rdname internal-methods
 #' @keywords internal
-.gridToIndex3D <- function(dimensions, vmat) {
-	stopifnot(length(dimensions) == 3)
-	slicedim = dimensions[1]*dimensions[2]
-	
-	apply(vmat, 1, function(vox) {
-				(slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
-	})	
+.gridToIndex3D <- function(dimensions, voxmat) {
+	assert_that(length(dimensions) == 3)
+  if (is.vector(voxmat)) {
+    assert_that(length(voxmat) == 3)
+    voxmat <- matrix(voxmat, 1,3)
+  }
+  
+  assert_that(ncol(voxmat) == 3)
+  gridToIndex3DCpp(dimensions, voxmat)
+
 }
 
 #' .gridToIndex
@@ -221,22 +224,31 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 #' @rdname internal-methods
 #' @keywords internal
 .indexToGrid <- function(idx, array.dim) {
-	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
-	rank = length(array.dim)
-	wh1 = idx-1
-	wh = 1 + wh1 %% array.dim[1]
-	wh = rep(wh, rank)
-	if (rank >=2) {
-		denom = 1
-		for (i in 2:rank) {
-			denom = denom * array.dim[i-1]
-			nextd1 = wh1%/%denom
-			wh[i] = 1 + nextd1%%array.dim[i]
-		}
-	}
-	wh
-	
+  assert_that(all(idx > 0 & idx <= prod(array.dim)))
+  assert_that(length(array.dim) <= 5)
+  indexToGridCpp(idx, array.dim)
+  
 }
+
+#' .indexToGrid
+#' @rdname internal-methods
+#' @keywords internal
+#.indexToGrid <- function(idx, array.dim) {
+#	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
+#	rank = length(array.dim)
+#	wh1 = idx-1
+#	wh = 1 + wh1 %% array.dim[1]
+#	wh = rep(wh, rank)
+#	if (rank >=2) {
+#		denom = 1
+#		for (i in 2:rank) {
+#			denom = denom * array.dim[i-1]
+#			nextd1 = wh1%/%denom
+#			wh[i] = 1 + nextd1%%array.dim[i]
+#		}
+#	}
+#	wh
+#}
 
 #' .getRStorage
 #' @rdname internal-methods

@@ -23,7 +23,5 @@ a matrix of real coordinates
 }
 \description{
 Generic function to convert 1D indices to N-dimensional real world coordinates
-
-indexToCoord
 }
 

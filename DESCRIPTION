@@ -2,8 +2,7 @@ Package: neuroim
 Imports:
     Matrix,
     yaImpute,
-    assertthat,
-    LinkingTo: Rcpp
+    assertthat
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -46,4 +45,6 @@ Collate:
     'Display.R'
     'IndexLookupVolume.R'
     'Ops.R'
+    'RcppExports.R'
     'conncomp.R'
+    'neuroim.R'

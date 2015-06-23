@@ -12,7 +12,7 @@ test.makeKernel <- function() {
 }
 
 test.indexToGrid <- function() {
-	mask <- loadVolume("data/global_mask.nii")
+	mask <- loadVolume("test_data/global_mask.nii")
 	idx <- which(mask>0)
 	grid <- indexToGrid(mask, idx)
 	checkEquals(nrow(grid), length(idx))
@@ -20,8 +20,8 @@ test.indexToGrid <- function() {
 
 
 test.gridToIndex <- function() {
-	mask <- loadVolume("data/rscan001_mask.nii.gz")
-	bvec <- loadVector("data/rscan001.nii.gz", mask=mask)
+	mask <- loadVolume("test_data/rscan001_mask.nii.gz")
+	bvec <- loadVector("test_data/rscan001.nii.gz", mask=mask)
 	
 	MAXIND <- prod(dim(mask))
 	

@@ -5,7 +5,7 @@
 \alias{[,SparseBrainVector,numeric,numeric,ANY-method}
 \title{extract data from SparseBrainVector}
 \usage{
-\S4method{[}{SparseBrainVector,numeric,numeric,ANY}(x, i, j, k, m, ...,
+\S4method{[}{SparseBrainVector,numeric,numeric,ANY}(x, i, j, k, ...,
   drop = TRUE)
 }
 \arguments{
@@ -13,9 +13,9 @@
 
 \item{k}{index for dimension 3}
 
-\item{m}{index for dimension 4}
-
 \item{...}{additional arguments}
+
+\item{m}{index for dimension 4}
 }
 \description{
 extract data from SparseBrainVector
