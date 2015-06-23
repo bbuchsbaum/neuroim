@@ -4,32 +4,28 @@
 {}
 
 
-#' ndim
-#' 
+ 
 #' @export
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainData"),
           def=function(x) numdim(x@space))
 
   
-#' dim
-#' 
+ 
 #' @export
 #' @rdname dim-methods
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
 
   
-#' space
-#' 
+
 #' @export
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x = "BrainData"),
           def=function(x) x@space)
 
   
-#' spacing
-#' 
+
 #' @export
 #' @rdname spacing-methods
 setMethod(f="spacing",signature= signature(x = "BrainData"),

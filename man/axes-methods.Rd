@@ -18,9 +18,5 @@ axes(x)
 }
 \description{
 Generic getter function to extract image axes
-
-axes
-
-axes
 }
 

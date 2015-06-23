@@ -89,6 +89,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
             }
             
             out <- matrix(0, nrow(x), ncol(x))
+            
             for (lev in levels(f)) {
               keep <- f == lev
               xs <- scale(x[keep,,drop=FALSE], center=center, scale=scale)

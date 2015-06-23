@@ -23,11 +23,11 @@ ndim(x, ...)
 }
 \description{
 Generic function to extract the number of dimensions of an object
-
-ndim
-
-ndim
-
-ndim
+}
+\examples{
+x = BrainSpace(c(10,10,10), c(1,1,1))
+ndim(x) == 3
+x = BrainSpace(c(10,10,10,3), c(1,1,1,1))
+ndim(x) == 4
 }
 

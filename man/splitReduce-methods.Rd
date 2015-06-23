@@ -6,7 +6,7 @@
 \alias{splitReduce,BrainVector,factor,function-method}
 \alias{splitReduce,matrix,factor,function-method}
 \alias{splitReduce,matrix,factor,missing-method}
-\title{Generic function to summarize subsets of an object}
+\title{Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}}
 \usage{
 splitReduce(x, fac, FUN)
 
@@ -27,6 +27,6 @@ splitReduce(x, fac, FUN)
 a new matrix(like) object where the original values have been scaled
 }
 \description{
-Generic function to summarize subsets of an object
+Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}
 }
 

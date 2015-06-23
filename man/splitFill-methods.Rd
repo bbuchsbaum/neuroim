@@ -15,17 +15,27 @@ splitFill(x, fac, FUN)
 
 \item{fac}{the factor to split by}
 
-\item{FUN}{the function to summarize the the clusters}
+\item{FUN}{the function to summarize the the sets}
 }
 \value{
 a new object where the original values have been replaced by the function output
 }
 \description{
 Generic function to fill disjoint sets of values with the output of a function
-
-split values by factor apply function and then fill in new volume
 }
-\note{
-FUN can return one value per category or one value per voxel
+\details{
+\code{FUN} can either return a scalar for each input vector or a vector equal to the length of the input vector.
+If it returns a scalar then every voxel in the set will be filled with that value in the output vector.
+}
+\examples{
+## summarize with mean -- FUN returns a scalar
+x = BrainSpace(c(10,10,10), c(1,1,1))
+vol <- BrainVolume(rnorm(10*10*10), x)
+fac <- factor(rep(1:10, length.out=1000))
+ovol.mean <- splitFill(vol, fac, mean)
+identical(dim(ovol.mean), dim(vol))
+length(unique(as.vector(ovol.mean))) == 10
+## transform by reversing vector -- FUN returns a vector.
+ovol2 <- splitFill(vol, fac, rev)
 }
 

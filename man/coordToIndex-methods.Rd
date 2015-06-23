@@ -26,9 +26,5 @@ a vector of indices
 }
 \description{
 Generic function to convert N-dimensional real world coordinates to 1D indices
-
-coordToIndex
-
-coordToIndex
 }
 

@@ -22,7 +22,5 @@ a vector of axis indices
 }
 \description{
 Generic function to convert 1-dimensional real axis coordinates along a single axis dimension to an 1D index along the same axis
-
-axisToIndex
 }
 

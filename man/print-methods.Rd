@@ -24,8 +24,6 @@ print(x, ...)
 \description{
 Generic function to print an object
 
-print a \code{NamedAxis} instance
-
 print a \code{AxisSet2D} instance
 
 print a \code{AxisSet3D} instance

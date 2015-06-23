@@ -6,7 +6,7 @@
 \alias{space,BrainData-method}
 \alias{space,BrainSpace-method}
 \alias{space,IndexLookupVolume-method}
-\title{Generic function to extract the \code{space} member variable}
+\title{Generic function to extract geometric properties of an image.}
 \usage{
 space(x, ...)
 
@@ -17,20 +17,19 @@ space(x, ...)
 \S4method{space}{IndexLookupVolume}(x)
 }
 \arguments{
-\item{x}{the object to query}
+\item{x}{the object to query, e.g. an instance of \code{BrainVolume} or \code{BrainVector}}
 
 \item{...}{additional arguments}
 }
 \value{
-an object representing the geometric space of the image
+an object representing the geometric space of the image of type \code{\linkS4class{BrainSpace}}
 }
 \description{
-Generic function to extract the \code{space} member variable
-
-space
-
-space
-
-space
+Generic function to extract geometric properties of an image.
+}
+\examples{
+x = BrainSpace(c(10,10,10), c(1,1,1))
+vol <- BrainVolume(rnorm(10*10*10), x)
+identical(x,space(vol))
 }
 

@@ -29,15 +29,11 @@ dropDim(x, dimnum)
 }
 \description{
 Generic function to drop a dimension from an object
-
-dropDim
-
-dropDim
-
-dropDim
-
-dropDim
-
-dropDim
+}
+\examples{
+x = BrainSpace(c(10,10,10), c(1,1,1))
+x1 <- dropDim(x)
+ndim(x1) == 2
+dim(x1)[2] == 10
 }
 

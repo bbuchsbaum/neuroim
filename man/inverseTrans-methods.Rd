@@ -18,9 +18,5 @@ inverseTrans(x)
 }
 \description{
 Generic getter to extract inverse image coordinate transformation
-
-inverseTrans
-
-inverseTrans
 }
 

@@ -20,4 +20,10 @@ Generic function to add a dimension to an object
 
 add dimension to \code{\linkS4class{BrainSpace}}
 }
+\examples{
+x = BrainSpace(c(10,10,10), c(1,1,1))
+x1 <- addDim(x, 10)
+ndim(x1) == 4
+dim(x1)[4] == 10
+}
 

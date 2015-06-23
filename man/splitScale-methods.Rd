@@ -5,7 +5,7 @@
 \alias{splitScale}
 \alias{splitScale,matrix,factor,logical,logical-method}
 \alias{splitScale,matrix,factor,missing,missing-method}
-\title{Generic function to center/scale subsets of an object}
+\title{Generic function to center/scale row-subsets of a matrix or matrix-like object}
 \usage{
 splitScale(x, f, center, scale)
 
@@ -15,20 +15,33 @@ splitScale(x, f, center, scale)
 \S4method{splitScale}{matrix,factor,missing,missing}(x, f)
 }
 \arguments{
-\item{x}{a numeric matrix(like) object}
+\item{x}{a numeric matrix or matrix-like object}
 
-\item{f}{the conditioning expression (usually a factor)}
+\item{f}{the splitting object, typically a \code{factor} or set of \code{integer} indices. must be equal to number of rows of matrix.}
 
-\item{center}{should values be centered?}
+\item{center}{should values within each submatrix be centered? (mean removed from each column of submatrix)}
 
-\item{scale}{should values be scaled?}
+\item{scale}{should values be scaled? (divide vector by standard deviation from each column of submatrix)}
 }
 \value{
-a new matrix(like) object where the original values have been grouped by a factor and then centered and/or scaled for each grouping
+a new matrix or matrix-like object where the original rows have been grouped by \code{f} and then centered and/or scaled for each grouping
 }
 \description{
-Generic function to center/scale subsets of an object
+Generic function to center/scale row-subsets of a matrix or matrix-like object
 
 
+}
+\examples{
+M <- matrix(rnorm(1000), 10, 100)
+fac <- factor(rep(1:2, each=5))
+Ms <- splitScale(M, fac)
+
+## correctly centered
+all(abs(apply(Ms[fac == 1,], 2, mean)) < .000001)
+all(abs(apply(Ms[fac == 2,], 2, mean)) < .000001)
+
+# correctly scaled
+all.equal(apply(Ms[fac == 1,], 2, sd), rep(1, ncol(Ms)))
+all.equal(apply(Ms[fac == 2,], 2, sd), rep(1, ncol(Ms)))
 }
 

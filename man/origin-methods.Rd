@@ -18,9 +18,5 @@ origin(x)
 }
 \description{
 Generic getter to extract image origin
-
-origin
-
-origin
 }
 

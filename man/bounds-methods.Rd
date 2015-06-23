@@ -22,7 +22,5 @@ Generic function to extract the spatial bounds (origin + dim * spacing) of an im
 param x the object
 
 bounds
-
-bounds
 }
 

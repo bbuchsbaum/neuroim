@@ -55,7 +55,7 @@ setMethod(f="permMat", signature=signature(x = "AxisSet2D"),
           })
 
 
-#' dropDim
+
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="numeric"),
@@ -70,7 +70,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="numeric"),
             }
           })
 
-#' dropDim
+
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="missing"),
@@ -78,7 +78,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="missing"),
             AxisSet1D(x@i)
           })
 
-#' dropDim
+
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
@@ -95,7 +95,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
             }
           })
 
-#' dropDim
+
 #' @export
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
@@ -105,7 +105,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
            
        
 
-#' ndim          
+        
 #' @export
 #' @rdname ndim-methods
 setMethod(f="ndim",signature=signature(x= "AxisSet"), 
@@ -120,7 +120,6 @@ setMethod(f="show", signature=signature("NamedAxis"),
 			cat(print(object@axis))
 		})
 
-#' print a \code{NamedAxis} instance
 #' @export
 #' @rdname print-methods
 setMethod(f="print", signature=signature("NamedAxis"), 

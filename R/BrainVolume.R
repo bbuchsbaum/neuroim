@@ -424,6 +424,15 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 			.concat4D(x,y,...)			
 		})
 
+
+#' @export
+#' @rdname fill-methods
+setMethod(f="fill", signature=signature(x="BrainVolume", lookup="list"),
+          def=function(x,lookup) {
+            out <- lookup[unlist(x)]
+            DenseBrainVolume(unlist(out), space(x))
+          })
+
 #' @export
 #' @rdname fill-methods
 setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
@@ -434,18 +443,17 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
               stop("fill: lookup matrix have at least one row")
             }
             
-            out <- DenseBrainVolume(array(0, dim(x)), space(x))
+            out <- array(0, dim(x))
             
             for (i in 1:nrow(lookup)) {
               idx <- which(x == lookup[i,1])
-              out[idx] <- lookup[i,2]             
+              out[idx] <- as.vector(lookup[i,2])             
             }
             
-            out
+            BrainVolume(out, space(x))
           })
 
-#' split values by factor apply function and then fill in new volume
-#' @note FUN can return one value per category or one value per voxel
+
 #' @export splitFill
 #' @rdname splitFill-methods
 setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN="function"),

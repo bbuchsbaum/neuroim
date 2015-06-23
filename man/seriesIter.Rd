@@ -27,7 +27,6 @@ Construct a series iterator
 \item \code{BrainVector}: get a series iterator for a \code{\linkS4class{BrainVector}} instance
 
 \item \code{SparseBrainVector}: get a seriesIter for a \code{\linkS4class{SparseBrainVector}} instance
-ggg
 }}
 \examples{
 ## create a BrainVector with 10X10X10X10, where the last dimension is by convention the 'series' dim.

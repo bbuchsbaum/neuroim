@@ -23,7 +23,5 @@ a numeric vector
 Generic function to extract the voxel dimensions of an image
 
 spacing
-
-spacing
 }
 

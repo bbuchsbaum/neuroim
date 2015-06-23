@@ -23,9 +23,5 @@ a matrix of real coordinates
 }
 \description{
 Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
-
-gridToCoord
-
-gridToCoord
 }
 

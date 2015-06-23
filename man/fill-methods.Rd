@@ -3,10 +3,13 @@
 \docType{methods}
 \name{fill}
 \alias{fill}
+\alias{fill,BrainVolume,list-method}
 \alias{fill,BrainVolume,matrix-method}
 \title{Generic function to map values from one set to another using a user-supplied lookup table}
 \usage{
 fill(x, lookup)
+
+\S4method{fill}{BrainVolume,list}(x, lookup)
 
 \S4method{fill}{BrainVolume,matrix}(x, lookup)
 }
@@ -20,5 +23,19 @@ a new object where the original values have been filled in with the values in th
 }
 \description{
 Generic function to map values from one set to another using a user-supplied lookup table
+}
+\examples{
+x <- BrainSpace(c(10,10,10), c(1,1,1))
+vol <- BrainVolume(sample(1:10, 10*10*10, replace=TRUE), x)
+
+## lookup table is list
+lookup <- lapply(1:10, function(i) i*10)
+ovol <- fill(vol, lookup)
+
+## lookup table is matrix. First column is key, second column is value
+names(lookup) <- 1:length(lookup)
+lookup.mat <- cbind(as.numeric(names(lookup)), unlist(lookup))
+ovol2 <- fill(vol, lookup.mat)
+all.equal(as.vector(ovol2), as.vector(ovol))
 }
 

@@ -24,9 +24,5 @@ trans(x)
 }
 \description{
 Generic getter to extract image coordinate transformation
-
-trans
-
-trans
 }
 

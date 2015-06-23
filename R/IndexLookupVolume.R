@@ -46,8 +46,7 @@ setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
             x@map[i]
           })
 
-#' space
-#' 
+
 #' @export space
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x="IndexLookupVolume"),

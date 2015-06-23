@@ -31,9 +31,16 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 
 
 #' Generic function to extract the number of dimensions of an object
+#' 
 #' @param x n-dimensional object
 #' @param ... additional arguments
 #' @export 
+#' @examples 
+#' x = BrainSpace(c(10,10,10), c(1,1,1))
+#' ndim(x) == 3
+#' x = BrainSpace(c(10,10,10,3), c(1,1,1,1))
+#' ndim(x) == 4
+#' 
 #' @rdname ndim-methods
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
@@ -42,6 +49,11 @@ setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 #' @param n the size of the dimension to add
 #' @export 
 #' @rdname addDim-methods
+#' @examples 
+#' x = BrainSpace(c(10,10,10), c(1,1,1))
+#' x1 <- addDim(x, 10)
+#' ndim(x1) == 4
+#' dim(x1)[4] == 10
 setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 
 #' Generic function to drop a dimension from an object
@@ -49,23 +61,47 @@ setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 #' @param dimnum the index of the dimension to drop
 #' @export 
 #' @rdname dropDim-methods
+#' @examples
+#' x = BrainSpace(c(10,10,10), c(1,1,1))
+#' x1 <- dropDim(x)
+#' ndim(x1) == 2
+#' dim(x1)[2] == 10
 setGeneric(name="dropDim", def=function(x, dimnum) standardGeneric("dropDim"))
 
-#' Generic function to extract the \code{space} member variable
-#' @param x the object to query
+#' Generic function to extract geometric properties of an image.
+#' @param x the object to query, e.g. an instance of \code{BrainVolume} or \code{BrainVector}
 #' @param ... additional arguments
-#' @return an object representing the geometric space of the image
+#' @return an object representing the geometric space of the image of type \code{\linkS4class{BrainSpace}}
 #' @export space
+#' @examples
+#' x = BrainSpace(c(10,10,10), c(1,1,1))
+#' vol <- BrainVolume(rnorm(10*10*10), x)
+#' identical(x,space(vol))
+#' 
 #' @rdname space-methods
 setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 
 #' Generic function to fill disjoint sets of values with the output of a function
 #' @param x the object to split
 #' @param fac the factor to split by
-#' @param FUN the function to summarize the the clusters
+#' @param FUN the function to summarize the the sets
 #' @return a new object where the original values have been replaced by the function output
 #' @export 
 #' @rdname splitFill-methods
+#' @details 
+#' \code{FUN} can either return a scalar for each input vector or a vector equal to the length of the input vector. 
+#' If it returns a scalar then every voxel in the set will be filled with that value in the output vector.
+#' @examples 
+#' 
+#' ## summarize with mean -- FUN returns a scalar
+#' x = BrainSpace(c(10,10,10), c(1,1,1))
+#' vol <- BrainVolume(rnorm(10*10*10), x)
+#' fac <- factor(rep(1:10, length.out=1000))
+#' ovol.mean <- splitFill(vol, fac, mean)
+#' identical(dim(ovol.mean), dim(vol))
+#' length(unique(as.vector(ovol.mean))) == 10
+#' ## transform by reversing vector -- FUN returns a vector.
+#' ovol2 <- splitFill(vol, fac, rev)
 setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
 
 #' Generic function to map values from one set to another using a user-supplied lookup table
@@ -73,27 +109,54 @@ setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFil
 #' @param lookup the lookup table. The first column is the "key" the second column is the "value".
 #' @return a new object where the original values have been filled in with the values in the lookup table
 #' @export 
+#' @examples 
+#' x <- BrainSpace(c(10,10,10), c(1,1,1))
+#' vol <- BrainVolume(sample(1:10, 10*10*10, replace=TRUE), x)
+#' 
+#' ## lookup table is list
+#' lookup <- lapply(1:10, function(i) i*10)
+#' ovol <- fill(vol, lookup)
+#' 
+#' ## lookup table is matrix. First column is key, second column is value
+#' names(lookup) <- 1:length(lookup)
+#' lookup.mat <- cbind(as.numeric(names(lookup)), unlist(lookup))
+#' ovol2 <- fill(vol, lookup.mat)
+#' all.equal(as.vector(ovol2), as.vector(ovol))
+#' 
 #' @rdname fill-methods
 setGeneric(name="fill", def=function(x, lookup) standardGeneric("fill"))
 
 
 
-#' Generic function to center/scale subsets of an object
-#' @param x a numeric matrix(like) object
-#' @param f the conditioning expression (usually a factor)
-#' @param center should values be centered?
-#' @param scale should values be scaled?
-#' @return a new matrix(like) object where the original values have been grouped by a factor and then centered and/or scaled for each grouping
+#' Generic function to center/scale row-subsets of a matrix or matrix-like object
+#' @param x a numeric matrix or matrix-like object
+#' @param f the splitting object, typically a \code{factor} or set of \code{integer} indices. must be equal to number of rows of matrix.
+#' @param center should values within each submatrix be centered? (mean removed from each column of submatrix)
+#' @param scale should values be scaled? (divide vector by standard deviation from each column of submatrix)
+#' @return a new matrix or matrix-like object where the original rows have been grouped by \code{f} and then centered and/or scaled for each grouping
 #' @docType methods
 #' @export 
+#' @examples 
+#' 
+#' M <- matrix(rnorm(1000), 10, 100)
+#' fac <- factor(rep(1:2, each=5))
+#' Ms <- splitScale(M, fac)
+#' 
+#' ## correctly centered
+#' all(abs(apply(Ms[fac == 1,], 2, mean)) < .000001)
+#' all(abs(apply(Ms[fac == 2,], 2, mean)) < .000001)
+#' 
+#' # correctly scaled
+#' all.equal(apply(Ms[fac == 1,], 2, sd), rep(1, ncol(Ms)))
+#' all.equal(apply(Ms[fac == 2,], 2, sd), rep(1, ncol(Ms)))
 #' @rdname splitScale-methods
 setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric("splitScale"))
 
-#' Generic function to summarize subsets of an object
+#' Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}
 #' @param x a numeric matrix(like) object
 #' @param fac the factor to define subsets of the object
 #' @param FUN the function to apply to each subset
-#' @return a new matrix(like) object where the original values have been scaled
+#' @return a new matrix(like) object where the original values have been reduced
 #' @docType methods
 #' @export 
 #' @rdname splitReduce-methods
