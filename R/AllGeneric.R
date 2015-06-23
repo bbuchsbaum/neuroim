@@ -155,10 +155,36 @@ setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric(
 #' Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}
 #' @param x a numeric matrix(like) object
 #' @param fac the factor to define subsets of the object
-#' @param FUN the function to apply to each subset
-#' @return a new matrix(like) object where the original values have been reduced
+#' @param FUN the function to apply to each subset. if \code{FUN} is missing, than the mean of each sub-matrix column is computed.
+#' @return a new \code{matrix} where the original values have been reduced
 #' @docType methods
+#' @details if \code{FUN} is supplied it must take a vector and return a single scalar value. If it returns more than one value, an error will occur.
+#' 
+#' if \code{x} is a \code{BrainVector} instance then voxels (dims 1:3) are treated as columns and time-series (dim 4) as rows. The summary function then is applied to groups of voxels.
+#' However, if the goal is to apply a function to groups of time-points, then this can be achieved as follows: 
+#' 
+#' \code{ splitReduce(t(as.matrix(bvec)), fac) }
+#' 
+#'
 #' @export 
+#' @examples 
+#' mat = matrix(rnorm(100*100), 100, 100)
+#' fac = sample(1:3, nrow(mat), replace=TRUE)
+#' ## compute column means of each sub-matrix
+#' ms <- splitReduce(mat, fac)
+#' all.equal(row.names(ms), levels(fac))
+#' 
+#' ## compute column medians of each sub-matrix
+#' ms <- splitReduce(mat, fac, median)
+#' 
+#' ## compute time-series means grouped over voxels. here, \code{length(fac)} must equal the number of voxels: \code{prod(dim(bvec)[1:3]}
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' fac <- factor(sample(1:3, prod(dim(bvec)[1:3]), replace=TRUE))
+#' ms <- splitReduce(bvec, fac)
+#' ms2 <- splitReduce(bvec, fac, mean)
+#' all.equal(row.names(ms), levels(fac))
+#' all.equal(ms,ms2)
+#' 
 #' @rdname splitReduce-methods
 setGeneric(name="splitReduce", def=function(x, fac, FUN) standardGeneric("splitReduce"))
 
@@ -167,6 +193,9 @@ setGeneric(name="splitReduce", def=function(x, fac, FUN) standardGeneric("splitR
 #' @param x the object
 #' @return a numeric vector
 #' @export 
+#' @examples 
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
+#' all.equal(spacing(bspace), c(2,2,2))
 #' @rdname spacing-methods
 setGeneric(name="spacing", def=function(x) standardGeneric("spacing"))
 
@@ -174,6 +203,12 @@ setGeneric(name="spacing", def=function(x) standardGeneric("spacing"))
 #' param x the object
 #' @export
 #' @param x the object with \code{bounds} property
+#' @return a \code{matrix} where each row contains the min (column 1) and max (column 2) bounds of the image dimension from 1 to \code{ndim(image)}.
+#' @examples 
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
+#' b <- bounds(bspace)
+#' nrow(b) == ndim(bspace)
+#' ncol(b) == 2
 #' @rdname bounds-methods
 setGeneric(name="bounds",     def=function(x) standardGeneric("bounds"))
 
@@ -187,18 +222,33 @@ setGeneric(name="axes",  def=function(x) standardGeneric("axes"))
 #' Generic getter to extract image origin
 #' @param x an object with an origin
 #' @export 
+#' @examples 
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
+#' origin(bspace)
+#' 
 #' @rdname origin-methods
 setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 
 #' Generic getter to extract image coordinate transformation
 #' @param x an object with a transformation
 #' @export 
+#' @details 
+#' This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
+#' see \code{\linkS4class{BrainSpace}}
+#' @examples 
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
+#' trans(bspace)
+#' all.equal(dim(trans(bspace)), c(4,4))
 #' @rdname trans-methods
 setGeneric(name="trans",  def=function(x) standardGeneric("trans"))
 
 #' Generic getter to extract inverse image coordinate transformation
 #' @param x an object
 #' @export 
+#' @examples 
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2)
+#' itrans <- inverseTrans(bspace)
+#' identical(trans(bspace) %*% inverseTrans(bspace), diag(4))
 #' @rdname inverseTrans-methods
 setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 
@@ -219,37 +269,63 @@ setGeneric(name="readElements", def=function(x, numElements) standardGeneric("re
 setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElements"))
 
 
-#' Generic function to write an image volume to disk
-#' @param x an image object
-#' @param fileName a file name
-#' @param format file format string
-#' @param dataType output data type
+#' Generic function to write a 3D image volume to disk
+#' @param x an image object, typically a \code{BrainVolume} instance.
+#' @param fileName output file name
+#' @param format file format string. Since "NIFTI" is the only currently supported format, this parameter can be safely ignored and omitted.
+#' @param dataType output data type, If specified should be a \code{character} vector of: "BINARY", "UBYTE", "SHORT", "INT", "FLOAT", "DOUBLE". 
+#' Otherwise output format will be inferred from R the datatype of the image.
 #' @export 
+#' @details 
+#'  
+#'  The output format will be inferred from file extension.
+#'  \code{writeVolume(x, "out.nii")} outputs a NIFTI file.
+#'  \code{writeVolume(x, "out.nii.gz")} outputs a gzipped NIFTI file.
+#'  
+#' No other file output formats are currently supported.
+#' 
+#' 
+#' @examples 
+#' 
+#' bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
+#' \dontrun{
+#' writeVolume(bvol, "out.nii")
+#' writeVolume(bvol, "out.nii.gz")
+#' }
 #' @rdname writeVolume-methods
 setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) standardGeneric("writeVolume"))
 
 
-#' Generic function to write an image vector to disk
-#' @param x the image to write
-#' @param fileName the bane of the file to write
-#' @param format the file format
-#' @param dataType the numeric data type
+#' Generic function to write a 4D image vector to disk
+#' @param x an image object, typically a \code{BrainVector} instance.
+#' @param fileName output file name.
+#' @param format file format string. Since "NIFTI" is the only currently supported format, this parameter can be safely ignored and omitted.
+#' @param dataType the numeric data type. If specified should be a \code{character} vector of: "BINARY", "UBYTE", "SHORT", "INT", "FLOAT", "DOUBLE". 
+#' Otherwise output format will be inferred from R the datatype of the image.
 #' @export 
+#' @examples 
+#' 
+#' bvec <- BrainVector(array(0, c(10,10,10,10), BrainSpace(c(10,10,10,10), c(1,1,1)))
+#' \dontrun{
+#' writeVector(bvol, "out.nii")
+#' writeVector(bvol, "out.nii.gz")
+#' }
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
-# Generic function to extract a value
-# @param object
-# @param x
-# @param y
-# @param ... additional arguments
-# setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("value"))
 
 #' Generic function to convert 1D indices to N-dimensional grid coordinates
 #' @param x the object
-#' @param idx the 1D indices
+#' @param idx the 1D \code{vector} of indices
 #' @return a matrix of grid coordinates
 #' @export 
+#' @examples 
+#'  
+#'  bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
+#'  idx <- 1:10
+#'  g <- indexToGrid(bvol, idx)
+#'  vol[g]
+#' 
 #' @rdname indexToGrid-methods
 setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGrid"))
 
@@ -258,6 +334,12 @@ setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGr
 #' @param idx the 1D indices
 #' @return a matrix of real coordinates
 #' @export 
+#' @examples 
+#' bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
+#' idx <- 1:10
+#' g <- indexToCoord(bvol, idx)
+#' idx2 <- coordToIndex(bvol, g)
+#' all.equal(idx, idx2)
 #' @rdname indexToCoord-methods
 setGeneric(name="indexToCoord",   def=function(x, idx) standardGeneric("indexToCoord"))
 

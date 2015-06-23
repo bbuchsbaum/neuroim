@@ -87,7 +87,7 @@ BrainVector <- function(data, space=NULL, mask=NULL, source=NULL, label="") {
 #' 
 #' constructor function for class \code{\linkS4class{DenseBrainVector}}
 #' 
-#' @param data a 4-dimensonal \code{array}
+#' @param data a 4-dimensional \code{array} or a 2-dimension \code{matrix} that is either nvoxels by ntime-points or ntime-points by nvoxels
 #' @param space a \code{\linkS4class{BrainSpace}} object
 #' @param source an optional \code{\linkS4class{BrainSource}} object
 #' @param label a label of type \code{character} 
@@ -845,8 +845,7 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric
 #		})          
 
 
-#' writeVector
-#' 
+
 #' @export
 #' @rdname writeVector-methods
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="missing"),
@@ -854,8 +853,7 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 			write.nifti.vector(x, fileName)           
 		})
 
-#' writeVector
-#' 
+
 #' @export 
 #' @rdname writeVector-methods
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="character", dataType="missing"),
@@ -867,8 +865,7 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 			}      
 		})
 
-#' writeVector
-#' 
+
 #' @export writeVector
 #' @rdname writeVector-methods
 #' @aliases writeVector,BrainVector,character,missing,character,ANY-method

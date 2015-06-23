@@ -152,7 +152,7 @@ setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
 setMethod(f="coordToIndex", signature=signature(x="BrainSpace", coords="matrix"),
           def=function(x, coords) {
             grid = t(inverseTrans(x) %*% t(cbind(coords, rep(1, nrow(coords)))))
-            gridToIndex(x, grid[,1:3] + 1)
+            gridToIndex(x, grid[,1:3] + .5)
           })
  
 #' @export 

@@ -25,6 +25,8 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   })
 }  
 
+
+
 #' @export
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="missing"),
@@ -33,9 +35,9 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
               stop(paste("x must be same length as factor used for splitting rows"))
             }
             
+            ind <- split(seq_along(fac), fac)
             out <- do.call(rbind, lapply(levels(fac), function(lev) {
-              keep <- fac == lev
-              colMeans(x[keep,])
+              colMeans(x[ind[[lev]],])
             }))
             
             row.names(out) <- levels(fac)           
@@ -49,9 +51,10 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
             if (length(fac) != nrow(x)) {
               stop(paste("x must be same length as split variable"))
             }        
-            out <- do.call(rbind, lapply(levels(fac), function(lev) {
-              keep <- fac == lev
-              apply(x[keep,], 2, FUN)
+            
+            ind <- split(seq_along(fac), fac)
+            out <- do.call(rbind, lapply(names(ind), function(lev) {
+              apply(x[ind[[lev]],], 2, FUN)
             }))
             
             row.names(out) <- levels(fac)           
@@ -66,17 +69,33 @@ setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", 
               stop(paste("fac must have as many elements as the number of voxels"))
             }
             
-            out <- do.call(rbind, lapply(levels(fac), function(lev) {
-              idx <- which(fac == lev)
-              mat <- series(x, idx)
-              apply(mat, 2, FUN)
+            ind <- split(seq_along(fac), fac)
+            out <- do.call(rbind, lapply(names(ind), function(lev) {
+              #idx <- which(fac == lev)
+              mat <- series(x, ind[[lev]])
+              apply(mat, 1, FUN)
             }))
             
             row.names(out) <- levels(fac)           
             out
           })
 
-
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", FUN="missing"),
+          def=function(x, fac, FUN) {
+            if (length(fac) != prod(dim(x)[1:3])) {
+              stop(paste("fac must have as many elements as the number of voxels"))
+            }
+            
+            ind <- split(seq_along(fac), fac)
+            out <- do.call(rbind, lapply(names(ind), function(lev) {
+              rowMeans(series(x, ind[[lev]]))
+            }))
+            
+            row.names(out) <- levels(fac)           
+            out
+          })
 
 
 #' 
@@ -89,9 +108,10 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
             }
             
             out <- matrix(0, nrow(x), ncol(x))
+            ind <- split(seq_along(f), f)
             
-            for (lev in levels(f)) {
-              keep <- f == lev
+            for (lev in names(ind)) {
+              keep <- ind[[lev]]
               xs <- scale(x[keep,,drop=FALSE], center=center, scale=scale)
               out[keep,] <- xs         
             }
