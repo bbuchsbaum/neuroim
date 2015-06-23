@@ -726,7 +726,7 @@ setMethod("series", signature(x="BrainVector", i="numeric"),
 
 
 
-#' @rdname seriesIter-methods
+#' @describeIn seriesIter get a series iterator for a \code{\linkS4class{BrainVector}} instance
 #' @export
 setMethod(f="seriesIter", signature=signature(x="BrainVector"), 
 		def=function(x) {

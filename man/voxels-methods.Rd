@@ -13,7 +13,7 @@ voxels(x, ...)
 \arguments{
 \item{x}{the object to extract voxels from}
 
-\item{...}{addiitonal arguments to function}
+\item{...}{additional arguments to function}
 
 \item{centerVoxel}{the absolute location of the center of the voxel, default is (0,0,0)}
 }

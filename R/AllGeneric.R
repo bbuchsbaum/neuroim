@@ -429,16 +429,33 @@ setGeneric(name="concat", def=function(x,y, ...) standardGeneric("concat"))
 #' @rdname connComp-methods
 setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
 
+#' seriesIter
+#' 
 #' Construct a series iterator
-#' @param x the object to be iterated
+#' @param x the object to be iterated over. This is typically an instance of class \code{\linkS4class{BrainVector}}
+#' @return an \code{iter} object from the \code{iterators} package.
 #' @export
-#' @rdname seriesIter-methods
+#' @examples 
+#' 
+#' ## create a BrainVector with 10X10X10X10, where the last dimension is by convention the 'series' dim.
+#' bvec <- BrainVector(array(rnorm(10*10*10*10), c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
+#' iter <- seriesIter(bvec)
+#' 
+#' ## compute mean of each series
+#' foreach(i=iter, .combine=c) %do% { mean(i) }
+#' iter <- seriesIter(bvec)
+#' 
+#' ## combine all series into a matrix
+#' foreach(i=iter, .combine=rbind) %do% { i }
+#' 
+#' ## scale all series, add as columns in matrix.
+#' foreach(i=seriesIter(bvec), .combine=cbind) %do% { scale(i) }
 setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
 
 
 #' extract voxel coordinates
 #' @param x the object to extract voxels from
-#' @param ... addiitonal arguments to function
+#' @param ... additional arguments to function
 #' @export 
 #' @rdname voxels-methods
 setGeneric(name="voxels", def=function(x, ...) standardGeneric("voxels"))

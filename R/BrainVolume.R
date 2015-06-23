@@ -888,24 +888,13 @@ setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "numeric", drop="ANY"),
           def=function (x, i, j, k, ..., drop=TRUE) {  
             if (missing(k)) {
-              print("k missing")
               k <- seq(1, dim(x)[3])
             }
             
             n <- length(i) * length(j) * length(k)
-          
-            out <- vector(mode="list", length=)
-            count <- 1
-            for (ki in k) {
-              for (ji in j) {
-                for (ii in i) {
-                 # print(count)
-                  out[[count]] <- c(ii,ji,ki)
-                  count <- count + 1
-                }
-              }
-            }
-            ind <- gridToIndex(x, do.call(rbind, out))
+            mind <- cbind(rep(i, length.out=n), rep(j, each=length(i)), rep(k, each=length(i) * length(j)))
+            
+            ind <- gridToIndex(x, mind)
             x@data[ind]
             
         })

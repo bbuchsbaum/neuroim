@@ -265,7 +265,7 @@ setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="functi
 
 
 #' @export  
-#' @rdname seriesIter-methods 
+#' @describeIn seriesIter get a seriesIter for a \code{\linkS4class{SparseBrainVector}} instance
 setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"), 
 	def=function(x) {
 		len <- NCOL(x@data)
