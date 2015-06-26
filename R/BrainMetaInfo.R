@@ -18,8 +18,7 @@ roxygen()
 #' @rdname dataReader-methods
 setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 
-#' @rdname dim-methods
-#' @aliases dim,FileMetaInfo,ANY-method
+#' @export
 setMethod(f="dim", signature=signature("FileMetaInfo"), 
 		def=function(x) {
 			x@Dim

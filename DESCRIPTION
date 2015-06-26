@@ -2,7 +2,8 @@ Package: neuroim
 Imports:
     Matrix,
     yaImpute,
-    assertthat
+    assertthat,
+    Rcpp
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -13,9 +14,9 @@ Author: Bradley R. Buchsbaum
 Description: neuroim is a collection of data structures that represent
     volumetric brain imaging data. The focus is on basic data handling for 3D
     and 4D neuroimaging data. In addition, there are function to read and write
-    ANALYZE7.5 and NIFTI files and limited support for reading AFNI files.
-Version: 0.0.3
-Date: 2014-04-01
+    NIFTI files and limited support for reading AFNI files.
+Version: 0.0.4
+Date: 2015-06-23
 Suggests:
     testthat
 Depends:

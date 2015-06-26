@@ -128,8 +128,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 
 
 
-#' loadData
-#' 
+
 #' @export
 #' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
@@ -169,7 +168,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 		})
 
 #' @export
-#' @rdname SparseBrainVector-class
+#' @rdname indices-methods
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
             indices(x@map)
@@ -192,8 +191,7 @@ setMethod(f="indices", signature=signature(x="SparseBrainVector"),
 #            indexToGrid(space(mask), i)
 #          })
             
-#' coords
-#'            
+            
 #' @export 
 #' @rdname coords-methods             
 setMethod(f="coords", signature=signature(x="SparseBrainVector"),
@@ -204,8 +202,7 @@ setMethod(f="coords", signature=signature(x="SparseBrainVector"),
             coords(x@map, i)            
           })            
 
-#' eachVolume
-#' 
+ 
 #' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical", mask="missing"),
@@ -222,8 +219,7 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 
 
 
-#' eachVolume
-#' 
+ 
 #' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing", mask="missing"),
@@ -244,9 +240,12 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
   
 
 #' @export  
+#' @details when \code{x} is a \code{SparseBrainVector} \code{eachSeries} only iterates over nonzero series.
 #' @rdname eachSeries-methods 
 setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical"),
           def=function(x, FUN, withIndex=FALSE, ...) {
+            ## eachSeries only iterates over nonzero entries ...
+            
             ret <- list()
             if (withIndex) {
               idx <- indices(x)
@@ -306,8 +305,7 @@ setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"),
 #           callGeneric(x,idx)
 #         })
   
-#' series
-#' 
+ 
 #' @export
 #' @rdname series-methods 
 setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
@@ -316,10 +314,11 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
            callGeneric(x,idx)
          })
  
- #' series
- #' 
+
  #' @export
  #' @rdname series-methods 
+ #' @param j index for 2nd dimension
+ #' @param k index for 3rd dimension
  setMethod("series", signature(x="SparseBrainVector", i="numeric"),
 		 def=function(x,i, j, k) {	
 			 if (missing(j) && missing(k)) { 
@@ -342,8 +341,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
 			
 		 })
  
-#' concat
-#' 
+
 #' @export           
 #' @rdname concat-methods 
 setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
@@ -371,8 +369,7 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
             
           })
           
-#'lookup
-#' 
+
 #' @export          
 #' @rdname lookup-methods          
 setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
@@ -380,44 +377,32 @@ setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
             lookup(x@map, i)
           })
 
-#' extract data from SparseBrainVector
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param m index for dimension 4
-#' @param ... additional arguments
+
+#' @export
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i, 1:(dim(x)[2]))
 		  }
   )
 
-#' extract data from SparseBrainVector
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param m index for dimension 4
-#' @param ... additional arguments
+
+#' @export
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, 1:(dim(x)[1]), 1:(dim(x)[2]))
 		  }
   )
   
-#' extract data from SparseBrainVector
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param m index for dimension 4
-#' @param ... additional arguments
+
+#' @export
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "numeric"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i:(dim(x)[1]), j)
 		  }
   )
 
-#' extract data from SparseBrainVector
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param m index for dimension 4
-#' @param ... additional arguments
+
+#' @export
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
           def = function (x, i, j, k,..., drop = TRUE) {
             if (missing(k))
@@ -452,9 +437,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 
 
 
-#' takeVolume
-#' extract volume from SparseBrainVector
-#' 
+ 
 #' @export
 #' @rdname takeVolume-methods
 setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
@@ -480,10 +463,11 @@ setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"
 setAs(from="SparseBrainVector", to="matrix",
 		  function(from) {
 		    ## TODO this should return a dense matrix
-		    ## ind <- indices(from)
-		    ## out <- matrix(dim(from)[4]), length(ind))
-		    ## out[, ind] <- from@data
-			  from@data			  
+		    ind <- indices(from)
+		    out <- matrix(dim(from)[4], length(ind))
+		    out[, ind] <- from@data
+		    out
+			  #from@data			  
 		  })
 
 #' as.matrix

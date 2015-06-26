@@ -93,9 +93,10 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
       }
 		})
 
-
+#' dim
+#' 
 #' @export
-#' @rdname dim-methods
+#' @param x the object
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 

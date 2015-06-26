@@ -1,8 +1,10 @@
 #'
+#' @title neuroim
+#' @description Data structures for analysis of neuroimaging data.
 #' 
 #' @useDynLib neuroim
 #' @importFrom Rcpp evalCpp
 #' 
 #' @docType package
-#' @name roxygen2
+#' @name neuroim
 NULL

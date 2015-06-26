@@ -107,17 +107,17 @@ setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric
 			
 		})
 
-## should there be a common superclass for Reader/Writer?
 #' close
-#' 
+#'  
 #' @rdname close-methods
+#' @export
+#' @param con the object to close
 setMethod(f="close", signature=signature(con= "BinaryReader"),
 		def=function(con) {
 			base::close(con@input)				
 		})
 
-#' close
-#' 
+
 #' @rdname close-methods
 setMethod(f="close", signature=signature(con= "BinaryWriter"),
 		def=function(con) {

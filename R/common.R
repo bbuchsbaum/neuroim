@@ -1,5 +1,7 @@
 #' @import abind
 NULL
+#' @import assertthat
+NULL
 
 #' matrixToVolumeList
 #' converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
@@ -25,7 +27,12 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   })
 }  
 
-
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="missing"),
+          def=function(x, fac) {
+            callGeneric(x,as.factor(fac))
+          })
 
 #' @export
 #' @rdname splitReduce-methods

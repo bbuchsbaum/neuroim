@@ -205,7 +205,7 @@ setClass("FileMetaInfo",
 #' 
 #' This class contains meta information for a NIfTI image file
 #' @rdname NIfTIMetaInfo-class
-#' @slot nifti_header a list of attributes specific to the NIfTI file format 
+#' @slot nifti_header a \code{list} of attributes specific to the NIfTI file format 
 #' @export	
 setClass("NIfTIMetaInfo",
     representation=(nifti_header="list"),
@@ -215,7 +215,7 @@ setClass("NIfTIMetaInfo",
 #' 
 #' This class contains meta information for a AFNI image file
 #' @rdname FileMetaInfo-class  
-#' @slot afni_header a list of attributes specific to the AFNI file format 
+#' @slot afni_header a \code{list} of attributes specific to the AFNI file format 
 #' @export
 setClass("AFNIMetaInfo",
     representation=(afni_header="list"),
@@ -265,7 +265,7 @@ setClass("BrainFileSource", representation=
 				contains=c("BrainSource"))
 
 		
-#' BrainVolume
+#' BrainVolumeSource
 #' 		
 #' A class is used to produce a \code{\linkS4class{BrainVolume}} instance
 #' @rdname BrainVolumeSource-class
@@ -389,8 +389,7 @@ setClass("BrainData",
 setClass("BrainSlice",       
 	    contains=c("BrainData", "array"))
 
-#' Three-dimensional brain image	   
-#' 
+#' Base class for image representing 3D volumetric data.
 #' @rdname BrainVolume-class
 #' @export
 setClass("BrainVolume", 	
@@ -410,6 +409,7 @@ setClass("DenseBrainVolume",
 #' SparseBrainVolume
 #' 
 #' Three-dimensional brain image, backed by a \code{sparseVector} for \code{Matrix} package
+#' @slot data a \code{sparseVector} instance
 #' @rdname SparseBrainVolume-class
 #' @export 
 setClass("SparseBrainVolume",   
@@ -505,10 +505,10 @@ setClass("SparseBrainVectorSource", representation=
 
 #' ROIVolume
 #' 
-#' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
+#' A class that representing a volumetric region of interest (ROI).
 #' @rdname ROIVolume-class
-#' @slot data the data stored in the ROI
-#' @slot coords the coordinates of the ROI
+#' @slot data the \code{numeric} data stored in the ROI
+#' @slot coords the voxel coordinates of the ROI
 #' @exportClass ROIVolume
 setClass("ROIVolume", 
 		representation=representation(data="numeric", coords="matrix"), contains=c("BrainData"),

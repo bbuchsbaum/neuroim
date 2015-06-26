@@ -1,22 +1,17 @@
 #' @include AllClass.R
 roxygen()
 #' @include AllGeneric.R
-roxygen()
+NULL
 #' @include BrainVector.R
-roxygen()
+NULL
 #' @include BrainVolume.R
-roxygen()
+NULL
 
-
+#' @importFrom assertthat assert_that
 checkDim <- function(e1,e2) {
-  if (!all(dim(e1) == dim(e2))) {
-    stop("cannot perform arithmetic operation on arguments with different dimensions")
-  }
-  
-  if (!all(spacing(e1) == spacing(e2))) {
-    stop("arguments have different voxel dimensions")
-  }
-  
+  assert_that(all(dim(e1) == dim(e2)))
+  assert_that(all(spacing(e1) == spacing(e2)))
+ 
 }
 
 setMethod(f="Arith", signature=signature(e1="SparseBrainVolume", e2="SparseBrainVolume"),

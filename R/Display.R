@@ -22,6 +22,7 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 }
 
 #' image
+#' @param x the image volume
 #' @param slice the voxel index of the slice to display
 #' @param col a color map
 #' @param zero.col the color to use when the value is 0 (e.g background color)
@@ -45,6 +46,7 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' @param colorMap a lookup table defining mapping from image intensity values to colors.
 #' @param thresh a range (min,max) defining the threshold window for determining image opacity.
 #' @param axis the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)
+#' @param zero.col the color used when the value is zero.
 #' @return an object of class \code{Layer}
 #' @export
 #' @rdname Layer
@@ -105,6 +107,8 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
 
 #' @export 
 #' @rdname overlay-methods
+#' @param e1 the left operand
+#' @param e2 the right operand
 setMethod(f="+", signature=signature(e1 = "Overlay", e2="Layer"),
           def=function(e1, e2) {  
             new("Overlay", layers=c(e1@layers, e2))
@@ -118,6 +122,7 @@ setMethod(f="+", signature=signature(e1 = "Layer", e2="Layer"),
           })
 
 #' image
+#' @param x the object to display
 #' @param zpos the z coordinate
 #' @param axis the axis index
 #' @rdname image-methods
@@ -141,6 +146,17 @@ setMethod(f="image", signature=signature(x = "Layer"),
 
 
 #' imageGrid
+#' 
+#' Display a set of mages slices in a 2D montage
+#' 
+#' @param layer the layer to display
+#' @param gridDim the dimensions of the 2D grid montage
+#' @param zstart the z coordinate of the first slice
+#' @param zend the z coordinate of the last slice
+#' @param panelSize the size of each panel in the montage (default unit is inches)
+#' @param panelUnit the unit for the panel size (default is inches)
+#' @param interpolate whether to interpolate pixel values
+#' @param fontCol color of labels indicating slice level
 #' @rdname imageGrid
 imageGrid <- function(layer, gridDim=c(3,3), zstart, zend, panelSize=3, panelUnit="inches", interpolate=FALSE, fontCol="red") {
   slices <- seq(zstart, zend, length.out=prod(gridDim))

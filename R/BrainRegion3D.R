@@ -290,7 +290,7 @@ Searchlight <- function(mask, radius) {
 			
 }
 
-#' conversion from ROIVolume to DenseBrainVolume
+
 #' @name as
 #' @rdname as-methods
 setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
@@ -299,7 +299,7 @@ setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
   ovol <- DenseBrainVolume(dat, from@space, from@source)
 })
 
-#' values
+
 #' @rdname values-methods
 #' @export 
 setMethod("values", signature(x="ROIVolume"),
@@ -308,7 +308,7 @@ setMethod("values", signature(x="ROIVolume"),
           })
 
 
-#' indices
+
 #' @rdname indices-methods
 #' @export 
 setMethod("indices", signature(x="ROIVolume"),
@@ -325,22 +325,30 @@ setMethod(f="coords", signature=signature(x="ROIVolume"),
             x@coords
           })
 
-#' length
+
 #' @export 
+#' @rdname length-methods
+#' @param x the object to get \code{length}
 setMethod(f="length", signature=signature(x="ROIVolume"),
           function(x) {
             length(x@data)
 		})
 
 #' extract data from \code{ROIVolume}
-#' @param j index for second dimension (missing)
+#' @export
+#' @param x the object
+#' @param i first index
+#' @param j second index
+#' @param drop drop dimension
 setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]
           })
-  
 
- setMethod(f="show", signature=signature(object = "ROIVolume"),
+ 
+#' @export
+#' @rdname show-methods
+setMethod(f="show", signature=signature(object = "ROIVolume"),
 		  function (object) {
 			  cat("\n\n\tROIVolume", "\n")
 			  cat("\tsize: ", length(object), "\n")
@@ -397,7 +405,7 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
 }
 
 
-#' extract voxels from a \code{Kernel} object
+
 #' @param centerVoxel the absolute location of the center of the voxel, default is (0,0,0)
 #' @rdname voxels-methods
 #' @export
