@@ -8,10 +8,12 @@
 \usage{
 values(x, ...)
 
-\S4method{values}{ROIVolume}(x)
+\S4method{values}{ROIVolume}(x, ...)
 }
 \arguments{
 \item{x}{the object to get values from}
+
+\item{...}{additional arguments}
 }
 \description{
 Generic function to extract data values of object

@@ -470,7 +470,6 @@ loadVolumeList <- function(fileNames, mask=NULL) {
 #' extract labeled volume from \code{BrainBucket}
 #' @param x the object
 #' @param i the first index
-#' @param j the second index
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "index", j = "missing"),
 		def=function(x, i) {
 		  x@data[[i]]
@@ -482,7 +481,6 @@ setMethod(f="[[", signature=signature(x="BrainBucket", i = "index", j = "missing
 #' @export
 #' @param x the object
 #' @param i first index
-#' @param j second index
 setMethod(f="[", signature=signature(x="BrainBucket", i = "index", j = "missing"),
           def=function(x, i) {
             x@data[i]
@@ -496,10 +494,9 @@ setAs("DenseBrainVector", "array", function(from) from@.Data)
 
 setAs("BrainVector", "array", function(from) from[,,,])
 
-
+#' show a \code{BrainVectorSource}
+#' @param object the object
 #' @export
-#' @param object the object to \code{show}
-#' @rdname show-methods
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
 		def=function(object) {
@@ -514,10 +511,9 @@ setMethod(f="show",
 
 
 
-#' show
+#' show a \code{BrainVector}
+#' @param object the object
 #' @export
-#' @param the object to \code{show}
-#' @rdname show-methods
 setMethod(f="show", signature=signature("BrainVector"),
           def=function(object) {
             sp <- space(object)

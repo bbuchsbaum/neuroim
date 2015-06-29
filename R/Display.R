@@ -22,11 +22,10 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 }
 
 #' image
-#' @param x the image volume
 #' @param slice the voxel index of the slice to display
 #' @param col a color map
 #' @param zero.col the color to use when the value is 0 (e.g background color)
-#' @param axis the index of the z axis (1, 2, or 3)
+#' @param ... extra arguments to passed to \code{grid.raster}
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
           def=function(x, slice, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    

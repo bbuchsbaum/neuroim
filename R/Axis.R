@@ -114,20 +114,26 @@ setMethod(f="ndim",signature=signature(x= "AxisSet"),
           })
 
 
-
+#' show an \code{NamedAxis}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(print(object@axis))
 		})
 
+#' print a \code{NamedAxis}
+#' @param x the object
+#' @param ... extra arguments
 #' @export
-#' @rdname print-methods
 setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
-
+#' show an \code{AxisSet1D}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -135,14 +141,17 @@ setMethod(f="show", signature=signature("AxisSet1D"),
 		})
 
 #' print a \code{AxisSet2D} instance
+#' @param x the object
+#' @param ... extra args
 #' @export
-#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(x@i@axis, "-", x@j@axis)
 		})
 
-
+#' show an \code{AxisSet2D}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -151,15 +160,18 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 		})
 
 #' print a \code{AxisSet3D} instance
+#' @param x the object
+#' @param ... extra args
 #' @export
-#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(x@i@axis, " -- ", x@j@axis, " -- ", x@k@axis)
 		})
 
 
-
+#' show an \code{AxisSet3D}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -168,8 +180,9 @@ setMethod(f="show", signature=signature("AxisSet3D"),
 			cat("Axis 3:", object@k@axis, "\n")
 		})
 
-
-
+#' show an \code{AxisSet4D}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("AxisSet4D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")

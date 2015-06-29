@@ -18,6 +18,8 @@ roxygen()
 #' @rdname dataReader-methods
 setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 
+#' dim of \code{FileMetaInfo}
+#' @param x the object
 #' @export
 setMethod(f="dim", signature=signature("FileMetaInfo"), 
 		def=function(x) {
@@ -117,8 +119,9 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			header=nifti_header)
 }
 
-
-
+#' show a \code{FileMetaInfo}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")

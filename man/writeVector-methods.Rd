@@ -33,10 +33,10 @@ Otherwise output format will be inferred from R the datatype of the image.}
 Generic function to write a 4D image vector to disk
 }
 \examples{
-bvec <- BrainVector(array(0, c(10,10,10,10), BrainSpace(c(10,10,10,10), c(1,1,1))))
+bvec <- BrainVector(array(0, c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 \dontrun{
-writeVector(bvol, "out.nii")
-writeVector(bvol, "out.nii.gz")
+writeVector(bvec, "out.nii")
+writeVector(bvec, "out.nii.gz")
 }
 }
 

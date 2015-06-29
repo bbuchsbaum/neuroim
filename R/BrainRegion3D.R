@@ -303,7 +303,7 @@ setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
 #' @rdname values-methods
 #' @export 
 setMethod("values", signature(x="ROIVolume"),
-          function(x) {
+          function(x, ...) {
              x@data
           })
 
@@ -340,15 +340,15 @@ setMethod(f="length", signature=signature(x="ROIVolume"),
 #' @param i first index
 #' @param j second index
 #' @param drop drop dimension
-setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
+setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]
           })
 
- 
+#' show an \code{ROIVolime} 
+#' @param object the object
 #' @export
-#' @rdname show-methods
-setMethod(f="show", signature=signature(object = "ROIVolume"),
+setMethod("show", signature=signature(object = "ROIVolume"),
 		  function (object) {
 			  cat("\n\n\tROIVolume", "\n")
 			  cat("\tsize: ", length(object), "\n")

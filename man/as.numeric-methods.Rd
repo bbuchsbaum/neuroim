@@ -7,6 +7,9 @@
 \usage{
 \S4method{as.numeric}{SparseBrainVolume}(x)
 }
+\arguments{
+\item{x}{the object to convert}
+}
 \description{
 Convert SparseBrainVolume to numeric
 }

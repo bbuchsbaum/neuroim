@@ -1,5 +1,5 @@
 #' @import hash
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #' @importFrom Matrix sparseVector
 #' @importFrom yaImpute ann
 NULL
@@ -265,7 +265,7 @@ setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
 
 
-#' conversion from SparseBrainVolume to array
+#' conversion from \code{SparseBrainVolume} to \code{array}
 #' @rdname as-methods
 #' @name as
 setAs(from="SparseBrainVolume", to="array", def=function(from) {
@@ -284,6 +284,7 @@ setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
 
 #' Convert SparseBrainVolume to numeric
 #' @rdname as.numeric-methods
+#' @param x the object to convert
 #' @export 
 setMethod(f="as.numeric", signature=signature(x = "SparseBrainVolume"), def=function(x) {
   as(x, "numeric")			
@@ -318,8 +319,9 @@ setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
 #' @name as
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
-#' show
-#' @rdname show-methods
+#' show a \code{BrainVolume}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("BrainVolume"),
           def=function(object) {
             sp <- space(object)
@@ -956,7 +958,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j =
 #' @param ... additional args
 #' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "matrix", j="missing", drop="ANY"),
-          def=function (x, i, j, ..., drop=TRUE) {  
+          def=function (x, i, j, k, ..., drop=TRUE) {  
             ind <- gridToIndex(x,i)
             x@data[ind]
           }

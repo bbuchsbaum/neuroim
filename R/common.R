@@ -29,6 +29,13 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
 
 #' @export
 #' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="function"),
+          def=function(x, fac, FUN) {
+            callGeneric(x,as.factor(fac), FUN)
+          })
+
+#' @export
+#' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="missing"),
           def=function(x, fac) {
             callGeneric(x,as.factor(fac))

@@ -121,7 +121,7 @@ setClass("AFNIFileDescriptor", contains=c("BrainFileDescriptor"))
 #' 
 #' This is a base class to represent meta information
 #' @rdname BaseMetaInfo-class
-#' @export
+#' @exportClass BaseMetaInfo
 setClass("BaseMetaInfo")
 
 #' NullMetaInfo
@@ -131,13 +131,18 @@ setClass("BaseMetaInfo")
 setClass("NullMetaInfo", contains=c("BaseMetaInfo"))
 
 
+#' show a \code{BaseMetaInfo}
+#' @param object the object
+#' @export
 setMethod(f="show",
 		signature=signature(object="BaseMetaInfo"),
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 		})
 
-
+#' show a \code{NullMetaInfo}
+#' @param object the object
+#' @export
 setMethod(f="show",
 		signature=signature(object="NullMetaInfo"),
 			def=function(object) {
@@ -204,7 +209,7 @@ setClass("FileMetaInfo",
 #' NifTIMetaInfo
 #' 
 #' This class contains meta information for a NIfTI image file
-#' @rdname NIfTIMetaInfo-class
+#' @rdname FileMetaInfo-class
 #' @slot nifti_header a \code{list} of attributes specific to the NIfTI file format 
 #' @export	
 setClass("NIfTIMetaInfo",
@@ -259,7 +264,7 @@ setClass("BrainSource", representation=
 #' low level IO and image loading functionality.
 #' @rdname BrainFileSource-class
 #' @slot metaInfo meta information for the data source
-#' @export
+#' @exportClass BrainFileSource
 setClass("BrainFileSource", representation=
 				representation(metaInfo="FileMetaInfo"),
 				contains=c("BrainSource"))

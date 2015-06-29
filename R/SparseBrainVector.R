@@ -378,7 +378,15 @@ setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
           })
 
 
-#' @export
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param m the fourth index
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i, 1:(dim(x)[2]))
@@ -386,7 +394,15 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
   )
 
 
-#' @export
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param m the fourth index
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, 1:(dim(x)[1]), 1:(dim(x)[2]))
@@ -394,7 +410,15 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j =
   )
   
 
-#' @export
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param m the fourth index
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j = "numeric"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
 			  callGeneric(x, i:(dim(x)[1]), j)
@@ -402,9 +426,17 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "missing", j =
   )
 
 
-#' @export
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param m the fourth index
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
-          def = function (x, i, j, k,..., drop = TRUE) {
+          def = function (x, i, j, k, m, ..., drop = TRUE) {
             if (missing(k))
               k = 1:(dim(x)[3])
              
@@ -490,7 +522,9 @@ setMethod(f="as.list", signature=signature(x = "SparseBrainVector"), def=functio
 			
 })
 
-
+#' show a \code{SparseBrainVector}
+#' @param object the object
+#' @export
 setMethod("show",
           signature=signature(object="SparseBrainVector"),
           def=function(object) {

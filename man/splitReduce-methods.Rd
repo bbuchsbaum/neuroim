@@ -7,10 +7,13 @@
 \alias{splitReduce,BrainVector,factor,missing-method}
 \alias{splitReduce,matrix,factor,function-method}
 \alias{splitReduce,matrix,factor,missing-method}
+\alias{splitReduce,matrix,integer,function-method}
 \alias{splitReduce,matrix,integer,missing-method}
 \title{Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}}
 \usage{
 splitReduce(x, fac, FUN)
+
+\S4method{splitReduce}{matrix,integer,`function`}(x, fac, FUN)
 
 \S4method{splitReduce}{matrix,integer,missing}(x, fac)
 

@@ -9,6 +9,7 @@ setGeneric(name="print", def=function(x, ...) standardGeneric("print"))
 
 #' Generic function to extract data values of object 
 #' @param x the object to get values from
+#' @param ... additional arguments
 #' @export 
 #' @rdname values-methods
 setGeneric(name="values", def=function(x, ...) standardGeneric("values"))
@@ -305,10 +306,10 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' @export 
 #' @examples 
 #' 
-#' bvec <- BrainVector(array(0, c(10,10,10,10), BrainSpace(c(10,10,10,10), c(1,1,1))))
+#' bvec <- BrainVector(array(0, c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 #' \dontrun{
-#' writeVector(bvol, "out.nii")
-#' writeVector(bvol, "out.nii.gz")
+#' writeVector(bvec, "out.nii")
+#' writeVector(bvec, "out.nii.gz")
 #' }
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
@@ -673,4 +674,6 @@ if (!isGeneric("as.raster"))
 #' @export 
 #' @rdname overlay-methods
 setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
+
+
 

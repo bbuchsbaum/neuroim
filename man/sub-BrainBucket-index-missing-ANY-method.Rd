@@ -11,8 +11,6 @@
 \item{x}{the object}
 
 \item{i}{first index}
-
-\item{j}{second index}
 }
 \description{
 extract labeled volume from \code{BrainBucket}

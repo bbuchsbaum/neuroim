@@ -15,7 +15,7 @@
 \S4method{image}{Layer}(x, zpos, axis = 3)
 }
 \arguments{
-\item{x}{the image volume}
+\item{x}{the object to display}
 
 \item{slice}{the voxel index of the slice to display}
 
@@ -23,13 +23,11 @@
 
 \item{zero.col}{the color to use when the value is 0 (e.g background color)}
 
-\item{axis}{the index of the z axis (1, 2, or 3)}
+\item{axis}{the axis index}
+
+\item{...}{extra arguments to passed to \code{grid.raster}}
 
 \item{zpos}{the z coordinate}
-
-\item{x}{the object to display}
-
-\item{axis}{the axis index}
 }
 \description{
 image

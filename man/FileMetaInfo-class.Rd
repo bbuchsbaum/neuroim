@@ -4,9 +4,12 @@
 \name{FileMetaInfo-class}
 \alias{AFNIMetaInfo-class}
 \alias{FileMetaInfo-class}
+\alias{NIfTIMetaInfo-class}
 \title{FileMetaInfo}
 \description{
 This class contains meta information from an image data file
+
+This class contains meta information for a NIfTI image file
 
 This class contains meta information for a AFNI image file
 }
@@ -30,6 +33,8 @@ This class contains meta information for a AFNI image file
 \item{\code{slope}}{image multiplier -- multiple values allowed (must equal numer of sub-images)}
 
 \item{\code{header}}{a list of format specific attributes}
+
+\item{\code{nifti_header}}{a \code{list} of attributes specific to the NIfTI file format}
 
 \item{\code{afni_header}}{a \code{list} of attributes specific to the AFNI file format}
 }}

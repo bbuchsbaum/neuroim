@@ -11,7 +11,8 @@ setMethod(f="ndim", signature=signature(x = "BrainData"),
           def=function(x) numdim(x@space))
 
   
- 
+#' dim of \code{BrainData} object
+#' @param x the object
 #' @export
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))

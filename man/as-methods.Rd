@@ -6,7 +6,7 @@
 \description{
 conversion from DenseBrainVolume to array
 
-conversion from SparseBrainVolume to array
+conversion from \code{SparseBrainVolume} to \code{array}
 
 conversion from SparseBrainVolume to numeric
 
