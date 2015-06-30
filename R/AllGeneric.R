@@ -233,8 +233,7 @@ setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 #' Generic getter to extract image coordinate transformation
 #' @param x an object with a transformation
 #' @export 
-#' @details 
-#' This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
+#' @details This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
 #' see \code{\linkS4class{BrainSpace}}
 #' @examples 
 #' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
@@ -277,9 +276,7 @@ setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElem
 #' @param dataType output data type, If specified should be a \code{character} vector of: "BINARY", "UBYTE", "SHORT", "INT", "FLOAT", "DOUBLE". 
 #' Otherwise output format will be inferred from R the datatype of the image.
 #' @export 
-#' @details 
-#'  
-#'  The output format will be inferred from file extension.
+#' @details The output format will be inferred from file extension.
 #'  \code{writeVolume(x, "out.nii")} outputs a NIFTI file.
 #'  \code{writeVolume(x, "out.nii.gz")} outputs a gzipped NIFTI file.
 #'  
@@ -475,8 +472,7 @@ setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("tak
 #' @param mask the elements to retain
 #' @param ... additional arguments
 #' 
-#' @details 
-#' \code{mask} can be an integer vector of 1D indices or a mask volume of class \code{LogicalBrainVolume}
+#' @details \code{mask} can be an integer vector of 1D indices or a mask volume of class \code{LogicalBrainVolume}
 #' @export
 #' @examples 
 #' bvol <- BrainVolume(array(runif(24*24*24), c(24,24,24)), BrainSpace(c(24,24,24), c(1,1,1)))
@@ -597,8 +593,7 @@ setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))
 #' Concatenate two data objects
 #' @param x the first object, typically \code{BrainVolume} or \code{BrainVector}
 #' @param y the second object, typically \code{BrainVolume} or \code{BrainVector}
-#' @details 
-#' the \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
+#' @details The \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
 #' @param ... additional objects
 #' 
 #' @examples 

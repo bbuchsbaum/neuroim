@@ -33,7 +33,7 @@ concat(x, y, ...)
 Concatenate two data objects
 }
 \details{
-the \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
+The \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
 }
 \note{
 dimensions of x and y must be equal

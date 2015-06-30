@@ -6,8 +6,8 @@
 {}
 #' @include SparseBrainVector.R
 {}
-#' @import assertthat
-{}
+
+
 
 ## TODO ought to be able to easily create BrainVector from list of vols
 
@@ -201,11 +201,10 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 #' @param mask image volume indicating the subset of voxels that will be loaded. If provided, function returns \code{\linkS4class{SparseBrainVectorSource}}
 #' @return a instance deriving from \code{\linkS4class{BrainVectorSource}}
 #' 
-#' @details 
-#' 
-#' If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
+#' @details If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
 #'
 #' @rdname BrainVectorSource
+#' @importFrom assertthat assert_that
 #' @export 
 BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	assert_that(is.character(fileName))

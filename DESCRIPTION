@@ -2,7 +2,6 @@ Package: neuroim
 Imports:
     Matrix,
     yaImpute,
-    assertthat,
     Rcpp
 LinkingTo: Rcpp
 License: GPL (>= 2)
@@ -25,7 +24,8 @@ Depends:
     hash,
     iterators,
     abind,
-    methods
+    methods,
+    assertthat
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'
@@ -48,4 +48,5 @@ Collate:
     'Ops.R'
     'RcppExports.R'
     'conncomp.R'
+    'datadoc.R'
     'neuroim.R'

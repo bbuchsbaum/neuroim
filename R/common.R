@@ -1,7 +1,6 @@
 #' @import abind
 NULL
-#' @import assertthat
-NULL
+
 
 #' matrixToVolumeList
 #' converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
@@ -229,6 +228,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 
 #' .gridToIndex3D
 #' @rdname internal-methods
+#' @importFrom assertthat assert_that
 #' @keywords internal
 .gridToIndex3D <- function(dimensions, voxmat) {
 	assert_that(length(dimensions) == 3)
