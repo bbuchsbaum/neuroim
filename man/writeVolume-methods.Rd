@@ -43,7 +43,7 @@ The output format will be inferred from file extension.
 No other file output formats are currently supported.
 }
 \examples{
-bvol <- BrainVolume(array(0, 10,10,10), BrainSpace(c(10,10,10), c(1,1,1)))
+bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
 \dontrun{
 writeVolume(bvol, "out.nii")
 writeVolume(bvol, "out.nii.gz")

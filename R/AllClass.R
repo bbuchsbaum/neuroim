@@ -117,6 +117,22 @@ setClass("NIfTIFileDescriptor", contains=c("BrainFileDescriptor"))
 #' @export
 setClass("AFNIFileDescriptor", contains=c("BrainFileDescriptor"))
 
+
+#' NIMLSurfaceFileDescriptor
+#' 
+#' This class supports the NIML file format for surface-based data
+#' @rdname NIMLSurfaceFileDescriptor-class
+#' @export
+setClass("NIMLSurfaceFileDescriptor", contains=c("BrainFileDescriptor"))
+
+#' FresurferAsciiSurfaceFileDescriptor
+#' 
+#' This class supports the FreesurferAsciiSurfaceFileDescriptor file format for surface geometry
+#' @rdname FreesurferAsciiSurfaceFileDescriptor-class
+#' @export
+setClass("FreesurferAsciiSurfaceFileDescriptor", contains=c("BrainFileDescriptor"))
+
+
 #' BaseMetaInfo
 #' 
 #' This is a base class to represent meta information
@@ -145,6 +161,72 @@ setMethod(f="show",
 				cat("meta info is null \n")
 			})
 	
+
+#' SurfaceGeometryMetaInfo
+#' 	
+#' This class contains meta information for brain surface geometry
+#' 
+#' @rdname SurfaceGeometryMetaInfo-class
+#' @slot nodes the number of surface vertices
+#' @slot faces the number of faces
+#' @slot embedDimension the dimensionality of the embedding
+#' @slot label a label indicating the type of surface (e.g. white, pial, inflated, flat, spherical)
+#' @export	 							 
+setClass("SurfaceGeometryMetaInfo",
+         representation=
+           representation(
+             headerFile="character",
+             dataFile="character",
+             fileDescriptor="BrainFileDescriptor",
+             vertices="integer",
+             faces="integer",
+             label="character",
+             embedDimension="integer"),
+         contains=c("BaseMetaInfo"))
+
+#' FreeSurferSurfaceGeometryMetaInfo
+#' 	
+#' This class contains meta information for brain surface geometry
+#' 
+#' @rdname FreeSurferSurfaceGeometryMetaInfo-class
+#' @export	 							 
+setClass("FreesurferSurfaceGeometryMetaInfo", contains=c("SurfaceGeometryMetaInfo"))
+
+#' SurfaceDataMetaInfo
+#' 	
+#' This class contains meta information for surface-based data (the values that map to a surface geometry)
+#' 
+#' @rdname SurfaceDataMetaInfo-class
+#' @slot nodeCount the number of nodes for which surface data exists
+#' @slot nels the number of data vectors (typically the number of columns in the surface data matrix; nels = 1 for a single surface data set)
+#' @slot label a label indicating the type of surface (e.g. white, pial, inflated, flat, spherical)
+#' @export	 							 
+setClass("SurfaceDataMetaInfo",
+         representation=
+           representation(
+             headerFile="character",
+             dataFile="character",
+             fileDescriptor="BrainFileDescriptor",
+             nodeCount="integer",
+             nels="integer",
+             label="character"),
+         contains=c("BaseMetaInfo"))
+
+#' NIMLSurfaceDataMetaInfo
+#' 	
+#' This class contains meta information for surface-based data for the NIML data format
+#' 
+#' @rdname NIMLSurfaceDataMetaInfo-class
+#' @slot data the numeric data matrix of surface values (rows = nodes, columns=surface vectors)
+#' @slot nodeIndices the indices of the nodes for mapping to associated surface geometry.
+#' @export	 							 
+setClass("NIMLSurfaceDataMetaInfo",
+         representation=
+           representation(
+             data="matrix",
+             nodeIndices="integer"),
+         contains=c("SurfaceDataMetaInfo"))
+
 #' BrainMetaInfo
 #' 	
 #' This class contains meta information from an image
@@ -284,6 +366,19 @@ setClass("BrainFileSource", representation=
 		setClass("BrainVectorSource", representation=
 						representation(indices="integer"),
 				contains=c("BrainSource"))
+
+
+#' BrainSurfaceVectorSource
+#' 
+#' A class that is used to produce a \code{\linkS4class{BrainSurfaceVector}} instance
+#' 
+#' @rdname BrainSurfaceVectorSource-class
+#' @slot indices the index vector of the volumes to be loaded
+#' @export
+setClass("BrainVectorSource", representation=
+           representation(indices="integer"),
+         contains=c("BaseSource"))
+
 		
 		
 #' BrainBucketSource
@@ -297,7 +392,18 @@ setClass("BrainFileSource", representation=
 				representation=representation(sourceList="list", cache="environment"),
 				contains=c("BrainVectorSource"))
 		
-		
+#' BrainSurfaceSource
+#' 
+#' A class that is used to produce a \code{\linkS4class{BrainSurface}} instance
+#' @rdname BrainSurfaceSource-class
+#' @slot metaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
+#' @slot dataMetaInfo a \code{\linkS4class{SurfaceDataMetaInfo}} instance
+#' @slot index the index offset into the surface data matrix
+#' @export
+setClass("BrainSurfaceSource",
+         representation=representation(metaInfo="SurfaceGeometryMetaInfo", dataMetaInfo="SurfaceDataMetaInfo", index="integer"),
+         contains=c("BaseSource"))
+
 
 #' BinaryReader
 #' 
@@ -316,6 +422,19 @@ setClass("BinaryReader", representation=
 							   bytesPerElement="integer",
 							   endian="character"))
 
+
+#' ColumnReader
+#' 
+#' This class supports reading of data froma matrix-like stroage format
+#' @rdname ColumnReader-class
+#' @slot nrow the number of rows
+#' @slot ncol the number of columns
+#' @slot reader a function that takes a set of column indices and returns a \code{matrix}
+#' @export
+setClass("ColumnReader", representation=
+           representation(nrow="integer", ncol="integer", reader="function"))
+
+         
 #' BinaryWriter
 #' 
 #' This class supports writing of bulk binary data to a connection
@@ -366,6 +485,8 @@ setClass("BrainSpace",
       }
     })
          
+
+
 #' BrainData
 #' 
 #' Base class for brain image data
@@ -534,6 +655,30 @@ setClass("Kernel",
 
 ## TODO add a LazyBrainBucket class
 
+#' BrainSurface
+#' 
+#' a three-dimensional surface consisting of a set of triangle vertices with one value per vertex.
+#' @rdname BrainSurface-class
+#' @slot source the data source for the surface
+#' @slot mesh the underlying \code{tmesh3d} object 
+#' @slot data the vector of data value at each vertex of the mesh
+#' @importFrom rgl tmesh3d
+#' @export
+setClass("BrainSurface", 
+         representation=representation(source="BrainSource", mesh="tmesh3d", data="numeric"))
+
+#' BrainSurfaceVector
+#' 
+#' a three-dimensional surface consisting of a set of triangle vertices with multiple values per vertex.
+#' 
+#' @rdname BrainSurfaceVector-class
+#' @slot source the data source for the surface
+#' @slot mesh the underlying \code{tmesh3d} object 
+#' @slot mat a matrix of values where each column contains a vector of values over the surface nodes.
+#' @importFrom rgl tmesh3d
+#' @export
+setClass("BrainSurfaceVector", 
+         representation=representation(source="BrainSource", mesh="tmesh3d", mat="numeric"))
 
 #' BrainBucket
 #' 

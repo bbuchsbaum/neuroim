@@ -25,6 +25,11 @@ setMethod(f="dim", signature=signature("FileMetaInfo"),
 			x@Dim
 		})
 
+
+#' @rdname loadData-methods
+# setMethod(f="loadData", signature=signature(""))
+
+
 #' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
 		def=function(x, offset=0) {
@@ -43,8 +48,30 @@ setMethod(f="dataReader", signature=signature("AFNIMetaInfo"),
 			} else {
 				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			}
-		})			
+		})		
 
+#' @rdname dataReader-methods
+setMethod(f="dataReader", signature=signature("NIMLSurfaceDataMetaInfo"), 
+          def=function(x) {
+            reader <- function(i) {
+              if (length(i) == 1 && i == 0) {
+                x@nodeIndices
+              } else {
+                x@data[,i,drop=FALSE]
+              }
+            }
+
+            new("ColumnReader", nrow=as.integer(nrow(x@data)), ncol=as.integer(ncol(x@data)), reader=reader)
+          })
+
+
+#' @rdname readColumns-methods
+setMethod(f="readColumns", signature=signature(x="ColumnReader", columnIndices="numeric"),
+          def=function(x,columnIndices) {
+            x@reader(columnIndices)
+          })
+          
+            
 #' @rdname trans-methods
 setMethod(f="trans", signature=signature("BrainMetaInfo"), 
 		def=function(x) {
@@ -65,12 +92,15 @@ niftiDim <- function(nifti_header) {
 	lastidx <- min(which(dimarray == 1)) - 1
 	dimarray[2:lastidx]
 }
-#' This class contains meta information from an image
+
+
+
+#' This class contains meta information for an image
 #'
 #' @param Dim image dimensions
 #' @param spacing voxel dimensions
 #' @param origin coordinate origin
-#' @param dataType the type of the data (e.g. " FLOAT")
+#' @param dataType the type of the data (e.g. "FLOAT")
 #' @param label name(s) of images 
 #' @param spatialAxes image axes for spatial dimensions (x,y,z)
 #' @param additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
@@ -86,8 +116,61 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 			label=label,
 			spatialAxes=spatialAxes,
 			additionalAxes=additionalAxes)
-	
 }						
+
+#' Constructor for \code{\linkS4class{SurfaceGeometryMetaInfo}} class
+#' @param descriptor the file descriptor
+#' @param header a \code{list} containing header information
+SurfaceGeometryMetaInfo <- function(descriptor, header) {
+  stopifnot(is.numeric(header$vertices))
+  stopifnot(is.numeric(header$faces))
+ 
+  
+  new("SurfaceGeometryMetaInfo",
+     headerFile=header$headerFile,
+     dataFile=header$dataFile,
+     fileDescriptor=descriptor,
+     vertices=as.integer(header$vertices),
+     faces=as.integer(header$faces),
+     label=as.character(header$label),
+     embedDimension=as.integer(header$embedDimension))
+}
+
+#' Constructor for \code{\linkS4class{SurfaceDataMetaInfo}} class
+#' @param descriptor the file descriptor
+#' @param header a \code{list} containing header information
+SurfaceDataMetaInfo <- function(descriptor, header) {
+  stopifnot(is.numeric(header$nodes))
+ 
+  new("SurfaceDataMetaInfo",
+      headerFile=header$headerFile,
+      dataFile=header$dataFile,
+      fileDescriptor=descriptor,
+      nodeCount=as.integer(header$nodes),
+      nels=as.integer(header$nels),
+      label=as.character(header$label))
+}
+
+
+
+
+#' Constructor for \code{\linkS4class{NIMLSurfaceDataMetaInfo}} class
+#' @param descriptor the file descriptor
+#' @param header a \code{list} containing header information
+#' 
+NIMLSurfaceDataMetaInfo <- function(descriptor, header) {
+  stopifnot(is.numeric(header$nodes))
+  
+  new("NIMLSurfaceDataMetaInfo",
+      headerFile=header$headerFile,
+      dataFile=header$dateFile,
+      fileDescriptor=descriptor,
+      nodeCount=as.integer(header$nodeCount),
+      nels=as.integer(header$nels),
+      label=as.character(header$label),
+      data=header$data,
+      nodeIndices=header$nodes)
+}
 
 #' Constructor for \code{\linkS4class{NIfTIMetaInfo}} class
 #' @param descriptor an instance of class \code{\linkS4class{NIfTIFileDescriptor}}
@@ -118,7 +201,22 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			header=nifti_header)
 }
 
+setMethod(f="show", signature=signature("SurfaceGeometryMetaInfo"), 
+          def=function(object) {
+            cat("an instance of class",  class(object), "\n\n")
+            cat("number of vertices:", "\t", object@vertices, "\n")
+            cat("number of faces:", "\t", object@faces, "\n")
+            cat("label:", "\t", object@label, "\n")
+            cat("embed dimension:", "\t", object@embedDimension, "\n")
+          })
 
+setMethod(f="show", signature=signature("SurfaceDataMetaInfo"), 
+          def=function(object) {
+            cat("an instance of class",  class(object), "\n\n")
+            cat("nodeCount:", "\t", object@nodeCount, "\n")
+            cat("nels:", "\t", object@nels, "\n")
+            cat("label:", "\t", object@label, "\n")
+          })
 
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {

@@ -2,7 +2,10 @@ Package: neuroim
 Imports:
     Matrix,
     yaImpute,
-    assertthat
+    assertthat,
+    igraph,
+    Rvcg,
+    rgl
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -24,7 +27,7 @@ Depends:
     hash,
     iterators,
     abind,
-    methods
+    methods,
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'
@@ -39,10 +42,12 @@ Collate:
     'BrainRegion3D.R'
     'BrainSlice.R'
     'BrainSpace.R'
+    'BrainSurface.R'
     'SparseBrainVector.R'
     'BrainVector.R'
     'BrainVolume.R'
     'Display.R'
+    'FREESURFER_IO.R'
     'IndexLookupVolume.R'
     'Ops.R'
     'RcppExports.R'

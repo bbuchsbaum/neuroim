@@ -260,6 +260,14 @@ setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 #' @rdname readElements-methods
 setGeneric(name="readElements", def=function(x, numElements) standardGeneric("readElements"))
 
+#' Generic function to read a set of column vector from an input source (e.g. \code{ColumnReader})
+#' @param x the input channel
+#' @param columnIndices
+#' @return a \code{matrix} consisting of the requested column vectors 
+#' @export 
+#' @rdname readColumns-methods
+setGeneric(name="readColumns", def=function(x, columnIndices) standardGeneric("readColumns"))
+
 
 #' Generic function to write a sequence of elements from an input source
 #' @param x the output channel
@@ -619,4 +627,65 @@ if (!isGeneric("as.raster"))
 #' @export 
 #' @rdname overlay-methods
 setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
+
+
+#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to either header file or data file
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export fileMatches
+#' @rdname fileMatches-methods
+setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
+
+
+#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to header file only
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export headerFileMatches
+#' @rdname headerFileMatches-methods
+setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
+
+#' Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to data file only
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export dataFileMatches
+#' @rdname dataFileMatches-methods
+setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
+
+#' Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return the correct header name
+#' @export headerFile
+#' @rdname headerFile-methods
+setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
+
+#' Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return the correct header name
+#' @export dataFile
+#' @rdname dataFile-methods
+setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
+
+#' Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return fileName without extension
+#' @export stripExtension
+#' @rdname stripExtension-methods
+setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
+
+#' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name contianing meta information
+#' @export readMetaInfo
+#' @rdname readMetaInfo-methods
+setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
+
 

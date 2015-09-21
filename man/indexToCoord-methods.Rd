@@ -24,4 +24,11 @@ a matrix of real coordinates
 \description{
 Generic function to convert 1D indices to N-dimensional real world coordinates
 }
+\examples{
+bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
+idx <- 1:10
+g <- indexToCoord(bvol, idx)
+idx2 <- coordToIndex(bvol, g)
+all.equal(idx, idx2)
+}
 

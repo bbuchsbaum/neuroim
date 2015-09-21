@@ -4,6 +4,8 @@
 \name{readMetaInfo}
 \alias{readMetaInfo}
 \alias{readMetaInfo,AFNIFileDescriptor-method}
+\alias{readMetaInfo,FreesurferAsciiSurfaceFileDescriptor-method}
+\alias{readMetaInfo,NIMLSurfaceFileDescriptor-method}
 \alias{readMetaInfo,NIfTIFileDescriptor-method}
 \title{Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.}
 \usage{
@@ -12,6 +14,10 @@ readMetaInfo(x, fileName)
 \S4method{readMetaInfo}{NIfTIFileDescriptor}(x, fileName)
 
 \S4method{readMetaInfo}{AFNIFileDescriptor}(x, fileName)
+
+\S4method{readMetaInfo}{NIMLSurfaceFileDescriptor}(x, fileName)
+
+\S4method{readMetaInfo}{FreesurferAsciiSurfaceFileDescriptor}(x, fileName)
 }
 \arguments{
 \item{x}{descriptor instance}

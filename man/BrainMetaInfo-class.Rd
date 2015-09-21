@@ -17,7 +17,7 @@ BrainMetaInfo(Dim, spacing, origin = rep(0, length(spacing)),
 
 \item{origin}{coordinate origin}
 
-\item{dataType}{the type of the data (e.g. " FLOAT")}
+\item{dataType}{the type of the data (e.g. "FLOAT")}
 
 \item{label}{name(s) of images}
 
@@ -31,7 +31,7 @@ an instance of class \code{\linkS4class{BrainMetaInfo}}
 \description{
 This class contains meta information from an image
 
-This class contains meta information from an image
+This class contains meta information for an image
 }
 \section{Slots}{
 

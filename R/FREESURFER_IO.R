@@ -1,0 +1,19 @@
+
+readFreesurferAsciiHeader <- function(fileName) {
+  ninfo <- as.integer(strsplit(readLines(fileName, n=2)[2], " ")[[1]])
+  list(vertices=ninfo[1], faces=ninfo[2], label=stripExtension(FREESURFER_ASCII_SURFACE_DSET, basename(fileName)), embedDimension=3, headerFile=fileName, dataFile=fileName)
+}
+
+#' @importFrom readr read_table
+#' @importFrom rgl tmesh3d
+readFreesurferAsciiGeometry<- function(fileName) {
+  ninfo <- as.integer(strsplit(readLines(fileName, n=2)[2], " ")[[1]])
+  asctab <- readr::read_table(fileName, skip=2)
+  
+  vertices <- as.matrix(asctab[1:ninfo[1],1:3])
+  nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
+  
+  list(mesh=tmesh3d(vertices, nodes), headerFile=fileName, dataFile=fileName)
+  
+}
+

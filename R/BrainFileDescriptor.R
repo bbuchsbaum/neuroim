@@ -7,64 +7,6 @@ roxygen()
 
 
 
-#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
-#' Will test for match to either header file or data file
-#' @param x object for which the file name is to matched to
-#' @param fileName file name to be matched
-#' @return TRUE for match, FALSE otherwise
-#' @export fileMatches
-#' @rdname fileMatches-methods
-setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
-
-
-#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
-#' Will test for match to header file only
-#' @param x object for which the file name is to matched to
-#' @param fileName file name to be matched
-#' @return TRUE for match, FALSE otherwise
-#' @export headerFileMatches
-#' @rdname headerFileMatches-methods
-setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
-
-#' Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
-#' Will test for match to data file only
-#' @param x object for which the file name is to matched to
-#' @param fileName file name to be matched
-#' @return TRUE for match, FALSE otherwise
-#' @export dataFileMatches
-#' @rdname dataFileMatches-methods
-setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
-
-#' Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
-#' @param x descriptor instance
-#' @param fileName file name to be stripped of its extension
-#' @return the correct header name
-#' @export headerFile
-#' @rdname headerFile-methods
-setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
-
-#' Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
-#' @param x descriptor instance
-#' @param fileName file name to be stripped of its extension
-#' @return the correct header name
-#' @export dataFile
-#' @rdname dataFile-methods
-setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
-
-#' Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
-#' @param x descriptor instance
-#' @param fileName file name to be stripped of its extension
-#' @return fileName without extension
-#' @export stripExtension
-#' @rdname stripExtension-methods
-setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
-
-#' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
-#' @param x descriptor instance
-#' @param fileName file name contianing meta information
-#' @export readMetaInfo
-#' @rdname readMetaInfo-methods
-setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 
 
@@ -157,6 +99,22 @@ setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
 			
 		})
 
+
+#' @rdname readMetaInfo-methods
+#' @export
+setMethod(f="readMetaInfo",signature=signature(x= "NIMLSurfaceFileDescriptor"),
+    def=function(x, fileName) {
+      .readMetaInfo(x, fileName, readNIMLSurfaceHeader, NIMLSurfaceDataMetaInfo)
+    })
+
+#' @rdname readMetaInfo-methods
+#' @export
+setMethod(f="readMetaInfo",signature=signature(x= "FreesurferAsciiSurfaceFileDescriptor"),
+    def=function(x, fileName) {
+      .readMetaInfo(x, fileName, readFreesurferAsciiHeader, SurfaceGeometryMetaInfo)
+    })
+
+
 findDescriptor <- function(fileName) {
 	if (fileMatches(NIFTI, fileName)) NIFTI
 	else if (fileMatches(NIFTI_GZ, fileName)) NIFTI_GZ
@@ -164,6 +122,8 @@ findDescriptor <- function(fileName) {
 	else if (fileMatches(NIFTI_PAIR_GZ, fileName)) NIFTI_PAIR_GZ
 	else if (fileMatches(AFNI, fileName)) AFNI
 	else if (fileMatches(AFNI_GZ, fileName)) AFNI_GZ
+  else if (fileMatches(NIML_SURFACE_DSET, fileName)) NIML_SURFACE_DSET
+  else if (fileMatches(FREESURFER_ASCII_SURFACE_DSET, fileName)) FREESURFER_ASCII_SURFACE_DSET
 	else NULL
 }
 
@@ -209,6 +169,17 @@ NIFTI_PAIR_GZ <- new("NIfTIFileDescriptor",
 		dataEncoding="gzip",
 		dataExtension="img.gz")
 
+NIML_SURFACE_DSET <- new("NIMLSurfaceFileDescriptor",
+                     fileFormat="NIML",
+                     headerEncoding="raw",
+                     headerExtension="niml.dset",
+                     dataEncoding="raw",
+                     dataExtension="niml.dset")
 
-
+FREESURFER_ASCII_SURFACE_DSET <- new("FreesurferAsciiSurfaceFileDescriptor",
+                         fileFormat="Freesurfer_ASCII",
+                         headerEncoding="text",
+                         headerExtension="asc",
+                         dataEncoding="raw",
+                         dataExtension="asc")
 

@@ -22,12 +22,18 @@ indexToGrid(x, idx)
 \arguments{
 \item{x}{the object}
 
-\item{idx}{the 1D indices}
+\item{idx}{the 1D \code{vector} of indices}
 }
 \value{
 a matrix of grid coordinates
 }
 \description{
 Generic function to convert 1D indices to N-dimensional grid coordinates
+}
+\examples{
+bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
+ idx <- 1:10
+ g <- indexToGrid(bvol, idx)
+ vol[g]
 }
 
