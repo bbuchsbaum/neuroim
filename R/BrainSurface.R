@@ -23,6 +23,7 @@ BrainSurfaceSource <- function(surfaceName, surfaceDataName, index=1) {
   
   metaInfo <- readHeader(surfaceName)
   #surfaceDataName = "/Users/bbuchsbaum/rstudio/rMVPA/test_data/surface_mouth/1005a_mprage/betas_hhh.niml.dset"
+  # surfaceName = "/Users/bbuchsbaum/rstudio/rMVPA/test_data/surface_mouth/1005a_mprage/surface/SUMA/lh.smoothwm.asc"
   metaInfo2 <- readHeader(surfaceDataName)
   
   new("BrainSurfaceSource", metaInfo=metaInfo, dataMetaInfo=metaInfo2, index=as.integer(index))								
