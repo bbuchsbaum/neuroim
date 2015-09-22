@@ -6,6 +6,7 @@ Imports:
     igraph,
     Rvcg,
     rgl
+    Rcpp
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -19,6 +20,9 @@ Description: neuroim is a collection of data structures that represent
     ANALYZE7.5 and NIFTI files and limited support for reading AFNI files.
 Version: 0.0.3
 Date: 2014-04-01
+    NIFTI files and limited support for reading AFNI files.
+Version: 0.0.4
+Date: 2015-06-23
 Suggests:
     testthat
 Depends:
@@ -28,6 +32,7 @@ Depends:
     iterators,
     abind,
     methods,
+    assertthat
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'
@@ -52,4 +57,5 @@ Collate:
     'Ops.R'
     'RcppExports.R'
     'conncomp.R'
+    'datadoc.R'
     'neuroim.R'

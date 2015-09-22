@@ -1,5 +1,5 @@
 #' @import hash
-#' @import assertthat
+#' @importFrom assertthat assert_that
 #' @importFrom Matrix sparseVector
 #' @importFrom yaImpute ann
 NULL
@@ -60,7 +60,7 @@ makeVolume <- function(data=NULL, refvol, source=NULL, label="", indices=NULL) {
 #' bvol <- BrainVolume(dat,bspace, label="test")
 #' print(bvol) 
 #' @export BrainVolume
-#' @rdname BrainVolume-class
+#' @rdname BrainVolume
 BrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	DenseBrainVolume(data,space,source=source, label=label, indices=indices)	
 }
@@ -184,7 +184,7 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
 #' @param indices a index vector indicating the 1-d coordinates of the data values
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @param label a \code{character} string
-#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @return \code{\linkS4class{SparseBrainVolume}} instance 
 #' @export SparseBrainVolume
 #' @examples
 #' data <- 1:10
@@ -215,7 +215,7 @@ SparseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") 
 #' LogicalBrainVolume
 #' 
 #' Construct a \code{\linkS4class{LogicalBrainVolume}} instance
-#' @param data a three-dimensional \code{array}
+#' @param data a three-dimensional \code{array}, a 1D vector with length equal to \code{prod(dim(space))}, or a set of \code{indices} where elements are \code{TRUE}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @param label a \code{character} string
@@ -227,6 +227,10 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL)
 	
 	if (is.null(dim(data)) && length(data) == prod(dim(space))) {
 		data <- array(data, dim(space))
+	} else if (is.null(dim(data)) && !is.null(indices)) {
+	  newdat <- array(FALSE, dim(space))
+	  newdat[indices] <- data
+	  data <- newdat
 	}
 	
 	if (length(dim(data)) != 3) {
@@ -236,12 +240,6 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL)
 	if (ndim(space) != 3) {
 		stop("LogicalVolume: space argument must have three dimensions")
 	} 
-	
-	if (!is.null(indices)) {
-		newdat <- array(FALSE, dim(space))
-		newdat[indices] <- data
-		data <- newdat
-	}
 	
 	
 	if (!is.logical(data)) {
@@ -267,7 +265,7 @@ setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
 
 
-#' conversion from SparseBrainVolume to array
+#' conversion from \code{SparseBrainVolume} to \code{array}
 #' @rdname as-methods
 #' @name as
 setAs(from="SparseBrainVolume", to="array", def=function(from) {
@@ -286,6 +284,7 @@ setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
 
 #' Convert SparseBrainVolume to numeric
 #' @rdname as.numeric-methods
+#' @param x the object to convert
 #' @export 
 setMethod(f="as.numeric", signature=signature(x = "SparseBrainVolume"), def=function(x) {
   as(x, "numeric")			
@@ -320,8 +319,9 @@ setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
 #' @name as
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
-#' show
-#' @rdname show-methods
+#' show a \code{BrainVolume}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("BrainVolume"),
           def=function(object) {
             sp <- space(object)
@@ -415,7 +415,6 @@ loadVolume  <- function(fileName, index=1) {
 }
 
 
-#' concatenate two BrainVolumes
 #' @note dimensions of x and y must be equal
 #' @export concat
 #' @rdname concat-methods
@@ -693,7 +692,7 @@ setMethod(f="numClusters", signature=signature(x="ClusteredBrainVolume"),
             length(x@clusterMap)
           })
 
-#' extract cluster centers in a ClusteredBrainVolume
+
 #' @rdname clusterCenters-methods
 #' @export
 setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", features="matrix", FUN="missing"), 
@@ -879,20 +878,44 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 #' 
 #' the image values will be converted to using R base function \code{as.logical} and wrapped in \code{LogicalBrainVolume}
 #' 
+#' @param x the object
 #' @return an instance of \code{linkS4class{LogicalBrainVolume}}
-#' @rdname BrainVolume-methods
+#' @rdname as.logical-methods
 #' @export 
 setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x) {
 			vals <- as.logical(as.vector(x))	
 			LogicalBrainVolume(vals, space(x))
 })
 
-#' extract data from \code{\linkS4class{SparseBrainVolume}}
-#' @param i index for dimension 1
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param ... additional arguments
-#' @rdname SparseBrainVolume-class
+#' @rdname as.sparse-methods
+setMethod(f="as.sparse", signature=signature(x="DenseBrainVolume", mask="LogicalBrainVolume"),
+          def=function(x, mask) {
+            assert_that(all(dim(x) == dim(mask)))
+            assert_that(all(spacing(x) == spacing(mask)))
+            
+            dat <- x[mask]
+            bvec <- SparseBrainVector(dat, space(x))
+            
+})
+
+#' @rdname as.sparse-methods
+setMethod(f="as.sparse", signature=signature(x="DenseBrainVolume", mask="numeric"),
+          def=function(x, mask) {
+            m <- as.integer(mask)
+            bvec <- SparseBrainVolume(x[m], space(x), indices=m)
+            
+          })
+
+
+
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "numeric", drop="ANY"),
           def=function (x, i, j, k, ..., drop=TRUE) {  
             if (missing(k)) {
@@ -908,12 +931,14 @@ setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j =
         })
 
 
-#' extract data from \code{\linkS4class{SparseBrainVolume}}
-#' @param i index for dimension 1
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param ... additional arguments
-#' @rdname SparseBrainVolume-class
+#' extractor
+#' @export
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param ... additional args
+#' @param drop drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j = "missing", drop="missing"),
           def=function (x, i, j, k, ..., drop) {  
             if (missing(k) && nargs() == 4) {
@@ -924,22 +949,29 @@ setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "numeric", j =
          }
 )
 
-#' extract data from \code{\linkS4class{SparseBrainVolume}}
-#' @param i matrix of voxel coordinates
-#' @rdname SparseBrainVolume-class
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "matrix", j="missing", drop="ANY"),
-          def=function (x, i, j, ..., drop=TRUE) {  
+          def=function (x, i, j, k, ..., drop=TRUE) {  
             ind <- gridToIndex(x,i)
             x@data[ind]
           }
 )
 
-#' extract data from \code{\linkS4class{SparseBrainVolume}}
-#' @param i index for dimension 1
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param ... additional arguments
-#' @rdname SparseBrainVolume-class
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "missing", drop="ANY"),
           def=function (x, i, j, k, ..., drop=TRUE) {  
             if (missing(k)) {
@@ -950,12 +982,14 @@ setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j =
           }
 )
 
-#' extract data from \code{\linkS4class{SparseBrainVolume}}
-#' @param i index for dimension 1
-#' @param j index for dimension 2
-#' @param k index for dimension 3
-#' @param ... additional arguments
-#' @rdname SparseBrainVolume-class
+#' extractor
+#' @export 
+#' @param x the object
+#' @param i first index 
+#' @param j second index 
+#' @param k third index 
+#' @param ... additional args
+#' @param drop dimension
 setMethod(f="[", signature=signature(x = "SparseBrainVolume", i = "missing", j = "numeric", drop="ANY"),
           def=function (x, i, j, k,  ..., drop=TRUE) {  
             callGeneric(x, seq(1, dim(x)[1]), j, k,...)

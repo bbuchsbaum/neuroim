@@ -1,6 +1,7 @@
 #' @import abind
 NULL
 
+
 #' matrixToVolumeList
 #' converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
 #' @param voxmat an N by 3 matrix of voxel coordinates
@@ -25,7 +26,19 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   })
 }  
 
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="function"),
+          def=function(x, fac, FUN) {
+            callGeneric(x,as.factor(fac), FUN)
+          })
 
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="missing"),
+          def=function(x, fac) {
+            callGeneric(x,as.factor(fac))
+          })
 
 #' @export
 #' @rdname splitReduce-methods
@@ -215,6 +228,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 
 #' .gridToIndex3D
 #' @rdname internal-methods
+#' @importFrom assertthat assert_that
 #' @keywords internal
 .gridToIndex3D <- function(dimensions, voxmat) {
 	assert_that(length(dimensions) == 3)

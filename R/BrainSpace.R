@@ -49,8 +49,9 @@ BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 			inverseTrans=solve(trans))
 }
 
-
-
+#' show a \code{BrainSpace}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("BrainSpace"),
 		def=function(object) {
 			cat("BrainSpace\n")
@@ -93,9 +94,10 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
       }
 		})
 
-
+#' dim
+#' 
 #' @export
-#' @rdname dim-methods
+#' @param x the object
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 

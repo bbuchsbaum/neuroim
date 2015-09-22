@@ -9,6 +9,7 @@ setGeneric(name="print", def=function(x, ...) standardGeneric("print"))
 
 #' Generic function to extract data values of object 
 #' @param x the object to get values from
+#' @param ... additional arguments
 #' @export 
 #' @rdname values-methods
 setGeneric(name="values", def=function(x, ...) standardGeneric("values"))
@@ -234,6 +235,7 @@ setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 #' @export 
 #' @details 
 #' This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
+#' @details This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
 #' see \code{\linkS4class{BrainSpace}}
 #' @examples 
 #' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
@@ -247,6 +249,7 @@ setGeneric(name="trans",  def=function(x) standardGeneric("trans"))
 #' @export 
 #' @examples 
 #' bspace <- BrainSpace(c(10,10,10), c(2,2,2)
+#' bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 #' itrans <- inverseTrans(bspace)
 #' identical(trans(bspace) %*% inverseTrans(bspace), diag(4))
 #' @rdname inverseTrans-methods
@@ -287,6 +290,7 @@ setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElem
 #' @details 
 #'  
 #'  The output format will be inferred from file extension.
+#' @details The output format will be inferred from file extension.
 #'  \code{writeVolume(x, "out.nii")} outputs a NIFTI file.
 #'  \code{writeVolume(x, "out.nii.gz")} outputs a gzipped NIFTI file.
 #'  
@@ -314,9 +318,12 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' @examples 
 #' 
 #' bvec <- BrainVector(array(0, c(10,10,10,10), BrainSpace(c(10,10,10,10), c(1,1,1)))
+#' bvec <- BrainVector(array(0, c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 #' \dontrun{
 #' writeVector(bvol, "out.nii")
 #' writeVector(bvol, "out.nii.gz")
+#' writeVector(bvec, "out.nii")
+#' writeVector(bvec, "out.nii.gz")
 #' }
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
@@ -333,6 +340,7 @@ setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) stan
 #'  idx <- 1:10
 #'  g <- indexToGrid(bvol, idx)
 #'  vol[g]
+#'  bvol[g]
 #' 
 #' @rdname indexToGrid-methods
 setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGrid"))
@@ -368,6 +376,7 @@ setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coord
 setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
 #' Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
+#' Generic function to convert N-dimensional grid coordinates to real world coordinates
 #' @param x the object
 #' @param coords a matrix of grid coordinates
 #' @return a matrix of real coordinates
@@ -389,6 +398,8 @@ setGeneric(name="axisToIndex",   def=function(x, real, dimNum) standardGeneric("
 #' Generic function to convert N-dimensional grid coordinate to 1D indices
 #' @param x the object
 #' @param coords a matrix where each row is a corodinate or a vector of length N
+#' @param x the object, typically a \code{BrainVolume} or \code{BrainSpace} instance.
+#' @param coords a matrix where each row is a coordinate or a vector of length equal to \code{ndim(x)}
 #' @return a vector of indices
 #' @export 
 #' @rdname gridToIndex-methods
@@ -398,18 +409,38 @@ setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridTo
 #' Generic function to apply a function to each volume of a four-dimensional image
 #' @param x four-dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
+#' @param x four-dimensional image, e.g. of class \code{BrainVector}
+#' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex})
 #' @param withIndex whether the index of the volume supplied as the second argument to the function
 #' @param mask an image mask indicating subset of volume elements to apply function over
+#' @param mask an image mask indicating subset of elements to apply function over.
 #' @param ... additional arguments
+#' @return a \code{list} of results of apply \code{FUN} to each volume.
 #' @export 
+#' @examples 
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' res <- eachVolume(bvec, mean)
+#' 
+#' res <- eachVolume(bvec, function(x,i) median(x), withIndex=TRUE)
 #' @rdname eachVolume-methods
 setGeneric(name="eachVolume", def=function(x, FUN, withIndex, mask, ...) standardGeneric("eachVolume"))
 
 #' Generic function to extract a volume from a four-dimensional image
+#' Generic function to extract a one or more individual volumes from a four-dimensional image
 #' @param x four-dimensional image
 #' @param i the indices of the volume(s) to extract
 #' @param ... additional arguments
+#' @return a list of \code{BrainVolume} elements
 #' @export 
+#' 
+#' @examples 
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' vol <- takeVolume(bvec,1)
+#' all.equal(dim(vol), c(24,24,24))
+#' 
+#' vol <- takeVolume(bvec,1:3)
+#' length(vol) == 3
+#' class(vol) == "list"
 #' @rdname takeVolume-methods
 setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolume"))
 
@@ -430,6 +461,10 @@ setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneri
 #' @param withIndex whether the index of the series is supplied as the second argument to the function
 #' @param ... additional arguments
 #' @export 
+#' @examples 
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' res <- eachSeries(bvec, mean)
+#' length(res) == 24*24*24
 #' @rdname eachSeries-methods
 setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGeneric("eachSeries"))
 
@@ -438,7 +473,12 @@ setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGener
 #' @param x a four dimensional image
 #' @param center a \code{logical} value indicating whether series should be centered
 #' @param scale a \code{logical} value indicating whether series should be divided by standard deviation
+#' @param center a \code{logical} value indicating whether series should be centered. \code{TRUE} if not specified.
+#' @param scale a \code{logical} value indicating whether series should be divided by standard deviation. \code{TRUE} if not specified.
 #' @export 
+#' @examples 
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' res <- scaleSeries(bvec, TRUE, TRUE)
 #' @rdname scaleSeries-methods
 setGeneric(name="scaleSeries", def=function(x, center, scale) standardGeneric("scaleSeries"))
 
@@ -455,9 +495,22 @@ setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("tak
 
 #' Convert to sparse representation
 #' @param x the object to sparsify
+#' Convert to from dense to sparse representation
+#' 
+#' @param x the object to make sparse, e.g. \code{DenseBrainVolume} or \code{DenseBrainVector}
 #' @param mask the elements to retain
 #' @param ... additional arguments
+#' 
+#' @details \code{mask} can be an integer vector of 1D indices or a mask volume of class \code{LogicalBrainVolume}
 #' @export
+#' @examples 
+#' bvol <- BrainVolume(array(runif(24*24*24), c(24,24,24)), BrainSpace(c(24,24,24), c(1,1,1)))
+#' indmask <- sort(sample(1:(24*24*24), 100))
+#' svol <- as.sparse(bvol, indmask)
+#' 
+#' 
+#' mask <- LogicalBrainVolume(runif(length(indmask)), space=space(bvol), indices=indmask)
+#' sum(mask) == 100
 #' @rdname as.sparse-methods
 setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.sparse"))
 
@@ -569,7 +622,26 @@ setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))
 #' Concatenate two objects
 #' @param x the first object
 #' @param y the second object
+#' Concatenate two data objects
+#' @param x the first object, typically \code{BrainVolume} or \code{BrainVector}
+#' @param y the second object, typically \code{BrainVolume} or \code{BrainVector}
+#' @details The \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
 #' @param ... additional objects
+#' 
+#' @examples 
+#' bv1 <- BrainVolume(rep(1,1000), BrainSpace(c(10,10,10), c(1,1,1)))
+#' bv2 <- BrainVolume(rep(2,1000), BrainSpace(c(10,10,10), c(1,1,1)))
+#' bv3 <- concat(bv1,bv2)
+#' inherits(bv3, "BrainVector")
+#' 
+#' bv4 <- concat(bv3, bv1)
+#' dim(bv4)[4] == 3
+#' bv5 <- concat(bv1, bv3)
+#' dim(bv4)[4] == 3
+#' 
+#' bv6 <- concat(bv4,bv5)
+#' dim(bv6)[4] == 6
+#' 
 #' @export 
 #' @rdname concat-methods
 setGeneric(name="concat", def=function(x,y, ...) standardGeneric("concat"))
@@ -595,6 +667,8 @@ setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
 #' iter <- seriesIter(bvec)
 #' 
 #' ## compute mean of each series
+#' library(foreach)
+#' library(iterators)
 #' foreach(i=iter, .combine=c) %do% { mean(i) }
 #' iter <- seriesIter(bvec)
 #' 

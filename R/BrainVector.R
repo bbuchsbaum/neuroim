@@ -7,6 +7,8 @@
 #' @include SparseBrainVector.R
 {}
 
+
+
 ## TODO ought to be able to easily create BrainVector from list of vols
 
 
@@ -60,7 +62,8 @@ makeVector <- function(data, refdata, source=NULL, label="") {
 #' @param mask an optional \code{array} of type \code{logical}
 #' @param source an optional \code{\linkS4class{BrainSource}} object
 #' @param label a label of type \code{character} 
-#' @return a concrete instance of \code{\linkS4class{BrainVector}} class 
+#' @return a concrete instance of \code{\linkS4class{BrainVector}} class. 
+#' If \code{mask} is provided then \code{\linkS4class{SparseBrainVector}}, otherwise \code{\linkS4class{DenseBrainVector}}
 #' @export BrainVector
 #' @rdname BrainVector-class
 BrainVector <- function(data, space=NULL, mask=NULL, source=NULL, label="") {
@@ -198,11 +201,10 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 #' @param mask image volume indicating the subset of voxels that will be loaded. If provided, function returns \code{\linkS4class{SparseBrainVectorSource}}
 #' @return a instance deriving from \code{\linkS4class{BrainVectorSource}}
 #' 
-#' @details 
-#' 
-#' If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
+#' @details If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
 #'
 #' @rdname BrainVectorSource
+#' @importFrom assertthat assert_that
 #' @export 
 BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	assert_that(is.character(fileName))
@@ -237,15 +239,16 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	
 }
 
-#' extract names of \code{BrainBucketSource} instance
+#' names
 #' @rdname names-methods
 #' @export
+#' @param x the object to get \code{names} of
 setMethod("names", signature=c("BrainBucketSource"),
 		def=function(x) {
 			x@metaInfo@label[x@indices]
 		})
 
-#' extract names of \code{BrainBucket} instance
+
 #' @rdname names-methods
 #' @export
 setMethod("names", signature=c("BrainBucket"),
@@ -278,7 +281,6 @@ setMethod(f="loadData", signature=signature("BrainBucketSource"),
 			}
       
       
-			
 			ret <- lapply(key, function(k) {				
 				haskey <- exists(k, envir=x@cache, inherits=FALSE)
 				if (!haskey) {
@@ -348,6 +350,15 @@ BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 #' @param volumeList a named list of \code{\linkS4class{BrainVolume}} instances
 #' @export BrainBucket
 #' @rdname BrainBucket-class
+#' @examples 
+#' vol1 <- BrainVolume(rnorm(24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
+#' vol2 <- BrainVolume(rnorm(24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
+#' vol3 <- BrainVolume(rnorm(24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
+#' vlist <- list(vol1,vol2,vol3)
+#' names(vlist) <- paste0("V", 1:3)
+#' bucket <- BrainBucket(vlist)
+#' all.equal(dim(bucket[[1]]), dim(vol1))
+#' @return an instance of class \code{\linkS4class{BrainBucket}}
 #' 
 BrainBucket <- function(volumeList) {
   
@@ -368,15 +379,16 @@ BrainBucket <- function(volumeList) {
   sp <- space(volumeList[[1]])
   D <- c(dim(sp), length(volumeList))
   
-  meta <- BrainMetaInfo(D, spacing(sp), origin=origin(sp), dataType="FLOAT", label="", spatialAxes=axes(sp))
-  
+  meta <- BrainMetaInfo(D, spacing(sp), origin=origin(sp), dataType="FLOAT", label=vnames, spatialAxes=axes(sp))
+
   sourceList <- lapply(1:length(volumeList), function(i) { 
     volumeList[[i]]@source
+
   })
   
   bsource <- new("BrainBucketSource", metaInfo=meta, indices=1:length(volumeList), sourceList=sourceList, cache=new.env(hash=TRUE))
   
-  new("BrainBucket", source=bsource,space=addDim(sp, length(volumeList)), labels=vnames,data=volumeList)
+  new("BrainBucket", source=bsource,space=addDim(sp, length(volumeList)), labels=vnames, data=volumeList)
 }
   
   
@@ -455,16 +467,25 @@ loadVolumeList <- function(fileNames, mask=NULL) {
 }
 
 #' extract labeled volume from \code{BrainBucket}
-setMethod(f="[[", signature=signature(x="BrainBucket", i = "character", j = "missing"),
+#' @param x the object
+#' @param i the first index
+setMethod(f="[[", signature=signature(x="BrainBucket", i = "index", j = "missing"),
 		def=function(x, i) {
-			loadData(x@source, i)
+		  x@data[[i]]
+			#loadData(x@source, i)
 		})
 
-#' extract indexed volume from \code{BrainBucket}
-setMethod(f="[[", signature=signature(x="BrainBucket", i = "numeric", j = "missing"),
-		def=function(x, i) {    
-			loadData(x@source, i)
-		})
+
+#' extract labeled volume from \code{BrainBucket}
+#' @export
+#' @param x the object
+#' @param i first index
+setMethod(f="[", signature=signature(x="BrainBucket", i = "index", j = "missing"),
+          def=function(x, i) {
+            x@data[i]
+            #loadData(x@source, i)
+          })
+
 
 
 
@@ -472,8 +493,9 @@ setAs("DenseBrainVector", "array", function(from) from@.Data)
 
 setAs("BrainVector", "array", function(from) from[,,,])
 
-
-
+#' show a \code{BrainVectorSource}
+#' @param object the object
+#' @export
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
 		def=function(object) {
@@ -488,12 +510,13 @@ setMethod(f="show",
 
 
 
-#' show
-#' @rdname show-methods
+#' show a \code{BrainVector}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("BrainVector"),
           def=function(object) {
             sp <- space(object)
-            cat("BrainVector\n")
+            cat(class(object), "\n")
             cat("  Type           :", class(object), "\n")
             cat("  Dimension      :", dim(object), "\n")
             cat("  Spacing        :", paste(paste(sp@spacing[1:(length(sp@spacing)-1)], " X ", collapse=" "), 
@@ -676,13 +699,34 @@ setMethod(f="concat", signature=signature(x="BrainVolume", y="BrainVector"),
 #' @rdname scaleSeries-methods
 #' @export
 setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="logical", scale="logical"),
-          def=function(x, center=TRUE, scale=TRUE) {
+          def=function(x, center, scale) {
             M <- as.matrix(x)
             Ms <- scale(t(M), center, scale)
             BrainVector(Ms, space(x))
              		
           })
 
+#' @rdname scaleSeries-methods
+#' @export
+setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="missing", scale="logical"),
+          def=function(x, center, scale) {
+            callGeneric(x, TRUE, scale)
+          })
+
+
+#' @rdname scaleSeries-methods
+#' @export
+setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="missing", scale="missing"),
+          def=function(x, center, scale) {
+            callGeneric(x, TRUE, TRUE)
+          })
+
+#' @rdname scaleSeries-methods
+#' @export
+setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="logical", scale="missing"),
+          def=function(x, center, scale) {
+            callGeneric(x, center, TRUE)
+          })
 
 
 #' @rdname concat-methods
@@ -710,8 +754,6 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 
 
 #' @rdname series-methods
-#' @param j index of second dimension
-#' @param k index of third dimension
 #' @export
 setMethod("series", signature(x="BrainVector", i="numeric"),
 		def=function(x,i, j, k) {	
@@ -770,9 +812,9 @@ setAs(from="DenseBrainVector", to="matrix",
 		})
 
 
-#' convert a BrainVector to a \code{list} of volumes
-#' 
+#' convert a \code{BrainVector} to \code{list} of volumes. 
 #' @rdname as.list-methods
+#' @param x the object
 #' @export 
 setMethod(f="as.list", signature=signature(x = "BrainVector"), def=function(x) {
   out = list()
@@ -784,16 +826,30 @@ setMethod(f="as.list", signature=signature(x = "BrainVector"), def=function(x) {
 })
 
 
-#' convert a DenseBrainVector to a matrix
+#' convert a \code{DenseBrainVector} to a matrix
 #' 
 #' @rdname as.matrix-methods
+#' @param x the object
 #' @export 
 setMethod(f="as.matrix", signature=signature(x = "DenseBrainVector"), def=function(x) {
 			as(x, "matrix")						
 		})
 
-#' convert a DenseBrainVector to a SparseBrainVector
-#' 
+ 
+#' @rdname as.sparse-methods
+#' @export
+setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="LogicalBrainVolume"),
+          def=function(x, mask) {
+            assert_that(all(dim(x)[1:3] == dim(mask)))
+            assert_that(all(spacing(x) == spacing(mask)))
+            
+            vdim <- dim(x)[1:3]
+            dat <- as.matrix(x)[mask == TRUE,]
+            bvec <- SparseBrainVector(dat, space(x), logivol)
+            
+          })
+
+ 
 #' @rdname as.sparse-methods
 setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric"),
 		def=function(x, mask) {
