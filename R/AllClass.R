@@ -137,6 +137,7 @@ setClass("FreesurferAsciiSurfaceFileDescriptor", contains=c("BrainFileDescriptor
 #' 
 #' This is a base class to represent meta information
 #' @rdname BaseMetaInfo-class
+#' @exportClass BaseMetaInfo
 setClass("BaseMetaInfo")
 
 #' NullMetaInfo
@@ -290,6 +291,8 @@ setClass("FileMetaInfo",
 #' NifTIMetaInfo
 #' 
 #' This class contains meta information for a NIfTI image file
+#' @rdname FileMetaInfo-class
+#' @slot nifti_header a \code{list} of attributes specific to the NIfTI file format 
 #' @export	
 setClass("NIfTIMetaInfo",
     representation=(nifti_header="list"),
@@ -344,6 +347,7 @@ setClass("BrainSource", representation=
 #' low level IO and image loading functionality.
 #' @rdname BrainFileSource-class
 #' @slot metaInfo meta information for the data source
+#' @exportClass BrainFileSource
 setClass("BrainFileSource", representation=
 				representation(metaInfo="FileMetaInfo"),
 				contains=c("BrainSource"))
