@@ -202,7 +202,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			header=nifti_header)
 }
 
-<<<<<<< HEAD
+
 setMethod(f="show", signature=signature("SurfaceGeometryMetaInfo"), 
           def=function(object) {
             cat("an instance of class",  class(object), "\n\n")
@@ -220,11 +220,9 @@ setMethod(f="show", signature=signature("SurfaceDataMetaInfo"),
             cat("label:", "\t", object@label, "\n")
           })
 
-=======
 #' show a \code{FileMetaInfo}
 #' @param object the object
 #' @export
->>>>>>> 8d4a39e7d673c84aff4d0c52f163d92e051ec62c
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")

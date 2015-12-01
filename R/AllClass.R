@@ -366,7 +366,7 @@ setClass("BrainFileSource", representation=
 
 #' BrainVectorSource
 #' 
-#' A class that is used to produce a \code{\linkS4class{BrainVector}} instance
+#' A class that is used to produce a \code{\linkS4class{BrainVectorSource}} instance
 #' @rdname BrainVectorSource-class
 #' @slot indices the index vector of the volumes to be loaded
 #' @export
@@ -377,12 +377,12 @@ setClass("BrainFileSource", representation=
 
 #' BrainSurfaceVectorSource
 #' 
-#' A class that is used to produce a \code{\linkS4class{BrainSurfaceVector}} instance
+#' A class that is used to produce a \code{\linkS4class{BrainSurfaceVectorSource}} instance
 #' 
 #' @rdname BrainSurfaceVectorSource-class
 #' @slot indices the index vector of the volumes to be loaded
 #' @export
-setClass("BrainVectorSource", representation=
+setClass("BrainSurfaceVectorSource", representation=
            representation(indices="integer"),
          contains=c("BaseSource"))
 

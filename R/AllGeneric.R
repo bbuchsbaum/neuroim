@@ -265,7 +265,7 @@ setGeneric(name="readElements", def=function(x, numElements) standardGeneric("re
 
 #' Generic function to read a set of column vector from an input source (e.g. \code{ColumnReader})
 #' @param x the input channel
-#' @param columnIndices
+#' @param columnIndices the column indices
 #' @return a \code{matrix} consisting of the requested column vectors 
 #' @export 
 #' @rdname readColumns-methods
@@ -432,7 +432,6 @@ setGeneric(name="eachVolume", def=function(x, FUN, withIndex, mask, ...) standar
 #' @param ... additional arguments
 #' @return a list of \code{BrainVolume} elements
 #' @export 
-#' 
 #' @examples 
 #' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
 #' vol <- takeVolume(bvec,1)

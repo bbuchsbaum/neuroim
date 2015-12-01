@@ -1,3 +1,5 @@
+
+
 #' load an surface from a set of files
 #' @param surfaceName the name of the file containing the surface geometry.
 #' @param surfaceDataName the name of the file containing the values to be mapped to the surface.
@@ -31,7 +33,6 @@ BrainSurfaceSource <- function(surfaceName, surfaceDataName, index=1) {
 }
 
 
-setMethod(f="loadData", signature=c("BrainSurfaceSource"), 
 
 #' load a BrainSurface
 #' @export loadData
