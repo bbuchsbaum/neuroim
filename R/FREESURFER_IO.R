@@ -5,15 +5,15 @@ readFreesurferAsciiHeader <- function(fileName) {
 }
 
 #' @importFrom readr read_table
-#' @importFrom rgl tmesh3d
+#' @import rgl 
 readFreesurferAsciiGeometry<- function(fileName) {
   ninfo <- as.integer(strsplit(readLines(fileName, n=2)[2], " ")[[1]])
-  asctab <- readr::read_table(fileName, skip=2)
+  asctab <- read_table(fileName, skip=2)
   
   vertices <- as.matrix(asctab[1:ninfo[1],1:3])
   nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
   
-  list(mesh=tmesh3d(vertices, nodes), headerFile=fileName, dataFile=fileName)
+  list(mesh=rgl::tmesh3d(vertices, nodes), headerFile=fileName, dataFile=fileName)
   
 }
 

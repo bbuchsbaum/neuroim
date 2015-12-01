@@ -6,14 +6,15 @@ Imports:
     igraph,
     Rvcg,
     rgl,
-    Rcpp
+    Rcpp,
+    readr
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
-Title: Reading, Writing and Manipulating neuroimaging data
+Title: Reading, Writing and Manipulating Neuroimaging Data
 Type: Package
 Author: Bradley R. Buchsbaum
-Description: neuroim is a collection of data structures that represent
+Description: A collection of data structures that represent
     volumetric brain imaging data. The focus is on basic data handling for 3D
     and 4D neuroimaging data. In addition, there are function to read and write
     NIFTI files and limited support for reading AFNI files.
@@ -28,7 +29,6 @@ Depends:
     iterators,
     abind,
     methods,
-    assertthat
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'
@@ -55,4 +55,4 @@ Collate:
     'conncomp.R'
     'datadoc.R'
     'neuroim.R'
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

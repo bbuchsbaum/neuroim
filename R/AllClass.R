@@ -3,7 +3,7 @@
 roxygen()
 
 
-
+setOldClass("mesh3d")
 setOldClass(c("file", "connection"))
 setOldClass(c("gzfile", "connection"))
 
@@ -667,12 +667,11 @@ setClass("Kernel",
 #' a three-dimensional surface consisting of a set of triangle vertices with one value per vertex.
 #' @rdname BrainSurface-class
 #' @slot source the data source for the surface
-#' @slot mesh the underlying \code{tmesh3d} object 
+#' @slot mesh the underlying \code{mesh3d} object 
 #' @slot data the vector of data value at each vertex of the mesh
-#' @importFrom rgl tmesh3d
 #' @export
 setClass("BrainSurface", 
-         representation=representation(source="BrainSource", mesh="tmesh3d", data="numeric"))
+         representation=representation(source="BrainSource", mesh="mesh3d", data="numeric"))
 
 #' BrainSurfaceVector
 #' 
@@ -680,12 +679,11 @@ setClass("BrainSurface",
 #' 
 #' @rdname BrainSurfaceVector-class
 #' @slot source the data source for the surface
-#' @slot mesh the underlying \code{tmesh3d} object 
+#' @slot mesh the underlying \code{mesh3d} object 
 #' @slot mat a matrix of values where each column contains a vector of values over the surface nodes.
-#' @importFrom rgl tmesh3d
 #' @export
 setClass("BrainSurfaceVector", 
-         representation=representation(source="BrainSource", mesh="tmesh3d", mat="numeric"))
+         representation=representation(source="BrainSource", mesh="mesh3d", mat="numeric"))
 
 #' BrainBucket
 #' 
