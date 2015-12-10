@@ -3,7 +3,6 @@ Imports:
     Matrix,
     yaImpute,
     assertthat,
-    rgl,
     Rcpp,
     readr
 LinkingTo: Rcpp
@@ -19,7 +18,8 @@ Description: A collection of data structures that represent
 Version: 0.0.5
 Date: 2015-11-29
 Suggests:
-    testthat
+    testthat,
+    rgl
 Depends:
     R (>= 3.0.0),
     stringr,
