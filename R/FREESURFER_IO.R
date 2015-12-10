@@ -5,8 +5,11 @@ readFreesurferAsciiHeader <- function(fileName) {
 }
 
 #' @importFrom readr read_table
-#' @import rgl 
 readFreesurferAsciiGeometry<- function(fileName) {
+  if (!requireNamespace("rgl", quietly = TRUE)) {
+    stop("Pkg needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
   ninfo <- as.integer(strsplit(readLines(fileName, n=2)[2], " ")[[1]])
   asctab <- read_table(fileName, skip=2)
   
