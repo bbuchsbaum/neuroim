@@ -5,8 +5,7 @@
 \alias{takeVolume}
 \alias{takeVolume,BrainVector,numeric-method}
 \alias{takeVolume,SparseBrainVector,numeric-method}
-\title{Generic function to extract a volume from a four-dimensional image
-Generic function to extract a one or more individual volumes from a four-dimensional image}
+\title{Generic function to extract a one or more individual volumes from a four-dimensional image}
 \usage{
 takeVolume(x, i, ...)
 
@@ -27,7 +26,6 @@ takeVolume(x, i, ...)
 a list of \code{BrainVolume} elements
 }
 \description{
-Generic function to extract a volume from a four-dimensional image
 Generic function to extract a one or more individual volumes from a four-dimensional image
 }
 \examples{

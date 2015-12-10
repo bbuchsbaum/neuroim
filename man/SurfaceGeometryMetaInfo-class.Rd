@@ -14,7 +14,13 @@ This class contains meta information for brain surface geometry
 \section{Slots}{
 
 \describe{
-\item{\code{nodes}}{the number of surface vertices}
+\item{\code{headerFile}}{name of the file containing meta information}
+
+\item{\code{dataFile}}{name of the file containing data}
+
+\item{\code{fileDescriptor}}{descriptor of image file format}
+
+\item{\code{vertices}}{the number of surface vertices}
 
 \item{\code{faces}}{the number of faces}
 

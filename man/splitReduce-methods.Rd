@@ -56,7 +56,7 @@ all.equal(row.names(ms), levels(fac))
 ## compute column medians of each sub-matrix
 ms <- splitReduce(mat, fac, median)
 
-## compute time-series means grouped over voxels. here, \\code{length(fac)} must equal the number of voxels: \\code{prod(dim(bvec)[1:3]}
+## compute time-series means grouped over voxels. 
 bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
 fac <- factor(sample(1:3, prod(dim(bvec)[1:3]), replace=TRUE))
 ms <- splitReduce(bvec, fac)

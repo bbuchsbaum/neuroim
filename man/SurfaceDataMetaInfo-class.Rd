@@ -14,6 +14,12 @@ This class contains meta information for surface-based data (the values that map
 \section{Slots}{
 
 \describe{
+\item{\code{headerFile}}{name of the file containing meta information}
+
+\item{\code{dataFile}}{name of the file containing data}
+
+\item{\code{fileDescriptor}}{descriptor of image file format}
+
 \item{\code{nodeCount}}{the number of nodes for which surface data exists}
 
 \item{\code{nels}}{the number of data vectors (typically the number of columns in the surface data matrix; nels = 1 for a single surface data set)}

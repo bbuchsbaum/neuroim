@@ -27,7 +27,7 @@ setMethod(f="dim", signature=signature("FileMetaInfo"),
 		})
 
 
-#' @rdname loadData-methods
+# @rdname loadData-methods
 # setMethod(f="loadData", signature=signature(""))
 
 
@@ -202,7 +202,9 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			header=nifti_header)
 }
 
-
+#' show an \code{SurfaceGeometryMetaInfo}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("SurfaceGeometryMetaInfo"), 
           def=function(object) {
             cat("an instance of class",  class(object), "\n\n")
@@ -212,6 +214,9 @@ setMethod(f="show", signature=signature("SurfaceGeometryMetaInfo"),
             cat("embed dimension:", "\t", object@embedDimension, "\n")
           })
 
+#' show an \code{SurfaceDataMetaInfo}
+#' @param object the object
+#' @export
 setMethod(f="show", signature=signature("SurfaceDataMetaInfo"), 
           def=function(object) {
             cat("an instance of class",  class(object), "\n\n")

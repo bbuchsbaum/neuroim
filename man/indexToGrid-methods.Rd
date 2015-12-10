@@ -35,7 +35,6 @@ Generic function to convert 1D indices to N-dimensional grid coordinates
  bvol <- BrainVolume(array(0, c(10,10,10)), BrainSpace(c(10,10,10), c(1,1,1)))
  idx <- 1:10
  g <- indexToGrid(bvol, idx)
- vol[g]
  bvol[g]
 
 }

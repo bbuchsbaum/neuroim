@@ -7,7 +7,7 @@
 \alias{as.sparse,DenseBrainVector,numeric-method}
 \alias{as.sparse,DenseBrainVolume,LogicalBrainVolume-method}
 \alias{as.sparse,DenseBrainVolume,numeric-method}
-\title{Convert to sparse representation}
+\title{Convert to from dense to sparse representation}
 \usage{
 as.sparse(x, mask, ...)
 
@@ -20,17 +20,14 @@ as.sparse(x, mask, ...)
 \S4method{as.sparse}{DenseBrainVolume,numeric}(x, mask)
 }
 \arguments{
-\item{x}{the object to sparsify
-Convert to from dense to sparse representation}
+\item{x}{the object to make sparse, e.g. \code{DenseBrainVolume} or \code{DenseBrainVector}}
 
 \item{mask}{the elements to retain}
 
 \item{...}{additional arguments}
-
-\item{x}{the object to make sparse, e.g. \code{DenseBrainVolume} or \code{DenseBrainVector}}
 }
 \description{
-Convert to sparse representation
+Convert to from dense to sparse representation
 }
 \details{
 \code{mask} can be an integer vector of 1D indices or a mask volume of class \code{LogicalBrainVolume}

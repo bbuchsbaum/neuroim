@@ -14,6 +14,7 @@ loadSurface  <- function(surfaceName, surfaceDataName) {
 #' 
 #' @param surfaceName the name of the file containing the surface geometry.
 #' @param surfaceDataName the name of the file containing the data values to be mapped to the surface.
+#' @param index the integer offset into the surface data matrix
 #' @export 
 #' @rdname BrainSurfaceSource-class
 BrainSurfaceSource <- function(surfaceName, surfaceDataName, index=1) {

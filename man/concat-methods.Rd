@@ -23,16 +23,11 @@ concat(x, y, ...)
 \S4method{concat}{DenseBrainVolume,DenseBrainVolume}(x, y, ...)
 }
 \arguments{
-\item{x}{the first object}
-
-\item{y}{the second object
-Concatenate two data objects}
-
-\item{...}{additional objects}
-
 \item{x}{the first object, typically \code{BrainVolume} or \code{BrainVector}}
 
 \item{y}{the second object, typically \code{BrainVolume} or \code{BrainVector}}
+
+\item{...}{additional objects}
 }
 \description{
 Concatenate two objects

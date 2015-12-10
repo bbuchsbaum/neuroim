@@ -30,7 +30,6 @@ Construct a series iterator
 }}
 \examples{
 
-## create a BrainVector with 10X10X10X10, where the last dimension is by convention the 'series' dim.
 bvec <- BrainVector(array(rnorm(10*10*10*10), c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 iter <- seriesIter(bvec)
 

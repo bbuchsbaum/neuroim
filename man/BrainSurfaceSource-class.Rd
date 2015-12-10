@@ -12,6 +12,8 @@ BrainSurfaceSource(surfaceName, surfaceDataName, index = 1)
 \item{surfaceName}{the name of the file containing the surface geometry.}
 
 \item{surfaceDataName}{the name of the file containing the data values to be mapped to the surface.}
+
+\item{index}{the integer offset into the surface data matrix}
 }
 \description{
 A class that is used to produce a \code{\linkS4class{BrainSurface}} instance

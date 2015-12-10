@@ -3,8 +3,6 @@ Imports:
     Matrix,
     yaImpute,
     assertthat,
-    igraph,
-    Rvcg,
     rgl,
     Rcpp,
     readr

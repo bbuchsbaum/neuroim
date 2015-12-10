@@ -34,7 +34,6 @@ Generic function to write a 4D image vector to disk
 }
 \examples{
 
-bvec <- BrainVector(array(0, c(10,10,10,10), BrainSpace(c(10,10,10,10), c(1,1,1)))
 bvec <- BrainVector(array(0, c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 \dontrun{
 writeVector(bvol, "out.nii")

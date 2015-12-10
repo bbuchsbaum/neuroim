@@ -44,21 +44,15 @@ eachVolume(x, FUN, withIndex, mask, ...)
   mask, ...)
 }
 \arguments{
-\item{x}{four-dimensional image}
+\item{x}{four-dimensional image, e.g. of class \code{BrainVector}}
 
-\item{FUN}{a \code{function} taking one or two arguments (depending on the value of \code{withIndex}}
+\item{FUN}{a \code{function} taking one or two arguments (depending on the value of \code{withIndex})}
 
 \item{withIndex}{whether the index of the volume supplied as the second argument to the function}
 
 \item{mask}{an image mask indicating subset of volume elements to apply function over}
 
 \item{...}{additional arguments}
-
-\item{x}{four-dimensional image, e.g. of class \code{BrainVector}}
-
-\item{FUN}{a \code{function} taking one or two arguments (depending on the value of \code{withIndex})}
-
-\item{mask}{an image mask indicating subset of elements to apply function over.}
 }
 \value{
 a \code{list} of results of apply \code{FUN} to each volume.

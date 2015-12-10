@@ -20,7 +20,6 @@ inverseTrans(x)
 Generic getter to extract inverse image coordinate transformation
 }
 \examples{
-bspace <- BrainSpace(c(10,10,10), c(2,2,2)
 bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 itrans <- inverseTrans(bspace)
 identical(trans(bspace) \%*\% inverseTrans(bspace), diag(4))

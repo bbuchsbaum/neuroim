@@ -26,10 +26,6 @@ scaleSeries(x, center, scale)
 \item{center}{a \code{logical} value indicating whether series should be centered}
 
 \item{scale}{a \code{logical} value indicating whether series should be divided by standard deviation}
-
-\item{center}{a \code{logical} value indicating whether series should be centered. \code{TRUE} if not specified.}
-
-\item{scale}{a \code{logical} value indicating whether series should be divided by standard deviation. \code{TRUE} if not specified.}
 }
 \description{
 Generic functions to scale (center and/or normalize by standard deviation) each series of a 4D image

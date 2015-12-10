@@ -172,7 +172,10 @@ setMethod(f="show",
 #' This class contains meta information for brain surface geometry
 #' 
 #' @rdname SurfaceGeometryMetaInfo-class
-#' @slot nodes the number of surface vertices
+#' @slot headerFile name of the file containing meta information
+#' @slot dataFile name of the file containing data
+#' @slot fileDescriptor descriptor of image file format
+#' @slot vertices the number of surface vertices
 #' @slot faces the number of faces
 #' @slot embedDimension the dimensionality of the embedding
 #' @slot label a label indicating the type of surface (e.g. white, pial, inflated, flat, spherical)
@@ -202,6 +205,9 @@ setClass("FreesurferSurfaceGeometryMetaInfo", contains=c("SurfaceGeometryMetaInf
 #' This class contains meta information for surface-based data (the values that map to a surface geometry)
 #' 
 #' @rdname SurfaceDataMetaInfo-class
+#' @slot headerFile name of the file containing meta information
+#' @slot dataFile name of the file containing data
+#' @slot fileDescriptor descriptor of image file format
 #' @slot nodeCount the number of nodes for which surface data exists
 #' @slot nels the number of data vectors (typically the number of columns in the surface data matrix; nels = 1 for a single surface data set)
 #' @slot label a label indicating the type of surface (e.g. white, pial, inflated, flat, spherical)

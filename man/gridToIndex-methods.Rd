@@ -23,10 +23,6 @@ gridToIndex(x, coords)
 \S4method{gridToIndex}{BrainVolume,numeric}(x, coords)
 }
 \arguments{
-\item{x}{the object}
-
-\item{coords}{a matrix where each row is a corodinate or a vector of length N}
-
 \item{x}{the object, typically a \code{BrainVolume} or \code{BrainSpace} instance.}
 
 \item{coords}{a matrix where each row is a coordinate or a vector of length equal to \code{ndim(x)}}
