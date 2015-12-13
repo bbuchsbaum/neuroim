@@ -234,6 +234,8 @@ setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 #' Generic getter to extract image coordinate transformation
 #' @param x an object with a transformation
 #' @export 
+#' @details 
+#' This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
 #' @details This function returns a transformation that can be used to go from "grid coordinates" to "real world coordinates" in millimeters.
 #' see \code{\linkS4class{BrainSpace}}
 #' @examples 
@@ -261,6 +263,14 @@ setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 #' @rdname readElements-methods
 setGeneric(name="readElements", def=function(x, numElements) standardGeneric("readElements"))
 
+#' Generic function to read a set of column vector from an input source (e.g. \code{ColumnReader})
+#' @param x the input channel
+#' @param columnIndices the column indices
+#' @return a \code{matrix} consisting of the requested column vectors 
+#' @export 
+#' @rdname readColumns-methods
+setGeneric(name="readColumns", def=function(x, columnIndices) standardGeneric("readColumns"))
+
 
 #' Generic function to write a sequence of elements from an input source
 #' @param x the output channel
@@ -277,6 +287,9 @@ setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElem
 #' @param dataType output data type, If specified should be a \code{character} vector of: "BINARY", "UBYTE", "SHORT", "INT", "FLOAT", "DOUBLE". 
 #' Otherwise output format will be inferred from R the datatype of the image.
 #' @export 
+#' @details 
+#'  
+#'  The output format will be inferred from file extension.
 #' @details The output format will be inferred from file extension.
 #'  \code{writeVolume(x, "out.nii")} outputs a NIFTI file.
 #'  \code{writeVolume(x, "out.nii.gz")} outputs a gzipped NIFTI file.
@@ -306,6 +319,8 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' 
 #' bvec <- BrainVector(array(0, c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
 #' \dontrun{
+#' writeVector(bvol, "out.nii")
+#' writeVector(bvol, "out.nii.gz")
 #' writeVector(bvec, "out.nii")
 #' writeVector(bvec, "out.nii.gz")
 #' }
@@ -358,6 +373,7 @@ setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coord
 #' @rdname coordToGrid-methods
 setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
+#' Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
 #' Generic function to convert N-dimensional grid coordinates to real world coordinates
 #' @param x the object
 #' @param coords a matrix of grid coordinates
@@ -390,7 +406,7 @@ setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridTo
 #' @param x four-dimensional image, e.g. of class \code{BrainVector}
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex})
 #' @param withIndex whether the index of the volume supplied as the second argument to the function
-#' @param mask an image mask indicating subset of elements to apply function over.
+#' @param mask an image mask indicating subset of volume elements to apply function over
 #' @param ... additional arguments
 #' @return a \code{list} of results of apply \code{FUN} to each volume.
 #' @export 
@@ -408,7 +424,6 @@ setGeneric(name="eachVolume", def=function(x, FUN, withIndex, mask, ...) standar
 #' @param ... additional arguments
 #' @return a list of \code{BrainVolume} elements
 #' @export 
-#' 
 #' @examples 
 #' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
 #' vol <- takeVolume(bvec,1)
@@ -419,6 +434,29 @@ setGeneric(name="eachVolume", def=function(x, FUN, withIndex, mask, ...) standar
 #' class(vol) == "list"
 #' @rdname takeVolume-methods
 setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolume"))
+
+#' Generic function to extract a sub-vector from a \code{BrainVector} object.
+#' @param x four-dimensional image
+#' @param i the indices of the volume(s) to extract
+#' @param ... additional arguments
+#' @return a  \code{BrainVector} object that is a sub-vector of the supplied object.
+#' @export 
+#' @examples 
+#' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
+#' vec <- subVector(bvec,1:2)
+#' all.equal(2, dim(vec)[4])
+#' 
+#' vec <- subVector(bvec, c(1,3,5,7))
+#' all.equal(4, dim(vec)[4])
+#' 
+#' mask <- LogicalBrainVolume(rep(TRUE, 24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
+#' svec <- SparseBrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), 
+#' BrainSpace(c(24,24,24,24), c(1,1,1)), mask)
+#' vec <- subVector(svec, c(1,3,5))
+#' all.equal(3, dim(vec)[4])
+#' @rdname subVector-methods
+setGeneric(name="subVector", def=function(x, i, ...) standardGeneric("subVector"))
+
 
 
 #' Generic functions to apply a function to each (2D) slice of an image
@@ -447,8 +485,8 @@ setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGener
 #' Generic functions to scale (center and/or normalize by standard deviation) each series of a 4D image
 #' That is, if the 4th dimension is 'time' each series is a 1D time series.
 #' @param x a four dimensional image
-#' @param center a \code{logical} value indicating whether series should be centered. \code{TRUE} if not specified.
-#' @param scale a \code{logical} value indicating whether series should be divided by standard deviation. \code{TRUE} if not specified.
+#' @param center a \code{logical} value indicating whether series should be centered
+#' @param scale a \code{logical} value indicating whether series should be divided by standard deviation
 #' @export 
 #' @examples 
 #' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
@@ -465,6 +503,7 @@ setGeneric(name="scaleSeries", def=function(x, center, scale) standardGeneric("s
 #' @export 
 #' @rdname takeSeries-methods
 setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("takeSeries"))
+
 
 
 #' Convert to from dense to sparse representation
@@ -591,7 +630,7 @@ setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standa
 #' @rdname permMat-methods
 setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))   
 
-#' Concatenate two data objects
+#' Concatenate two objects
 #' @param x the first object, typically \code{BrainVolume} or \code{BrainVector}
 #' @param y the second object, typically \code{BrainVolume} or \code{BrainVector}
 #' @details The \code{x} and \code{y} images must have compatible dimensions. a \code{BrainVolume} can be concatenated to \code{BrainVector}, and vice versa. See examples.
@@ -672,5 +711,64 @@ if (!isGeneric("as.raster"))
 #' @rdname overlay-methods
 setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
 
+
+#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to either header file or data file
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export fileMatches
+#' @rdname fileMatches-methods
+setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
+
+
+#' Generic function to test whether a file name conforms to the given \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to header file only
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export headerFileMatches
+#' @rdname headerFileMatches-methods
+setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
+
+#' Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' Will test for match to data file only
+#' @param x object for which the file name is to matched to
+#' @param fileName file name to be matched
+#' @return TRUE for match, FALSE otherwise
+#' @export dataFileMatches
+#' @rdname dataFileMatches-methods
+setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
+
+#' Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return the correct header name
+#' @export headerFile
+#' @rdname headerFile-methods
+setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
+
+#' Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return the correct header name
+#' @export dataFile
+#' @rdname dataFile-methods
+setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
+
+#' Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name to be stripped of its extension
+#' @return fileName without extension
+#' @export stripExtension
+#' @rdname stripExtension-methods
+setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
+
+#' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
+#' @param x descriptor instance
+#' @param fileName file name contianing meta information
+#' @export readMetaInfo
+#' @rdname readMetaInfo-methods
+setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 

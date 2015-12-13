@@ -111,7 +111,7 @@ setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", 
           })
 
 
-#' 
+
 #' @export
 #' @rdname splitScale-methods
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="logical", scale="logical"),
@@ -265,25 +265,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
   
 }
 
-#' .indexToGrid
-#' @rdname internal-methods
-#' @keywords internal
-#.indexToGrid <- function(idx, array.dim) {
-#	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
-#	rank = length(array.dim)
-#	wh1 = idx-1
-#	wh = 1 + wh1 %% array.dim[1]
-#	wh = rep(wh, rank)
-#	if (rank >=2) {
-#		denom = 1
-#		for (i in 2:rank) {
-#			denom = denom * array.dim[i-1]
-#			nextd1 = wh1%/%denom
-#			wh[i] = 1 + nextd1%%array.dim[i]
-#		}
-#	}
-#	wh
-#}
+
 
 #' .getRStorage
 #' @rdname internal-methods

@@ -73,7 +73,7 @@ setMethod(f="show", signature=signature("BrainSpace"),
 #' @rdname addDim-methods
 setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 		def=function(x, n) {
-			BrainSpace(c(dim(x), n), origin(x), spacing(x), axes(x), trans(x))
+			BrainSpace(c(dim(x), n), origin=origin(x), spacing=spacing(x), axes=axes(x), trans=trans(x))
 		})
 
 

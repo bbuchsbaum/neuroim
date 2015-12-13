@@ -601,6 +601,19 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 
 
 
+#' @rdname subVector-methods
+#' @export
+setMethod(f="subVector", signature=signature(x="DenseBrainVector", i="numeric"),
+          def=function(x, i) {
+            xs <- space(x)
+            dat <- x@.Data[,,,i]
+            
+            newdim <- c(dim(x)[1:3], length(i))
+            bspace <- BrainSpace(newdim, spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
+            DenseBrainVector(dat, bspace)
+          })
+
+
 #' @rdname takeVolume-methods
 #' @param merge concatenate extracted volumes
 #' @export
@@ -845,7 +858,7 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="Logical
             
             vdim <- dim(x)[1:3]
             dat <- as.matrix(x)[mask == TRUE,]
-            bvec <- SparseBrainVector(dat, space(x), logivol)
+            bvec <- SparseBrainVector(dat, space(x), mask)
             
           })
 

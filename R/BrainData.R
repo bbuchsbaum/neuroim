@@ -8,7 +8,7 @@
 #' @export
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainData"),
-          def=function(x) numdim(x@space))
+          def=function(x) length(dim(x@space)))
 
   
 #' dim of \code{BrainData} object

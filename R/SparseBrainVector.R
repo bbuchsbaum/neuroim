@@ -467,6 +467,17 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 			           
 })
 
+#' @export
+#' @rdname subVector-methods
+setMethod(f="subVector", signature=signature(x="SparseBrainVector", i="numeric"),
+          def=function(x, i) {
+            idx <- which(x@mask > 0)      
+            bspace <- dropDim(space(x))
+            
+            res <- lapply(i, function(i) x@data[i,])
+            res <- do.call("cbind", res)			
+            SparseBrainVector(res, bspace, x@mask)
+          })
 
 
  

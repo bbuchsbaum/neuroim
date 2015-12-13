@@ -1,7 +1,10 @@
 #' Extract connected components from a 3D mask
 #' @export
 #' @param mask a 3D binary array
-#' @return a two-element list of the connected components (cluster index and cluster sizes)
+#' @return a two-element list of the connected components (cluster 'index' and cluster 'size')
+#' The first element 'index' is a 3D array containing the cluster index of the connected component for each voxel.
+#' The second element 'size' is a 3D array consisting of the size of the connected component inhabited by each voxel.
+#' 
 connComp3D <- function(mask) {
 	stopifnot(length(dim(mask)) == 3 && is.logical(mask[1]))
 	
@@ -23,10 +26,10 @@ connComp3D <- function(mask) {
 		if (any(vox == 1) || any(vox == DIM)) {
 			vox.hood <- vox.hood[apply(vox.hood, 1, function(coords) {
 				all(coords > 1 & coords <= DIM)
-			}),]			
+			}),,drop=FALSE]			
 		}
 		
-		vox.hood[labels[vox.hood] !=0,,drop=F]	
+		vox.hood[labels[vox.hood] != 0,,drop=F]	
 	}
 
 	find <- function(i) {
@@ -45,7 +48,7 @@ connComp3D <- function(mask) {
 	for (i in 1:NROW(grid)) {
 		vox <- grid[i,]
 		nabes <- neighbors(vox)
-		if (length(nabes) == 0) {
+		if (nrow(nabes) == 0) {
 			nodes[nextlabel] <- nextlabel				
 			labels[vox[1],vox[2],vox[3]] <- nextlabel
 		} else {

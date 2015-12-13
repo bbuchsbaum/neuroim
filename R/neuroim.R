@@ -7,4 +7,5 @@
 #' 
 #' @docType package
 #' @name neuroim
+#' @details none
 NULL

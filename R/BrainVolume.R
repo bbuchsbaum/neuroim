@@ -635,7 +635,7 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
             zdim <- dim(x)[3]
             
             if (!is.null(mask)) {
-              if (!all.equal(dim(mask), dim(vol))) {
+              if (!all.equal(dim(mask), dim(ovol))) {
                 stop(paste("mask must have same dimensions as input volume"))
               }
               # TODO check that mask is same shape as volume
@@ -694,11 +694,12 @@ setMethod(f="numClusters", signature=signature(x="ClusteredBrainVolume"),
 
 
 #' @rdname clusterCenters-methods
+#' @import parallel
 #' @export
 setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", features="matrix", FUN="missing"), 
           def=function(x, features) {
             cmap <- x@clusterMap
-            res <- mclapply(sort(as.integer(names(cmap))), function(cnum) {
+            res <- parallel::mclapply(sort(as.integer(names(cmap))), function(cnum) {
               idx <- cmap[[as.character(cnum)]]
               mat <- features[idx,]
               colMeans(mat)
@@ -732,6 +733,7 @@ setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="
 
 #' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
 #' @param method clustering method
+#' @import parallel
 #' @rdname partition-methods
 #' @export
 setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
@@ -739,7 +741,7 @@ setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeri
             cmap <- x@clusterMap
             cnums <- sort(as.integer(names(cmap)))
             
-            kres <- mclapply(cnums, function(cnum) {
+            kres <- parallel::mclapply(cnums, function(cnum) {
               idx <- cmap[[as.character(cnum)]]
               fmat <- features[idx,]
               kmeans(fmat, centers=K)
