@@ -19,6 +19,34 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 }
   
 
+.makeSquareGrid <- function(bvol, centroid, surround, fixdim=3) {
+  vspacing <- spacing(bvol)
+  vdim <- dim(bvol)
+  centroid <- as.integer(centroid)
+  
+  dimnums <- seq(1,3)[-fixdim]
+  
+  coords <- lapply(centroid, function(x) { round(seq(x-surround, x+surround)) })
+  coords <- lapply(dimnums, function(i) {
+    x <- coords[[i]]
+    x[x > 0 & x <= vdim[i]]
+  })
+  
+  if (all(sapply(coords, length) == 0)) {
+    stop(paste("invalid cube for centroid", centroid, " with surround", surround, ": volume is zero"))
+  }
+  
+  if (fixdim == 3) {
+    grid <- as.matrix(expand.grid(x=coords[[1]],y=coords[[2]],z=centroid[3]))
+  } else if (fixdim == 2) {
+    grid <- as.matrix(expand.grid(x=coords[[1]],y=centroid[2],z=coords[[2]]))
+  } else if (fixdim == 1) {
+    grid <- as.matrix(expand.grid(x=centroid[1],y=coords[[1]],z=coords[[2]]))
+  }
+  
+  grid
+  
+}
 .makeCubicGrid <- function(bvol, centroid, surround) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
@@ -39,7 +67,57 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 
 
 
-
+#' Create A Square Region of Interest where the z-dimension is fixed at one coordinate.
+#' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
+#' @param centroid the center of the cube in voxel space
+#' @param surround the number of voxels on either side of the central voxel
+#' @param fill optional value(s) to assign to data slot. 
+#' @param nonzero keep only nonzero elements from \code{bvol}. If \code{bvol} is A \code{BrainSpace} then this argument is ignored.
+#' @param fixdim the fixed dimension is the third, or z, dimension.
+#' @return an instance of class \code{ROIVolume}
+#' @examples
+#'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
+#'  square <- RegionSquare(sp1, c(5,5,5), 1)
+#'  vox <- coords(square)
+#'  ## a 3 X 3 X 1 grid
+#'  nrow(vox) == 9
+#' @export
+RegionSquare <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE, fixdim=3) {
+  if (is.matrix(centroid)) {
+    centroid <- drop(centroid)
+  }
+  
+  if (length(centroid) != 3) {
+    stop("RegionSquare: centroid must have length of 3 (x,y,z coordinates)")
+  }
+  
+  if (surround < 0) {
+    stop("'surround' argument cannot be negative")
+  }
+  
+  if (is(bvol, "BrainSpace") && is.null(fill)) {
+    fill = 1
+  }
+  
+  grid <- .makeSquareGrid(bvol,centroid,surround,fixdim=fixdim)
+  
+  vals <- if (!is.null(fill)) {
+    rep(fill, nrow(grid))
+  } else {
+    ## coercion to numeric shouldn't be necessary here.
+    as.numeric(bvol[grid])
+  }   
+  
+  keep <- if (nonzero) {
+    which(vals != 0)    
+  } else {
+    seq_along(vals)
+  }
+  
+  ### add central voxel
+  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[keep, ])
+  
+}
 
   
 #' Create A Cuboid Region of Interest
@@ -368,6 +446,7 @@ setMethod("show", signature=signature(object = "ROIVolume"),
 #' @param vdim the dimensions of the voxels in real units
 #' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel
 #' @param ... additional parameters to the kernel FUN
+#' @importFrom stats dnorm
 #' @export
 Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
   if (length(kerndim) < 2) {

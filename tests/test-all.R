@@ -1,4 +1,4 @@
 library(testthat)
 library(neuroim)
 
-test_package("neuroim")
+test_check("neuroim")

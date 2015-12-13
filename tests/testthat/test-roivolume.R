@@ -1,5 +1,3 @@
-library(testthat)
-library(neuroim)
 
 test_that("can create a RegionSphere", {
   sp1 <- BrainSpace(c(10,10,10), c(1,1,1))

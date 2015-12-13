@@ -8,7 +8,5 @@
 \description{
 Data structures for analysis of neuroimaging data.
 }
-\details{
 
-}
 

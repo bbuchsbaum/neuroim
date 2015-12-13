@@ -29,8 +29,9 @@ Construct a series iterator
 \item \code{SparseBrainVector}: get a seriesIter for a \code{\linkS4class{SparseBrainVector}} instance
 }}
 \examples{
-## create a BrainVector with 10X10X10X10, where the last dimension is by convention the 'series' dim.
-bvec <- BrainVector(array(rnorm(10*10*10*10), c(10,10,10,10)), BrainSpace(c(10,10,10,10), c(1,1,1)))
+## create a BrainVector with 10X10X10X10, where the last dimension is
+## by convention the fourth dimension.
+bvec <- BrainVector(array(rnorm(10*10*10*10), rep(10,4)), BrainSpace(rep(10,4), c(1,1,1)))
 iter <- seriesIter(bvec)
 
 ## compute mean of each series

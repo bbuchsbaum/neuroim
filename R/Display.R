@@ -12,6 +12,7 @@ sliceData <- function(vol, slice, axis=3) {
   imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])    
 }
 
+#' @importFrom grDevices heat.colors
 mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {
   vrange <- range(imslice)
   imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
@@ -49,6 +50,7 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' @return an object of class \code{Layer}
 #' @export
 #' @rdname Layer
+#' @importFrom grDevices gray
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000") {
   new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col)
 }

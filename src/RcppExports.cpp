@@ -9,31 +9,23 @@ using namespace Rcpp;
 IntegerVector gridToIndex3DCpp(IntegerVector array_dim, NumericMatrix voxmat);
 RcppExport SEXP neuroim_gridToIndex3DCpp(SEXP array_dimSEXP, SEXP voxmatSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type array_dim(array_dimSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type voxmat(voxmatSEXP );
-        IntegerVector __result = gridToIndex3DCpp(array_dim, voxmat);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type array_dim(array_dimSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type voxmat(voxmatSEXP);
+    __result = Rcpp::wrap(gridToIndex3DCpp(array_dim, voxmat));
+    return __result;
 END_RCPP
 }
 // indexToGridCpp
 NumericMatrix indexToGridCpp(IntegerVector idx, IntegerVector array_dim);
 RcppExport SEXP neuroim_indexToGridCpp(SEXP idxSEXP, SEXP array_dimSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type array_dim(array_dimSEXP );
-        NumericMatrix __result = indexToGridCpp(idx, array_dim);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type array_dim(array_dimSEXP);
+    __result = Rcpp::wrap(indexToGridCpp(idx, array_dim));
+    return __result;
 END_RCPP
 }

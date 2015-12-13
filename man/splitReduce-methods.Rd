@@ -41,8 +41,9 @@ Generic function to summarize subsets of an object by first splitting by row and
 \details{
 if \code{FUN} is supplied it must take a vector and return a single scalar value. If it returns more than one value, an error will occur.
 
-if \code{x} is a \code{BrainVector} instance then voxels (dims 1:3) are treated as columns and time-series (dim 4) as rows. The summary function then is applied to groups of voxels.
-However, if the goal is to apply a function to groups of time-points, then this can be achieved as follows:
+if \code{x} is a \code{BrainVector} instance then voxels (dims 1:3) are treated as columns and time-series (dim 4) as rows.
+The summary function then is applied to groups of voxels. However, if the goal is to apply a function to groups of time-points,
+then this can be achieved as follows:
 
 \code{ splitReduce(t(as.matrix(bvec)), fac) }
 }
@@ -56,7 +57,8 @@ all.equal(row.names(ms), levels(fac))
 ## compute column medians of each sub-matrix
 ms <- splitReduce(mat, fac, median)
 
-## compute time-series means grouped over voxels. here, \\code{length(fac)} must equal the number of voxels: \\code{prod(dim(bvec)[1:3]}
+## compute time-series means grouped over voxels.
+## Here, \\code{length(fac)} must equal the number of voxels: \\code{prod(dim(bvec)[1:3]}
 bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
 fac <- factor(sample(1:3, prod(dim(bvec)[1:3]), replace=TRUE))
 ms <- splitReduce(bvec, fac)
