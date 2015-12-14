@@ -27,6 +27,9 @@ Three-dimensional brain image, backed by a \code{sparseVector} for \code{Matrix}
 
 Construct a \code{\linkS4class{SparseBrainVolume}} instance
 }
+\details{
+Image data is backed by \code{Matrix::sparseVector}.
+}
 \section{Slots}{
 
 \describe{
@@ -34,11 +37,13 @@ Construct a \code{\linkS4class{SparseBrainVolume}} instance
 }}
 \examples{
 data <- 1:10
-indices = seq(1,1000, length.out=10)
+indices <- seq(1,1000, length.out=10)
 bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
 sparsevol <- SparseBrainVolume(data,bspace,indices=indices)
 densevol <- BrainVolume(data,bspace,indices=indices)
 sum(sparsevol) == sum(densevol)
+
+
 
 }
 

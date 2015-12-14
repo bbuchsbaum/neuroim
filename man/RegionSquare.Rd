@@ -2,17 +2,17 @@
 % Please edit documentation in R/BrainRegion3D.R
 \name{RegionSquare}
 \alias{RegionSquare}
-\title{Create A Square Region of Interest where the z-dimension is fixed at one coordinate.}
+\title{Create a square region of interest where the z-dimension is fixed at one voxel coordinate.}
 \usage{
 RegionSquare(bvol, centroid, surround, fill = NULL, nonzero = FALSE,
   fixdim = 3)
 }
 \arguments{
-\item{bvol}{an \code{BrainVolume} or \code{BrainSpace} instance}
+\item{bvol}{an \code{BrainVolume} or \code{BrainSpace} instance.}
 
-\item{centroid}{the center of the cube in voxel space}
+\item{centroid}{the center of the cube in \emph{voxel} coordinates.}
 
-\item{surround}{the number of voxels on either side of the central voxel}
+\item{surround}{the number of voxels on either side of the central voxel.}
 
 \item{fill}{optional value(s) to assign to data slot.}
 
@@ -21,10 +21,10 @@ RegionSquare(bvol, centroid, surround, fill = NULL, nonzero = FALSE,
 \item{fixdim}{the fixed dimension is the third, or z, dimension.}
 }
 \value{
-an instance of class \code{ROIVolume}
+an instance of class \code{ROIVolume}.
 }
 \description{
-Create A Square Region of Interest where the z-dimension is fixed at one coordinate.
+Create a square region of interest where the z-dimension is fixed at one voxel coordinate.
 }
 \examples{
  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))

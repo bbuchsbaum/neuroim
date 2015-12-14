@@ -11,9 +11,15 @@ BrainSlice(data, space, indices = NULL)
 
 \item{space}{an instance of class BrainSpace}
 
-\item{indices}{linear indices corresponding to data elements}
+\item{indices}{linear indices corresponding used if \code{data} is a 1D vector.}
 }
 \description{
 BrainSlice constructor
+}
+\examples{
+bspace <- BrainSpace(c(64,64), spacing=c(1,1))
+dat <- array(rnorm(64*64), c(64,64))
+bslice <- BrainSlice(dat,bspace, label="test")
+print(bslice) 
 }
 

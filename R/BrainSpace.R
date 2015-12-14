@@ -37,8 +37,12 @@ BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 		trans[1:D,D+1] <- origin
 	}
   
-	if (is.null(axes)) {
+	if (is.null(axes) && length(Dim) == 3) {
 	  axes <- .nearestAnatomy(trans)
+	} else if (is.null(axes) && length(Dim) == 2) {
+	  ### need .nearestAnatomy for 2d slice
+	  ## TODO
+	  axes <- c(LEFT_RIGHT, POSTERIOR_ANTERIOR)
 	}
 	
 	new("BrainSpace", Dim=as.integer(Dim),

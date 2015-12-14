@@ -10,9 +10,9 @@ connComp3D(mask)
 \item{mask}{a 3D binary array}
 }
 \value{
-a two-element list of the connected components (cluster 'index' and cluster 'size')
-The first element 'index' is a 3D array containing the cluster index of the connected component for each voxel.
-The second element 'size' is a 3D array consisting of the size of the connected component inhabited by each voxel.
+a two-element list of the connected components (cluster \code{index} and cluster \code{size})
+The first element \code{index} is a 3D array containing the cluster index of the connected component for each voxel.
+The second element \code{size} is a 3D array consisting of the size of the connected component inhabited by each voxel.
 }
 \description{
 Extract connected components from a 3D mask

@@ -227,8 +227,7 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 			lapply(1:nrow(x@data), function(i) FUN(takeVolume(x, i), ...))					
 		})
 
-#' eachVolume
-#' 
+
 #' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing", mask="LogicalBrainVolume"),

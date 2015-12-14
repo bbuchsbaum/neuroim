@@ -531,8 +531,7 @@ setMethod(f="show", signature=signature("BrainVector"),
 
 
 
-#' eachVolume
-#' 
+ 
 #' @rdname eachVolume-methods
 #' @export
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="missing"),
@@ -540,8 +539,7 @@ setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", w
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt], ...))				
 		})
 
-#' eachVolume
-#' 
+
 #' @rdname eachVolume-methods
 #' @export
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="BrainVolume"),
@@ -553,8 +551,7 @@ setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", w
             })
           })
 
-#' eachVolume
-#' 
+ 
 #' @rdname eachVolume-methods
 #' @export
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing", mask="missing"),

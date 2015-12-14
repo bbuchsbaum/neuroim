@@ -8,10 +8,6 @@ roxygen()
 
 
 
-
-
-
-
 #' @rdname fileMatches-methods
 setMethod(f="fileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {

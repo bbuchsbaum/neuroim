@@ -59,14 +59,6 @@ a \code{list} of results of apply \code{FUN} to each volume.
 }
 \description{
 Generic function to apply a function to each volume of a four-dimensional image
-
-eachVolume
-
-eachVolume
-
-eachVolume
-
-eachVolume
 }
 \examples{
 bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))

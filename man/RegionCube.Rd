@@ -9,9 +9,9 @@ RegionCube(bvol, centroid, surround, fill = NULL, nonzero = FALSE)
 \arguments{
 \item{bvol}{an \code{BrainVolume} or \code{BrainSpace} instance}
 
-\item{centroid}{the center of the cube in voxel space}
+\item{centroid}{the center of the cube in \emph{voxel} coordinates}
 
-\item{surround}{the number of voxels on either side of the central voxel}
+\item{surround}{the number of voxels on either side of the central voxel. A \code{vector} of length 3.}
 
 \item{fill}{optional value(s) to assign to data slot.}
 
@@ -26,7 +26,7 @@ Create A Cuboid Region of Interest
 \examples{
  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
  cube <- RegionCube(sp1, c(5,5,5), 3)
- vox = coords(cube)
+ vox <- coords(cube)
  cube2 <- RegionCube(sp1, c(5,5,5), 3, fill=5)
  
  

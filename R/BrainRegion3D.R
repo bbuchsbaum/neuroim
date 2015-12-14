@@ -67,14 +67,14 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
 
 
 
-#' Create A Square Region of Interest where the z-dimension is fixed at one coordinate.
-#' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
-#' @param centroid the center of the cube in voxel space
-#' @param surround the number of voxels on either side of the central voxel
-#' @param fill optional value(s) to assign to data slot. 
+#' Create a square region of interest where the z-dimension is fixed at one voxel coordinate.
+#' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance.
+#' @param centroid the center of the cube in \emph{voxel} coordinates.
+#' @param surround the number of voxels on either side of the central voxel.
+#' @param fill optional value(s) to assign to data slot.
 #' @param nonzero keep only nonzero elements from \code{bvol}. If \code{bvol} is A \code{BrainSpace} then this argument is ignored.
 #' @param fixdim the fixed dimension is the third, or z, dimension.
-#' @return an instance of class \code{ROIVolume}
+#' @return an instance of class \code{ROIVolume}.
 #' @examples
 #'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
 #'  square <- RegionSquare(sp1, c(5,5,5), 1)
@@ -122,15 +122,15 @@ RegionSquare <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE, fix
   
 #' Create A Cuboid Region of Interest
 #' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
-#' @param centroid the center of the cube in voxel space
-#' @param surround the number of voxels on either side of the central voxel
+#' @param centroid the center of the cube in \emph{voxel} coordinates
+#' @param surround the number of voxels on either side of the central voxel. A \code{vector} of length 3.
 #' @param fill optional value(s) to assign to data slot. 
 #' @param nonzero keep only nonzero elements from \code{bvol}. If \code{bvol} is A \code{BrainSpace} then this argument is ignored.
 #' @return an instance of class \code{ROIVolume}
 #' @examples
 #'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
 #'  cube <- RegionCube(sp1, c(5,5,5), 3)
-#'  vox = coords(cube)
+#'  vox <- coords(cube)
 #'  cube2 <- RegionCube(sp1, c(5,5,5), 3, fill=5)
 #'  
 #'  

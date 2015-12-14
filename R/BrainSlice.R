@@ -7,8 +7,13 @@
 #' BrainSlice constructor
 #' @param data data vector or matrix
 #' @param space an instance of class BrainSpace
-#' @param indices linear indices corresponding to data elements
+#' @param indices linear indices corresponding used if \code{data} is a 1D vector.
 #' @export
+#' @examples
+#' bspace <- BrainSpace(c(64,64), spacing=c(1,1))
+#' dat <- array(rnorm(64*64), c(64,64))
+#' bslice <- BrainSlice(dat,bspace, label="test")
+#' print(bslice) 
 BrainSlice <- function(data, space, indices=NULL) {
 	if (ndim(space) != 2) {
 		stop("incorrect dimension for BrainSlice")
@@ -16,8 +21,9 @@ BrainSlice <- function(data, space, indices=NULL) {
 	
 	if (is.null(indices)) {
 		if (length(dim(data)) != 2) {
+		  stopifnot(length(data) != prod(dim(space)[1:2]))
 			data <- matrix(data, dim(space)[1], dim(space)[2])
-		}
+		} 
 		new("BrainSlice", .Data=data, space=space)
 	
 	} else {

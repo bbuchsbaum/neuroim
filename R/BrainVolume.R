@@ -97,7 +97,7 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	} 
 	
 	if (!all(dim(space) == dim(data))) {
-		stop("DenseBrainVolume: data and space argument must equal dimensions")
+		stop("DenseBrainVolume: data and space argument must have equal dimensions")
 	} 
 	
 	if (is.null(source)) {
@@ -186,13 +186,17 @@ ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, lab
 #' @param label a \code{character} string
 #' @return \code{\linkS4class{SparseBrainVolume}} instance 
 #' @export SparseBrainVolume
+#' @details 
+#' Image data is backed by \code{Matrix::sparseVector}. 
 #' @examples
 #' data <- 1:10
-#' indices = seq(1,1000, length.out=10)
+#' indices <- seq(1,1000, length.out=10)
 #' bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
 #' sparsevol <- SparseBrainVolume(data,bspace,indices=indices)
 #' densevol <- BrainVolume(data,bspace,indices=indices)
 #' sum(sparsevol) == sum(densevol)
+#' 
+#' 
 #' 
 #' @rdname SparseBrainVolume-class
 SparseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") {
