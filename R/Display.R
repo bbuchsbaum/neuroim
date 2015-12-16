@@ -27,6 +27,7 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 #' @param col a color map
 #' @param zero.col the color to use when the value is 0 (e.g background color)
 #' @param ... extra arguments to passed to \code{grid.raster}
+#' @export
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
           def=function(x, slice, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    
@@ -126,6 +127,7 @@ setMethod(f="+", signature=signature(e1 = "Layer", e2="Layer"),
 #' @param x the object to display
 #' @param zpos the z coordinate
 #' @param axis the axis index
+#' @export
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "Overlay"),
           def=function(x, zpos, axis=3) {  
@@ -138,6 +140,7 @@ setMethod(f="image", signature=signature(x = "Overlay"),
 
 #' image
 #' @rdname image-methods
+#' @export
 setMethod(f="image", signature=signature(x = "Layer"),
           def=function(x, zpos, axis=3) {  
             ras <- as.raster(x, zpos, x@thresh,axis=axis)      
