@@ -26,6 +26,8 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   })
 }  
 
+matrixToVols <- matrixToVolumeList
+
 #' @export
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="integer", FUN="function"),
