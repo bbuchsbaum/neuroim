@@ -1,8 +1,13 @@
 #' @import grid
 NULL
 
-
-
+#' sliceData
+#' extract a 2D slice from a \code{BrainVolume} instance.
+#' 
+#' @param vol an \code{BrainVolume} instance
+#' @param slice the integer index of the slice to cut.
+#' @param axis the axis number (1, 2, 3) defining fixed axis of the 2D slice.
+#' @export
 sliceData <- function(vol, slice, axis=3) {
   imslice <- switch(axis,
                     "1"=vol[slice,,],
@@ -12,7 +17,15 @@ sliceData <- function(vol, slice, axis=3) {
   imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])    
 }
 
+#' mapToColors
+#' 
+#' map an matrix of intensity values to a matrix of color values.
+#' 
 #' @importFrom grDevices heat.colors
+#' @param imslice an image matrix defining intensity values
+#' @param col a color map
+#' @param zero.col the background color.
+#' @export
 mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {
   vrange <- range(imslice)
   imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
@@ -58,6 +71,19 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=
 
 
 
+#' as.grob
+#' 
+#' @param layer the \code{Layer} instance
+#' @param zpos the z slice coordinate
+#' @param thresh the threshold range
+#' @param axis the axis index (1,2,3)
+#' @param width the display width in pixels
+#' @param height the display height in pixels
+as.grob <- function(x,zpos,thresh,axis,width=NULL,height=NULL) {
+  
+}
+
+
 #' as.raster
 #' 
 #' @export 
@@ -86,8 +112,6 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
               imcols[(imslice >= thresh[1] & imslice <= thresh[2])] <- "#00000000"
             }
             
-            
-              
             dim(imcols) <- dim(imslice)
             ras <- as.raster(imcols)
             #ras[imslice == 0] <- zero.col            
@@ -151,7 +175,7 @@ setMethod(f="image", signature=signature(x = "Layer"),
 
 #' imageGrid
 #' 
-#' Display a set of mages slices in a 2D montage
+#' Display a set of images slices in a 2D montage
 #' 
 #' @param layer the layer to display
 #' @param gridDim the dimensions of the 2D grid montage

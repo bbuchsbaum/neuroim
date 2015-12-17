@@ -180,6 +180,7 @@ setMethod(f="axisToIndex", signature=signature(x="BrainSpace", real="numeric", d
             floor(abs(real - bds[1])/(spacing(x)[dimNum]) + 1)
             
           })
+
  
 #' @export 
 #' @rdname coordToGrid-methods
