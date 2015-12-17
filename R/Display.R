@@ -80,7 +80,7 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=
 #' @param width the display width in pixels
 #' @param height the display height in pixels
 as.grob <- function(x,zpos,thresh,axis,width=NULL,height=NULL) {
-  
+        
 }
 
 
