@@ -622,6 +622,12 @@ setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))
 #' @rdname slice-methods
 setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standardGeneric("slice"))   
 
+#' Render a an image to create a drawable image.
+#' @param x the object, e.g. an instance of type \code{BrainSlice}
+#' @param width width in pixels of the rendered image
+#' @param height height in pixels of rendered image
+#' @param colmap the colors used to map from values to RGBA colors.
+setGeneric(name="render", def=function(x, width, height, colmap,...) standardGeneric("render"))
 
 #' Extract permutation matrix
 #' @param x the object

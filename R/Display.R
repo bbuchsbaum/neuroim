@@ -174,6 +174,32 @@ setMethod(f="image", signature=signature(x = "Layer"),
           })
 
 
+# plotMontage <- function(x, layout=c(3,3), zstart, zend) {
+#   
+#   zslices <- seq(zstart, zend,by=(zend-zstart)/prod(layout))
+#   
+#   raslist <- lapply(zslices, function(z) {
+#     print(z)
+#     zind <- axisToIndex(space(x@vol), z, x@axis)
+#     dat <- slice(x@vol, zind, x@axis,"")
+#     xy <- indexToCoord(space(dat), 1:length(dat))
+#     list(xy=as.matrix(xy), values=as.numeric(dat@.Data), slice=z)
+#   })
+#   
+#   xy <- do.call(rbind, lapply(raslist, "[[", "xy"))
+#   dfras <- data.frame(x=xy[,1], y=xy[,2], values=unlist(lapply(raslist, "[[", "values")), slice=sapply(raslist, "[[", "slice"))
+#   dfras$slice <- factor(dfras$slice)
+#   
+#   p <- ggplot(data=dfras, aes(x=x,y=y)) +
+#     theme_bw() + coord_equal() +
+#     geom_raster(aes(fill=values)) +
+#     facet_grid(. ~ slice)
+#   
+#     
+#   
+# }
+# 
+
 #' imageGrid
 #' 
 #' Display a set of images slices in a 2D montage
@@ -206,7 +232,7 @@ imageGrid <- function(layer, gridDim=c(3,3), zstart, zend, panelSize=3, panelUni
       grid.text(paste(round(slices[scount])), x=unit(.15, "npc"), y=unit(.1, "npc"), 
                 just="centre", gp=gpar(fontsize=14, col=fontCol))
       popViewport()
-      scount = scount+1
+      scount <- scount+1
     }
       
   }

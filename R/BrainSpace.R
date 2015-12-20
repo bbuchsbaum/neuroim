@@ -169,8 +169,7 @@ setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
             grid <- indexToGrid(x, idx) - .5
             res <- trans(x) %*% t(cbind(grid, rep(1,nrow(grid))))
-            ## TODO assumes 3D coordinate
-            t(res[1:3,])
+            t(res[1:ndim(x),])
           })
 
 

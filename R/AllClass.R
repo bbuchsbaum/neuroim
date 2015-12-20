@@ -6,6 +6,7 @@ roxygen()
 setOldClass("mesh3d")
 setOldClass(c("file", "connection"))
 setOldClass(c("gzfile", "connection"))
+setOldClass("raster")
 
 .package_env <- new.env()
 
