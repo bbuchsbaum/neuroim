@@ -15,6 +15,7 @@ sliceData <- function(vol, slice, axis=3) {
                     "3"=vol[,,slice])
   
   imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])    
+  
 }
 
 #' mapToColors

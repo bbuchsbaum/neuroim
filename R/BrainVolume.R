@@ -488,6 +488,8 @@ setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", alon
                               "2"=x[,zlevel,],
                               "3"=x[,,zlevel])
             
+            BrainSlice(imslice, dropDim(space(x), along))
+            
             
           })
 

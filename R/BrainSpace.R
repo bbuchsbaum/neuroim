@@ -83,18 +83,39 @@ setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 
 #' @export
 #' @rdname dropDim-methods
+setMethod(f="dropDim", signature=signature(x="BrainSpace", dimnum="numeric"),
+          def=function(x, dimnum) {
+            D <- dim(x)
+            stopifnot(length(D) >= 2)
+            
+            Dind <- seq(1,length(D))[-dimnum]
+            if (ndim(x) > 3) {
+              BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=axes(x), trans=trans(x))
+            } else {
+              tx <- trans(x)
+              tx <- rbind(cbind(tx[Dind,Dind], origin(x)[Dind]), c(rep(0, length(Dind)), 1))
+              BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x), dimnum), trans=tx)
+            }
+            
+          })
+
+#' @export
+#' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 		def=function(x) {			
 			D <- dim(x)		
-			stopifnot(length(D) > 2)
+			stopifnot(length(D) >= 2)
 			Dind <- 1:(length(D)-1)		
 			
+			
 			### doesn't drop dimension in transformation matrix...
-      ### brain vector's don't have th axis and tese are incorrectly dropped
-      if (ndim(x) == 4) {
+      ### brain vector's don't have th axis and these are incorrectly dropped
+      if (ndim(x) > 3) {
 			  BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=axes(x), trans=trans(x))
       } else {
-        BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x)), trans=trans(x))
+        tx <- trans(x)
+        tx <- rbind(cbind(tx[Dind,Dind], origin(x)[Dind]), c(rep(0, length(Dind)),1))
+        BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x)), trans=tx)
       }
 		})
 

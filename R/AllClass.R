@@ -732,3 +732,8 @@ setClass("Overlay",
                   representation(layers="list"))
                   
 
+setClass("RenderedSlice",
+         representation=representation(slice="BrainSlice",
+                                       width="numeric",
+                                       height="numeric",
+                                       raster="raster"))

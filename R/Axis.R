@@ -91,7 +91,7 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
             } else if (dimnum == 3) {
               AxisSet2D(x@i, x@j)
             } else {
-              stop(paste("illegal dimnum: ",dimnum, "for axis with 2 dimensions"))
+              stop(paste("illegal dimnum: ", dimnum, " for axis with 2 dimensions"))
             }
           })
 
@@ -104,7 +104,6 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
            })
            
        
-
         
 #' @export
 #' @rdname ndim-methods
