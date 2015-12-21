@@ -287,6 +287,7 @@ setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
 
 
 #' Convert SparseBrainVolume to numeric
+#' 
 #' @rdname as.numeric-methods
 #' @param x the object to convert
 #' @export 
@@ -401,7 +402,8 @@ BrainVolumeSource <- function(input, index=1) {
 	
 }
 
-#' load an image volume from a file
+#' Load an image volume from a file
+#' 
 #' @param fileName the name of the file to load
 #' @param index the index of the volume (e.g. if the file is 4-dimensional)
 #' @return an instance of the class \code{\linkS4class{DenseBrainVolume}}

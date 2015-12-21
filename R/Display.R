@@ -2,6 +2,7 @@
 NULL
 
 #' sliceData
+#' 
 #' extract a 2D slice from a \code{BrainVolume} instance.
 #' 
 #' @param vol an \code{BrainVolume} instance
@@ -15,6 +16,7 @@ sliceData <- function(vol, slice, axis=3) {
                     "3"=vol[,,slice])
   
   imslice <- t(imslice[nrow(imslice):1, ncol(imslice):1,drop=FALSE])    
+  
   
 }
 
@@ -72,32 +74,20 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=
 
 
 
-#' as.grob
-#' 
-#' @param layer the \code{Layer} instance
-#' @param zpos the z slice coordinate
-#' @param thresh the threshold range
-#' @param axis the axis index (1,2,3)
-#' @param width the display width in pixels
-#' @param height the display height in pixels
-as.grob <- function(x,zpos,thresh,axis,width=NULL,height=NULL) {
-        
-}
-
 
 #' as.raster
 #' 
 #' @export 
 #' @param x the layer to convert
 #' @param zpos the z coordinate in coordinate space
-#' @param thresh the threshold range
-#' @param axis the axis index (1,2,3)
 #' @rdname as.raster-methods
 setMethod(f="as.raster", signature=signature(x = "Layer"),
-          def=function(x, zpos, thresh=c(0,0), axis=3) {  
-            slice <- axisToIndex(space(x@vol), zpos, axis)
-            imslice <- sliceData(x@vol, slice, axis)     
+          def=function(x, zpos) {  
+            slice <- axisToIndex(space(x@vol), zpos, x@axis)
+            imslice <- sliceData(x@vol, slice, x@axis)     
             vrange <- range(imslice)
+            
+            thresh <- x@thresh
             
             lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@colorMap) -1) + 1
             
@@ -172,6 +162,28 @@ setMethod(f="image", signature=signature(x = "Layer"),
             #grid.newpage()
             grid.raster(ras, interpolate=TRUE)
           })
+
+#' @export
+#' @rdname render-methods
+setMethod(f="render", signature=signature(x="Layer", width="numeric", height="numeric", colmap="missing"),
+          def=function(x, width, height, zpos, zero.col="#000000FF") {
+            slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
+            grob <- render(slice, width, height, x@colmap,zero.col)
+            new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
+          })
+
+#' @export
+#' @rdname render-methods
+setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
+          def=function(x, width, height, colmap, zero.col="#000000FF") {
+      
+            imslice <- t(x@.Data[nrow(x@.Data):1, ncol(x@.Data):1,drop=FALSE])    
+            imcols <- mapToColors(imslice, colmap, zero.col)
+            ras <- as.raster(imcols)
+            grob <- rasterGrob(ras, width=unit(width, "mm"), height=unit(height, "mm"), interpolate=TRUE)
+            new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
+          })
+
 
 
 # plotMontage <- function(x, layout=c(3,3), zstart, zend) {

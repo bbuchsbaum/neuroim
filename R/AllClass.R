@@ -7,6 +7,8 @@ setOldClass("mesh3d")
 setOldClass(c("file", "connection"))
 setOldClass(c("gzfile", "connection"))
 setOldClass("raster")
+setOldClass("rastergrob")
+
 
 .package_env <- new.env()
 
@@ -737,4 +739,10 @@ setClass("RenderedSlice",
          representation=representation(slice="BrainSlice",
                                        width="numeric",
                                        height="numeric",
-                                       raster="raster"))
+                                       raster="rastergrob"))
+
+setClass("RenderedStack",
+         representation=representation(list="RenderedStack",
+                                       bbox="matrix",
+                                       width="numeric",
+                                       height="numeric"))

@@ -55,13 +55,6 @@ setMethod(f="indexToGrid", signature=signature(x = "BrainSlice", idx="index"),
 		})
 
 
-setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="numeric"),
-          def=function(x,width,height, col, zero.col="#00000000") {
-            cols <- mapToColors(x@.Data, col, zero.col)
-            
-              
-          })
-
 
 
 
