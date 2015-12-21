@@ -167,7 +167,7 @@ setMethod(f="image", signature=signature(x = "Layer"),
 setMethod(f="render", signature=signature(x="Layer", width="numeric", height="numeric", colmap="missing"),
           def=function(x, width, height, zpos, zero.col="#000000FF") {
             slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
-            grob <- render(slice, width, height, x@colmap,zero.col)
+            grob <- render(slice, width, height, x@colmap, zero.col)
             new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
           })
 
@@ -179,7 +179,7 @@ setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", heigh
             imslice <- t(x@.Data[nrow(x@.Data):1, ncol(x@.Data):1,drop=FALSE])    
             imcols <- mapToColors(imslice, colmap, zero.col)
             ras <- as.raster(imcols)
-            grob <- rasterGrob(ras, width=unit(width, "mm"), height=unit(height, "mm"), interpolate=TRUE)
+            grob <- rasterGrob(ras, width=unit(width, "native"), height=unit(height, "native"), interpolate=TRUE)
             new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
           })
 
