@@ -90,7 +90,6 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
             thresh <- x@thresh
             
             lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@colorMap) -1) + 1
-            
             imcols <- x@colorMap[lookup]
             
             if (length(thresh) == 1) {
