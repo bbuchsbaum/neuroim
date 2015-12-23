@@ -162,6 +162,23 @@ setMethod(f="image", signature=signature(x = "Layer"),
             grid.raster(ras, interpolate=TRUE)
           })
 
+
+#' @export
+#' @rdname render-methods
+setMethod(f="render", signature=signature(x="Overlay", width="numeric", height="numeric", colmap="missing"),
+          def=function(x, width, height, zpos, zero.col="#000000FF") {
+            sliceList <- lapply(x@layers, function(layer) {
+              render(layer, width, height, zpos, zero.col)
+            })
+            
+            slices <- lapply(sliceList, function(x) x@slices)
+            grobs <- lapply(sliceList, function(x) x@raster)
+            gl <- do.call(gList, grobs)
+            new("RenderedSliceStack", slices=slices, width=width, height=height, grob=gl)
+            
+          })
+
+
 #' @export
 #' @rdname render-methods
 setMethod(f="render", signature=signature(x="Layer", width="numeric", height="numeric", colmap="missing"),

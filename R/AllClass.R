@@ -741,8 +741,8 @@ setClass("RenderedSlice",
                                        height="numeric",
                                        raster="rastergrob"))
 
-setClass("RenderedStack",
-         representation=representation(list="RenderedStack",
-                                       bbox="matrix",
+setClass("RenderedSliceStack",
+         representation=representation(slices="list",
                                        width="numeric",
-                                       height="numeric"))
+                                       height="numeric",
+                                       grob="gList"))
