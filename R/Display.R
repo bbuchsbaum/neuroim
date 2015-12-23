@@ -190,7 +190,7 @@ setMethod(f="render", signature=signature(x="Layer", width="numeric", height="nu
 
 #' @export
 #' @rdname render-methods
-setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
+setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="missing"),
           def=function(x, width, height, colmap, zero.col="#000000FF") {
       
             imslice <- t(x@.Data[nrow(x@.Data):1, ncol(x@.Data):1,drop=FALSE])    
