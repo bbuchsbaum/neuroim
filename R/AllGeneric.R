@@ -638,6 +638,9 @@ setGeneric(name="render", def=function(x, width, height, colmap,...) standardGen
 #' @param colmap the colors used to map from values to RGBA colors.
 setGeneric(name="renderSlice", def=function(x, zpos, width, height, colmap,...) standardGeneric("renderSlice"))
 
+
+
+
 #' Extract permutation matrix
 #' @param x the object
 #' @param ... additional arguments
