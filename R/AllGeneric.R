@@ -629,6 +629,15 @@ setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standa
 #' @param colmap the colors used to map from values to RGBA colors.
 setGeneric(name="render", def=function(x, width, height, colmap,...) standardGeneric("render"))
 
+
+#' Render a slice at z coordinate
+#' @param x the object, e.g. an instance of type \code{Layer} or \code{Overlay}
+#' @param zpos the z coordinate to slice through.
+#' @param width width of the rendered image
+#' @param height height of the rendered image
+#' @param colmap the colors used to map from values to RGBA colors.
+setGeneric(name="renderSlice", def=function(x, zpos, width, height, colmap,...) standardGeneric("renderSlice"))
+
 #' Extract permutation matrix
 #' @param x the object
 #' @param ... additional arguments

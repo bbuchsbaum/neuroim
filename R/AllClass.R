@@ -8,7 +8,7 @@ setOldClass(c("file", "connection"))
 setOldClass(c("gzfile", "connection"))
 setOldClass("raster")
 setOldClass("rastergrob")
-
+setOldClass("gList")
 
 .package_env <- new.env()
 
@@ -727,9 +727,10 @@ setClass("BrainBucket",
 #' @slot thresh cut-off value above which vlaues will be made transparent.
 #' @slot axis the axis index of perpendicular to the xy plane (option: 1,2,3; default is 3)
 #' @slot zero.col the color pixels with intensity of zero. This value overrides the color from the slot \code{colorMap}
+#' @slot alpha the transparency of the layer
 #' @export
 setClass("Layer",
-         representation=representation(vol="BrainVolume", colorMap="vector", thresh="numeric", axis="numeric", zero.col="character"))
+         representation=representation(vol="BrainVolume", colorMap="vector", thresh="numeric", axis="numeric", zero.col="character", alpha="numeric"))
 
 setClass("Overlay",
                   representation(layers="list"))

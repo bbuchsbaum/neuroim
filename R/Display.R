@@ -29,13 +29,26 @@ sliceData <- function(vol, slice, axis=3) {
 #' @param col a color map
 #' @param zero.col the background color.
 #' @export
-mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000") {
+mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000", alpha=1) {
   vrange <- range(imslice)
   imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
-  dim(imcols) <- dim(imslice)
   
+  dim(imcols) <- dim(imslice)
   imcols[imslice == 0] <- zero.col
-  imcols
+  
+  if (alpha < 1) {
+    rgbmat <- col2rgb(imcols, alpha=TRUE)
+    rgbmat <- rgbmat/255
+  
+    if (alpha < 1) {
+      rgbmat[4,] <- rgbmat[4,] * alpha
+    }
+  
+    array(t(rgbmat), c(dim(imslice), 4))
+  } else {
+    imcols
+  }
+  
 }
 
 #' image
@@ -68,8 +81,8 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' @export
 #' @rdname Layer
 #' @importFrom grDevices gray
-Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000") {
-  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col)
+Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000", alpha=1) {
+  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col, alpha=alpha)
 }
 
 
@@ -165,15 +178,16 @@ setMethod(f="image", signature=signature(x = "Layer"),
 
 #' @export
 #' @rdname render-methods
-setMethod(f="render", signature=signature(x="Overlay", width="numeric", height="numeric", colmap="missing"),
-          def=function(x, width, height, zpos, zero.col="#000000FF") {
+setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
+          def=function(x, zpos, width, height, zero.col="#000000FF", units="mm") {
             sliceList <- lapply(x@layers, function(layer) {
-              render(layer, width, height, zpos, zero.col)
+              renderSlice(layer, zpos=zpos, width=width, height=height, zero.col=zero.col, units=units)
             })
             
-            slices <- lapply(sliceList, function(x) x@slices)
+            slices <- lapply(sliceList, function(x) x@slice)
             grobs <- lapply(sliceList, function(x) x@raster)
             gl <- do.call(gList, grobs)
+            
             new("RenderedSliceStack", slices=slices, width=width, height=height, grob=gl)
             
           })
@@ -181,26 +195,35 @@ setMethod(f="render", signature=signature(x="Overlay", width="numeric", height="
 
 #' @export
 #' @rdname render-methods
-setMethod(f="render", signature=signature(x="Layer", width="numeric", height="numeric", colmap="missing"),
-          def=function(x, width, height, zpos, zero.col="#000000FF") {
+setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
+          def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="mm") {
             slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
-            grob <- render(slice, width, height, x@colmap, zero.col)
-            new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
+            grob <- render(slice, width, height, colmap=x@colorMap, zero.col=zero.col, alpha=x@alpha, units=units)
+            
+            new("RenderedSlice", slice=slice, width=width, height=height, raster=grob)
           })
 
 #' @export
 #' @rdname render-methods
-setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="missing"),
-          def=function(x, width, height, colmap, zero.col="#000000FF") {
-      
+setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
+          def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="mm") {
             imslice <- t(x@.Data[nrow(x@.Data):1, ncol(x@.Data):1,drop=FALSE])    
-            imcols <- mapToColors(imslice, colmap, zero.col)
+            imcols <- mapToColors(imslice, colmap, zero.col, alpha=alpha)
             ras <- as.raster(imcols)
-            grob <- rasterGrob(ras, width=unit(width, "native"), height=unit(height, "native"), interpolate=TRUE)
-            new("RenderedSlice", slice=x, width=width, height=height, raster=grob)
+  
+            grob <- rasterGrob(ras, width=unit(width, units), height=unit(height, units), interpolate=TRUE)
+    
           })
 
 
+
+#orthoPlot <- function(layer, zpos) {
+#  
+#  vpmain <- viewport(x=0, y=0, width=1, height=1)
+#  vptopright <- viewport(x=unit(.5, "npc"), y=unit(0, "npc"), width=unit(.5, "npc"), height=unit(.5, "npc"))
+#  vpbottomright <- viewport(x=unit(.5, "npc"), y=unit(.5, "npc"), width=unit(.5, "npc"), height=unit(.5, "npc"))
+#  vpleft <- viewport(x=unit(0, "npc"), y=unit(0,"ncp"), width=unit(.5, "npc"), height=unit(1, "npc"))
+#}
 
 # plotMontage <- function(x, layout=c(3,3), zstart, zend) {
 #   
@@ -254,7 +277,7 @@ imageGrid <- function(layer, gridDim=c(3,3), zstart, zend, panelSize=3, panelUni
   for (i in 1:gridDim[1]) {
     for (j in 1:gridDim[2]) {
       pushViewport(viewport(layout.pos.col=j, layout.pos.row=i))
-      ras <- as.raster(layer, slices[scount], layer@thresh, layer@axis)
+      ras <- as.raster(layer, slices[scount])
       
       grid.raster(ras, interpolate=interpolate)
       grid.text(paste(round(slices[scount])), x=unit(.15, "npc"), y=unit(.1, "npc"), 
