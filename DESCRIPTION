@@ -3,43 +3,37 @@ Imports:
     Matrix,
     yaImpute,
     Rcpp,
-    stringr,
-    hash,
     iterators,
     abind,
     assertthat,
-    stats,
-    grDevices,
-    readr
-VignetteBuilder: knitr
-LinkingTo: Rcpp
-License: GPL (>= 2)
-Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
+    readr,
+    rgl
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
 Type: Package
 Author: Bradley R. Buchsbaum
+Title: Data Structures and Handling for Neuroimaging Data
 Description: A collection of data structures that represent
     volumetric brain imaging data. The focus is on basic data handling for 3D
     and 4D neuroimaging data. In addition, there are function to read and write
     NIFTI files and limited support for reading AFNI files.
+Date: 2016-01-06
 Suggests:
     foreach,
     testthat,
     knitr
-Version: 0.0.5
-Date: 2015-11-29
-Suggests:
-    testthat,
-    rgl
+Version: 0.0.6
 Depends:
     R (>= 3.0.0),
     stringr,
     hash,
-    iterators,
-    abind,
     methods,
+    stats,
+    grDevices,
+    grid,
+    utils
+VignetteBuilder: knitr
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'

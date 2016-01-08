@@ -33,7 +33,5 @@
 image
 
 image
-
-image
 }
 

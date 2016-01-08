@@ -1,7 +1,7 @@
 
 
 
-test.rand_connComp3D {
+test.rand_connComp3D <- function() {
   for (i in 1:10) {
     mat = array(sample(c(0, 1), size = 10^3, replace = TRUE), dim = rep(10, 3))
     dim(mat)
@@ -14,7 +14,7 @@ test.rand_connComp3D {
   
 }
 
-test.twoclust_connComp3D {
+test.twoclust_connComp3D <- function() {
   arr <- array(0,rep(50,3))
   spc <- BrainSpace(rep(50,3), spacing=c(1,1,1))
   vol <- BrainVolume(arr, spc)

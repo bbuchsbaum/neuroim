@@ -3,6 +3,7 @@
 #' @include Axis.R
 {}
 
+
 #' Constructor function for \code{\linkS4class{BrainSpace}} class
 #' 
 #' @param Dim a vector describing the dimensions of the spatial grid
@@ -37,12 +38,12 @@ BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 		trans[1:D,D+1] <- origin
 	}
   
-	if (is.null(axes) && length(Dim) == 3) {
+	if (is.null(axes) && length(Dim) >= 3) {
 	  axes <- .nearestAnatomy(trans)
 	} else if (is.null(axes) && length(Dim) == 2) {
 	  ### need .nearestAnatomy for 2d slice
 	  ## TODO
-	  axes <- c(LEFT_RIGHT, POSTERIOR_ANTERIOR)
+	  axes <- AxisSet2D(LEFT_RIGHT, POST_ANT)
 	}
 	
 	new("BrainSpace", Dim=as.integer(Dim),

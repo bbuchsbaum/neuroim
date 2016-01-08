@@ -16,6 +16,7 @@ setGeneric(name="values", def=function(x, ...) standardGeneric("values"))
 
 
 #' Generic function to load data from a data source
+#' 
 #' @param x a data source
 #' @param ... additional arguments
 #' @export 
@@ -627,6 +628,8 @@ setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standa
 #' @param width width of the rendered image
 #' @param height height of the rendered image
 #' @param colmap the colors used to map from values to RGBA colors.
+#' @param ... additional arguments
+#' @rdname render-methods
 setGeneric(name="render", def=function(x, width, height, colmap,...) standardGeneric("render"))
 
 
@@ -636,6 +639,8 @@ setGeneric(name="render", def=function(x, width, height, colmap,...) standardGen
 #' @param width width of the rendered image
 #' @param height height of the rendered image
 #' @param colmap the colors used to map from values to RGBA colors.
+#' @param ... additional arguments
+#' @rdname renderSlice-methods
 setGeneric(name="renderSlice", def=function(x, zpos, width, height, colmap,...) standardGeneric("renderSlice"))
 
 

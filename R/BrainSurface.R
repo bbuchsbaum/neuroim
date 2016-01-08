@@ -37,6 +37,7 @@ BrainSurfaceSource <- function(surfaceName, surfaceDataName, index=1) {
 
 #' load a BrainSurface
 #' @export loadData
+#' @importFrom utils read.table
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainSurfaceSource"), 
           def=function(x) {
@@ -48,15 +49,17 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
           })
 
 
-
-loadFSSurface <- function(mesh, values) {
+#' load Freesurfer ascii surface
+#' @param mesh file name of mesh to read in.
+#' @importFrom rgl tmesh3d
+loadFSSurface <- function(mesh) {
   ninfo <- as.integer(strsplit(readLines(mesh, n=2)[2], " ")[[1]])
   asctab <- read.table(mesh, skip=2)
   
   vertices <- as.matrix(asctab[1:ninfo[1],1:3])
   nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
   
-  mesh <- tmesh3d(vertices, nodes)
+  mesh <- rgl::tmesh3d(vertices, nodes)
   new("BrainSurface", mesh=mesh, )
 }
 

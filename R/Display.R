@@ -28,6 +28,8 @@ sliceData <- function(vol, slice, axis=3) {
 #' @param imslice an image matrix defining intensity values
 #' @param col a color map
 #' @param zero.col the background color.
+#' @param alpha transparency multiplier
+#' @importFrom grDevices col2rgb
 #' @export
 mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000", alpha=1) {
   vrange <- range(imslice)
@@ -77,6 +79,7 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' @param thresh a range (min,max) defining the threshold window for determining image opacity.
 #' @param axis the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)
 #' @param zero.col the color used when the value is zero.
+#' @param alpha transparency multiplier, vlaue between 0 and 1.
 #' @return an object of class \code{Layer}
 #' @export
 #' @rdname Layer
@@ -165,7 +168,7 @@ setMethod(f="image", signature=signature(x = "Overlay"),
             }             
           })
 
-#' image
+
 #' @rdname image-methods
 #' @export
 setMethod(f="image", signature=signature(x = "Layer"),
@@ -177,7 +180,9 @@ setMethod(f="image", signature=signature(x = "Layer"),
 
 
 #' @export
-#' @rdname render-methods
+#' @rdname renderSlice-methods
+#' @param zero.col color used when background intensity is 0.
+#' @param units grid unit type, e.g. "mm", "inches"
 setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
           def=function(x, zpos, width, height, zero.col="#000000FF", units="mm") {
             sliceList <- lapply(x@layers, function(layer) {
@@ -194,7 +199,7 @@ setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", widt
 
 
 #' @export
-#' @rdname render-methods
+#' @rdname renderSlice-methods
 setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
           def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="mm") {
             slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
@@ -205,6 +210,9 @@ setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", width=
 
 #' @export
 #' @rdname render-methods
+#' @param zero.col color used when background intensity is 0.
+#' @param alpha transparency multiplier
+#' @param units grid unit type, e.g. "mm", "inches"
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
           def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="mm") {
             imslice <- t(x@.Data[nrow(x@.Data):1, ncol(x@.Data):1,drop=FALSE])    

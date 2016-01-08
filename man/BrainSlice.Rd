@@ -19,7 +19,7 @@ BrainSlice constructor
 \examples{
 bspace <- BrainSpace(c(64,64), spacing=c(1,1))
 dat <- array(rnorm(64*64), c(64,64))
-bslice <- BrainSlice(dat,bspace, label="test")
+bslice <- BrainSlice(dat,bspace)
 print(bslice) 
 }
 

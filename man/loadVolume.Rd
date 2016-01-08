@@ -2,7 +2,7 @@
 % Please edit documentation in R/BrainVolume.R
 \name{loadVolume}
 \alias{loadVolume}
-\title{load an image volume from a file}
+\title{Load an image volume from a file}
 \usage{
 loadVolume(fileName, index = 1)
 }
@@ -15,7 +15,7 @@ loadVolume(fileName, index = 1)
 an instance of the class \code{\linkS4class{DenseBrainVolume}}
 }
 \description{
-load an image volume from a file
+Load an image volume from a file
 }
 \examples{
 fname <- system.file("extdata", "global_mask.nii", package="neuroim")

@@ -25,6 +25,6 @@ imageGrid(layer, gridDim = c(3, 3), zstart, zend, panelSize = 3,
 \item{fontCol}{color of labels indicating slice level}
 }
 \description{
-Display a set of mages slices in a 2D montage
+Display a set of images slices in a 2D montage
 }
 

@@ -5,7 +5,7 @@
 \title{Layer}
 \usage{
 Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0),
-  axis = 3, zero.col = "#000000")
+  axis = 3, zero.col = "#000000", alpha = 1)
 }
 \arguments{
 \item{vol}{volume instance of \code{\linkS4class{BrainVolume}}}
@@ -17,6 +17,8 @@ Layer(vol, colorMap = gray((0:255)/255, alpha = 1), thresh = c(0, 0),
 \item{axis}{the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)}
 
 \item{zero.col}{the color used when the value is zero.}
+
+\item{alpha}{transparency multiplier, vlaue between 0 and 1.}
 }
 \value{
 an object of class \code{Layer}

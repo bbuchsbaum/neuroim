@@ -5,16 +5,12 @@
 \alias{as.raster,Layer-method}
 \title{as.raster}
 \usage{
-\S4method{as.raster}{Layer}(x, zpos, thresh = c(0, 0), axis = 3)
+\S4method{as.raster}{Layer}(x, zpos)
 }
 \arguments{
 \item{x}{the layer to convert}
 
 \item{zpos}{the z coordinate in coordinate space}
-
-\item{thresh}{the threshold range}
-
-\item{axis}{the axis index (1,2,3)}
 }
 \description{
 as.raster

@@ -8,6 +8,7 @@
 \alias{dropDim,AxisSet3D,missing-method}
 \alias{dropDim,AxisSet3D,numeric-method}
 \alias{dropDim,BrainSpace,missing-method}
+\alias{dropDim,BrainSpace,numeric-method}
 \title{Generic function to drop a dimension from an object}
 \usage{
 dropDim(x, dimnum)
@@ -19,6 +20,8 @@ dropDim(x, dimnum)
 \S4method{dropDim}{AxisSet3D,numeric}(x, dimnum)
 
 \S4method{dropDim}{AxisSet3D,missing}(x, dimnum)
+
+\S4method{dropDim}{BrainSpace,numeric}(x, dimnum)
 
 \S4method{dropDim}{BrainSpace,missing}(x)
 }

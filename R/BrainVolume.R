@@ -669,6 +669,8 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
 #' tesselate a LogicalBrainVolume into K spatial disjoint components
 #' @param features use addiitonal feature set to tesselate volume
 #' @param spatialWeight weight voxels according to distance
+#' @importFrom stats kmeans
+#' @importFrom stats sd
 #' @rdname tesselate-methods
 setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
           def=function(x, K, features=NULL, spatialWeight=4) {
@@ -722,6 +724,7 @@ setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", feat
 
 #' merge partititons in a ClusteredBrainVolume
 #' @rdname mergePartitions-methods
+#' @importFrom stats kmeans
 #' @export
 setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
           def=function(x, K, features) {
@@ -742,6 +745,7 @@ setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="
 #' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
 #' @param method clustering method
 #' @import parallel
+#' @importFrom stats kmeans
 #' @rdname partition-methods
 #' @export
 setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 

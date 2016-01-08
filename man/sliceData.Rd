@@ -2,8 +2,7 @@
 % Please edit documentation in R/Display.R
 \name{sliceData}
 \alias{sliceData}
-\title{sliceData
-extract a 2D slice from a \code{BrainVolume} instance.}
+\title{sliceData}
 \usage{
 sliceData(vol, slice, axis = 3)
 }
@@ -15,7 +14,6 @@ sliceData(vol, slice, axis = 3)
 \item{axis}{the axis number (1, 2, 3) defining fixed axis of the 2D slice.}
 }
 \description{
-sliceData
 extract a 2D slice from a \code{BrainVolume} instance.
 }
 
