@@ -7,7 +7,6 @@ Imports:
     abind,
     assertthat,
     readr,
-    rgl
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -22,7 +21,8 @@ Date: 2016-01-06
 Suggests:
     foreach,
     testthat,
-    knitr
+    knitr,
+    rgl
 Version: 0.0.6
 Depends:
     R (>= 3.0.0),
