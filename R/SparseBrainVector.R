@@ -504,11 +504,11 @@ setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"
 setAs(from="SparseBrainVector", to="matrix",
 		  function(from) {
 		    ## TODO this should return a dense matrix
-		    ind <- indices(from)
-		    out <- matrix(dim(from)[4], length(ind))
-		    out[, ind] <- from@data
-		    out
-			  #from@data			  
+		    #ind <- indices(from)
+		    #out <- matrix(0, dim(from)[4], length(ind))
+		    #out[, ind] <- from@data
+		    #out
+			  from@data			  
 		  })
 
 #' as.matrix
