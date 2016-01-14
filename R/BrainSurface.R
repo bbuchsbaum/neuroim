@@ -51,8 +51,12 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
 
 #' load Freesurfer ascii surface
 #' @param mesh file name of mesh to read in.
-#' @importFrom rgl tmesh3d
 loadFSSurface <- function(mesh) {
+  if (!requireNamespace("rgl", quietly = TRUE)) {
+    stop("Pkg needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  
   ninfo <- as.integer(strsplit(readLines(mesh, n=2)[2], " ")[[1]])
   asctab <- read.table(mesh, skip=2)
   
