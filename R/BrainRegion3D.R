@@ -283,10 +283,10 @@ RandomSearchlight <- function(mask, radius) {
   nextEl <- function() {
     if (!all(done[mask.idx])) {
       center <- .resample(which(!done[mask.idx]), 1)
-      done[center] <<- TRUE
       search <- RegionSphere(mask, grid[center,], radius, nonzero=TRUE) 
       vox <- coords(search)
       vox <- vox[!done[vox],,drop=FALSE]
+      done[center] <<- TRUE
       done[vox] <<- TRUE
       attr(vox, "center") <- grid[center,]
       vox
