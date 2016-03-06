@@ -4,7 +4,7 @@
 \alias{loadVector}
 \title{loadVector}
 \usage{
-loadVector(fileName, indices = NULL, mask = NULL)
+loadVector(fileName, indices = NULL, mask = NULL, mmap = FALSE)
 }
 \arguments{
 \item{fileName}{the name of the file to load}
@@ -12,6 +12,8 @@ loadVector(fileName, indices = NULL, mask = NULL)
 \item{indices}{the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)}
 
 \item{mask}{a mask defining the spatial elements to load}
+
+\item{use}{memory mapping if possible}
 }
 \value{
 an \code{\linkS4class{BrainVector}} object

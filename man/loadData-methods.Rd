@@ -14,7 +14,7 @@ loadData(x, ...)
 
 \S4method{loadData}{BrainSurfaceSource}(x)
 
-\S4method{loadData}{SparseBrainVectorSource}(x)
+\S4method{loadData}{SparseBrainVectorSource}(x, mmap = FALSE)
 
 \S4method{loadData}{BrainVectorSource}(x, mmap = FALSE)
 

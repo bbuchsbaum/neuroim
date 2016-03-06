@@ -3,6 +3,8 @@
 \docType{methods}
 \name{series}
 \alias{series}
+\alias{series,BrainVector,LogicalBrainVolume-method}
+\alias{series,BrainVector,ROIVolume-method}
 \alias{series,BrainVector,matrix-method}
 \alias{series,BrainVector,numeric-method}
 \alias{series,SparseBrainVector,matrix-method}
@@ -16,6 +18,10 @@ series(x, i, ...)
 \S4method{series}{SparseBrainVector,numeric}(x, i, j, k)
 
 \S4method{series}{BrainVector,matrix}(x, i)
+
+\S4method{series}{BrainVector,ROIVolume}(x, i)
+
+\S4method{series}{BrainVector,LogicalBrainVolume}(x, i)
 
 \S4method{series}{BrainVector,numeric}(x, i, j, k)
 }

@@ -47,6 +47,7 @@ ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
   grid
   
 }
+
 .makeCubicGrid <- function(bvol, centroid, surround) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
@@ -221,13 +222,19 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
 #'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
 #'  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
 #'  vox = coords(cube)
+#'  
+#'  ## fill in ROI with value of 6
+#'  cube1 <- RegionSphere(sp1, c(5,5,5), 3.5, fill=6)
+#'  all(cube1@data == 6)
 #' @export
 RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   if (is.matrix(centroid)) {
+    assertthat::assert_that(ncol(centroid == 3) & nrow(centroid) == 1)
     centroid <- drop(centroid)
   }
+  
   if (length(centroid) != 3) {
-    stop("RegionSphere: centroid must have length of 3 (x,y,z coordinates)")
+    stop("RegionSphere: centroid must have length of 3 (x,y,z voxel coordinates)")
   }
   
   if (is.null(fill) && is(bvol, "BrainSpace")) {
@@ -238,6 +245,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
   centroid <- as.integer(centroid)
+  
   mcentroid <- ((centroid-1) * vspacing + vspacing/2)
  
   grid <- .makeSphericalGrid(bvol, centroid, radius)
@@ -252,7 +260,6 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   vals <- if (!is.null(fill)) {
     rep(fill, nrow(grid))
   } else {    
-    ## coercion to numeric shouldn't be necessary here.
     as.numeric(bvol[grid])
   }   
   
@@ -277,7 +284,6 @@ RandomSearchlight <- function(mask, radius) {
   grid <- indexToGrid(mask, mask.idx)
   
 
-
   prog <- function() { sum(done)/length(mask.idx) }
   
   nextEl <- function() {
@@ -301,7 +307,7 @@ RandomSearchlight <- function(mask, radius) {
 }
 
 #' Create a searchlight iterator that samples regions from within a mask.
-#' Searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
+#' searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
 #' It is in the latter sense that this is a bootstrap resampling scheme.
 #' @param mask an image volume containing valid central voxels for roving searchlight
 #' @param radius in mm of spherical searchlight

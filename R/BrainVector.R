@@ -127,10 +127,6 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 }
 
 
-#.makeMMap <- function(meta) {
-#	mmap(meta@dataFile, mode=.getMMapMode(meta@dataType), off=meta@dataOffset)
-	
-#}
 
 
 #' loadData
@@ -142,37 +138,34 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			
 			meta <- x@metaInfo
       
-      if (mmap) {
-        stop("memory mapping not implemented")
-      }
-			if (mmap && (.Platform$endian != meta@endian)) {
-				stop("cannot create memory mapped file when image endianness does not equal OS endianess")
-			}
+      #if (mmap) {
+       # stop("memory mapping not implemented")
+      #}
 			
-			if (mmap && .isExtension(meta@dataFile, ".gz")) {
-				stop("cannot memory map to a gzipped file")		
+			#if (mmap && (.Platform$endian != meta@endian)) {
+			#	message("cannot create memory mapped file when image endianness does not equal OS endianess")
+			#  mmap <- FALSE
+			#}
+			
+			if (mmap && neuroim:::.isExtension(meta@dataFile, ".gz")) {
+				message("cannot memory map to a gzipped file.")		
+			  mmap <- FALSE
 			}
 						
 			stopifnot(length(meta@Dim) == 4)
 						
 			nels <- prod(meta@Dim[1:4]) 		
 			ind <- x@indices
+	
 			
-			#nels <- prod(meta@Dim[1:3]) 
-      #datlist <- list()
-			#for (i in 1:length(ind)) {
-			#	offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
-			#	reader <- dataReader(meta, offset)		
-			#	datlist[[i]] <- array(readElements(reader, nels), meta@Dim[1:3])
-			#	close(reader)				
-			#}
-			
-			
-			#mappedData <- .makeMMap(meta)
-			
-			reader <- dataReader(meta, 0)	
-			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
-      
+			if (mmap) {
+			  mappedData <- .makeMMap(meta)
+			  arr <- array(mappedData, c(meta@Dim[1:4]))
+			} else {
+			  reader <- dataReader(meta, 0)	
+			  arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			  close(reader)
+			}
 			## bit of a hack to deal with scale factors
 			if (.hasSlot(meta, "slope")) {
         
@@ -181,8 +174,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
         }
 			}
       
-			close(reader)
-				
+		
 			#arr <- abind(datlist, along=4)			
 			
       bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)),meta@spacing, meta@origin, meta@spatialAxes, trans(meta))
@@ -602,8 +594,9 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 #' @export
 setMethod(f="subVector", signature=signature(x="DenseBrainVector", i="numeric"),
           def=function(x, i) {
+            assertthat::assert_that(max(i) <= dim(x)[4])
             xs <- space(x)
-            dat <- x@.Data[,,,i]
+            dat <- x[,,,i]
             
             newdim <- c(dim(x)[1:3], length(i))
             bspace <- BrainSpace(newdim, spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
@@ -619,12 +612,11 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 			## TODO this is VERY slow
 			## TODO should be renamed "volSlice"
 		  
-		  
 			xs <- space(x)
 			bspace <- BrainSpace(dim(x)[1:3], spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
 			
 			makevol <- function(i) {				
-				BrainVolume(x@.Data[,,,i], bspace)
+				BrainVolume(x[,,,i], bspace)
 			}
 			
 			res <- lapply(i, makevol)
@@ -675,11 +667,12 @@ setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", w
 #' @param fileName the name of the file to load
 #' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
 #' @param mask a mask defining the spatial elements to load 
+#' @param use memory mapping if possible
 #' @return an \code{\linkS4class{BrainVector}} object
 #' @export 
-loadVector  <- function(fileName, indices=NULL, mask=NULL) {
+loadVector  <- function(fileName, indices=NULL, mask=NULL, mmap=FALSE) {
 	src <- BrainVectorSource(fileName, indices, mask)
-	loadData(src)
+	loadData(src,mmap)
 }
 
 
@@ -751,12 +744,7 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 #' @export
 setMethod("series", signature(x="BrainVector", i="matrix"),
 		def=function(x,i) {
-      ## TODO not necessary, has to be matrix based on type of i arg...
-			if (!is.matrix(i) && length(i) == 3) {
-				i <- matrix(i, 1, 3)
-			}
-			
-			stopifnot(ncol(i) == 3)
+			assertthat::assert_that(ncol(i) == 3)
 			apply(i, 1, function(i) x[i[1], i[2], i[3],])
 	
 		})
@@ -765,8 +753,30 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 
 #' @rdname series-methods
 #' @export
+setMethod("series", signature(x="BrainVector", i="ROIVolume"),
+          def=function(x,i) {
+            grid <- coords(i)
+            callGeneric(x, grid)
+          })
+          
+
+#' @rdname series-methods
+#' @export
+setMethod("series", signature(x="BrainVector", i="LogicalBrainVolume"),
+          def=function(x,i) {
+            assertthat::assert_that(all.equal(dim(x)[1:3], dim(i)[1:3]))
+            idx <- which(i == TRUE)
+            assertthat::assert_that(length(idx) > 0)
+            
+            grid <- indexToGrid(i, idx)
+            callGeneric(x, grid)
+            
+          })
+
+#' @rdname series-methods
+#' @export
 setMethod("series", signature(x="BrainVector", i="numeric"),
-		def=function(x,i, j, k) {	
+		def=function(x, i, j, k) {	
 			if (missing(j) && missing(k)) {
 				vdim <- dim(x)[1:3]
 				mat <- arrayInd(i, vdim)
@@ -875,42 +885,6 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric
 			
 		})
 
-# @export gridToIndex
-# @rdname gridToIndex-methods
-# setMethod(f="gridToIndex", signature=signature(x="BrainVector", coords="matrix"),
-#		def=function(x, coords) {
-#			stopifnot(ncol(coords) == 4)
-#			array.dim <- dim(x)
-#			ind3d <- .gridToIndex(dim(x), coords[,1:3])
-#		})
-
-#setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="numeric"),
-#		def=function(x, indices) {
-#			
-#			D <- dim(x)[1:3]
-#			if (all.equal(dim(indices), D)) {
-#				indices <- which(indices>0)
-#			}
-			
-#			vox <- t(sapply(indices, .indexToGrid, D)) 
-			
-#			apply(vox, 1, function(v) {
-#				x[v[1], v[2], v[3],]
-#			})
-			
-#		})
-
-#setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="BrainVolume"),
-#		def=function(x, indices) {				
-#			D <- dim(x)[1:3]
-#			stopifnot(all.equal(dim(indices), D))
-#			
-#			idx <- which(indices > 0)
-#			callGeneric(x, idx)			
-#			
-#		})          
-
-
 
 #' @export
 #' @rdname writeVector-methods
@@ -941,67 +915,4 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 			
 		})
 
-
-
-
-#loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verbose=F, bulk.thresh=100 ) {
-#stopifnot(all(sapply(filenames, .isNIFTI)))
-
-#ret <- lapply(filenames, function(filename) {
-#			bvec <- loadVector(filename, indices)
-#			
-#			if (demean) {
-#				cmeans <- colMeans(retmat)
-#				retmat <- sweep(retmat, 2, cmeans)
-#			}
-#			
-#			if (reduce) {
-#				retmat <- rowMeans(retmat)
-#			}
-#			
-#			if (is.matrix(retmat) && NCOL(retmat) == 1) {
-#				retmat <- retmat[,1]
-#			}
-#			
-#			close(conn)
-#			
-#			retmat
-#		})
-#	
-#	
-#	if (length(ret) == 1) {
-#		ret[[1]]
-#	} else {
-#		ret
-#	}
-#}
-
-
-
-#.loadSparseVector <- function(filename, mask) {
-#	if (!.isNIFTI(filename)) {
-#		stop("only support NIFTI files at present")
-#	}
-#	
-#	nfile <- NIFTIFile(filename)
-#	header <- readHeader(nfile)
-#	ddim <- dataDim(header)
-#	
-#	if (length(ddim) != 4) {
-#		stop("Error: file does not have 4 dimensions, which is required for a BrainVector object")
-#	}
-#	
-#	
-#	if (inherits(mask, "array") || inherits(mask, "BrainData")) {
-#		# should check that dimensions are equal
-#		ind <- which(mask > 0)
-#	} else {
-#		stop("mask must be of type array or BrainData")
-#	}
-#	
-#	mat <- readData(nfile, ind)
-#	
-#	space <- createSpace(header)
-#	SparseBrainVector(mat, space, indices=ind)
-#}
 

@@ -27,5 +27,9 @@ Create A Spherical Region of Interest
  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
  vox = coords(cube)
+ 
+ ## fill in ROI with value of 6
+ cube1 <- RegionSphere(sp1, c(5,5,5), 3.5, fill=6)
+ all(cube1@data == 6)
 }
 

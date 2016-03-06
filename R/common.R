@@ -168,7 +168,6 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 		
 	NVOLS <- D4(x) + D4(y)
 	
-
 	ndat <- abind(as.array(x), as.array(y), along=4)
 	
 	new.dim <- c(D, NVOLS)
@@ -283,25 +282,26 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 }
 
 # @nord
-# .getMMapMode <- function(code) {	
-#	if (code == "UNKNOWN") {
-#		stop(paste(".getMMapMode: no memory map mode for UNKNOWN data type: ", code))
-#	} else if (code == "BINARY") {
-#		int8()
-#	} else if (code == "UBYTE") {
-#		uint8()
-#	} else if(code == "SHORT") {
-#		int16()
-#	} else if(code == "INT") {
-#		int32()
-#	} else if (code == "FLOAT") {
-#		real32()
-#	} else if (code == "DOUBLE") {
-#		real64()
-#	} else {
-#		stop(paste(".getMMapMode: unsupported data type: ", code))
-#	}
-#}
+#' @import mmap
+.getMMapMode <- function(code) {	
+	if (code == "UNKNOWN") {
+		stop(paste(".getMMapMode: no memory map mode for UNKNOWN data type: ", code))
+	} else if (code == "BINARY") {
+		mmap::int8()
+	} else if (code == "UBYTE") {
+	  mmap::uint8()
+	} else if(code == "SHORT") {
+	  mmap::int16()
+	} else if(code == "INT") {
+	  mmap::int32()
+	} else if (code == "FLOAT") {
+	  mmap::real32()
+	} else if (code == "DOUBLE") {
+	  mmap::real64()
+	} else {
+		stop(paste(".getMMapMode: unsupported data type: ", code))
+	}
+}
 	
 
 #' .getDataStorage
@@ -360,23 +360,17 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	  return(1)
   } else if (dataType == "UBYTE") {
     return(1)
-  }
-  else if (dataType == "SHORT") {
+  } else if (dataType == "SHORT") {
     return(2)
-  }
-  else if (dataType == "INTEGER") {
+  } else if (dataType == "INTEGER") {
     return(4)
-  }
-  else if (dataType == "INT") {
+  } else if (dataType == "INT") {
     return(4)
-  }
-  else if (dataType == "FLOAT") {
+  } else if (dataType == "FLOAT") {
     return(4)
-  }
-  else if (dataType == "DOUBLE") {
+  } else if (dataType == "DOUBLE") {
     return(8)
-  }
-  else if (dataType == "LONG") {
+  } else if (dataType == "LONG") {
     return(8)
   }
 
@@ -537,5 +531,37 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 
   return(mat)
 }
+# 
+# .byteSwapppedReader <- function(rawmap, meta, offset) {
+#   dsize <- .getDataSize(meta@dataType)
+#   nels <- prod(meta@Dim)
+#   dtype <- .getRStorage(meta@dataType)
+#   getElements <- function(indices) {
+#     
+#   }
+# }
+
+.makeMMap <- function(meta) {
+  nels <- prod(meta@Dim[1:4]) 	
+  
+  if (.Platform$endian != meta@endian) {
+    ## read raw bytes
+    rawbytes <- mmap::mmap(meta@dataFile, mode=mmap::char(), prot=mmap::mmapFlags("PROT_READ"))
+    rawbytes <- rawbytes[(meta@dataOffset+1):length(rawbytes)]
+    
+    mmap::munmap(rawbytes)
+    readBin(rawbytes, what=.getRStorage(meta@dataType), size=.getDataSize(meta@dataType), n=nels, endian=meta@endian)
+  } else {
+    #mmap::mmap(meta@dataFile, mode=.getMMapMode(meta@dataType), off=meta@dataOffset,prot=mmap::mmapFlags("PROT_READ"),flags=mmap::mmapFlags("MAP_PRIVATE"))
+    ret <- mmap::mmap(meta@dataFile, mode=.getMMapMode(meta@dataType), prot=mmap::mmapFlags("PROT_READ"))
+    offset <- meta@dataOffset/.getDataSize(meta@dataType) + 1
+    vals <- ret[offset:nels]
+    mmap::munmap(ret)
+    vals
+  }
+  
+  
+}
+
 
     

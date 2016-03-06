@@ -7,10 +7,14 @@
 \alias{concat,BrainVector,BrainVolume-method}
 \alias{concat,BrainVolume,BrainVector-method}
 \alias{concat,DenseBrainVolume,DenseBrainVolume-method}
+\alias{concat,DenseBrainVolume,missing-method}
 \alias{concat,SparseBrainVector,SparseBrainVector-method}
+\alias{concat,SparseBrainVector,missing-method}
 \title{Concatenate two objects}
 \usage{
 concat(x, y, ...)
+
+\S4method{concat}{SparseBrainVector,missing}(x, y, ...)
 
 \S4method{concat}{SparseBrainVector,SparseBrainVector}(x, y, ...)
 
@@ -19,6 +23,8 @@ concat(x, y, ...)
 \S4method{concat}{BrainVolume,BrainVector}(x, y, ...)
 
 \S4method{concat}{BrainVector,BrainVector}(x, y, ...)
+
+\S4method{concat}{DenseBrainVolume,missing}(x, y, ...)
 
 \S4method{concat}{DenseBrainVolume,DenseBrainVolume}(x, y, ...)
 }

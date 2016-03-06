@@ -132,36 +132,45 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 #' @export
 #' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
-		def=function(x) {		
+		def=function(x, mmap=FALSE) {		
+		  
+		  if (mmap && neuroim:::.isExtension(meta@dataFile, ".gz")) {
+		    message("cannot memory map to a gzipped file.")		
+		    mmap <- FALSE
+		  }
 			
-			### considerable code duplication with BrainVectorSource#loadData
-			meta <- x@metaInfo
-			#stopifnot(length(meta@Dim) == 4)
-			
+
 			meta <- x@metaInfo
 			nels <- prod(meta@Dim[1:3]) 		
 			
 			ind <- x@indices
 			M <- x@mask > 0
 			
-			reader <- dataReader(meta, offset=0)		
-			dat4D <- readElements(reader, prod(meta@Dim[1:4]))
+			if (mmap) {
+			  dat4D <- .makeMMap(meta)
+			} else {
+			  reader <- dataReader(meta, offset=0)	
+			  dat4D <- readElements(reader, prod(meta@Dim[1:4]))
+			  close(reader)
+			}
+			
+			#reader <- dataReader(meta, offset=0)		
+			#dat4D <- readElements(reader, prod(meta@Dim[1:4]))
+		
 			datlist <- lapply(1:length(ind), function(i) {
 				offset <- (nels * (ind[i]-1))
 				dat4D[(offset+1):(offset + nels)][M]
 			})
 	
-			close(reader)
-				
-			#datlist <- list()
-			#for (i in 1:length(ind)) {
-			#	offset <- (nels * (ind[i]-1)) * meta@bytesPerElement
-			#	reader <- dataReader(meta, offset)		
-			#	datlist[[i]] <- readElements(reader, nels)[M]
-			#	close(reader)				
-			#}
-			
+			#close(reader)
 			arr <- do.call(rbind, datlist)		
+			
+			if (.hasSlot(meta, "slope")) {
+			  if (meta@slope != 0) {		  
+			    arr <- arr*meta@slope
+			  }
+			}
+			
 			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@spacing, meta@origin, meta@spatialAxes)
 			SparseBrainVector(arr, bspace, x@mask)
 			
@@ -326,7 +335,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
 					 matrix(0, dim(x)[4], length(i))
 				 } else {
 					 mat <- matrix(0, dim(x)[4], length(i))
-					 mat[, idx != 0] <- x@data[,idx.nz]     
+					 mat[, idx !=0] <- x@data[,idx.nz]     
 					 mat
 				 }
 			 } else {
@@ -335,11 +344,17 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
 				 idx <- slicedim*(k-1) + (j-1)*vdim[1] + i
 				 callGeneric(x, idx)
 			 }
-				 
 			
 		 })
  
-
+#' @rdname concat-methods 
+#' @export
+setMethod(f="concat", signature=signature(x="SparseBrainVector", y="missing"),
+          def=function(x,y,...) {
+            x
+          })
+          
+          
 #' @export           
 #' @rdname concat-methods 
 setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
@@ -347,23 +362,32 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
             if (!all(indices(x) == indices(y))) {
               stop("cannot concatenate arguments with different index maps")
             }
+            
+            if (!all(dim(x)[1:3] == dim(y)[1:3])) {
+              stop("cannot concatenate arguments with different spatial dimensions")
+            }
 
             ndat <- rbind(x@data, y@data)
             d1 <- dim(x)
             d2 <- dim(y)
             
-            ndim <- c(d1[1:3], d1[4] + d2[4])
-            nspace <- BrainSpace(ndim, spacing(x@space),  origin(x@space), axes(x@space), trans(x@space))
-  
-            
-            ret <- SparseBrainVector(ndat, nspace, mask=x@mask)
             rest <- list(...)
             
+           
             if (length(rest) >= 1) {
-              ret <- Reduce("concat", c(ret, rest))
+              mat <- do.call(rbind, lapply(rest, function(vec) {
+                vec@data
+              }))
+              
+              ndim <- c(d1[1:3], d1[4] + d2[4] + nrow(mat))
+              ndat <- rbind(ndat, mat)
+              nspace <- BrainSpace(ndim, spacing(x@space),  origin(x@space), axes(x@space), trans(x@space))
+              SparseBrainVector(ndat, nspace, mask=x@mask)  
+            } else {
+              ndim <- c(d1[1:3], d1[4] + d2[4])
+              nspace <- BrainSpace(ndim, spacing(x@space),  origin(x@space), axes(x@space), trans(x@space))
+              SparseBrainVector(ndat, nspace, mask=x@mask)
             }
-
-            return(ret)
             
           })
           

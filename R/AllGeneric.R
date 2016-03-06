@@ -161,7 +161,7 @@ setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric(
 #' @docType methods
 #' @details if \code{FUN} is supplied it must take a vector and return a single scalar value. If it returns more than one value, an error will occur.
 #' 
-#' if \code{x} is a \code{BrainVector} instance then voxels (dims 1:3) are treated as columns and time-series (dim 4) as rows. 
+#' if \code{x} is a \code{\linkS4class{BrainVector}} instance then voxels (dims 1:3) are treated as columns and time-series (dim 4) as rows. 
 #' The summary function then is applied to groups of voxels. However, if the goal is to apply a function to groups of time-points, 
 #' then this can be achieved as follows: 
 #' 

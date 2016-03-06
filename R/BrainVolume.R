@@ -420,6 +420,13 @@ loadVolume  <- function(fileName, index=1) {
 	loadData(src)
 }
 
+#' @rdname concat-methods 
+#' @export
+setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="missing"),
+          def=function(x,y,...) {
+            x
+          })
+
 
 #' @note dimensions of x and y must be equal
 #' @export concat

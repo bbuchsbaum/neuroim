@@ -3,7 +3,7 @@
 \name{BootstrapSearchlight}
 \alias{BootstrapSearchlight}
 \title{Create a searchlight iterator that samples regions from within a mask.
-Searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
+searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
 It is in the latter sense that this is a bootstrap resampling scheme.}
 \usage{
 BootstrapSearchlight(mask, radius, iter = 100)
@@ -17,7 +17,7 @@ BootstrapSearchlight(mask, radius, iter = 100)
 }
 \description{
 Create a searchlight iterator that samples regions from within a mask.
-Searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
+searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
 It is in the latter sense that this is a bootstrap resampling scheme.
 }
 

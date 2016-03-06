@@ -186,6 +186,8 @@ test.SparseBrainVector.concat <- function() {
 	bv3 <- concat(bv1,bv2, bv1, bv2)
 	checkTrue(inherits(bv3, "BrainVector"))
 	checkEquals(dim(bv3), c(64,64,64,24))
+	
+	do.call(concat, list(bv1))
 	#checkEquals(bv4[1,1,1,1],0)
 }
 	
