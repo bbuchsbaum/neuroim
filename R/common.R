@@ -14,6 +14,7 @@ matrixToVolumeList <- function(voxmat, mat, mask, default=NA) {
   if (nrow(voxmat) != nrow(mat)) {
     stop("mismatching dimensions: nrow(voxmat) must equal nrow(mat)")
   }
+  
   lapply(1:ncol(mat), function(i) {
     vol <- array(default, dim(mask))   
     vol[voxmat] <- mat[,i]
