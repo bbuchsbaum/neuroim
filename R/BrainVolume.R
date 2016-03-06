@@ -639,7 +639,7 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 #' apply a kernel function to a \code{\linkS4class{BrainVolume}}
 #' 
 #' @rdname map-methods
-#' @param mask restrict application of kernel to maksed area
+#' @param mask restrict application of kernel to masked area
 #' @export
 setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
           def=function(x, m, mask=NULL) {          
