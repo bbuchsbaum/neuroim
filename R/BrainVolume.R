@@ -673,26 +673,36 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
             BrainVolume(ovol, space(x))
           })
 
-#' tesselate a LogicalBrainVolume into K spatial disjoint components
-#' @param features use addiitonal feature set to tesselate volume
+
+#' tesselate a LogicalBrainVolume into K spatial disjoint components using \code{kmeans} clustering.
+#' 
+#' @param features an optional matrix of additional features to tesselate volume
 #' @param spatialWeight weight voxels according to distance
 #' @importFrom stats kmeans
 #' @importFrom stats sd
 #' @rdname tesselate-methods
 setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
           def=function(x, K, features=NULL, spatialWeight=4) {
+           
+            
             voxgrid <- indexToGrid(x, which(x == TRUE))
             voxgrid <- sweep(voxgrid, 2, spacing(x), "*")
             
+            
             if (!is.null(features)) {
+              
               if (nrow(features) == length(x)) {
                 features <- features[which(x == TRUE),]
+              } else {
+                assertthat::assert_that(nrow(features) == nrow(voxgrid))
               }
               
-        
-              features <- apply(features,2, scale)
-              avg.sd <- sum(apply(voxgrid,2, sd))/ncol(features)
-              sfeatures <- (features*avg.sd)/spatialWeight
+              #features <- apply(features,2, scale)
+              voxVar <- sum(apply(voxgrid,2, var))
+              featureVar <- sum(apply(features , 2, var))
+              featureWeight <- 1/spatialWeight * voxVar/featureVar
+              
+              sfeatures <- featureWeight * featureVar
               voxgrid <- cbind(voxgrid, sfeatures)
             }
     

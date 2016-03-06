@@ -3,7 +3,7 @@
 \docType{methods}
 \name{show,ROIVolume-method}
 \alias{show,ROIVolume-method}
-\title{show an \code{ROIVolime}}
+\title{show an \code{\linkS4class{ROIVolume}}}
 \usage{
 \S4method{show}{ROIVolume}(object)
 }
@@ -11,6 +11,6 @@
 \item{object}{the object}
 }
 \description{
-show an \code{ROIVolime}
+show an \code{\linkS4class{ROIVolume}}
 }
 

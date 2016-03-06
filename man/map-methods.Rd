@@ -17,7 +17,7 @@ map(x, m, ...)
 
 \item{...}{additional arguments}
 
-\item{mask}{restrict application of kernel to maksed area}
+\item{mask}{restrict application of kernel to masked area}
 }
 \description{
 Generic function to apply a function to an object

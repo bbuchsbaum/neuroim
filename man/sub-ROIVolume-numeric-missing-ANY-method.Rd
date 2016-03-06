@@ -3,7 +3,7 @@
 \docType{methods}
 \name{[,ROIVolume,numeric,missing,ANY-method}
 \alias{[,ROIVolume,numeric,missing,ANY-method}
-\title{extract data from \code{ROIVolume}}
+\title{subset an \code{ROIVolume}}
 \usage{
 \S4method{[}{ROIVolume,numeric,missing,ANY}(x, i, j, drop)
 }
@@ -17,6 +17,6 @@
 \item{drop}{drop dimension}
 }
 \description{
-extract data from \code{ROIVolume}
+subset an \code{ROIVolume}
 }
 

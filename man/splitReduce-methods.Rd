@@ -33,7 +33,7 @@ splitReduce(x, fac, FUN)
 \item{FUN}{the function to apply to each subset. if \code{FUN} is missing, than the mean of each sub-matrix column is computed.}
 }
 \value{
-a new \code{matrix} where the original values have been reduced
+a new \code{matrix} where the original values have been "reduced" by the supplied function.
 }
 \description{
 Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}

@@ -418,7 +418,7 @@ setMethod(f="length", signature=signature(x="ROIVolume"),
             length(x@data)
 		})
 
-#' extract data from \code{ROIVolume}
+#' subset an \code{ROIVolume}
 #' @export
 #' @param x the object
 #' @param i first index
@@ -426,10 +426,10 @@ setMethod(f="length", signature=signature(x="ROIVolume"),
 #' @param drop drop dimension
 setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
-            x@data[i]
+            ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
           })
 
-#' show an \code{ROIVolime} 
+#' show an \code{\linkS4class{ROIVolume}} 
 #' @param object the object
 #' @export
 setMethod("show", signature=signature(object = "ROIVolume"),
