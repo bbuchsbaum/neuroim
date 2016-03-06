@@ -157,7 +157,7 @@ setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric(
 #' @param x a numeric matrix(like) object
 #' @param fac the factor to define subsets of the object
 #' @param FUN the function to apply to each subset. if \code{FUN} is missing, than the mean of each sub-matrix column is computed.
-#' @return a new \code{matrix} where the original values have been reduced
+#' @return a new \code{matrix} where the original values have been "reduced" by the supplied function.
 #' @docType methods
 #' @details if \code{FUN} is supplied it must take a vector and return a single scalar value. If it returns more than one value, an error will occur.
 #' 

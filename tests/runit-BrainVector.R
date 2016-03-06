@@ -160,7 +160,7 @@ test.SparseBrainVector <- function() {
 	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
 	spc <- BrainSpace(c(64,64,64,4))
 	tmp <- rnorm(64*64*64)
-	mask <- tmp < 1000
+	mask <- tmp < .4
 	mask <- LogicalBrainVolume(mask, dropDim(spc))
 	bvec <- SparseBrainVector(dat, spc, mask)
 	
