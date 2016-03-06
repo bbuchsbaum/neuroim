@@ -429,6 +429,11 @@ setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing"
             ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
           })
 
+setMethod("[", signature=signature(x="ROIVolume", i="logical", j="missing", drop="ANY"),
+          function(x,i,j,drop) {
+            ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+          })
+
 #' show an \code{\linkS4class{ROIVolume}} 
 #' @param object the object
 #' @export
