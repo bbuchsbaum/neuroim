@@ -14,7 +14,7 @@
 #' @rdname ROIVolume
 #' @name ROIVolume
 #' @export
-ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
+ROIVolume <- function(vspace, coords, data=rep(nrow(coords),1)) {
   new("ROIVolume", space=vspace, coords=coords, data=data)
 }
   
