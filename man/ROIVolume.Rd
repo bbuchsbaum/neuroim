@@ -4,7 +4,7 @@
 \alias{ROIVolume}
 \title{Create an instance of class ROIVolume}
 \usage{
-ROIVolume(vspace, coords, data = rep(length(indices), 1))
+ROIVolume(vspace, coords, data = rep(nrow(coords), 1))
 }
 \arguments{
 \item{vspace}{the volume \code{BrainSpace}}

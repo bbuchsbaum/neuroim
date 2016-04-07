@@ -6,7 +6,6 @@ Imports:
     iterators,
     abind,
     assertthat,
-    readr,
     mmap
 LinkingTo: Rcpp
 License: GPL (>= 2)
@@ -23,7 +22,8 @@ Suggests:
     foreach,
     testthat,
     knitr,
-    rgl
+    rgl,
+    readr
 Version: 0.0.6
 Depends:
     R (>= 3.0.0),

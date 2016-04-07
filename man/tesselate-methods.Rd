@@ -4,7 +4,7 @@
 \name{tesselate}
 \alias{tesselate}
 \alias{tesselate,LogicalBrainVolume,numeric-method}
-\title{tesselate a LogicalBrainVolume into K spatial disjoint components using \code{kmeans} clustering.}
+\title{tesselate}
 \usage{
 tesselate(x, K, ...)
 
@@ -23,6 +23,8 @@ tesselate(x, K, ...)
 \item{spatialWeight}{weight voxels according to distance}
 }
 \description{
+tesselate
+
 tesselate a LogicalBrainVolume into K spatial disjoint components using \code{kmeans} clustering.
 }
 
