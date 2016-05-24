@@ -49,11 +49,25 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
           })
 
 
+meshToGraph <- function(vertices, nodes) {
+  edge1 <- nodes[,1:2 ]
+  edge2 <- nodes[,2:3 ]
+  edges <- rbind(e1,e2) + 1
+  
+  gg1 <- igraph::simplify(igraph::graph_from_edgelist(edges, directed=FALSE))
+  gg1 <- set.vertex.attribute(gg1, "x", V(gg1), vertices[,1])
+  gg1 <- set.vertex.attribute(gg1, "y", V(gg1), vertices[,2])
+  gg1 <- set.vertex.attribute(gg1, "z", V(gg1), vertices[,3])
+  
+  gg1
+  
+}
+
 #' load Freesurfer ascii surface
 #' @param mesh file name of mesh to read in.
 loadFSSurface <- function(mesh) {
   if (!requireNamespace("rgl", quietly = TRUE)) {
-    stop("Pkg needed for this function to work. Please install it.",
+    stop("Pkg rgl needed for this function to work. Please install it.",
          call. = FALSE)
   }
   
@@ -61,10 +75,13 @@ loadFSSurface <- function(mesh) {
   asctab <- read.table(mesh, skip=2)
   
   vertices <- as.matrix(asctab[1:ninfo[1],1:3])
+  dat <- asctab[1:mninfo[1],4]
   nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
   
-  mesh <- rgl::tmesh3d(vertices, nodes)
-  new("BrainSurface", mesh=mesh, )
+  
+  
+  mesh <- rgl::tmesh3d(as.vector(t(vertices)), as.vector(t(nodes))+1, homogeneous=FALSE)
+  new("BrainSurface", mesh=mesh, dat)
 }
 
 
