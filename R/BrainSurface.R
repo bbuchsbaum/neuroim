@@ -50,38 +50,63 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
 
 
 meshToGraph <- function(vertices, nodes) {
-  edge1 <- nodes[,1:2 ]
-  edge2 <- nodes[,2:3 ]
-  edges <- rbind(e1,e2) + 1
+  edge1 <- as.matrix(nodes[,1:2 ])
+  edge2 <- as.matrix(nodes[,2:3 ])
+  edges <- rbind(edge1,edge2) + 1
+  
+  
+  
   
   gg1 <- igraph::simplify(igraph::graph_from_edgelist(edges, directed=FALSE))
+  emat <- get.edgelist(gg1)
+  v1 <- vertices[emat[,1],]
+  v2 <- vertices[emat[,2],]
+  
+  ED <- sqrt(rowSums((v1 - v2)^2))
+  
   gg1 <- set.vertex.attribute(gg1, "x", V(gg1), vertices[,1])
   gg1 <- set.vertex.attribute(gg1, "y", V(gg1), vertices[,2])
   gg1 <- set.vertex.attribute(gg1, "z", V(gg1), vertices[,3])
   
+  gg1 <- set.edge.attribute(gg1, "dist", E(gg1), ED)
   gg1
   
 }
 
+####
+
+## curvature: 
+
+## curv <- Rvcg::vcgCurve(mesh)
+## normalize <- function(vals) (vals - min(vals))/(max(vals)-min(vals))
+## vbmean <- normalize(curv$meanitmax)
+## ccol = ifelse(curv$meanitmax > 0, "red", "green")
+## make triangles: tri = misc3d::makeTriangles(t(vertices), t(nodes)+1, color=ccol)
+## draw: drawScene.rgl(tri)
+## for normal rgl using shade3d:
+## ccol <- rep(ccol,each=3)
+####
+
 #' load Freesurfer ascii surface
 #' @param mesh file name of mesh to read in.
-loadFSSurface <- function(mesh) {
+loadFSSurface <- function(meshname) {
   if (!requireNamespace("rgl", quietly = TRUE)) {
     stop("Pkg rgl needed for this function to work. Please install it.",
          call. = FALSE)
   }
   
-  ninfo <- as.integer(strsplit(readLines(mesh, n=2)[2], " ")[[1]])
-  asctab <- read.table(mesh, skip=2)
+  ninfo <- as.integer(strsplit(readLines(meshname, n=2)[2], " ")[[1]])
+  message("loading ", meshname)
+  asctab <- read.table(meshname, skip=2)
   
   vertices <- as.matrix(asctab[1:ninfo[1],1:3])
-  dat <- asctab[1:mninfo[1],4]
+  dat <- asctab[1:ninfo[1],4]
   nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
-  
-  
+  message("constructing graph")
+  graph <- meshToGraph(vertices, nodes)
   
   mesh <- rgl::tmesh3d(as.vector(t(vertices)), as.vector(t(nodes))+1, homogeneous=FALSE)
-  new("BrainSurface", mesh=mesh, dat)
+  new("BrainSurface", mesh=mesh, data=dat, graph=graph)
 }
 
 

@@ -9,7 +9,7 @@ setOldClass(c("gzfile", "connection"))
 setOldClass("raster")
 setOldClass("rastergrob")
 setOldClass("gList")
-
+setOldClass("igraph")
 .package_env <- new.env()
 
 #' Base
@@ -678,9 +678,10 @@ setClass("Kernel",
 #' @slot source the data source for the surface
 #' @slot mesh the underlying \code{mesh3d} object 
 #' @slot data the vector of data value at each vertex of the mesh
+#' @slot graph underlying graph structure
 #' @export
 setClass("BrainSurface", 
-         representation=representation(source="BrainSource", mesh="mesh3d", data="numeric"))
+         representation=representation(source="BrainSource", mesh="mesh3d", data="numeric", graph="igraph"))
 
 #' BrainSurfaceVector
 #' 
