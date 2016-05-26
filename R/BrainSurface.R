@@ -49,13 +49,16 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
           })
 
 
+#' construct a graph from a set of vertices and nodes faces.
+#' 
+#' @export
+#' @param N-by-3 matrix of vertices 
+#' @param matrix of node faces, where each row is a set of three vertex indices.
+#' @return an \code{igraph} instance representing th mesh connectivity.
 meshToGraph <- function(vertices, nodes) {
   edge1 <- as.matrix(nodes[,1:2 ])
   edge2 <- as.matrix(nodes[,2:3 ])
   edges <- rbind(edge1,edge2) + 1
-  
-  
-  
   
   gg1 <- igraph::simplify(igraph::graph_from_edgelist(edges, directed=FALSE))
   emat <- get.edgelist(gg1)
@@ -107,6 +110,29 @@ loadFSSurface <- function(meshname) {
   
   mesh <- rgl::tmesh3d(as.vector(t(vertices)), as.vector(t(nodes))+1, homogeneous=FALSE)
   new("BrainSurface", mesh=mesh, data=dat, graph=graph)
+}
+
+knnAdjacency <- function(surf, knn=10, edge_weights=E(surf@graph)$dist, mutual=TRUE) {
+  nabeinfo <- lapply(V(graph), function(v) {
+  
+    cand <- ego(surf@graph, order= sqrt(knn), nodes=v)[[1]]
+    D <- distances(surf@graph, v, cand, weights=edge_weights, algorithm="dijkstra")
+    ord <- order(D)[2:(knn+1)]
+    knabes <- cand[ord]
+    cbind(i=rep(v, length(knabes)), j=knabes, d=D[ord])
+  })
+  
+  mat <- plyr::rbind.fill.matrix(nabeinfo)
+  adj <- sparseMatrix(i=mat[,1], j=mat[,2], x=mat[,3])
+  
+  S <- rbind(summary(adj), summary(t(adj)))
+  outS <- aggregate(x ~ i + j, data = S, max)
+  symmAdj <- sparseMatrix(i = outS$i,
+               j = outS$j,
+               x = outS$x,
+               dims = c(nrow(adj), ncol(adj)))
+  
+  
 }
 
 

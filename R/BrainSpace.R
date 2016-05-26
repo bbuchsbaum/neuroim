@@ -163,7 +163,22 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
             .indexToGrid(idx, array.dim)        
           })
 
- 
+#' @export 
+#' @rdname indexToCoord-methods
+setMethod(f="indexToCoord", signature=signature(x="BrainSurface", idx="index"),
+          def=function(x, idx) {
+            x@mesh$vb[1:3, idx]
+          })
+
+#' @export 
+#' @rdname coordToIndex-methods
+setMethod(f="coordToIndex", signature=signature(x="BrainSurface", coords="matrix"),
+          def=function(x, coords) {
+            ## find nearest nodes
+            stop("unimplimented")
+          })
+
+
 #' @export 
 #' @rdname indexToCoord-methods
 setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
