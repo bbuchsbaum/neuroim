@@ -51,6 +51,21 @@ setMethod(f="dataReader", signature=signature("AFNIMetaInfo"),
 			}
 		})		
 
+
+#' @rdname dataReader-methods
+setMethod(f="dataReader", signature=signature("SurfaceGeometryMetaInfo"), 
+          def=function(x) {
+            reader <- function(i) {
+              if (length(i) == 1 && i == 0) {
+                x@nodeIndices
+              } else {
+                x@data[,i,drop=FALSE]
+              }
+            }
+            
+            new("ColumnReader", nrow=as.integer(nrow(x@data)), ncol=as.integer(ncol(x@data)), reader=reader)
+          })
+
 #' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("NIMLSurfaceDataMetaInfo"), 
           def=function(x) {
@@ -122,12 +137,12 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 #' Constructor for \code{\linkS4class{SurfaceGeometryMetaInfo}} class
 #' @param descriptor the file descriptor
 #' @param header a \code{list} containing header information
-SurfaceGeometryMetaInfo <- function(descriptor, header) {
+FreesurferSurfaceGeometryMetaInfo <- function(descriptor, header) {
   stopifnot(is.numeric(header$vertices))
   stopifnot(is.numeric(header$faces))
  
   
-  new("SurfaceGeometryMetaInfo",
+  new("FreesurferSurfaceGeometryMetaInfo",
      headerFile=header$headerFile,
      dataFile=header$dataFile,
      fileDescriptor=descriptor,
@@ -136,6 +151,10 @@ SurfaceGeometryMetaInfo <- function(descriptor, header) {
      label=as.character(header$label),
      embedDimension=as.integer(header$embedDimension))
 }
+
+
+
+
 
 #' Constructor for \code{\linkS4class{SurfaceDataMetaInfo}} class
 #' @param descriptor the file descriptor
@@ -164,7 +183,7 @@ NIMLSurfaceDataMetaInfo <- function(descriptor, header) {
   
   new("NIMLSurfaceDataMetaInfo",
       headerFile=header$headerFile,
-      dataFile=header$dateFile,
+      dataFile=header$dataFile,
       fileDescriptor=descriptor,
       nodeCount=as.integer(header$nodeCount),
       nels=as.integer(header$nels),

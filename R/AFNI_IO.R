@@ -65,14 +65,18 @@ readAFNIHeader <- function(fileName) {
 	header
 	
 }
-
+#' readNIMLSurfaceHeader
+#
+#' @param fileName the name of the NIML file
+#' @export 
 readNIMLSurfaceHeader <- function(fileName) {
   p <- parse_niml_file(fileName)
   whdat <- which(unlist(lapply(p, "[[", "label")) == "SPARSE_DATA")
   dmat <- do.call(cbind, p[[whdat]]$data)
   whind <- which(unlist(lapply(p, "[[", "label")) == "INDEX_LIST")
   idat <- p[[whind]]$data[[1]]
-  list(nodeCount=nrow(dmat), nels=ncol(dmat), 
+  list(headerFile=fileName, dataFile=fileName, 
+       nodeCount=nrow(dmat), nels=ncol(dmat), 
        label=stripExtension(NIML_SURFACE_DSET, basename(fileName)),
        data=dmat, nodes=idat)
 }
@@ -129,7 +133,7 @@ parse_niml_header <- function(fconn) {
   STATE <- "BEGIN"
   while(TRUE ) {
     ch <- readChar(fconn,1)
-    print(ch)
+   
     if (length(ch) == 0) {
       break
     } else if (ch == "<" && STATE == "BEGIN") {
@@ -142,7 +146,7 @@ parse_niml_header <- function(fconn) {
       out <- c(out, ch)
     }
     
-    print(STATE)
+
   }
   
   out <- paste(out, collapse="")
@@ -165,7 +169,7 @@ parse_niml_next <- function(fconn) {
   lastch <- ""
   while(TRUE ) {
     ch <- readChar(fconn,1)
-    print(ch)
+    
     if (length(ch) == 0) {
       break
     } else if (ch == "<" && STATE == "BEGIN") {
@@ -191,9 +195,7 @@ parse_niml_file <- function(fname, maxels=10000) {
   while (seek(fconn, where=NA) < fsize && elcount < maxels) {
     elcount <- elcount + 1
     el <- parse_niml_next(fconn)
-    print(el$label)
     out[[elcount]] <- el
-    print(seek(fconn, where=NA))
   }
   
   out

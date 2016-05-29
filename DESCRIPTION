@@ -6,8 +6,7 @@ Imports:
     iterators,
     abind,
     assertthat,
-    mmap,
-
+    mmap
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>

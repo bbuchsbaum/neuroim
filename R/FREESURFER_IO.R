@@ -1,11 +1,12 @@
 
 readFreesurferAsciiHeader <- function(fileName) {
   ninfo <- as.integer(strsplit(readLines(fileName, n=2)[2], " ")[[1]])
-  list(vertices=ninfo[1], faces=ninfo[2], label=stripExtension(FREESURFER_ASCII_SURFACE_DSET, basename(fileName)), embedDimension=3, headerFile=fileName, dataFile=fileName)
+  list(vertices=ninfo[1], faces=ninfo[2], label=stripExtension(FREESURFER_ASCII_SURFACE_DSET, basename(fileName)), 
+       embedDimension=3, headerFile=fileName, dataFile=fileName)
 }
 
-# @importFrom readr read_table
-readFreesurferAsciiGeometry<- function(fileName) {
+
+readFreesurferAsciiGeometry <- function(fileName) {
   if (!requireNamespace("rgl", quietly = TRUE)) {
     stop("Pkg needed for this function to work. Please install it.",
          call. = FALSE)

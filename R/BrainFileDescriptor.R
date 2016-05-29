@@ -107,7 +107,7 @@ setMethod(f="readMetaInfo",signature=signature(x= "NIMLSurfaceFileDescriptor"),
 #' @export
 setMethod(f="readMetaInfo",signature=signature(x= "FreesurferAsciiSurfaceFileDescriptor"),
     def=function(x, fileName) {
-      .readMetaInfo(x, fileName, readFreesurferAsciiHeader, SurfaceGeometryMetaInfo)
+      .readMetaInfo(x, fileName, readFreesurferAsciiHeader, FreesurferSurfaceGeometryMetaInfo)
     })
 
 

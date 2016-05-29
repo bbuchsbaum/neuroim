@@ -362,7 +362,7 @@ setClass("BrainFileSource", representation=
 				contains=c("BrainSource"))
 
 		
-#' BrainVolume
+
 #' BrainVolumeSource
 #' 		
 #' A class is used to produce a \code{\linkS4class{BrainVolume}} instance
@@ -384,16 +384,6 @@ setClass("BrainFileSource", representation=
 				contains=c("BrainSource"))
 
 
-#' BrainSurfaceVectorSource
-#' 
-#' A class that is used to produce a \code{\linkS4class{BrainSurfaceVectorSource}} instance
-#' 
-#' @rdname BrainSurfaceVectorSource-class
-#' @slot indices the index vector of the volumes to be loaded
-#' @export
-setClass("BrainSurfaceVectorSource", representation=
-           representation(indices="integer"),
-         contains=c("BaseSource"))
 
 		
 		
@@ -413,12 +403,24 @@ setClass("BrainSurfaceVectorSource", representation=
 #' A class that is used to produce a \code{\linkS4class{BrainSurface}} instance
 #' @rdname BrainSurfaceSource-class
 #' @slot metaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
-#' @slot dataMetaInfo a \code{\linkS4class{SurfaceDataMetaInfo}} instance
-#' @slot index the index offset into the surface data matrix
 #' @export
 setClass("BrainSurfaceSource",
-         representation=representation(metaInfo="SurfaceGeometryMetaInfo", dataMetaInfo="SurfaceDataMetaInfo", index="integer"),
+         representation=representation(metaInfo="SurfaceGeometryMetaInfo"),
          contains=c("BaseSource"))
+
+#' BrainSurfaceVectorSource
+#' 
+#' A class that is used to produce a \code{\linkS4class{BrainSurfaceVector}} instance
+#' 
+#' @rdname BrainSurfaceVectorSource-class
+#' @slot dataMetaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
+#' @slot indices the index vector of the volumes to be loaded
+#' @export
+setClass("BrainSurfaceVectorSource", representation=
+           representation(
+                          dataMetaInfo="SurfaceDataMetaInfo",
+                          indices="integer"),
+         contains=c("BrainSurfaceSource"))
 
 
 #' BinaryReader
@@ -526,6 +528,7 @@ setClass("BrainData",
 setClass("BrainSlice",       
 	    contains=c("BrainData", "array"))
 
+#' BrainVolume
 #' Base class for image representing 3D volumetric data.
 #' @rdname BrainVolume-class
 #' @export
@@ -681,7 +684,7 @@ setClass("Kernel",
 #' @slot graph underlying graph structure
 #' @export
 setClass("BrainSurface", 
-         representation=representation(source="BrainSource", mesh="mesh3d", data="numeric", graph="igraph"))
+         representation=representation(source="BaseSource", mesh="mesh3d", data="numeric", graph="igraph"))
 
 #' BrainSurfaceVector
 #' 
@@ -690,10 +693,11 @@ setClass("BrainSurface",
 #' @rdname BrainSurfaceVector-class
 #' @slot source the data source for the surface
 #' @slot mesh the underlying \code{mesh3d} object 
-#' @slot mat a matrix of values where each column contains a vector of values over the surface nodes.
+#' @slot nodes the subset of mesh nodes indices that contain data
+#' @slot data a matrix of values where each column contains a vector of values over the surface nodes.
 #' @export
 setClass("BrainSurfaceVector", 
-         representation=representation(source="BrainSource", mesh="mesh3d", mat="numeric"))
+         representation=representation(source="BaseSource", mesh="mesh3d", nodes="integer", data="Matrix", graph="igraph"))
 
 #' BrainBucket
 #' 
