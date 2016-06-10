@@ -72,9 +72,14 @@ readAFNIHeader <- function(fileName) {
 readNIMLSurfaceHeader <- function(fileName) {
   p <- parse_niml_file(fileName)
   whdat <- which(unlist(lapply(p, "[[", "label")) == "SPARSE_DATA")
-  dmat <- do.call(cbind, p[[whdat]]$data)
+  dmat <- if (length(whdat) > 1) {
+    t(do.call(rbind, lapply(p[[whdat]], "[[", "data")))
+  } else {
+    t(p[[whdat]]$data)
+  }
+  
   whind <- which(unlist(lapply(p, "[[", "label")) == "INDEX_LIST")
-  idat <- p[[whind]]$data[[1]]
+  idat <- p[[whind]]$data[1,]
   list(headerFile=fileName, dataFile=fileName, 
        nodeCount=nrow(dmat), nels=ncol(dmat), 
        label=stripExtension(NIML_SURFACE_DSET, basename(fileName)),
@@ -121,11 +126,8 @@ read_niml_binary <- function(fconn, meta) {
   
   nels <- as.integer(meta$ni_dimen)
   
-  volseq <- lapply(1:nvols, function(i) {
-    readBin(fconn, what=type, size=4, n=nels)
-  })
-  
-  volseq
+  allvals <- readBin(fconn, what=type, size=4, n=nels*nvols)
+  mat <- matrix(allvals, nvols, nels)
 }
 
 parse_niml_header <- function(fconn) {

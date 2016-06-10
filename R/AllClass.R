@@ -169,6 +169,16 @@ setMethod(f="show",
 				cat("meta info is null \n")
 			})
 	
+#' SurfaceGeometry
+#' 
+#' a three-dimensional surface consisting of a set of triangle vertices
+#' @rdname SurfaceGeometry-class
+#' @slot source the data source for the surface geometry
+#' @slot mesh the underlying \code{mesh3d} object 
+#' @slot graph underlying graph structure
+#' @export
+setClass("SurfaceGeometry", 
+         representation=representation(source="BaseSource", mesh="mesh3d", graph="igraph"))
 
 #' SurfaceGeometryMetaInfo
 #' 	
@@ -398,14 +408,29 @@ setClass("BrainFileSource", representation=
 				representation=representation(sourceList="list", cache="environment"),
 				contains=c("BrainVectorSource"))
 		
+#' SurfaceGeometrySource
+#' 
+#' A class that is used to produce a \code{\linkS4class{SurfaceGeometry}} instance
+#' @rdname SurfaceGeometrySource-class
+#' @slot metaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
+#' @export
+setClass("SurfaceGeometrySource",
+         representation=representation(metaInfo="SurfaceGeometryMetaInfo"),
+         contains=c("BaseSource"))
+
 #' BrainSurfaceSource
 #' 
 #' A class that is used to produce a \code{\linkS4class{BrainSurface}} instance
+#' 
 #' @rdname BrainSurfaceSource-class
-#' @slot metaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
+#' @slot geometry a \code{\linkS4class{SurfaceGeometry}} instance
+#' @slot dataMetaInfo a \code{\linkS4class{SurfaceDataMetaInfo}} instance
+#' @slot index the column index of the surface map to be loaded.
 #' @export
-setClass("BrainSurfaceSource",
-         representation=representation(metaInfo="SurfaceGeometryMetaInfo"),
+setClass("BrainSurfaceSource", representation=
+           representation(geometry="SurfaceGeometry",
+                          dataMetaInfo="SurfaceDataMetaInfo",
+                          index="integer"),
          contains=c("BaseSource"))
 
 #' BrainSurfaceVectorSource
@@ -413,11 +438,12 @@ setClass("BrainSurfaceSource",
 #' A class that is used to produce a \code{\linkS4class{BrainSurfaceVector}} instance
 #' 
 #' @rdname BrainSurfaceVectorSource-class
-#' @slot dataMetaInfo a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance
-#' @slot indices the index vector of the volumes to be loaded
+#' @slot geometry a \code{\linkS4class{SurfaceGeometry}} instance
+#' @slot dataMetaInfo a \code{\linkS4class{SurfaceDataMetaInfo}} instance
+#' @slot indices the column indices vector of the surface maps to be loaded
 #' @export
 setClass("BrainSurfaceVectorSource", representation=
-           representation(
+           representation(geometry="SurfaceGeometry",
                           dataMetaInfo="SurfaceDataMetaInfo",
                           indices="integer"),
          contains=c("BrainSurfaceSource"))
@@ -674,17 +700,19 @@ setClass("Kernel",
 
 ## TODO add a LazyBrainBucket class
 
+
+
 #' BrainSurface
 #' 
 #' a three-dimensional surface consisting of a set of triangle vertices with one value per vertex.
+#' 
 #' @rdname BrainSurface-class
 #' @slot source the data source for the surface
-#' @slot mesh the underlying \code{mesh3d} object 
-#' @slot data the vector of data value at each vertex of the mesh
-#' @slot graph underlying graph structure
+#' @slot geometry the surface geometry, an instance of \code{SurfaceGeometry}
+#' @slot data the 1-D vector of data value at each vertex of the mesh
 #' @export
 setClass("BrainSurface", 
-         representation=representation(source="BaseSource", mesh="mesh3d", data="numeric", graph="igraph"))
+         representation=representation(source="BaseSource", geometry="SurfaceGeometry", data="numeric"))
 
 #' BrainSurfaceVector
 #' 
@@ -692,12 +720,12 @@ setClass("BrainSurface",
 #' 
 #' @rdname BrainSurfaceVector-class
 #' @slot source the data source for the surface
-#' @slot mesh the underlying \code{mesh3d} object 
-#' @slot nodes the subset of mesh nodes indices that contain data
-#' @slot data a matrix of values where each column contains a vector of values over the surface nodes.
+#' @slot geometry the surface geometry, an instance of \code{SurfaceGeometry}
+#' @slot nodes the subset of mesh node indices that contain data
+#' @slot data a \code{Matrix} of values where each column contains a vector of values over the surface nodes.
 #' @export
 setClass("BrainSurfaceVector", 
-         representation=representation(source="BaseSource", mesh="mesh3d", nodes="integer", data="Matrix", graph="igraph"))
+         representation=representation(source="BaseSource", geometry="SurfaceGeometry", nodes="integer", data="Matrix"))
 
 #' BrainBucket
 #' 
@@ -726,27 +754,29 @@ setClass("BrainBucket",
 #' A class used for displaying 2D images with color maps
 #' 
 #' @rdname Layer-class
-#' @slot vol the \code{BrainVolume} that provides the data for the layer.
+#' @slot vol the \code{\linkS4Class{BrainVolume}} that provides the data for the layer.
 #' @slot colorMap a character vector of colors in hexadecimal rgb format. 
 #'       Can be generated by calls to \code{rainbow}, \code{heat.colors}, \code{topo.colors}, \code{terrain.colors} or similar functions.
-#' @slot thresh cut-off value above which vlaues will be made transparent.
+#' @slot thresh cut-off value above which pixels will be made transparent.
 #' @slot axis the axis index of perpendicular to the xy plane (option: 1,2,3; default is 3)
-#' @slot zero.col the color pixels with intensity of zero. This value overrides the color from the slot \code{colorMap}
-#' @slot alpha the transparency of the layer
+#' @slot zero.col the color of pixels with intensity of zero. This value overrides the color from the slot \code{colorMap}
+#' @slot alpha the transparency of the layer (0 to 1)
 #' @export
 setClass("Layer",
          representation=representation(vol="BrainVolume", colorMap="vector", thresh="numeric", axis="numeric", zero.col="character", alpha="numeric"))
 
+
+#' Overlay
 setClass("Overlay",
                   representation(layers="list"))
                   
-
+#' RenderedSlice
 setClass("RenderedSlice",
          representation=representation(slice="BrainSlice",
                                        width="numeric",
                                        height="numeric",
                                        raster="rastergrob"))
-
+#' RenderedSliceStack
 setClass("RenderedSliceStack",
          representation=representation(slices="list",
                                        width="numeric",

@@ -347,7 +347,7 @@ setMethod(f="show", signature=signature("BrainVolume"),
 #' @export loadData
 #' @rdname loadData-methods
 ## TODO reduce code duplication with loadData#BrainVectorSource
-setMethod(f="loadData", signature=c("BrainVolumeSource"), 
+setMethod(f="loadData", signature=c(x="BrainVolumeSource"), 
 		def=function(x) {
 			
 			meta <- x@metaInfo

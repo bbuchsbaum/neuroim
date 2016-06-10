@@ -795,3 +795,25 @@ setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("str
 setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 
+#' Construct a neighborhood graph from a \code{BrainSurface} object using edge weights.
+#' @param surf the \code{BrainSurface} instance
+#' @param radius the edge radius defining the neighborhood (default is 8)
+#' @param edge_weights the weights defining the "cost" of each connection (default is Euclidean edge distance).
+#' @return an \code{igraph} instance.
+#' @import igraph
+
+#' Generic function to construct neighborhood graph from surface mesh using edge weights.
+#' @param x surface mesh
+#' @param radius the edge radius defining the neighborhood 
+#' @param edgeWeights vector of edgeWeights used to define edge distance.
+#' @export neighborGraph
+#' @rdname neighborGraph-methods
+setGeneric(name="neighborGraph", def=function(x, radius, edgeWeights) standardGeneric("neighborGraph"))
+
+#' extract vertices from surface
+#' @param x the surface object
+setGeneric(name="vertices", def=function(x) standardGeneric("vertices"))
+
+#' extract surface node indices
+#' @param x the surface object
+setGeneric(name="nodes", def=function(x) standardGeneric("nodes"))

@@ -20,12 +20,14 @@ sliceData <- function(vol, slice, axis=3) {
   
 }
 
+
+
 #' mapToColors
 #' 
 #' map an matrix of intensity values to a matrix of color values.
 #' 
 #' @importFrom grDevices heat.colors
-#' @param imslice an image matrix defining intensity values
+#' @param imslice vector or matrix of intensity values
 #' @param col a color map
 #' @param zero.col the background color.
 #' @param alpha transparency multiplier
@@ -33,20 +35,24 @@ sliceData <- function(vol, slice, axis=3) {
 #' @export
 mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000", alpha=1) {
   vrange <- range(imslice)
-  imcols <- col[(imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1]
+  imcols <- col[as.integer((imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1)]
   
-  dim(imcols) <- dim(imslice)
+  if (!is.vector(imslice)) {
+    dim(imcols) <- dim(imslice)
+  }
+  
   imcols[imslice == 0] <- zero.col
   
   if (alpha < 1) {
     rgbmat <- col2rgb(imcols, alpha=TRUE)
     rgbmat <- rgbmat/255
-  
-    if (alpha < 1) {
-      rgbmat[4,] <- rgbmat[4,] * alpha
+    rgbmat[4,] <- rgbmat[4,] * alpha
+    
+    if (is.vector(imslice)) {
+      array(t(rgbmat), c(length(imslice), 4))
+    } else {
+      array(t(rgbmat), c(dim(imslice), 4))
     }
-  
-    array(t(rgbmat), c(dim(imslice), 4))
   } else {
     imcols
   }

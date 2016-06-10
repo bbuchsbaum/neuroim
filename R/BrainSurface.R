@@ -1,61 +1,129 @@
 
 
-#' load an surface from a set of files
+#' load an surface from a surface geometry with optional mapped surface data
 #' @param surfaceName the name of the file containing the surface geometry.
-#' @param surfaceDataName the name of the file containing the values to be mapped to the surface.
-#' @return an instance of the class \code{\linkS4class{BrainSurface}}
+#' @param surfaceDataName the name of the file containing the values to be mapped to the surface (optional).
+#' @param column indices to load (optional)
+#' @return an instance of the class:
+#'  \code{\linkS4class{SurfaceGeometry}} 
+#'  or \code{\linkS4class{BrainSurface}} 
+#'  or \code{\linkS4class{BrainSurfaceVector}} 
 #' @export loadSurface
-loadSurface  <- function(surfaceName, surfaceDataName) {
-  src <- BrainSurfaceSource(surfaceName, surfaceDataName)
+loadSurface  <- function(surfaceName, surfaceDataName=NULL, indices=NULL) {
+  if (is.null(surfaceDataName)) {
+    surfSource <- SurfaceGeometrySource(surfaceName)
+    loadData(surfSource)
+  } else {
+    src <- BrainSurfaceSource(surfaceName, surfaceDataName, indices)
+    loadData(src)
+  }
+}
+
+#' load surface data and attach to \code{\linkS4Class{SurfaceGeometry}}
+#' @param geometry a \code{\linkS4Class{SurfaceGeometry}} instance
+#' @param surfaceDataName the name of the file containing the values to be mapped to the surface.
+#' @param column indices to load (optional)
+#' @return an instance of the class \code{\linkS4class{BrainSurface}} or \code{\linkS4class{BrainSurfaceVector}} 
+#' @export loadSurfaceData
+loadSurfaceData  <- function(geometry, surfaceDataName, indices=NULL) {
+  src <- BrainSurfaceSource(geometry, surfaceDataName, NULL)
   loadData(src)
+}
+
+#' load surface geometry
+#' @param surfaceName the name of the file containing the surface geometry.
+#' @export loadSurfaceGeometry
+loadSurfaceGeometry <- function(surfaceName) {
+  surfSource <- SurfaceGeometrySource(surfaceName)
+  loadData(surfSource)
+ 
+}
+
+#' Constructor for SurfaceGeometrySource
+#' 
+#' @param surfaceName the name of the file containing the surface geometry.
+#' @export 
+#' @rdname SurfaceGeometrySource-class
+SurfaceGeometrySource <- function(surfaceName) {
+  stopifnot(is.character(surfaceName))
+  stopifnot(file.exists(surfaceName))
+  metaInfo <- readHeader(surfaceName)
+  new("SurfaceGeometrySource", metaInfo=metaInfo)	
+ 
 }
 
 #' Constructor for BrainSurfaceSource
 #' 
-#' @param surfaceName the name of the file containing the surface geometry.
+#' @param surfaceGeom the name of the file containing the surface geometry or a \code{SurfaceGeometry} instance
 #' @param surfaceDataName the name of the file containing the data values to be mapped to the surface.
 #' @param indices the indices to load from surface data matrix (if provided)
 #' @export 
 #' @rdname BrainSurfaceSource-class
-BrainSurfaceSource <- function(surfaceName, surfaceDataName=NULL, indices=NULL) {
-  stopifnot(is.character(surfaceName))
+BrainSurfaceSource <- function(surfaceGeom, surfaceDataName, indices=NULL) {
+  if (is.character(surfaceGeom)) {
+    assert_that(file.exists(surfaceGeom))
+    metaInfo <- readHeader(surfaceGeom)
+    surfaceGeom <- loadData(metaInfo)
+  }
   
-  stopifnot(file.exists(surfaceName))
+  dataMetaInfo <- readHeader(surfaceDataName)
   
-  if (!is.null(surfaceDataName)) {
-    stopifnot(file.exists(surfaceDataName))
-    metaInfo <- readHeader(surfaceName)
-    dataMetaInfo <- readHeader(surfaceDataName)
-    if (is.null(indices)) {
-      indices <- 1:dataMetaInfo@nels
-    }
-    new("BrainSurfaceVectorSource", metaInfo=metaInfo, dataMetaInfo=dataMetaInfo, indices=indices)
+  if (is.null(indices)) {
+    indices <- 1:dataMetaInfo@nels
+  } 
+  
+  if (length(indices) > 1 && dataMetaInfo@nels > 1) {
+    new("BrainSurfaceVectorSource", geometry=surfaceGeom, dataMetaInfo=dataMetaInfo, indices=as.integer(indices))
   } else {
-  
-    metaInfo <- readHeader(surfaceName)
-    new("BrainSurfaceSource", metaInfo=metaInfo)	
+    new("BrainSurfaceSource", geometry=surfaceGeom, dataMetaInfo=dataMetaInfo, index=as.integer(indices))	
   }
   
 }
 
 
+
+setMethod(f="vertices", signature=c("BrainSurface"),
+          def=function(x) {
+            vertices(x@geometry)
+          })
+
+setMethod(f="vertices", signature=c("BrainSurfaceVector"),
+          def=function(x) {
+            callGeneric(x@geometry)
+          })
+
+setMethod(f="vertices", signature=c("SurfaceGeometry"),
+          def=function(x) {
+            t(x@mesh$vb[1:3,])
+          })
+
+setMethod(f="nodes", signature=c("SurfaceGeometry"),
+          def=function(x) {
+            seq(1, ncol(surf@mesh$vb))
+          })
+
+#' @rdname series-methods
+#' @export
+setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
+          def=function(x, i) {	
+            x@data[i,]
+          })
+
 #' construct a new BrainSurfaceVector 
-BrainSurfaceVector <- function(geometry, datanodes, datamat) {
-  
-}
+# BrainSurfaceVector <- function(geometry, datanodes, datamat) {
+#}
 
-
-#' load a BrainSurface
+#' load a BrainSurfaceVector
 #' @export loadData
-#' @importFrom utils read.table
+#' @import Matrix
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"), 
           def=function(x) {
-            geometry <- loadData(x@metaInfo)
+            geometry <- x@geometry
             
             reader <- dataReader(x@dataMetaInfo,0)
             nodes <- readColumns(reader,0) + 1
-            mat <- readColumns(reader, seq(1, dataMetaInfo@nels))
+            mat <- readColumns(reader, x@indices)
             nvert <- ncol(geometry@mesh$vb)
             
             mat <- if (nvert > length(nodes) && length(nodes)/nvert < .5) {
@@ -63,16 +131,43 @@ setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"),
                 cbind(i=nodes, j=i, x=mat[,i])
               }))
               
-              sparseMatrix(i=M[,1], j=M[,2], x=M[,3])
+              Matrix::sparseMatrix(i=M[,1], j=M[,2], x=M[,3])
             } else if (nvert > length(nodes)) {
               m <- matrix(0, nvert, ncol(mat))
               m[nodes, 1:ncol(mat)] <- mat
-              Matrix(m)
+              Matrix::Matrix(m)
             } else {
-              Matrix(mat)
+              Matrix::Matrix(mat)
             }
             
-            svec <- new("BrainSurfaceVector", source=x, mesh=geometry@mesh, nodes=as.integer(nodes), data=mat, graph=geometry@graph)
+            svec <- new("BrainSurfaceVector", source=x, geometry=geometry, 
+                        nodes=as.integer(nodes), data=mat)
+            
+          })
+
+#' load a \code{SurfaceGeometry} instance
+#' @export loadData
+#' @rdname loadData-methods
+setMethod(f="loadData", signature=c("SurfaceGeometrySource"), 
+          def=function(x) {
+            geometry <- loadData(x@metaInfo)
+          })
+
+
+#' load a BrainSurface
+#' @export loadData
+#' @rdname loadData-methods
+setMethod(f="loadData", signature=c("BrainSurfaceSource"), 
+          def=function(x) {
+            geometry <- x@geometry
+            reader <- dataReader(x@dataMetaInfo,0)
+            nodes <- readColumns(reader,0) + 1
+            vals<- readColumns(reader, x@index)[,1]
+            nvert <- ncol(geometry@mesh$vb)
+            
+            avals <- numeric(nvert)
+            avals[nodes] <- vals
+            surf<- new("BrainSurface", source=x, geometry=geometry, data=avals)
             
           })
           
@@ -148,28 +243,34 @@ loadFSSurface <- function(meshname) {
   asctab <- read.table(meshname, skip=2)
   
   vertices <- as.matrix(asctab[1:ninfo[1],1:3])
-  dat <- asctab[1:ninfo[1],4]
   nodes <- as.matrix(asctab[(ninfo[1]+1):nrow(asctab),1:3])
   message("constructing graph")
   graph <- meshToGraph(vertices, nodes)
   
   mesh <- rgl::tmesh3d(as.vector(t(vertices)), as.vector(t(nodes))+1, homogeneous=FALSE)
-  new("BrainSurface", mesh=mesh, data=dat, graph=graph)
+  new("SurfaceGeometry", mesh=mesh, graph=graph)
 }
 
 
-#' Construct a neighborhood graph from a \code{BrainSurface} object using edge weights.
-#' @param surf the \code{BrainSurface} instance
-#' @param radius the edge radius defining the neighborhood (default is 8)
-#' @param edge_weights the weights defining the "cost" of each connection (default is Euclidean edge distance).
-#' @return an \code{igraph} instance.
-#' @import igraph
-neighborGraph <- function(surf, radius=8, edge_weights=igraph::E(surf@graph)$dist) {
-  avg_weight <- mean(edge_weights)
+findNeighbors <- function(graph, node, radius, edgeWeights, max_order=NULL) {
+  if (is.null(max_order)) {
+    avg_weight <- mean(edgeWeights)
+    max_order <- radius/avg_weight + (2*avg_weight)
+  }
+  
+  cand <- igraph::ego(graph, order= max_order, nodes=node)[[1]]
+  D <- igraph::distances(graph, node, cand, weights=edgeWeights, algorithm="dijkstra")
+  keep <- which(D < radius)[-1]
+  cand[keep]
+}
+
+
+findAllNeighbors <- function(x, radius, edgeWeights) {
+  avg_weight <- mean(edgeWeights)
   est_order <- radius/avg_weight + (2*avg_weight)
-  nabeinfo <- lapply(igraph::V(surf@graph), function(v) {
-    cand <- igraph::ego(surf@graph, order= est_order, nodes=v)[[1]]
-    D <- igraph::distances(surf@graph, v, cand, weights=edge_weights, algorithm="dijkstra")
+  nabeinfo <- lapply(igraph::V(x@graph), function(v) {
+    cand <- igraph::ego(x@graph, order= est_order, nodes=v)[[1]]
+    D <- igraph::distances(x@graph, v, cand, weights=edgeWeights, algorithm="dijkstra")
     keep <- which(D < radius)[-1]
     knabes <- cand[keep]
     cbind(i=rep(v, length(knabes)), j=knabes, d=D[keep])
@@ -179,6 +280,24 @@ neighborGraph <- function(surf, radius=8, edge_weights=igraph::E(surf@graph)$dis
   adj <- Matrix::sparseMatrix(i=mat[,1], j=mat[,2], x=mat[,3])
   g <- igraph::graph.adjacency(adj, mode="undirected", weighted=TRUE)
 }
+
+
+#' @rdname neighborGraph-methods
+#' @export
+setMethod(f="neighborGraph", signature=c(x="SurfaceGeometry", radius="numeric", edgeWeights="missing"),
+          def=function(x, radius ) {
+            edgeWeights=igraph::E(x@graph)$dist    
+            findAllNeighbors(x, radius, edgeWeights)
+})
+
+#' @rdname neighborGraph-methods
+#' @export
+setMethod(f="neighborGraph", signature=c(x="SurfaceGeometry", radius="numeric", edgeWeights="numeric"),
+          def=function(x, radius, edgeWeights) {
+            stopifnot(length(edgeWeights) == length(E(x@graph))) 
+            findAllNeighbors(x, radius, edgeWeights)
+          })
+
 
 # knn_graph <- function(surf, knn=10, edge_weights=E(surf@graph)$dist) {
 #   nabeinfo <- lapply(V(graph), function(v) {
@@ -204,6 +323,25 @@ neighborGraph <- function(surf, radius=8, edge_weights=igraph::E(surf@graph)$dis
 #   g <- graph.adjacency(symmAdj, mode="undirected", weighted=TRUE)
 #   
 # }
+
+
+viewSurface <- function(surfgeom, vals, col=heat.colors(128, alpha = 1), 
+                        zero.col = "#00000000", 
+                        alpha=1, 
+                        geom.col="lightgray") {
+#   v1 <- vals[surfgeom@mesh$it[1,]]
+#   v2 <- vals[surfgeom@mesh$it[2,]]
+#   v3 <- vals[surfgeom@mesh$it[3,]]
+#   avgvals <- (v1 + v2 + v3)/3
+#   
+#   clrs <- mapToColors(avgvals, col=rev(rainbow(60)))
+#   ccol <- rep(clrs,each=3)
+#   shade3d(surfgeom@mesh, col=ccol)
+#   
+  v2 <- vals[as.vector(surfgeom@mesh$it)]
+  clrs <- mapToColors(v2, col=rev(rainbow(60)), alpha=1)
+  shade3d(surfgeom@mesh, col=clrs, alpha=.5)
+}
 
 
 

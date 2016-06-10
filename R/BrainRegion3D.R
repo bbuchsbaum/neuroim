@@ -344,6 +344,29 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
   
 }
 
+SurfaceSearchlight <- function(surfgeom, radius=8) {
+  nds <- nodes(surfgeom)
+  bg <- neighborGraph(surfgeom, radius)
+  
+  index <- 0
+  
+  prog <- function() { index/length(nds) }
+  
+  nextEl <- function() {
+    if (index < length(nds)) {
+      index <<- index +1
+      neighborhood(bg, 1, index)[[1]]
+    } else {
+      stop('StopIteration')
+    }
+  }
+  
+  obj <- list(nextElem=nextEl, progress=prog)
+  class(obj) <- c("Searchlight", 'abstractiter', 'iter')
+  obj
+  
+}
+
 
 #' Create an exhaustive searchlight iterator
 #' @param mask an image volume containing valid central voxels for roving searchlight
