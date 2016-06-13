@@ -81,22 +81,29 @@ BrainSurfaceSource <- function(surfaceGeom, surfaceDataName, indices=NULL) {
 }
 
 
-
+#' @rdname vertices-methods
+#' @export
 setMethod(f="vertices", signature=c("BrainSurface"),
           def=function(x) {
             vertices(x@geometry)
           })
 
+#' @rdname vertices-methods
+#' @export
 setMethod(f="vertices", signature=c("BrainSurfaceVector"),
           def=function(x) {
             callGeneric(x@geometry)
           })
 
+#' @rdname vertices-methods
+#' @export
 setMethod(f="vertices", signature=c("SurfaceGeometry"),
           def=function(x) {
             t(x@mesh$vb[1:3,])
           })
 
+#' @rdname nodes-methods
+#' @export
 setMethod(f="nodes", signature=c("SurfaceGeometry"),
           def=function(x) {
             seq(1, ncol(surf@mesh$vb))
