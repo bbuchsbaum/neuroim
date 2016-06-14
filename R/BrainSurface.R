@@ -62,8 +62,8 @@ SurfaceGeometrySource <- function(surfaceName) {
 BrainSurfaceSource <- function(surfaceGeom, surfaceDataName, indices=NULL) {
   if (is.character(surfaceGeom)) {
     assert_that(file.exists(surfaceGeom))
-    metaInfo <- readHeader(surfaceGeom)
-    surfaceGeom <- loadData(metaInfo)
+    src <- SurfaceGeometrySource(surfaceGeom)
+    surfaceGeom <- loadData(src)
   }
   
   dataMetaInfo <- readHeader(surfaceDataName)
@@ -106,7 +106,21 @@ setMethod(f="vertices", signature=c("SurfaceGeometry"),
 #' @export
 setMethod(f="nodes", signature=c("SurfaceGeometry"),
           def=function(x) {
-            seq(1, ncol(surf@mesh$vb))
+            seq(1, ncol(x@mesh$vb))
+          })
+
+#' @rdname nodes-methods
+#' @export
+setMethod(f="nodes", signature=c("BrainSurfaceVector"),
+          def=function(x) {
+            callGeneric(x@geometry)
+          })
+
+#' @rdname nodes-methods
+#' @export
+setMethod(f="nodes", signature=c("BrainSurface"),
+          def=function(x) {
+            callGeneric(x@geometry)
           })
 
 #' @rdname series-methods
@@ -228,23 +242,24 @@ meshToGraph <- function(vertices, nodes) {
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("FreesurferSurfaceGeometryMetaInfo"), 
           def=function(x) {
-            loadFSSurface(x@headerFile)
+            loadFSSurface(x)
           })
 
 
 
 #' load Freesurfer ascii surface
 #' 
-#' @param meshname file name of mesh to read in.
+#' @param metaInfo instance of type \code{FreesurferSurfaceGeometryMetaInfo}
 #' @details requires rgl library
 #' @return a class of type \code{BrainSurface}
 #' @export
-loadFSSurface <- function(meshname) {
+loadFSSurface <- function(metaInfo) {
   if (!requireNamespace("rgl", quietly = TRUE)) {
     stop("Pkg rgl needed for this function to work. Please install it.",
          call. = FALSE)
   }
   
+  meshname <- metaInfo@headerFile
   ninfo <- as.integer(strsplit(readLines(meshname, n=2)[2], " ")[[1]])
   message("loading ", meshname)
   asctab <- read.table(meshname, skip=2)
@@ -255,7 +270,7 @@ loadFSSurface <- function(meshname) {
   graph <- meshToGraph(vertices, nodes)
   
   mesh <- rgl::tmesh3d(as.vector(t(vertices)), as.vector(t(nodes))+1, homogeneous=FALSE)
-  new("SurfaceGeometry", mesh=mesh, graph=graph)
+  new("SurfaceGeometry", source=new("SurfaceGeometrySource", metaInfo=metaInfo), mesh=mesh, graph=graph)
 }
 
 

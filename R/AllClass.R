@@ -143,6 +143,8 @@ setClass("FreesurferAsciiSurfaceFileDescriptor", contains=c("BrainFileDescriptor
 #' @exportClass BaseMetaInfo
 setClass("BaseMetaInfo")
 
+
+
 #' NullMetaInfo
 #' 
 #' This is class is used to denote the absense of meta information
@@ -389,7 +391,7 @@ setClass("BrainFileSource", representation=
 #' @rdname BrainVectorSource-class
 #' @slot indices the index vector of the volumes to be loaded
 #' @export
-		setClass("BrainVectorSource", representation=
+setClass("BrainVectorSource", representation=
 						representation(indices="integer"),
 				contains=c("BrainSource"))
 
@@ -404,7 +406,7 @@ setClass("BrainFileSource", representation=
 #' @slot sourceList a list of sources for the bucket sub-volumes
 #' @slot cache a cache used to store data in memory
 #' @export
-		setClass("BrainBucketSource",
+setClass("BrainBucketSource",
 				representation=representation(sourceList="list", cache="environment"),
 				contains=c("BrainVectorSource"))
 		

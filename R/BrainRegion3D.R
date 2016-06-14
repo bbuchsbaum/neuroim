@@ -344,6 +344,10 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
   
 }
 
+#' @param surfgeom a surface mesh: instance of class \code{SurfaceGeometry}
+#' @param radius radius of the searchlight as a geodesic distance in mm
+#' @importFrom igraph neighborhood
+#' @export
 SurfaceSearchlight <- function(surfgeom, radius=8) {
   nds <- nodes(surfgeom)
   bg <- neighborGraph(surfgeom, radius)
@@ -355,7 +359,7 @@ SurfaceSearchlight <- function(surfgeom, radius=8) {
   nextEl <- function() {
     if (index < length(nds)) {
       index <<- index +1
-      neighborhood(bg, 1, index)[[1]]
+      igraph::neighborhood(bg, 1, index)[[1]]
     } else {
       stop('StopIteration')
     }
