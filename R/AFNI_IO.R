@@ -106,7 +106,7 @@ parse_niml_element <- function(el) {
 
 
 
-read_niml_binary <- function(fconn, meta) {
+read_niml_data <- function(fconn, meta) {
   dtype <- meta$ni_type
   dtype <- strsplit(as.character(dtype), "\\*")[[1]]
   
@@ -126,8 +126,19 @@ read_niml_binary <- function(fconn, meta) {
   
   nels <- as.integer(meta$ni_dimen)
   
-  allvals <- readBin(fconn, what=type, size=4, n=nels*nvols)
-  mat <- matrix(allvals, nvols, nels)
+  if (!is.null(meta$ni_form) && meta$ni_form == "binary.lsbfirst") {
+    allvals <- readBin(fconn, what=type, size=4, n=nels*nvols)
+    mat <- matrix(allvals, nvols, nels)
+  } else {
+    ret <- readLines(fconn, n=nels*nvols+1)[-1]
+    if (type == "integer") {
+      matrix(as.integer(stringr::str_trim(ret)), nvols,nels)
+    } else if (type == "double") {
+      matrix(as.numeric(stringr::str_trim(ret)), nvols, nels)
+    } else {
+      stop(paste("unrecognized type: ", type))
+    }
+  }
 }
 
 parse_niml_header <- function(fconn) {
@@ -163,7 +174,7 @@ parse_niml_header <- function(fconn) {
 parse_niml_next <- function(fconn) {
   header <- parse_niml_header(fconn)
   if (!is.null(header$attr) && (header$label == "SPARSE_DATA" || header$label == "INDEX_LIST")) {
-    header$data <- read_niml_binary(fconn, header$attr)
+    header$data <- read_niml_data(fconn, header$attr)
     #while (readChar(fconn,1) != ">") { next }
   }
   out <- c()
@@ -199,6 +210,8 @@ parse_niml_file <- function(fname, maxels=10000) {
     el <- parse_niml_next(fconn)
     out[[elcount]] <- el
   }
+  
+  close(fconn)
   
   out
 }

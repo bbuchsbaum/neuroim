@@ -6,8 +6,9 @@
 {}
 
 
-#' Create an instance of class ROIVolume
-#' @param vspace the volume \code{BrainSpace}
+#' Create an instance of class \code{\linkS4Class{ROIVolume}}
+#' 
+#' @param vspace an instance of class \code{BrainSpace}
 #' @param coords matrix of voxel coordinates
 #' @param data the data values
 #' @return an instance of class \code{ROIVolume}
@@ -158,7 +159,6 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   vals <- if (!is.null(fill)) {
     rep(fill, nrow(grid))
   } else {
-    ## coercion to numeric shouldn't be necessary here.
     as.numeric(bvol[grid])
   }   
   
@@ -197,8 +197,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
                radius))
   }
 
-  ## should be: need to add dvals
-  ## as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))[which(dvals <= radius),]
+ 
   grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
   
   dvals <- apply(grid, 1, function(gvals) {
@@ -211,18 +210,39 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
 }
 
 
-#' Create A Spherical Region of Interest
+#' Create a Region on Surface 
+#' 
+#'  @param surfgeom a \code{SurfaceGeometry} object
+#'  @param index the index of the central surface node
+#'  @param radius the size in mm of the geodesic radius
+#'  @param optional value(s) to store as data
+SurfaceRegion <- function(surfgeom, index, radius, fill=NULL, max_order=NULL) {
+  edgeWeights=igraph::E(surfgeom@graph)$dist
+
+  if (is.null(max_order)) {
+    avg_weight <- mean(edgeWeights)
+    max_order <- ceiling(radius/avg_weight) + 1
+  }
+
+  cand <- igraph::ego(surfgeom@graph, order= max_order, nodes=index)[[1]]
+  D <- igraph::distances(g, v, cand, weights=edgeWeights, algorithm="dijkstra")
+  keep <- which(D < radius)
+  
+}
+
+#' Create a Spherical Region of Interest
+#' 
 #' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius in real units (e.g. millimeters) of the spherical ROI
-#' @param fill optional value(s) to assign to data slot
-#' @param nonzero keep only nonzero elements from \code{bvol}
+#' @param fill optional value(s) to store as data
+#' @param nonzero if \code{TRUE}, keep only nonzero elements from \code{bvol}
 #' @return an instance of class \code{ROIVolume}
 #' @examples
-#'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
+#'  sp1 <- BrainSpace(c(10,10,10), c(1,2,3))
 #'  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
-#'  vox = coords(cube)
-#'  
+#'  vox <- coords(cube)
+#'  cds <- coords(cube, real=TRUE)
 #'  ## fill in ROI with value of 6
 #'  cube1 <- RegionSphere(sp1, c(5,5,5), 3.5, fill=6)
 #'  all(cube1@data == 6)
@@ -233,9 +253,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
     centroid <- drop(centroid)
   }
   
-  if (length(centroid) != 3) {
-    stop("RegionSphere: centroid must have length of 3 (x,y,z voxel coordinates)")
-  }
+  assertthat::assert_that(length(centroid) == 3)
   
   if (is.null(fill) && is(bvol, "BrainSpace")) {
     fill = 1
@@ -245,17 +263,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
   centroid <- as.integer(centroid)
-  
-  mcentroid <- ((centroid-1) * vspacing + vspacing/2)
- 
   grid <- .makeSphericalGrid(bvol, centroid, radius)
-   
-  #dvals <- apply(grid, 1, function(gvals) {
-  #  coord <- (gvals-1) * vspacing + vspacing/2
-  #  sqrt(sum((coord - mcentroid)^2))
-  #})
-  
-  #idx <- which(dvals <= radius)
    
   vals <- if (!is.null(fill)) {
     rep(fill, nrow(grid))
@@ -263,19 +271,20 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
     as.numeric(bvol[grid])
   }   
   
-  keep <- if (nonzero) {
-    which(vals != 0)    
+  if (nonzero) {
+    keep <- vals != 0 
+    new("ROIVolume", space = bspace, data = vals[keep], coords = grid[keep, ,drop=FALSE])
   } else {
-    seq_along(vals)
+    new("ROIVolume", space = bspace, data = vals, coords = grid)
   }
   
-  new("ROIVolume", space = bspace, data = vals[keep], coords = grid[keep, ])
 }
 
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
 
-#' Create an Random Searchlight iterator
-#' @param mask an image volume containing valid central voxels for roving searchlight
+#' Create an spherical random searchlight iterator
+#' 
+#' @param mask an volumetric image mask of type \code{\linkS4Class{BrainVolume}} containing valid searchlight voxel set.
 #' @param radius in mm of spherical searchlight
 #' @export
 RandomSearchlight <- function(mask, radius) {
@@ -292,7 +301,7 @@ RandomSearchlight <- function(mask, radius) {
       search <- RegionSphere(mask, grid[center,], radius, nonzero=TRUE) 
       vox <- coords(search)
       vox <- vox[!done[vox],,drop=FALSE]
-      done[center] <<- TRUE
+      #done[center] <<- TRUE
       done[vox] <<- TRUE
       attr(vox, "center") <- grid[center,]
       vox
@@ -306,12 +315,12 @@ RandomSearchlight <- function(mask, radius) {
   obj
 }
 
-#' Create a searchlight iterator that samples regions from within a mask.
-#' searchlight centers are sampled *without* replacement, but the same voxel can belong to multiple searchlight samples.
-#' It is in the latter sense that this is a bootstrap resampling scheme.
+#' Create a spherical searchlight iterator that samples regions from within a mask.
+#' 
+#' searchlight centers are sampled without replacement, but the same surround voxel can belong to multiple searchlight samples.
 #' @param mask an image volume containing valid central voxels for roving searchlight
 #' @param radius in mm of spherical searchlight
-#' @param iter the total number of searchlights to sample (default is 100)
+#' @param iter the total number of searchlights to sample (default is 100).
 #' @export
 BootstrapSearchlight <- function(mask, radius, iter=100) {
   mask.idx <- which(mask != 0)
@@ -331,7 +340,7 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
       
       search <- RegionSphere(mask, grid[cenidx,], radius, nonzero=TRUE) 
       vox <- search@coords
-      attr(vox, "center") <- grid[index,]
+      attr(vox, "center") <- grid[cenidx,]
       vox
     } else {
       stop('StopIteration')
@@ -344,28 +353,127 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
   
 }
 
-#' @param surfgeom a surface mesh: instance of class \code{SurfaceGeometry}
+#' Create a Random Searchlight iterator for surface mesh using geodesic distance to define regions.
+#' 
+#' @param surfgeom a surface mesh: instance of class \code{\linkS4Class{SurfaceGeometry}}
 #' @param radius radius of the searchlight as a geodesic distance in mm
-#' @importFrom igraph neighborhood
+#' @param nodeset the subset of surface node indices to use
+#' @importFrom igraph neighborhood induced_subgraph
 #' @export
-SurfaceSearchlight <- function(surfgeom, radius=8) {
-  nds <- nodes(surfgeom)
-  bg <- neighborGraph(surfgeom, radius)
+#' @details 
+#'   On every call to \code{nextElem} a set of surface nodes are returned. 
+#'   These nodes index into the vertices of the \code{igraph} instance.
+#' 
+#' @examples
+#' file <- system.file("extdata", "std.lh.smoothwm.asc", package = "neuroim")
+#' geom <- loadSurface(file)
+#' searchlight <- RandomSurfaceSearchlight(geom, 12)
+#' nodes <- searchlight$nextElem()
+#' length(nodes) > 1
+#' 
+RandomSurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
+  subgraph <- FALSE
+  if (is.null(nodeset)) {
+    ## use all surface nodes
+    nodeset <- nodes(surfgeom)
+    g <- surfgeom@graph
+  } else {
+    ## use supplied subset
+    g <- igraph::induced_subgraph(surfgeom@graph, nodeset)
+    subgraph <- TRUE
+  }
+  
+  
+  bg <- neighborGraph(g, radius=radius)
   
   index <- 0
   
-  prog <- function() { index/length(nds) }
+  nds <- as.vector(igraph::V(bg))
+  done <- logical(length(nds))
+  
+  prog <- function() { sum(done)/length(done) }
   
   nextEl <- function() {
-    if (index < length(nds)) {
-      index <<- index +1
-      igraph::neighborhood(bg, 1, index)[[1]]
+    if (!all(done)) {
+      ## sample from remaining nodes
+      center <- .resample(which(!done), 1)
+      indices <- as.vector(igraph::neighborhood(bg, 1, nds[center])[[1]])
+      indices <- indices[!done[indices]]
+      done[indices] <<- TRUE
+      
+      if (subgraph) {
+        ## index into to absolute graph nodes
+        vout <- nodeset[indices]
+        attr(vout, "center") <- nodeset[center]
+        vout
+      } else {
+        attr(indices, "center") <- center
+        indices
+      }
+        
     } else {
       stop('StopIteration')
     }
   }
   
   obj <- list(nextElem=nextEl, progress=prog)
+  class(obj) <- c("RandomSurfaceSearchlight", 'abstractiter', 'iter')
+  obj
+  
+}
+
+
+#' Create a Searchlight iterator for surface mesh using geodesic distance to define regions.
+#' 
+#' @param surfgeom a surface mesh: instance of class \code{SurfaceGeometry}
+#' @param radius radius of the searchlight as a geodesic distance in mm
+#' @param nodeset the subset of surface nodes to use
+#' @importFrom igraph neighborhood induced_subgraph
+#' @export
+SurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
+  assertthat::assert_that(length(radius) == 1)
+  g <- if (is.null(nodeset)) {
+    ## use all surface nodes
+    nodeset <- nodes(surfgeom)
+    subgraph = FALSE
+    surfgeom@graph
+  } else {
+    assertthat::assert_that(length(nodeset) > 1)
+    subgraph=TRUE
+    g <- igraph::induced_subgraph(surfgeom@graph, nodeset)
+  }
+  
+  bg <- neighborGraph(g, radius=radius)
+  
+  index <- 0
+  
+  nds <- V(bg)
+  
+  prog <- function() { index/length(nds) }
+  
+  getIndex <- function() { index }
+  
+  nextEl <- function() {
+    if (index < length(nds)) {
+      index <<- index + 1
+      indices <- as.vector(igraph::neighborhood(bg, 1, nds[index])[[1]])
+      
+      if (subgraph) {
+        ## index into to absolute graph nodes
+        indices <- nodeset[indices]
+        attr(indices, "center") <- nodeset[index]
+        indices
+      } else {
+        attr(indices, "center") <- index
+        indices
+      }
+      
+    } else {
+      stop('StopIteration')
+    }
+  }
+  
+  obj <- list(nextElem=nextEl, progress=prog, index=getIndex)
   class(obj) <- c("Searchlight", 'abstractiter', 'iter')
   obj
   
@@ -387,7 +495,7 @@ Searchlight <- function(mask, radius) {
 		if (index < nrow(grid)) { 
 			 index <<- index + 1
 		 	 search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
-       vox <- search@coords
+       vox <- coords(search)
 			 attr(vox, "center") <- grid[index,]
        vox
 		} else {
@@ -406,7 +514,7 @@ Searchlight <- function(mask, radius) {
 #' @rdname as-methods
 setAs(from="ROIVolume", to="DenseBrainVolume", function(from) {
   dat <- array(0, dim(from@space))
-  dat[from@coords] <- from@data
+  dat[coords(from)] <- from@data
   ovol <- DenseBrainVolume(dat, from@space, from@source)
 })
 
@@ -430,10 +538,17 @@ setMethod("indices", signature(x="ROIVolume"),
 
 
 #' @export
+#' @param real return coordinates in real world units
 #' @rdname coords-methods
 setMethod(f="coords", signature=signature(x="ROIVolume"),
-          function(x) {
-            x@coords
+          function(x, real=FALSE) {
+            if (real) {
+              input <- t(cbind(x@coords-.5, rep(1, nrow(x@coords)))) 
+              ret <- t(trans(x) %*% input)
+              ret[,1:3,drop=FALSE]
+            } else {
+              x@coords
+            }
           })
 
 

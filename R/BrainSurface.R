@@ -9,7 +9,7 @@
 #'  or \code{\linkS4class{BrainSurface}} 
 #'  or \code{\linkS4class{BrainSurfaceVector}} 
 #' @export loadSurface
-loadSurface  <- function(surfaceName, surfaceDataName=NULL, indices=NULL) {
+loadSurface  <- function(surfaceName, surfaceDataName=NULL, indices=NULL, keepZero=FALSE) {
   if (is.null(surfaceDataName)) {
     surfSource <- SurfaceGeometrySource(surfaceName)
     loadData(surfSource)
@@ -36,7 +36,7 @@ loadSurfaceData  <- function(geometry, surfaceDataName, indices=NULL) {
 loadSurfaceGeometry <- function(surfaceName) {
   surfSource <- SurfaceGeometrySource(surfaceName)
   loadData(surfSource)
- 
+
 }
 
 #' Constructor for SurfaceGeometrySource
@@ -111,9 +111,9 @@ setMethod(f="nodes", signature=c("SurfaceGeometry"),
 
 #' @rdname nodes-methods
 #' @export
-setMethod(f="nodes", signature=c("BrainSurfaceVector"),
+setMethod(f="indices", signature=c("BrainSurfaceVector"),
           def=function(x) {
-            callGeneric(x@geometry)
+            x@indices
           })
 
 #' @rdname nodes-methods
@@ -124,10 +124,11 @@ setMethod(f="nodes", signature=c("BrainSurface"),
           })
 
 #' @rdname series-methods
+#' @import Matrix
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
           def=function(x, i) {	
-            x@data[i,]
+            Matrix::t(x@data[i,])
           })
 
 #' construct a new BrainSurfaceVector 
@@ -140,12 +141,17 @@ setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"), 
           def=function(x) {
+          
             geometry <- x@geometry
             
             reader <- dataReader(x@dataMetaInfo,0)
             nodes <- readColumns(reader,0) + 1
             mat <- readColumns(reader, x@indices)
             nvert <- ncol(geometry@mesh$vb)
+            
+            allzero <- apply(mat, 1, function(vals) all(vals == 0))
+            nodes <- nodes[!allzero]
+            
             
             mat <- if (nvert > length(nodes) && length(nodes)/nvert < .5) {
               M <- do.call(rbind, lapply(1:ncol(mat), function(i) {
@@ -155,14 +161,14 @@ setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"),
               Matrix::sparseMatrix(i=M[,1], j=M[,2], x=M[,3])
             } else if (nvert > length(nodes)) {
               m <- matrix(0, nvert, ncol(mat))
-              m[nodes, 1:ncol(mat)] <- mat
+              m[nodes, 1:ncol(mat)] <- mat[nodes,]
               Matrix::Matrix(m)
             } else {
               Matrix::Matrix(mat)
             }
             
             svec <- new("BrainSurfaceVector", source=x, geometry=geometry, 
-                        nodes=as.integer(nodes), data=mat)
+                        indices=as.integer(nodes), data=mat)
             
           })
 
@@ -287,39 +293,59 @@ findNeighbors <- function(graph, node, radius, edgeWeights, max_order=NULL) {
 }
 
 
-findAllNeighbors <- function(x, radius, edgeWeights) {
+findAllNeighbors <- function(g, radius, edgeWeights, nodes=NULL) {
   avg_weight <- mean(edgeWeights)
-  est_order <- radius/avg_weight + (2*avg_weight)
-  nabeinfo <- lapply(igraph::V(x@graph), function(v) {
-    cand <- igraph::ego(x@graph, order= est_order, nodes=v)[[1]]
-    D <- igraph::distances(x@graph, v, cand, weights=edgeWeights, algorithm="dijkstra")
-    keep <- which(D < radius)[-1]
-    knabes <- cand[keep]
-    cbind(i=rep(v, length(knabes)), j=knabes, d=D[keep])
+  est_order <- ceiling(radius/avg_weight) + 1
+  
+  if (is.null(nodes)) {
+    nodes <- igraph::V(g)
+  }
+  
+  nabeinfo <- lapply(nodes, function(v) {
+    cand <- igraph::ego(g, order= est_order, nodes=v)[[1]]
+    D <- igraph::distances(g, v, cand, weights=edgeWeights, algorithm="dijkstra")
+    keep <- which(D < radius)
+    if (length(keep) > 0) {
+      knabes <- cand[keep]
+      cbind(i=rep(v, length(knabes)), j=knabes, d=D[keep])
+    } else {
+      matrix(0,0,0)
+    }
   })
   
   mat <- plyr::rbind.fill.matrix(nabeinfo)
   adj <- Matrix::sparseMatrix(i=mat[,1], j=mat[,2], x=mat[,3])
-  g <- igraph::graph.adjacency(adj, mode="undirected", weighted=TRUE)
+  igraph::graph.adjacency(adj, mode="undirected", weighted=TRUE)
 }
 
 
 #' @rdname neighborGraph-methods
 #' @export
-setMethod(f="neighborGraph", signature=c(x="SurfaceGeometry", radius="numeric", edgeWeights="missing"),
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="missing"),
           def=function(x, radius ) {
-            edgeWeights=igraph::E(x@graph)$dist    
-            findAllNeighbors(x, radius, edgeWeights)
+            edgeWeights=igraph::E(x)$dist    
+            findAllNeighbors(x, radius, as.vector(edgeWeights))
 })
 
 #' @rdname neighborGraph-methods
 #' @export
-setMethod(f="neighborGraph", signature=c(x="SurfaceGeometry", radius="numeric", edgeWeights="numeric"),
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="missing"),
           def=function(x, radius, edgeWeights) {
-            stopifnot(length(edgeWeights) == length(E(x@graph))) 
+            stopifnot(length(edgeWeights) == length(igraph::E(x))) 
             findAllNeighbors(x, radius, edgeWeights)
           })
 
+
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="integer"),
+          def=function(x,radius, edgeWeights, nodes) {
+            stopifnot(length(edgeWeights) == length(igraph::E(x)))
+            findAllNeighbors(x,radius, edgeWeights, nodes)
+          })
+
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="integer"),
+          def=function(x,radius, nodes) {
+            findAllNeighbors(x, radius, igraph::E(x)$dist, nodes) 
+          })
 
 # knn_graph <- function(surf, knn=10, edge_weights=E(surf@graph)$dist) {
 #   nabeinfo <- lapply(V(graph), function(v) {
@@ -362,7 +388,7 @@ viewSurface <- function(surfgeom, vals, col=heat.colors(128, alpha = 1),
 #   
   v2 <- vals[as.vector(surfgeom@mesh$it)]
   clrs <- mapToColors(v2, col=rev(rainbow(60)), alpha=1)
-  shade3d(surfgeom@mesh, col=clrs, alpha=.5)
+  rgl::shade3d(surfgeom@mesh, col=clrs, alpha=.5)
 }
 
 

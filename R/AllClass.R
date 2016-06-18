@@ -673,7 +673,7 @@ setClass("SparseBrainVectorSource", representation=
 
 #' ROIVolume
 #' 
-#' A class that representing a volumetric region of interest (ROI).
+#' A class that represents a volumetric region of interest
 #' @rdname ROIVolume-class
 #' @slot data the \code{numeric} data stored in the ROI
 #' @slot coords the voxel coordinates of the ROI
@@ -685,6 +685,29 @@ setClass("ROIVolume",
              stop("coords slot must be a matrix with 3 columns")
            }
          })
+
+
+#' ROISurface
+#' 
+#' A class that respresents a surface-based region of interest
+#' 
+#' @slot geometry the geometry of the parent surface: a \code{SurfaceGeometry} instance
+#' @slot data the \code{numeric} data stored in ROI
+#' @slot coords the surface-based coordinates of the data
+#' @slot indices the node indices of the parent surface stored in the \code{geometry} field.
+#' @exportClass ROISurface
+#' @rdname ROISurface-class
+setClass("ROISurface", 
+  representation=representation(geometry="SurfaceGeometry", data="numeric", coords="matrix", indices="integer"),
+  validity = function(object) {
+    if (ncol(object@coords) != 3) {
+      stop("coords slot must be a matrix with 3 columns")
+    }
+    if (nrow(object@coords) != length(object@indices)) {
+      stop("length of indices must equal nrow(coords)")
+    }
+})
+
 
 #' Kernel
 #' 
@@ -723,11 +746,11 @@ setClass("BrainSurface",
 #' @rdname BrainSurfaceVector-class
 #' @slot source the data source for the surface
 #' @slot geometry the surface geometry, an instance of \code{SurfaceGeometry}
-#' @slot nodes the subset of mesh node indices that contain data
-#' @slot data a \code{Matrix} of values where each column contains a vector of values over the surface nodes.
+#' @slot indices the node indices that contain valid data
+#' @slot data a \code{Matrix} of values where each column contains a vector of values over all the surface nodes.
 #' @export
 setClass("BrainSurfaceVector", 
-         representation=representation(source="BaseSource", geometry="SurfaceGeometry", nodes="integer", data="Matrix"))
+         representation=representation(source="BaseSource", geometry="SurfaceGeometry", indices="integer", data="Matrix"))
 
 #' BrainBucket
 #' 

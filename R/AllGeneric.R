@@ -367,6 +367,7 @@ setGeneric(name="indexToCoord",   def=function(x, idx) standardGeneric("indexToC
 setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coordToIndex"))
 
 #' Generic function to convert N-dimensional real world coordinates to grid coordinates
+#' 
 #' @param x the object
 #' @param coords a matrix of real world coordinates
 #' @return a matrix of grid coordinates
@@ -375,7 +376,7 @@ setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coord
 setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
 #' Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
-#' Generic function to convert N-dimensional grid coordinates to real world coordinates
+#' 
 #' @param x the object
 #' @param coords a matrix of grid coordinates
 #' @return a matrix of real coordinates
@@ -585,6 +586,7 @@ setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
 
 #' Extract coordinates
+#' 
 #' @param x the object to extract coordinates from
 #' @param ... additional arguments
 #' @export 
@@ -795,20 +797,14 @@ setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("str
 setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 
-#' Construct a neighborhood graph from a \code{BrainSurface} object using edge weights.
-#' @param surf the \code{BrainSurface} instance
-#' @param radius the edge radius defining the neighborhood (default is 8)
-#' @param edge_weights the weights defining the "cost" of each connection (default is Euclidean edge distance).
-#' @return an \code{igraph} instance.
-#' @import igraph
-
 #' Generic function to construct neighborhood graph from surface mesh using edge weights.
 #' @param x surface mesh
 #' @param radius the edge radius defining the neighborhood 
 #' @param edgeWeights vector of edgeWeights used to define edge distance.
+#' @param nodes the subset of nodes to use
 #' @export neighborGraph
 #' @rdname neighborGraph-methods
-setGeneric(name="neighborGraph", def=function(x, radius, edgeWeights) standardGeneric("neighborGraph"))
+setGeneric(name="neighborGraph", def=function(x, radius, edgeWeights, nodes) standardGeneric("neighborGraph"))
 
 #' extract vertices from surface
 #' @param x the surface object
@@ -817,3 +813,9 @@ setGeneric(name="vertices", def=function(x) standardGeneric("vertices"))
 #' extract surface node indices
 #' @param x the surface object
 setGeneric(name="nodes", def=function(x) standardGeneric("nodes"))
+
+
+
+
+
+
