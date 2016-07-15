@@ -3,8 +3,10 @@
 \docType{class}
 \name{BrainVolume-class}
 \alias{BrainVolume-class}
-\title{Base class for image representing 3D volumetric data.}
+\title{BrainVolume
+Base class for image representing 3D volumetric data.}
 \description{
+BrainVolume
 Base class for image representing 3D volumetric data.
 }
 

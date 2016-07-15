@@ -4,12 +4,18 @@
 \alias{loadFSSurface}
 \title{load Freesurfer ascii surface}
 \usage{
-loadFSSurface(mesh)
+loadFSSurface(metaInfo)
 }
 \arguments{
-\item{mesh}{file name of mesh to read in.}
+\item{metaInfo}{instance of type \code{FreesurferSurfaceGeometryMetaInfo}}
+}
+\value{
+a class of type \code{BrainSurface}
 }
 \description{
 load Freesurfer ascii surface
+}
+\details{
+requires rgl library
 }
 

@@ -2,21 +2,21 @@
 % Please edit documentation in R/BrainRegion3D.R
 \name{ROIVolume}
 \alias{ROIVolume}
-\title{Create an instance of class ROIVolume}
+\title{Create an instance of class \code{\linkS4class{ROIVolume}}}
 \usage{
 ROIVolume(vspace, coords, data = rep(nrow(coords), 1))
 }
 \arguments{
-\item{vspace}{the volume \code{BrainSpace}}
+\item{vspace}{an instance of class \code{BrainSpace}}
 
 \item{coords}{matrix of voxel coordinates}
 
-\item{data}{the data values}
+\item{data}{the data values, numeric vector or matrix}
 }
 \value{
 an instance of class \code{ROIVolume}
 }
 \description{
-Create an instance of class ROIVolume
+Create an instance of class \code{\linkS4class{ROIVolume}}
 }
 

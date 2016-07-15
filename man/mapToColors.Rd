@@ -8,7 +8,7 @@ mapToColors(imslice, col = heat.colors(128, alpha = 1),
   zero.col = "#00000000", alpha = 1)
 }
 \arguments{
-\item{imslice}{an image matrix defining intensity values}
+\item{imslice}{vector or matrix of intensity values}
 
 \item{col}{a color map}
 

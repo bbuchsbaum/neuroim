@@ -2,19 +2,25 @@
 % Please edit documentation in R/BrainSurface.R
 \name{loadSurface}
 \alias{loadSurface}
-\title{load an surface from a set of files}
+\title{load an surface from a surface geometry with optional mapped surface data}
 \usage{
-loadSurface(surfaceName, surfaceDataName)
+loadSurface(surfaceName, surfaceDataName = NULL, indices = NULL,
+  keepZero = FALSE)
 }
 \arguments{
 \item{surfaceName}{the name of the file containing the surface geometry.}
 
-\item{surfaceDataName}{the name of the file containing the values to be mapped to the surface.}
+\item{surfaceDataName}{the name of the file containing the values to be mapped to the surface (optional).}
+
+\item{column}{indices to load (optional)}
 }
 \value{
-an instance of the class \code{\linkS4class{BrainSurface}}
+an instance of the class:
+ \code{\linkS4class{SurfaceGeometry}} 
+ or \code{\linkS4class{BrainSurface}} 
+ or \code{\linkS4class{BrainSurfaceVector}}
 }
 \description{
-load an surface from a set of files
+load an surface from a surface geometry with optional mapped surface data
 }
 

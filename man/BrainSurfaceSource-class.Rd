@@ -6,14 +6,14 @@
 \alias{BrainSurfaceSource-class}
 \title{BrainSurfaceSource}
 \usage{
-BrainSurfaceSource(surfaceName, surfaceDataName, index = 1)
+BrainSurfaceSource(surfaceGeom, surfaceDataName, indices = NULL)
 }
 \arguments{
-\item{surfaceName}{the name of the file containing the surface geometry.}
+\item{surfaceGeom}{the name of the file containing the surface geometry or a \code{SurfaceGeometry} instance}
 
 \item{surfaceDataName}{the name of the file containing the data values to be mapped to the surface.}
 
-\item{index}{the integer offset into the surface data matrix}
+\item{indices}{the indices to load from surface data matrix (if provided)}
 }
 \description{
 A class that is used to produce a \code{\linkS4class{BrainSurface}} instance
@@ -23,10 +23,10 @@ Constructor for BrainSurfaceSource
 \section{Slots}{
 
 \describe{
-\item{\code{metaInfo}}{a \code{\linkS4class{SurfaceGeometryMetaInfo}} instance}
+\item{\code{geometry}}{a \code{\linkS4class{SurfaceGeometry}} instance}
 
 \item{\code{dataMetaInfo}}{a \code{\linkS4class{SurfaceDataMetaInfo}} instance}
 
-\item{\code{index}}{the index offset into the surface data matrix}
+\item{\code{index}}{the column index of the surface map to be loaded.}
 }}
 

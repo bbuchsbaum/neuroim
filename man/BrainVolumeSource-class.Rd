@@ -4,8 +4,7 @@
 \name{BrainVolumeSource-class}
 \alias{BrainVolumeSource}
 \alias{BrainVolumeSource-class}
-\title{BrainVolume
-BrainVolumeSource
+\title{BrainVolumeSource
 		
 A class is used to produce a \code{\linkS4class{BrainVolume}} instance}
 \usage{
@@ -17,7 +16,6 @@ BrainVolumeSource(input, index = 1)
 \item{index}{the image subvolume index}
 }
 \description{
-BrainVolume
 BrainVolumeSource
 		
 A class is used to produce a \code{\linkS4class{BrainVolume}} instance

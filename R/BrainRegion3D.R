@@ -6,17 +6,30 @@
 {}
 
 
-#' Create an instance of class \code{\linkS4Class{ROIVolume}}
+#' Create an instance of class \code{\linkS4class{ROIVolume}}
 #' 
 #' @param vspace an instance of class \code{BrainSpace}
 #' @param coords matrix of voxel coordinates
-#' @param data the data values
+#' @param data the data values, numeric vector or matrix
 #' @return an instance of class \code{ROIVolume}
 #' @rdname ROIVolume
-#' @name ROIVolume
 #' @export
 ROIVolume <- function(vspace, coords, data=rep(nrow(coords),1)) {
   new("ROIVolume", space=vspace, coords=coords, data=data)
+}
+
+
+#' Create an instance of class \code{\linkS4class{ROISurface}}
+#' 
+#' @param geometry the parent geometry: an instance of class \code{SurfaceGeometry}
+#' @param indices the parent surface indices
+#' @param data the data values, numeric \code{vector} or \code{matrix}
+#' @return an instance of class \code{ROISurface}
+#' @rdname ROISurface
+#' @export
+ROISurface <- function(geometry, indices, data) {
+  vert <- vertices(geometry, indices)
+  new("ROISurface", geometry=geometry, data=data, coords=vert, indices=indices)
 }
   
 
@@ -129,6 +142,7 @@ RegionSquare <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE, fix
 #' @param fill optional value(s) to assign to data slot. 
 #' @param nonzero keep only nonzero elements from \code{bvol}. If \code{bvol} is A \code{BrainSpace} then this argument is ignored.
 #' @return an instance of class \code{ROIVolume}
+#' @rdname RegionCube
 #' @examples
 #'  sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
 #'  cube <- RegionCube(sp1, c(5,5,5), 3)
@@ -212,11 +226,16 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
 
 #' Create a Region on Surface 
 #' 
-#'  @param surfgeom a \code{SurfaceGeometry} object
+#'  @param surf a \code{SurfaceGeometry} or \code{BrainSurface} or \code{BrainSurfaceVector}
 #'  @param index the index of the central surface node
 #'  @param radius the size in mm of the geodesic radius
-#'  @param optional value(s) to store as data
-SurfaceRegion <- function(surfgeom, index, radius, fill=NULL, max_order=NULL) {
+#'  @param max_order maximum number of edges to traverse. 
+#'    default is computed based on averaged edge length.
+#'  @importFrom assertthat assert_that
+#'  @rdname SurfaceDisk
+SurfaceDisk <- function(surf, index, radius, max_order=NULL) {
+  assertthat::assert_that(length(index) == 1)
+  
   edgeWeights=igraph::E(surfgeom@graph)$dist
 
   if (is.null(max_order)) {
@@ -224,9 +243,15 @@ SurfaceRegion <- function(surfgeom, index, radius, fill=NULL, max_order=NULL) {
     max_order <- ceiling(radius/avg_weight) + 1
   }
 
-  cand <- igraph::ego(surfgeom@graph, order= max_order, nodes=index)[[1]]
-  D <- igraph::distances(g, v, cand, weights=edgeWeights, algorithm="dijkstra")
+  cand <- as.vector(igraph::ego(surfgeom@graph, order= max_order, nodes=index)[[1]])
+  D <- igraph::distances(surfgeom@graph, index, cand, weights=edgeWeights, algorithm="dijkstra")
   keep <- which(D < radius)
+  
+  if (inherits(x, "BrainSurface") || inherits(x, "BrainSurfaceVector")) {
+    ROISurface(surf@geometry, indices=cand[keep], data=series(x, keep))
+  } else {
+    ROISurface(surf, indices=cand[keep], rep(1, length(keep)))
+  }
   
 }
 
@@ -284,7 +309,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
 
 #' Create an spherical random searchlight iterator
 #' 
-#' @param mask an volumetric image mask of type \code{\linkS4Class{BrainVolume}} containing valid searchlight voxel set.
+#' @param mask an volumetric image mask of type \code{\linkS4class{BrainVolume}} containing valid searchlight voxel set.
 #' @param radius in mm of spherical searchlight
 #' @export
 RandomSearchlight <- function(mask, radius) {
@@ -304,6 +329,7 @@ RandomSearchlight <- function(mask, radius) {
       #done[center] <<- TRUE
       done[vox] <<- TRUE
       attr(vox, "center") <- grid[center,]
+      attr(vox, "center.index") <- mask.idx[center]
       vox
       
     } else {
@@ -341,6 +367,7 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
       search <- RegionSphere(mask, grid[cenidx,], radius, nonzero=TRUE) 
       vox <- search@coords
       attr(vox, "center") <- grid[cenidx,]
+      attr(vox, "center.index") <- mask.idx[cenidx]
       vox
     } else {
       stop('StopIteration')
@@ -355,7 +382,7 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
 
 #' Create a Random Searchlight iterator for surface mesh using geodesic distance to define regions.
 #' 
-#' @param surfgeom a surface mesh: instance of class \code{\linkS4Class{SurfaceGeometry}}
+#' @param surfgeom a surface mesh: instance of class \code{\linkS4class{SurfaceGeometry}}
 #' @param radius radius of the searchlight as a geodesic distance in mm
 #' @param nodeset the subset of surface node indices to use
 #' @importFrom igraph neighborhood induced_subgraph
@@ -379,7 +406,7 @@ RandomSurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
     g <- surfgeom@graph
   } else {
     ## use supplied subset
-    g <- igraph::induced_subgraph(surfgeom@graph, nodeset)
+    g <- igraph::induced_subgraph(graph(surfgeom), nodeset)
     subgraph <- TRUE
   }
   
@@ -405,9 +432,11 @@ RandomSurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
         ## index into to absolute graph nodes
         vout <- nodeset[indices]
         attr(vout, "center") <- nodeset[center]
+        attr(vout, "center.index") <- nodeset[center]
         vout
       } else {
         attr(indices, "center") <- center
+        attr(indices, "center.index") <- center
         indices
       }
         
@@ -436,11 +465,11 @@ SurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
     ## use all surface nodes
     nodeset <- nodes(surfgeom)
     subgraph = FALSE
-    surfgeom@graph
+    neuroim::graph(surfgeom)
   } else {
     assertthat::assert_that(length(nodeset) > 1)
     subgraph=TRUE
-    g <- igraph::induced_subgraph(surfgeom@graph, nodeset)
+    g <- igraph::induced_subgraph(neuroim::graph(surfgeom), nodeset)
   }
   
   bg <- neighborGraph(g, radius=radius)
@@ -462,9 +491,11 @@ SurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
         ## index into to absolute graph nodes
         indices <- nodeset[indices]
         attr(indices, "center") <- nodeset[index]
+        attr(indices, "center.index") <- nodeset[index]
         indices
       } else {
         attr(indices, "center") <- index
+        attr(indices, "center.index") <- index
         indices
       }
       
@@ -497,6 +528,7 @@ Searchlight <- function(mask, radius) {
 		 	 search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
        vox <- coords(search)
 			 attr(vox, "center") <- grid[index,]
+			 attr(vox, "center.index") <- mask.idx[index]
        vox
 		} else {
 			stop('StopIteration')
@@ -527,6 +559,13 @@ setMethod("values", signature(x="ROIVolume"),
           })
 
 
+#' @rdname values-methods
+#' @export 
+setMethod("values", signature(x="ROISurface"),
+          function(x, ...) {
+            x@data
+          })
+
 
 #' @rdname indices-methods
 #' @export 
@@ -535,10 +574,16 @@ setMethod("indices", signature(x="ROIVolume"),
 			  gridToIndex(x@space, x@coords)
 		  })
             
+#' @rdname indices-methods
+#' @export 
+setMethod("indices", signature(x="ROISurface"),
+          function(x) {
+            x@indices
+          })
 
 
 #' @export
-#' @param real return coordinates in real world units
+#' @param real if \code{TRUE}, return coordinates in real world units
 #' @rdname coords-methods
 setMethod(f="coords", signature=signature(x="ROIVolume"),
           function(x, real=FALSE) {
@@ -551,14 +596,31 @@ setMethod(f="coords", signature=signature(x="ROIVolume"),
             }
           })
 
+#' @export
+#' @rdname coords-methods
+setMethod(f="coords", signature=signature(x="ROISurface"),
+          function(x) {
+            x@coords
+          })
 
 #' @export 
 #' @rdname length-methods
 #' @param x the object to get \code{length}
 setMethod(f="length", signature=signature(x="ROIVolume"),
           function(x) {
-            length(x@data)
-		})
+            nrow(x@coords)
+          })
+
+
+
+#' @export 
+#' @rdname length-methods
+#' @param x the object to get \code{length}
+setMethod(f="length", signature=signature(x="ROISurface"),
+          function(x) {
+            length(x@indices)
+          })
+
 
 #' subset an \code{ROIVolume}
 #' @export
@@ -568,13 +630,117 @@ setMethod(f="length", signature=signature(x="ROIVolume"),
 #' @param drop drop dimension
 setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
-            ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[,i])
+            } else {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+            }
           })
 
 setMethod("[", signature=signature(x="ROIVolume", i="logical", j="missing", drop="ANY"),
           function(x,i,j,drop) {
-            ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[,i])
+            } else {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+            }
           })
+
+setMethod("[", signature=signature(x="ROIVolume", i="numeric", j="numeric", drop="ANY"),
+          function(x,i,j,drop) {
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[j,i,drop=drop])
+            } else {
+              stop("illegal subset: `data` is 1-dimensional")
+            }
+          })
+
+setMethod("[", signature=signature(x="ROIVolume", i="missing", j="numeric", drop="ANY"),
+          function(x,i,j,drop) {
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords, x@data[j,,drop=drop])
+            } else {
+              stop("illegal subset: `data` is 1-dimensional")
+            }
+          })
+
+setMethod("[", signature=signature(x="ROIVolume", i="missing", j="logical", drop="ANY"),
+          function(x,i,j,drop) {
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords, x@data[j,,drop=drop])
+            } else {
+              stop("illegal subset: `data` is 1-dimensional")
+            }
+          })
+
+setMethod("[", signature=signature(x="ROIVolume", i="logical", j="logical", drop="ANY"),
+          function(x,i,j,drop) {
+            if (is.matrix(x@data)) {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[j,i,drop=drop])
+            } else {
+              ROIVolume(x@space, x@coords[i,,drop=FALSE], x@data[i])
+            }
+          })
+
+#' subset an \code{ROISurface}
+#' @export
+#' @param x the object
+#' @param i first index
+#' @param j second index
+#' @param drop drop dimension
+setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "missing", drop = "ANY"),
+          function (x, i, j, drop) {
+            if (is.matrix(x@data)) {
+              ROISurface(x@geometry, x@indices[i], x@data[,i])
+            } else {
+              ROISurface(x@geometry, x@indices[i], x@data[i])
+            }
+          })
+
+setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "numeric", drop = "ANY"),
+          function (x, i, j, drop) {
+            if (is.matrix(x@data)) {
+              ROISurface(x@geometry, x@indices[i], x@data[j,i,drop=drop])
+            } else {
+              ROISurface(x@geometry, x@indices[i], x@data[i])
+            }
+          })
+
+setMethod("[", signature=signature(x = "ROISurface", i = "missing", j = "numeric", drop = "ANY"),
+          function (x, i, j, drop) {
+            if (is.matrix(x@data)) {
+              ROISurface(x@geometry, x@indices[i], x@data[j,i,drop=drop])
+            } else {
+              ROISurface(x@geometry, x@indices[i], x@data[i])
+            }
+          })
+
+
+setMethod("[", signature=signature(x = "ROISurface", i = "logical", j = "logical", drop = "ANY"),
+          function (x, i, j, drop) {
+            if (is.matrix(x@data)) {
+              ROISurface(x@geometry, x@indices[i], x@data[j,i,drop=drop])
+            } else {
+              ROISurface(x@geometry, x@indices[i], x@data[i])
+            }
+          })
+
+
+#' subset an \code{ROISurface}
+#' @export
+#' @param x the object
+#' @param i first index
+#' @param j second index
+#' @param drop drop dimension
+setMethod("[", signature=signature(x = "ROISurface", i = "logical", j = "missing", drop = "ANY"),
+          function (x, i, j, drop) {
+            if (is.matrix(x@data)) {
+              ROISurface(x@geometry, x@indices[i], x@data[,i])
+            } else {
+              ROISurface(x@geometry, x@indices[i], x@data[i])
+            }
+          })
+
 
 #' show an \code{\linkS4class{ROIVolume}} 
 #' @param object the object
@@ -582,10 +748,24 @@ setMethod("[", signature=signature(x="ROIVolume", i="logical", j="missing", drop
 setMethod("show", signature=signature(object = "ROIVolume"),
 		  function (object) {
 			  cat("\n\n\tROIVolume", "\n")
-			  cat("\tsize: ", length(object), "\n")
-			  cat("\tparent dim:", dim(object), "\n")
-			  cat("\tvoxel center of mass: ", colMeans(coords(object)), "\n")
+			  cat("\t size: ", length(object), "\n")
+			  cat("\t parent dim:", dim(object), "\n")
+			  cat("\t num data cols:", if (is.matrix(object@data)) ncol(object@data) else 1, "\n" )
+			  cat("\t voxel center of mass: ", colMeans(coords(object)), "\n")
 		  })
+
+#' show an \code{\linkS4class{ROISurface}} 
+#' @param object the object
+#' @export
+setMethod("show", signature=signature(object = "ROISurface"),
+          function (object) {
+            cat("\n\n\tROISurface", "\n")
+            cat("\tsize: ", length(object@indices), "\n")
+            cat("\tdata type:", if (is.matrix(object@data)) "matrix" else "vector", "\n" )
+            cat("\tdata dim:", if (is.matrix(object@data)) dim(object@data) else length(object@data), "\n" )
+            cat("\tvertex center of mass: ", colMeans(object@coords), "\n")
+          })
+
   
       
 .distance <- function(p1, p2) {

@@ -12,8 +12,8 @@ a three-dimensional surface consisting of a set of triangle vertices with one va
 \describe{
 \item{\code{source}}{the data source for the surface}
 
-\item{\code{mesh}}{the underlying \code{mesh3d} object}
+\item{\code{geometry}}{the surface geometry, an instance of \code{SurfaceGeometry}}
 
-\item{\code{data}}{the vector of data value at each vertex of the mesh}
+\item{\code{data}}{the 1-D vector of data value at each vertex of the mesh}
 }}
 

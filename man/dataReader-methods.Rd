@@ -6,6 +6,7 @@
 \alias{dataReader,AFNIMetaInfo-method}
 \alias{dataReader,NIMLSurfaceDataMetaInfo-method}
 \alias{dataReader,NIfTIMetaInfo-method}
+\alias{dataReader,SurfaceGeometryMetaInfo-method}
 \title{Generic function to create data reader}
 \usage{
 dataReader(x, offset)
@@ -13,6 +14,8 @@ dataReader(x, offset)
 \S4method{dataReader}{NIfTIMetaInfo}(x, offset = 0)
 
 \S4method{dataReader}{AFNIMetaInfo}(x, offset = 0)
+
+\S4method{dataReader}{SurfaceGeometryMetaInfo}(x)
 
 \S4method{dataReader}{NIMLSurfaceDataMetaInfo}(x)
 }

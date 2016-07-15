@@ -2,16 +2,16 @@
 % Please edit documentation in R/BrainRegion3D.R
 \name{RandomSearchlight}
 \alias{RandomSearchlight}
-\title{Create an Random Searchlight iterator}
+\title{Create an spherical random searchlight iterator}
 \usage{
 RandomSearchlight(mask, radius)
 }
 \arguments{
-\item{mask}{an image volume containing valid central voxels for roving searchlight}
+\item{mask}{an volumetric image mask of type \code{\linkS4class{BrainVolume}} containing valid searchlight voxel set.}
 
 \item{radius}{in mm of spherical searchlight}
 }
 \description{
-Create an Random Searchlight iterator
+Create an spherical random searchlight iterator
 }
 

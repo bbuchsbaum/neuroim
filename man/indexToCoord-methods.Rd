@@ -4,10 +4,13 @@
 \name{indexToCoord}
 \alias{indexToCoord}
 \alias{indexToCoord,BrainSpace,index-method}
+\alias{indexToCoord,BrainSurface,index-method}
 \alias{indexToCoord,BrainVolume,index-method}
 \title{Generic function to convert 1D indices to N-dimensional real world coordinates}
 \usage{
 indexToCoord(x, idx)
+
+\S4method{indexToCoord}{BrainSurface,index}(x, idx)
 
 \S4method{indexToCoord}{BrainSpace,index}(x, idx)
 

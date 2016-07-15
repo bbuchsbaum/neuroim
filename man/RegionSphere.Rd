@@ -2,7 +2,7 @@
 % Please edit documentation in R/BrainRegion3D.R
 \name{RegionSphere}
 \alias{RegionSphere}
-\title{Create A Spherical Region of Interest}
+\title{Create a Spherical Region of Interest}
 \usage{
 RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = FALSE)
 }
@@ -13,21 +13,21 @@ RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = FALSE)
 
 \item{radius}{the radius in real units (e.g. millimeters) of the spherical ROI}
 
-\item{fill}{optional value(s) to assign to data slot}
+\item{fill}{optional value(s) to store as data}
 
-\item{nonzero}{keep only nonzero elements from \code{bvol}}
+\item{nonzero}{if \code{TRUE}, keep only nonzero elements from \code{bvol}}
 }
 \value{
 an instance of class \code{ROIVolume}
 }
 \description{
-Create A Spherical Region of Interest
+Create a Spherical Region of Interest
 }
 \examples{
- sp1 <- BrainSpace(c(10,10,10), c(1,1,1))
+ sp1 <- BrainSpace(c(10,10,10), c(1,2,3))
  cube <- RegionSphere(sp1, c(5,5,5), 3.5)
- vox = coords(cube)
- 
+ vox <- coords(cube)
+ cds <- coords(cube, real=TRUE)
  ## fill in ROI with value of 6
  cube1 <- RegionSphere(sp1, c(5,5,5), 3.5, fill=6)
  all(cube1@data == 6)

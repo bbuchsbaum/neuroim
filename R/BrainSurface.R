@@ -19,8 +19,8 @@ loadSurface  <- function(surfaceName, surfaceDataName=NULL, indices=NULL, keepZe
   }
 }
 
-#' load surface data and attach to \code{\linkS4Class{SurfaceGeometry}}
-#' @param geometry a \code{\linkS4Class{SurfaceGeometry}} instance
+#' load surface data and attach to \code{\linkS4class{SurfaceGeometry}}
+#' @param geometry a \code{\linkS4class{SurfaceGeometry}} instance
 #' @param surfaceDataName the name of the file containing the values to be mapped to the surface.
 #' @param column indices to load (optional)
 #' @return an instance of the class \code{\linkS4class{BrainSurface}} or \code{\linkS4class{BrainSurfaceVector}} 
@@ -91,15 +91,15 @@ setMethod(f="vertices", signature=c("BrainSurface"),
 #' @rdname vertices-methods
 #' @export
 setMethod(f="vertices", signature=c("BrainSurfaceVector"),
-          def=function(x) {
-            callGeneric(x@geometry)
+          def=function(x, indices) {
+            callGeneric(x@geometry, indices)
           })
 
 #' @rdname vertices-methods
 #' @export
 setMethod(f="vertices", signature=c("SurfaceGeometry"),
-          def=function(x) {
-            t(x@mesh$vb[1:3,])
+          def=function(x, indices) {
+            t(x@mesh$vb[1:3,indices, drop=FALSE])
           })
 
 #' @rdname nodes-methods
@@ -131,9 +131,54 @@ setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
             Matrix::t(x@data[i,])
           })
 
+#' @rdname series-methods
+#' @import Matrix
+#' @export
+setMethod("series", signature(x="BrainSurfaceVector", i="ROISurface"),
+          def=function(x, i) {	
+            callGeneric(x, indices(i))
+          })
+
+#' @rdname series-methods
+#' @export
+setMethod("series", signature(x="BrainSurface", i="numeric"),
+          def=function(x, i) {	
+            stop("not implemented")
+            
+          })
+
+#' @rdname graph-methods
+#' @export
+setMethod("graph", signature(x="BrainSurface"),
+          def=function(x,...) {	
+            callGeneric(x@geometry)
+          })
+
+#' @rdname graph-methods
+#' @export
+setMethod("graph", signature(x="BrainSurfaceVector"),
+          def=function(x, ...) {	
+            callGeneric(x@geometry)
+          })
+
+#' @rdname graph-methods
+#' @export
+setMethod("graph", signature(x="SurfaceGeometry"),
+          def=function(x) {	
+            x@graph
+          })
+
+
 #' construct a new BrainSurfaceVector 
-# BrainSurfaceVector <- function(geometry, datanodes, datamat) {
-#}
+#' @param geometry a \code{SurfaceGeometry} instance
+#' @param indices a vector of indices specifying the valid surface nodes. 
+#' @param mat a \code{matrix} of data values (rows=nodes, columns=variables)
+#' @export
+BrainSurfaceVector <- function(geometry, indices, mat) {
+  new("BrainSurfaceVector", source=NullSource(), geometry=geometry, indices=as.integer(indices), 
+      data=Matrix::Matrix(mat))
+  
+}
 
 #' load a BrainSurfaceVector
 #' @export loadData

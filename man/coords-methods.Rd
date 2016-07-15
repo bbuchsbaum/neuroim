@@ -4,13 +4,16 @@
 \name{coords}
 \alias{coords}
 \alias{coords,IndexLookupVolume-method}
+\alias{coords,ROISurface-method}
 \alias{coords,ROIVolume-method}
 \alias{coords,SparseBrainVector-method}
 \title{Extract coordinates}
 \usage{
 coords(x, ...)
 
-\S4method{coords}{ROIVolume}(x)
+\S4method{coords}{ROIVolume}(x, real = FALSE)
+
+\S4method{coords}{ROISurface}(x)
 
 \S4method{coords}{SparseBrainVector}(x, i)
 
@@ -20,6 +23,8 @@ coords(x, ...)
 \item{x}{the object to extract coordinates from}
 
 \item{...}{additional arguments}
+
+\item{real}{if \code{TRUE}, return coordinates in real world units}
 
 \item{i}{the index in to the lookup volume}
 }

@@ -12,8 +12,11 @@ a three-dimensional surface consisting of a set of triangle vertices with multip
 \describe{
 \item{\code{source}}{the data source for the surface}
 
-\item{\code{mesh}}{the underlying \code{mesh3d} object}
+\item{\code{geometry}}{the surface geometry, an instance of \code{SurfaceGeometry}}
 
-\item{\code{mat}}{a matrix of values where each column contains a vector of values over the surface nodes.}
+\item{\code{indices}}{a vector of indices specifying the valid surface nodes.}
+
+\item{\code{data}}{a \code{Matrix} of values where each column contains a vector of values 
+over all the surface nodes.}
 }}
 

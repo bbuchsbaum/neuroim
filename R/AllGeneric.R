@@ -607,9 +607,9 @@ setGeneric(name="indices", def=function(x) standardGeneric("indices"))
 #' @rdname lookup-methods
 setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 
-#' Extract vector series from object
+#' Extract series from object
 #' @param x the object
-#' @param i the series index
+#' @param i the series indices
 #' @param ... additional arguments
 #' @export 
 #' @rdname series-methods
@@ -715,6 +715,7 @@ setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
 
 
 #' extract voxel coordinates
+#' 
 #' @param x the object to extract voxels from
 #' @param ... additional arguments to function
 #' @export 
@@ -729,6 +730,7 @@ if (!isGeneric("as.raster"))
   setGeneric("as.raster", function(x, ...) standardGeneric("as.raster"))
 
 #' overlay two objects
+#' 
 #' @param x the underlay object
 #' @param y the overlay object
 #' @param ... additional arguments for class-specific implementations
@@ -808,11 +810,21 @@ setGeneric(name="neighborGraph", def=function(x, radius, edgeWeights, nodes) sta
 
 #' extract vertices from surface
 #' @param x the surface object
-setGeneric(name="vertices", def=function(x) standardGeneric("vertices"))
+#' @param ... extra args
+#' @rdname vertices-methods
+setGeneric(name="vertices", def=function(x,...) standardGeneric("vertices"))
 
 #' extract surface node indices
 #' @param x the surface object
+#' @rdname nodes-methods
 setGeneric(name="nodes", def=function(x) standardGeneric("nodes"))
+
+
+#' extract \code{igraph} object
+#' @param x the object to extract the graph from
+#' @param ... extra args
+#' @rdname graph-methods
+setGeneric(name="graph", def=function(x, ...) standardGeneric("graph"))
 
 
 

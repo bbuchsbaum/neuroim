@@ -5,8 +5,7 @@
 \alias{gridToCoord}
 \alias{gridToCoord,BrainSpace,matrix-method}
 \alias{gridToCoord,BrainVolume,matrix-method}
-\title{Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
-Generic function to convert N-dimensional grid coordinates to real world coordinates}
+\title{Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates}
 \usage{
 gridToCoord(x, coords)
 
@@ -24,6 +23,5 @@ a matrix of real coordinates
 }
 \description{
 Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
-Generic function to convert N-dimensional grid coordinates to real world coordinates
 }
 

@@ -5,14 +5,23 @@
 \alias{loadData}
 \alias{loadData,BrainBucketSource-method}
 \alias{loadData,BrainSurfaceSource-method}
+\alias{loadData,BrainSurfaceVectorSource-method}
 \alias{loadData,BrainVectorSource-method}
 \alias{loadData,BrainVolumeSource-method}
+\alias{loadData,FreesurferSurfaceGeometryMetaInfo-method}
 \alias{loadData,SparseBrainVectorSource-method}
+\alias{loadData,SurfaceGeometrySource-method}
 \title{Generic function to load data from a data source}
 \usage{
 loadData(x, ...)
 
+\S4method{loadData}{BrainSurfaceVectorSource}(x)
+
+\S4method{loadData}{SurfaceGeometrySource}(x)
+
 \S4method{loadData}{BrainSurfaceSource}(x)
+
+\S4method{loadData}{FreesurferSurfaceGeometryMetaInfo}(x)
 
 \S4method{loadData}{SparseBrainVectorSource}(x, mmap = FALSE)
 
@@ -39,7 +48,13 @@ an instance of class \code{\linkS4class{BrainVolume}}
 \description{
 Generic function to load data from a data source
 
+load a BrainSurfaceVector
+
+load a \code{SurfaceGeometry} instance
+
 load a BrainSurface
+
+load a Freesurfer surface geometry
 
 loadData
 

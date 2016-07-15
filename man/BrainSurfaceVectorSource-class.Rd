@@ -5,11 +5,15 @@
 \alias{BrainSurfaceVectorSource-class}
 \title{BrainSurfaceVectorSource}
 \description{
-A class that is used to produce a \code{\linkS4class{BrainSurfaceVectorSource}} instance
+A class that is used to produce a \code{\linkS4class{BrainSurfaceVector}} instance
 }
 \section{Slots}{
 
 \describe{
-\item{\code{indices}}{the index vector of the volumes to be loaded}
+\item{\code{geometry}}{a \code{\linkS4class{SurfaceGeometry}} instance}
+
+\item{\code{dataMetaInfo}}{a \code{\linkS4class{SurfaceDataMetaInfo}} instance}
+
+\item{\code{indices}}{the column indices vector of the surface maps to be loaded}
 }}
 

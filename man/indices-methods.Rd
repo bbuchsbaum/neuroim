@@ -4,6 +4,7 @@
 \name{indices}
 \alias{indices}
 \alias{indices,IndexLookupVolume-method}
+\alias{indices,ROISurface-method}
 \alias{indices,ROIVolume-method}
 \alias{indices,SparseBrainVector-method}
 \title{Extract indices}
@@ -11,6 +12,8 @@
 indices(x)
 
 \S4method{indices}{ROIVolume}(x)
+
+\S4method{indices}{ROISurface}(x)
 
 \S4method{indices}{SparseBrainVector}(x)
 

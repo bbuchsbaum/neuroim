@@ -5,12 +5,12 @@
 \alias{ROIVolume-class}
 \title{ROIVolume}
 \description{
-A class that representing a volumetric region of interest (ROI).
+A class that represents a volumetric region of interest
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{the \code{numeric} data stored in the ROI}
+\item{\code{data}}{the \code{numeric} or \code{matrix} data stored in ROI}
 
 \item{\code{coords}}{the voxel coordinates of the ROI}
 }}
