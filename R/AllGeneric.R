@@ -804,7 +804,7 @@ setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readM
 #' @param radius the edge radius defining the neighborhood 
 #' @param edgeWeights vector of edgeWeights used to define edge distance.
 #' @param nodes the subset of nodes to use
-#' @export neighborGraph
+#' @exportMethod neighborGraph
 #' @rdname neighborGraph-methods
 setGeneric(name="neighborGraph", def=function(x, radius, edgeWeights, nodes) standardGeneric("neighborGraph"))
 

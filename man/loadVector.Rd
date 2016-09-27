@@ -13,7 +13,7 @@ loadVector(fileName, indices = NULL, mask = NULL, mmap = FALSE)
 
 \item{mask}{a mask defining the spatial elements to load}
 
-\item{use}{memory mapping if possible}
+\item{mmap}{memory mapping if possible}
 }
 \value{
 an \code{\linkS4class{BrainVector}} object

@@ -6,13 +6,17 @@
 \usage{
 SurfaceDisk(surf, index, radius, max_order = NULL)
 }
+\arguments{
+\item{surf}{a \code{SurfaceGeometry} or \code{BrainSurface} or \code{BrainSurfaceVector}}
+
+\item{index}{the index of the central surface node}
+
+\item{radius}{the size in mm of the geodesic radius}
+
+\item{max_order}{maximum number of edges to traverse. 
+default is computed based on averaged edge length.}
+}
 \description{
-@param surf a \code{SurfaceGeometry} or \code{BrainSurface} or \code{BrainSurfaceVector}
- @param index the index of the central surface node
- @param radius the size in mm of the geodesic radius
- @param max_order maximum number of edges to traverse. 
-   default is computed based on averaged edge length.
- @importFrom assertthat assert_that
- @rdname SurfaceDisk
+Creates a Region on a Surface from a radius and surface
 }
 

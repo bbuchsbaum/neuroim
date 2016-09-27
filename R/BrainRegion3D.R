@@ -224,39 +224,43 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
 }
 
 
-#' Create a Region on Surface 
+#' @title Create a Region on Surface 
+#' @description Creates a Region on a Surface from a radius and surface
 #' 
-#'  @param surf a \code{SurfaceGeometry} or \code{BrainSurface} or \code{BrainSurfaceVector}
-#'  @param index the index of the central surface node
-#'  @param radius the size in mm of the geodesic radius
-#'  @param max_order maximum number of edges to traverse. 
-#'    default is computed based on averaged edge length.
-#'  @importFrom assertthat assert_that
-#'  @rdname SurfaceDisk
+#' @param surf a \code{SurfaceGeometry} or \code{BrainSurface} or \code{BrainSurfaceVector}
+#' @param index the index of the central surface node
+#' @param radius the size in mm of the geodesic radius
+#' @param max_order maximum number of edges to traverse. 
+#'   default is computed based on averaged edge length.
+#' @importFrom assertthat assert_that
+#' @importFrom igraph E V ego distances induced_subgraph V neighborhood
+#' @rdname SurfaceDisk
+#' @export
 SurfaceDisk <- function(surf, index, radius, max_order=NULL) {
   assertthat::assert_that(length(index) == 1)
   
-  edgeWeights=igraph::E(surfgeom@graph)$dist
+  edgeWeights=igraph::E(surf@graph)$dist
 
   if (is.null(max_order)) {
     avg_weight <- mean(edgeWeights)
     max_order <- ceiling(radius/avg_weight) + 1
   }
 
-  cand <- as.vector(igraph::ego(surfgeom@graph, order= max_order, nodes=index)[[1]])
-  D <- igraph::distances(surfgeom@graph, index, cand, weights=edgeWeights, algorithm="dijkstra")
+  cand <- as.vector(igraph::ego(surf@graph, order= max_order, nodes=index)[[1]])
+  D <- igraph::distances(surf@graph, index, cand, weights=edgeWeights, algorithm="dijkstra")
   keep <- which(D < radius)
   
-  if (inherits(x, "BrainSurface") || inherits(x, "BrainSurfaceVector")) {
-    ROISurface(surf@geometry, indices=cand[keep], data=series(x, keep))
+  if (inherits(surf, "BrainSurface") || inherits(surf, "BrainSurfaceVector")) {
+    ROISurface(surf@geometry, indices=cand[keep], data=series(surf, keep))
   } else {
     ROISurface(surf, indices=cand[keep], rep(1, length(keep)))
   }
   
 }
 
-#' Create a Spherical Region of Interest
+#' @title Create a Spherical Region of Interest
 #' 
+#' @description Creates a Spherical ROI based on a Centroid.
 #' @param bvol an \code{BrainVolume} or \code{BrainSpace} instance
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius in real units (e.g. millimeters) of the spherical ROI
@@ -605,7 +609,6 @@ setMethod(f="coords", signature=signature(x="ROISurface"),
 
 #' @export 
 #' @rdname length-methods
-#' @param x the object to get \code{length}
 setMethod(f="length", signature=signature(x="ROIVolume"),
           function(x) {
             nrow(x@coords)
@@ -628,6 +631,8 @@ setMethod(f="length", signature=signature(x="ROISurface"),
 #' @param i first index
 #' @param j second index
 #' @param drop drop dimension
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,numeric,missing,ANY-method
 setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {
@@ -637,6 +642,8 @@ setMethod("[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing"
             }
           })
 
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,logical,missing,ANY-method
 setMethod("[", signature=signature(x="ROIVolume", i="logical", j="missing", drop="ANY"),
           function(x,i,j,drop) {
             if (is.matrix(x@data)) {
@@ -646,6 +653,8 @@ setMethod("[", signature=signature(x="ROIVolume", i="logical", j="missing", drop
             }
           })
 
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,numeric,numeric,ANY-method
 setMethod("[", signature=signature(x="ROIVolume", i="numeric", j="numeric", drop="ANY"),
           function(x,i,j,drop) {
             if (is.matrix(x@data)) {
@@ -655,6 +664,8 @@ setMethod("[", signature=signature(x="ROIVolume", i="numeric", j="numeric", drop
             }
           })
 
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,missing,numeric,ANY-method
 setMethod("[", signature=signature(x="ROIVolume", i="missing", j="numeric", drop="ANY"),
           function(x,i,j,drop) {
             if (is.matrix(x@data)) {
@@ -664,6 +675,8 @@ setMethod("[", signature=signature(x="ROIVolume", i="missing", j="numeric", drop
             }
           })
 
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,missing,logical,ANY-method
 setMethod("[", signature=signature(x="ROIVolume", i="missing", j="logical", drop="ANY"),
           function(x,i,j,drop) {
             if (is.matrix(x@data)) {
@@ -673,6 +686,8 @@ setMethod("[", signature=signature(x="ROIVolume", i="missing", j="logical", drop
             }
           })
 
+#' @rdname vol_subset-methods
+#' @aliases [,ROIVolume,logical,logical,ANY-method
 setMethod("[", signature=signature(x="ROIVolume", i="logical", j="logical", drop="ANY"),
           function(x,i,j,drop) {
             if (is.matrix(x@data)) {
@@ -688,6 +703,8 @@ setMethod("[", signature=signature(x="ROIVolume", i="logical", j="logical", drop
 #' @param i first index
 #' @param j second index
 #' @param drop drop dimension
+#' @rdname surf_subset-methods
+#' @aliases [,ROISurface,numeric,missing,ANY-method
 setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {
@@ -697,6 +714,8 @@ setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "missing
             }
           })
 
+#' @rdname surf_subset-methods
+#' @aliases [,ROISurface,numeric,numeric,ANY-method
 setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "numeric", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {
@@ -706,6 +725,8 @@ setMethod("[", signature=signature(x = "ROISurface", i = "numeric", j = "numeric
             }
           })
 
+#' @rdname surf_subset-methods
+#' @aliases [,ROISurface,missing,numeric,ANY-method
 setMethod("[", signature=signature(x = "ROISurface", i = "missing", j = "numeric", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {
@@ -715,7 +736,8 @@ setMethod("[", signature=signature(x = "ROISurface", i = "missing", j = "numeric
             }
           })
 
-
+#' @rdname surf_subset-methods
+#' @aliases [,ROISurface,logical,logical,ANY-method
 setMethod("[", signature=signature(x = "ROISurface", i = "logical", j = "logical", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {
@@ -725,13 +747,8 @@ setMethod("[", signature=signature(x = "ROISurface", i = "logical", j = "logical
             }
           })
 
-
-#' subset an \code{ROISurface}
-#' @export
-#' @param x the object
-#' @param i first index
-#' @param j second index
-#' @param drop drop dimension
+#' @rdname surf_subset-methods
+#' @aliases [,ROISurface,logical,missing,ANY-method
 setMethod("[", signature=signature(x = "ROISurface", i = "logical", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             if (is.matrix(x@data)) {

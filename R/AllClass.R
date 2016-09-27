@@ -171,6 +171,15 @@ setMethod(f="show",
 				cat("meta info is null \n")
 			})
 	
+
+#' BaseSource
+#' 
+#' This is a base class to represent a data source
+#' @rdname BaseSource-class
+#' @slot metaInfo meta information for the data source
+#' @exportClass BaseSource
+setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
+
 #' SurfaceGeometry
 #' 
 #' a three-dimensional surface consisting of a set of triangle vertices
@@ -329,14 +338,6 @@ setClass("NIfTIMetaInfo",
 setClass("AFNIMetaInfo",
     representation=(afni_header="list"),
 		contains=c("FileMetaInfo"))
-
-#' BaseSource
-#' 
-#' This is a base class to represent a data source
-#' @rdname BaseSource-class
-#' @slot metaInfo meta information for the data source
-#' @exportClass BaseSource
-setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
 
 
 NullSource <- function() {

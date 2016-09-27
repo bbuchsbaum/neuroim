@@ -3,7 +3,13 @@
 \docType{methods}
 \name{neighborGraph}
 \alias{neighborGraph}
+\alias{neighborGraph,igraph,numeric,missing,integer}
+\alias{neighborGraph,igraph,numeric,missing,integer-method}
+\alias{neighborGraph,igraph,numeric,missing,missing}
 \alias{neighborGraph,igraph,numeric,missing,missing-method}
+\alias{neighborGraph,igraph,numeric,numeric,integer}
+\alias{neighborGraph,igraph,numeric,numeric,integer-method}
+\alias{neighborGraph,igraph,numeric,numeric,missing}
 \alias{neighborGraph,igraph,numeric,numeric,missing-method}
 \title{Generic function to construct neighborhood graph from surface mesh using edge weights.}
 \usage{
@@ -12,6 +18,11 @@ neighborGraph(x, radius, edgeWeights, nodes)
 \S4method{neighborGraph}{igraph,numeric,missing,missing}(x, radius)
 
 \S4method{neighborGraph}{igraph,numeric,numeric,missing}(x, radius, edgeWeights)
+
+\S4method{neighborGraph}{igraph,numeric,numeric,integer}(x, radius, edgeWeights,
+  nodes)
+
+\S4method{neighborGraph}{igraph,numeric,missing,integer}(x, radius, nodes)
 }
 \arguments{
 \item{x}{surface mesh}

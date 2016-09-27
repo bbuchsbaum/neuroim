@@ -667,7 +667,7 @@ setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", w
 #' @param fileName the name of the file to load
 #' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
 #' @param mask a mask defining the spatial elements to load 
-#' @param use memory mapping if possible
+#' @param mmap memory mapping if possible
 #' @return an \code{\linkS4class{BrainVector}} object
 #' @export 
 loadVector  <- function(fileName, indices=NULL, mask=NULL, mmap=FALSE) {

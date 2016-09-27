@@ -1,4 +1,3 @@
-#' @import hash
 #' @importFrom assertthat assert_that
 #' @importFrom Matrix sparseVector
 #' @importFrom yaImpute ann
@@ -135,6 +134,7 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' mask <- BrainVolume(rep(1, 16^3),bspace)
 #' clusvol <- ClusteredBrainVolume(mask, kres$cluster)
 #' @rdname ClusteredBrainVolume-class
+#' @importFrom hash hash
 ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, label="") {
   mask <- as(mask, "LogicalBrainVolume")
   space <- space(mask)
@@ -679,7 +679,7 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
 #' @param features an optional matrix of additional features to tesselate volume
 #' @param spatialWeight weight voxels according to distance
 #' @importFrom stats kmeans
-#' @importFrom stats sd
+#' @importFrom stats sd var
 #' @rdname tesselate-methods
 setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
           def=function(x, K, features=NULL, spatialWeight=4) {
