@@ -20,6 +20,8 @@ vertices(x, ...)
 \item{x}{the surface object}
 
 \item{...}{extra args}
+
+\item{indices}{a vector of indices specifying the valid surface nodes.}
 }
 \description{
 extract vertices from surface

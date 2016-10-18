@@ -1,7 +1,3 @@
-#' @import abind
-NULL
-
-
 #' matrixToVolumeList
 #' converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
 #' @param voxmat an N by 3 matrix of voxel coordinates
@@ -138,6 +134,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 
 #' @export
 #' @rdname splitScale-methods
+#' @importFrom abind abind
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="missing", scale="missing"),
           def=function(x, f) {
             callGeneric(x,f, TRUE, TRUE)
@@ -283,7 +280,8 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 }
 
 # @nord
-#' @import mmap
+#' @importFrom mmap int8 uint8 int16 int32 real32 real64
+#' @importFrom mmap mmap char mmapFlags munmap
 .getMMapMode <- function(code) {	
 	if (code == "UNKNOWN") {
 		stop(paste(".getMMapMode: no memory map mode for UNKNOWN data type: ", code))
