@@ -60,6 +60,7 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 }
 
 #' image
+#' 
 #' @param slice the voxel index of the slice to display
 #' @param col a color map
 #' @param zero.col the color to use when the value is 0 (e.g background color)
@@ -67,7 +68,7 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 #' @export
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
-          def=function(x, slice, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    
+          def=function(x, slice=dim(vol)[3]/2, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    
             imslice <- sliceData(x, slice, axis)
             imcols <- mapToColors(imslice, col, zero.col)
             ras <- as.raster(imcols)
@@ -93,7 +94,6 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000", alpha=1) {
   new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col, alpha=alpha)
 }
-
 
 
 
@@ -143,10 +143,11 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
           })
 
 
-#' @export 
+
 #' @rdname overlay-methods
 #' @param e1 the left operand
 #' @param e2 the right operand
+#' @export 
 setMethod(f="+", signature=signature(e1 = "Overlay", e2="Layer"),
           def=function(e1, e2) {  
             new("Overlay", layers=c(e1@layers, e2))
@@ -185,10 +186,11 @@ setMethod(f="image", signature=signature(x = "Layer"),
           })
 
 
-#' @export
+
 #' @rdname renderSlice-methods
 #' @param zero.col color used when background intensity is 0.
 #' @param units grid unit type, e.g. "mm", "inches"
+#' @export
 setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
           def=function(x, zpos, width, height, zero.col="#000000FF", units="mm") {
             sliceList <- lapply(x@layers, function(layer) {

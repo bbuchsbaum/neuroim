@@ -132,23 +132,21 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 #' loadData
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 #' @param mmap use memory-mapped file
+#' @importFrom RNifti readNifti
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x, mmap=FALSE) {		
 			
 			meta <- x@metaInfo
       
-      #if (mmap) {
-       # stop("memory mapping not implemented")
-      #}
-			
+     
 			#if (mmap && (.Platform$endian != meta@endian)) {
 			#	message("cannot create memory mapped file when image endianness does not equal OS endianess")
 			#  mmap <- FALSE
 			#}
 			
 			if (mmap && neuroim:::.isExtension(meta@dataFile, ".gz")) {
-				message("cannot memory map to a gzipped file.")		
+				warning("cannot memory map to a gzipped file. ")		
 			  mmap <- FALSE
 			}
 						
@@ -157,20 +155,25 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			nels <- prod(meta@Dim[1:4]) 		
 			ind <- x@indices
 	
-			
 			if (mmap) {
 			  mappedData <- .makeMMap(meta)
 			  arr <- array(mappedData, c(meta@Dim[1:4]))
 			} else {
-			  reader <- dataReader(meta, 0)	
-			  arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
-			  close(reader)
+			  
+			  ## use RNifti
+			  arr <- RNifti::readNifti("test_data/epivector.nii")
+			  
+			  #### old R-level File IO
+			  #reader <- dataReader(meta, 0)	
+			  #arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			  #close(reader)
 			}
+			
 			## bit of a hack to deal with scale factors
 			if (.hasSlot(meta, "slope")) {
         
         if (meta@slope != 0) {		  
-			    arr <- arr*meta@slope
+			    arr <- arr* meta@slope
         }
 			}
       
@@ -634,6 +637,17 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		})
 
 
+
+#' @rdname eachSeries-methods
+#' @importFrom purrr array_branch map
+#' @export
+setMethod(f="eachSeries", signature=signature(x="DenseBrainVector", FUN="function", withIndex="missing"),
+          def=function(x, FUN, withIndex=FALSE, ...) {
+            map(array_branch(x, 1:3), FUN)
+          })
+          
+            
+
 #' @rdname eachSeries-methods
 #' @export
 setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
@@ -675,13 +689,6 @@ loadVector  <- function(fileName, indices=NULL, mask=NULL, mmap=FALSE) {
 	loadData(src,mmap)
 }
 
-
-
-
-#setMethod("sliceMeans", signature(x="BrainVector"),
-#          function(x) {
-#             t(colMeans(x, dims=2))
-#           })
 
 
 #' @rdname concat-methods
