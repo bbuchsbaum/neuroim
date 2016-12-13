@@ -317,9 +317,13 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
 #' @param radius in mm of spherical searchlight
 #' @export
 RandomSearchlight <- function(mask, radius) {
+  
   done <- array(FALSE, dim(mask))
+  
   mask.idx <- which(mask != 0)
-  grid <- indexToGrid(mask, mask.idx)
+  
+  grid <- indexToGrid(mask, as.numeric(mask.idx))
+  
   
 
   prog <- function() { sum(done)/length(mask.idx) }
@@ -334,6 +338,7 @@ RandomSearchlight <- function(mask, radius) {
       done[vox] <<- TRUE
       attr(vox, "center") <- grid[center,]
       attr(vox, "center.index") <- mask.idx[center]
+      attr(vox, "indices") <- gridToIndex(mask, vox)
       vox
       
     } else {
@@ -348,16 +353,17 @@ RandomSearchlight <- function(mask, radius) {
 #' Create a spherical searchlight iterator that samples regions from within a mask.
 #' 
 #' searchlight centers are sampled without replacement, but the same surround voxel can belong to multiple searchlight samples.
+#' 
 #' @param mask an image volume containing valid central voxels for roving searchlight
-#' @param radius in mm of spherical searchlight
+#' @param radius in mm of spherical searchlight (can be a vector which is randomly sampled)
 #' @param iter the total number of searchlights to sample (default is 100).
 #' @export
-BootstrapSearchlight <- function(mask, radius, iter=100) {
+BootstrapSearchlight <- function(mask, radius=8, iter=100) {
   mask.idx <- which(mask != 0)
   grid <- indexToGrid(mask, mask.idx)
   index <- 0
   
-  sample.idx <- sample(1:nrow(grid))
+  sample.idx <- sample(1:nrow(grid), iter)
   
   prog <- function() { index/length(mask.idx) }
   
@@ -368,10 +374,12 @@ BootstrapSearchlight <- function(mask, radius, iter=100) {
       cenidx <- sample.idx[1]
       sample.idx <<- sample.idx[-1]
       
-      search <- RegionSphere(mask, grid[cenidx,], radius, nonzero=TRUE) 
+      search <- RegionSphere(mask, grid[cenidx,], sample(radius,1), nonzero=TRUE) 
       vox <- search@coords
       attr(vox, "center") <- grid[cenidx,]
       attr(vox, "center.index") <- mask.idx[cenidx]
+      #attr(ret, "mask_indices") <- mask.idx[ind]
+      #attr(ret, "indices") <- ind
       vox
     } else {
       stop('StopIteration')

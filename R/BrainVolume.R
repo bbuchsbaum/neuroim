@@ -555,6 +555,13 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' @export 
+#' @rdname indexToGrid-methods
+setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="integer"),
+          def=function(x, idx) {
+            callGeneric(space(x), as.numeric(idx))
+          })
+
  
 #' @export 
 #' @rdname indexToGrid-methods
@@ -563,6 +570,12 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' @export 
+#' @rdname indexToGrid-methods
+setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="integer"),
+          def=function(x, idx) {
+            callGeneric(space(x), as.numeric(idx))
+          })
 
 #' @export 
 #' @rdname gridToIndex-methods
