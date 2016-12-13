@@ -9,8 +9,6 @@
 
 
 
-## TODO ought to be able to easily create BrainVector from list of vols
-
 
 .BrainVectorFromMatrix <- function(data, space) {
 	nvols <- dim(space)[4]

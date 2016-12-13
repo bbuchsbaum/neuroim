@@ -4,6 +4,7 @@
 \name{eachSeries}
 \alias{eachSeries}
 \alias{eachSeries,BrainVector,function,missing-method}
+\alias{eachSeries,DenseBrainVector,function,missing-method}
 \alias{eachSeries,SparseBrainVector,function,logical-method}
 \title{Generic functions to apply a function to each series of a 4D image
 That is, if the 4th dimension is 'time' each series is a 1D time series.}
@@ -11,6 +12,9 @@ That is, if the 4th dimension is 'time' each series is a 1D time series.}
 eachSeries(x, FUN, withIndex, ...)
 
 \S4method{eachSeries}{SparseBrainVector,`function`,logical}(x, FUN,
+  withIndex = FALSE, ...)
+
+\S4method{eachSeries}{DenseBrainVector,`function`,missing}(x, FUN,
   withIndex = FALSE, ...)
 
 \S4method{eachSeries}{BrainVector,`function`,missing}(x, FUN,

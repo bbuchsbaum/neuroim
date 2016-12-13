@@ -518,6 +518,7 @@ SurfaceSearchlight <- function(surfgeom, radius=8, nodeset=NULL) {
 #' Create an exhaustive searchlight iterator
 #' @param mask an image volume containing valid central voxels for roving searchlight
 #' @param radius in mm of spherical searchlight
+#' @return an \code{iter} class 
 #' @export
 Searchlight <- function(mask, radius) {
   mask.idx <- which(mask != 0)
@@ -544,6 +545,45 @@ Searchlight <- function(mask, radius) {
 	obj
 			
 }
+
+#' Create a clustered Searchlight iterator
+#' 
+#' @param mask an image volume containing valid central voxels for roving searchlight
+#' @param csize the number of clusters
+#' @return an \code{iter} class 
+#' @export
+ClusteredSearchlight <- function(mask, csize) {
+  mask.idx <- which(mask != 0)
+  grid <- indexToCoord(mask, as.numeric(mask.idx))
+  vox <- indexToGrid(mask, as.numeric(mask.idx))
+  
+  kres <- kmeans(grid, centers=csize, iter.max=500)
+  
+  index_list <- split(1:length(mask.idx), kres$cluster)
+  
+  index <- 0
+  
+  prog <- function() { index/csize }
+  
+  nextEl <- function() {
+    if (index < csize) { 
+      index <<- index + 1
+      ind <- index_list[[index]]
+      ret <- vox[index_list[[index]],]
+      attr(ret, "mask_indices") <- mask.idx[ind]
+      attr(ret, "indices") <- ind
+      ret
+    } else {
+      stop('StopIteration')
+    }
+  }
+  
+  obj <- list(nextElem=nextEl, progress=prog, index_list=index_list, clusters=kres$cluster)
+  class(obj) <- c("Searchlight", 'abstractiter', 'iter')
+  obj
+  
+}
+
 
 
 #' @name as
