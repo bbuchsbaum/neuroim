@@ -637,10 +637,11 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 
 
 #' @rdname eachSeries-methods
-#' @importFrom purrr array_branch map
+# @importFrom purrr array_branch map
 #' @export
 setMethod(f="eachSeries", signature=signature(x="DenseBrainVector", FUN="function", withIndex="missing"),
           def=function(x, FUN, withIndex=FALSE, ...) {
+            stop()
             map(array_branch(x, 1:3), FUN)
           })
           
