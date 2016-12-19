@@ -181,7 +181,7 @@ setMethod(f="coordToIndex", signature=signature(x="BrainSurface", coords="matrix
 
 #' @export 
 #' @rdname indexToCoord-methods
-setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
+setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="numeric"),
           def=function(x, idx) {
             grid <- indexToGrid(x, idx) - .5
             res <- trans(x) %*% t(cbind(grid, rep(1,nrow(grid))))
@@ -264,7 +264,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="matrix"),
 		def=function(x, coords) {
 			array.dim <- dim(x)
       ### TODO assumes 3D index ....
-			.gridToIndex3D(dim(x), coords)
+			.gridToIndex3D(dim(x)[1:3], coords)
 		})
 
  

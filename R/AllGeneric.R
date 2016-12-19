@@ -607,7 +607,16 @@ setGeneric(name="indices", def=function(x) standardGeneric("indices"))
 #' @rdname lookup-methods
 setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 
-#' Extract series from object
+
+#' Extract one or more series from object and return as ROI object
+#' @param x the object
+#' @param i the series indices
+#' @param ... additional arguments
+#' @export 
+#' @rdname series-methods
+setGeneric(name="series_roi", def=function(x, i, ...) standardGeneric("series_roi")) 
+
+#' Extract one or more series from object
 #' @param x the object
 #' @param i the series indices
 #' @param ... additional arguments

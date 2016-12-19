@@ -127,10 +127,21 @@ setMethod(f="nodes", signature=c("BrainSurface"),
 
 #' @rdname series-methods
 #' @importFrom Matrix t
+#' @return a class of type \code{Matrix}
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
           def=function(x, i) {	
             Matrix::t(x@data[i,])
+          })
+
+
+#' @rdname series-methods
+#' @return a class of type \code{ROISurfaceVector}
+#' @export
+setMethod("series_roi", signature(x="BrainSurfaceVector", i="numeric"),
+          def=function(x, i) {	
+            m <- as.matrix(series(x,i))
+            ROISurfaceVector(geometry=x@geometry, indices=i, data=m)
           })
 
 #' @rdname series-methods
@@ -142,10 +153,17 @@ setMethod("series", signature(x="BrainSurfaceVector", i="ROISurface"),
 
 #' @rdname series-methods
 #' @export
+setMethod("series_roi", signature(x="BrainSurfaceVector", i="ROISurface"),
+          def=function(x, i) {	
+            mat <- series(x, indices(i))
+            ROISurfaceVector(x@geometry, indices(i), as.matrix(mat))
+          })
+
+#' @rdname series-methods
+#' @export
 setMethod("series", signature(x="BrainSurface", i="numeric"),
           def=function(x, i) {	
             stop("not implemented")
-            
           })
 
 #' @rdname graph-methods

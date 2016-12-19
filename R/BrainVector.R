@@ -757,6 +757,16 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 		})
 
 
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="matrix"),
+          def=function(x,i) {
+            mat <- series(x, i)
+            ROIVector(space(x), coords=i, data=mat)
+            
+          })
+
+
 
 #' @rdname series-methods
 #' @export
@@ -764,6 +774,15 @@ setMethod("series", signature(x="BrainVector", i="ROIVolume"),
           def=function(x,i) {
             grid <- coords(i)
             callGeneric(x, grid)
+          })
+
+
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="ROIVolume"),
+          def=function(x,i) {
+            rvol <- series(x, i)
+            ROIVector(space(x), coords=coords(rvol), data=as.matrix(values(rvol)))
           })
           
 
@@ -782,6 +801,15 @@ setMethod("series", signature(x="BrainVector", i="LogicalBrainVolume"),
 
 #' @rdname series-methods
 #' @export
+setMethod("series_roi", signature(x="BrainVector", i="LogicalBrainVolume"),
+          def=function(x,i) {
+            mat <- as.matrix(series(x, i))
+            ROIVector(space(x), coords=indexToGrid(which(i == TRUE), idx), data=as.matrix(mat))
+            
+          })
+
+#' @rdname series-methods
+#' @export
 setMethod("series", signature(x="BrainVector", i="numeric"),
 		def=function(x, i, j, k) {	
 			if (missing(j) && missing(k)) {
@@ -792,6 +820,23 @@ setMethod("series", signature(x="BrainVector", i="numeric"),
 				x[i,j,k,]	
 			}
 		})
+
+
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="numeric"),
+          def=function(x, i, j, k) {	
+            mat <- if (missing(j) && missing(k)) {
+              vdim <- dim(x)[1:3]
+              vox <- arrayInd(i, vdim)
+              apply(vox, 1, function(i) x[i[1], i[2], i[3],])			
+            } else {
+              vox <- cbind(i,j,k)
+              x[i,j,k,]	
+            }
+            
+            ROIVector(space(x), coords=vox, data=as.matrix(mat))
+          })
 
 
 
@@ -840,6 +885,7 @@ setAs(from="DenseBrainVector", to="matrix",
 
 
 #' convert a \code{BrainVector} to \code{list} of volumes. 
+#' 
 #' @rdname as.list-methods
 #' @param x the object
 #' @export 
