@@ -1,4 +1,3 @@
-#' @import hash
 #' @importFrom assertthat assert_that
 #' @importFrom Matrix sparseVector
 #' @importFrom yaImpute ann
@@ -135,6 +134,7 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' mask <- BrainVolume(rep(1, 16^3),bspace)
 #' clusvol <- ClusteredBrainVolume(mask, kres$cluster)
 #' @rdname ClusteredBrainVolume-class
+#' @importFrom hash hash
 ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, label="") {
   mask <- as(mask, "LogicalBrainVolume")
   space <- space(mask)
@@ -358,8 +358,10 @@ setMethod(f="loadData", signature=c(x="BrainVolumeSource"),
 			
 			reader <- dataReader(meta, offset)
 			dat <- readElements(reader, nels)
+			
 			## bit of a hack to deal with scale factors
       if (.hasSlot(meta, "slope")) {
+        
         if (meta@slope != 0) {  	  
           dat <- dat*meta@slope
         }
@@ -455,6 +457,7 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
               stop("fill: lookup matrix have at least one row")
             }
             
+<<<<<<< HEAD
             out <- array(0, dim(x))
             spl <- split(1:length(vol), as.integer(as.vector(vol)))
             keys <- as.character(lookup[,1])
@@ -464,8 +467,20 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
                 out[idx] <- as.vector(lookup[i,2])
               }
             }
+=======
             
-            BrainVolume(out, space(x))
+            m <- match(as.vector(x), lookup[,1])
+            outv <- lookup[m,2]
+            
+            #out <- array(0, dim(x))
+            #for (i in 1:nrow(lookup)) {
+            #  idx <- which(x == lookup[i,1])
+            #  out[idx] <- as.vector(lookup[i,2])             
+            #}
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
+            
+            outv[is.na(outv)] <- 0
+            BrainVolume(array(outv, dim(x)), space(x))
           })
 
 
@@ -552,6 +567,13 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' @export 
+#' @rdname indexToGrid-methods
+setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="integer"),
+          def=function(x, idx) {
+            callGeneric(space(x), as.numeric(idx))
+          })
+
  
 #' @export 
 #' @rdname indexToGrid-methods
@@ -560,6 +582,12 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' @export 
+#' @rdname indexToGrid-methods
+setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="integer"),
+          def=function(x, idx) {
+            callGeneric(space(x), as.numeric(idx))
+          })
 
 #' @export 
 #' @rdname gridToIndex-methods
@@ -682,7 +710,7 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
 #' @param features an optional matrix of additional features to tesselate volume
 #' @param spatialWeight weight voxels according to distance
 #' @importFrom stats kmeans
-#' @importFrom stats sd
+#' @importFrom stats sd var
 #' @rdname tesselate-methods
 setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
           def=function(x, K, features=NULL, spatialWeight=4) {

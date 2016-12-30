@@ -1,9 +1,5 @@
-#' @import stringr
-NULL
-
-
-
 #' @keywords internal
+#' @importFrom stringr str_split str_trim str_sub
 parseIntAttribute <- function(line){ 
 	as.integer(str_split(str_trim(paste(line, collapse=" ")), "\\s+")[[1]])
 }

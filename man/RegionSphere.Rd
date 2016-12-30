@@ -21,7 +21,7 @@ RegionSphere(bvol, centroid, radius, fill = NULL, nonzero = FALSE)
 an instance of class \code{ROIVolume}
 }
 \description{
-Create a Spherical Region of Interest
+Creates a Spherical ROI based on a Centroid.
 }
 \examples{
  sp1 <- BrainSpace(c(10,10,10), c(1,2,3))

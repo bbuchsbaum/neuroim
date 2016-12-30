@@ -12,7 +12,9 @@ loadSurface(surfaceName, surfaceDataName = NULL, indices = NULL,
 
 \item{surfaceDataName}{the name of the file containing the values to be mapped to the surface (optional).}
 
-\item{column}{indices to load (optional)}
+\item{indices}{indices to be used (optional), only if \code{surfaceDataName = NULL}}
+
+\item{keepZero}{NOT USED!!}
 }
 \value{
 an instance of the class:

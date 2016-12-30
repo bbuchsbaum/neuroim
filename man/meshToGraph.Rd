@@ -7,9 +7,9 @@
 meshToGraph(vertices, nodes)
 }
 \arguments{
-\item{N-by-3}{matrix of vertices}
+\item{vertices}{N-by-3 matrix of vertices}
 
-\item{matrix}{of node faces, where each row is a set of three vertex indices.}
+\item{nodes}{matrix of node faces, where each row is a set of three vertex indices.}
 }
 \value{
 an \code{igraph} instance representing th mesh connectivity.

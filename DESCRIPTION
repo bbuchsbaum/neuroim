@@ -6,7 +6,9 @@ Imports:
     iterators,
     abind,
     assertthat,
-    mmap
+    mmap,
+    igraph,
+    plyr
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
@@ -24,7 +26,7 @@ Suggests:
     knitr,
     rgl,
     readr
-Version: 0.0.6
+Version: 0.1.0
 Depends:
     R (>= 3.0.0),
     stringr,

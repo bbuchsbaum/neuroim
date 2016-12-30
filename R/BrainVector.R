@@ -9,8 +9,6 @@
 
 
 
-## TODO ought to be able to easily create BrainVector from list of vols
-
 
 .BrainVectorFromMatrix <- function(data, space) {
 	nvols <- dim(space)[4]
@@ -132,23 +130,21 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 #' loadData
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 #' @param mmap use memory-mapped file
+#' @importFrom RNifti readNifti
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x, mmap=FALSE) {		
 			
 			meta <- x@metaInfo
       
-      #if (mmap) {
-       # stop("memory mapping not implemented")
-      #}
-			
+     
 			#if (mmap && (.Platform$endian != meta@endian)) {
 			#	message("cannot create memory mapped file when image endianness does not equal OS endianess")
 			#  mmap <- FALSE
 			#}
 			
 			if (mmap && neuroim:::.isExtension(meta@dataFile, ".gz")) {
-				message("cannot memory map to a gzipped file.")		
+				warning("cannot memory map to a gzipped file. ")		
 			  mmap <- FALSE
 			}
 						
@@ -157,20 +153,25 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			nels <- prod(meta@Dim[1:4]) 		
 			ind <- x@indices
 	
-			
 			if (mmap) {
 			  mappedData <- .makeMMap(meta)
 			  arr <- array(mappedData, c(meta@Dim[1:4]))
 			} else {
-			  reader <- dataReader(meta, 0)	
-			  arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
-			  close(reader)
+			  
+			  ## use RNifti
+			  arr <- RNifti::readNifti("test_data/epivector.nii")
+			  
+			  #### old R-level File IO
+			  #reader <- dataReader(meta, 0)	
+			  #arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			  #close(reader)
 			}
+			
 			## bit of a hack to deal with scale factors
 			if (.hasSlot(meta, "slope")) {
         
         if (meta@slope != 0) {		  
-			    arr <- arr*meta@slope
+			    arr <- arr* meta@slope
         }
 			}
       
@@ -634,6 +635,19 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		})
 
 
+
+#' @rdname eachSeries-methods
+# @importFrom purrr array_branch map
+#' @export
+setMethod(f="eachSeries", signature=signature(x="DenseBrainVector", FUN="function", withIndex="missing"),
+          def=function(x, FUN, withIndex=FALSE, ...) {
+            #stop()
+            #map(array_branch(x, 1:3), FUN)
+            callGeneric(x,FUN, withIndex,...)
+          })
+          
+            
+
 #' @rdname eachSeries-methods
 #' @export
 setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
@@ -667,7 +681,7 @@ setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", w
 #' @param fileName the name of the file to load
 #' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
 #' @param mask a mask defining the spatial elements to load 
-#' @param use memory mapping if possible
+#' @param mmap memory mapping if possible
 #' @return an \code{\linkS4class{BrainVector}} object
 #' @export 
 loadVector  <- function(fileName, indices=NULL, mask=NULL, mmap=FALSE) {
@@ -675,13 +689,6 @@ loadVector  <- function(fileName, indices=NULL, mask=NULL, mmap=FALSE) {
 	loadData(src,mmap)
 }
 
-
-
-
-#setMethod("sliceMeans", signature(x="BrainVector"),
-#          function(x) {
-#             t(colMeans(x, dims=2))
-#           })
 
 
 #' @rdname concat-methods
@@ -750,6 +757,16 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 		})
 
 
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="matrix"),
+          def=function(x,i) {
+            mat <- series(x, i)
+            ROIVector(space(x), coords=i, data=mat)
+            
+          })
+
+
 
 #' @rdname series-methods
 #' @export
@@ -757,6 +774,15 @@ setMethod("series", signature(x="BrainVector", i="ROIVolume"),
           def=function(x,i) {
             grid <- coords(i)
             callGeneric(x, grid)
+          })
+
+
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="ROIVolume"),
+          def=function(x,i) {
+            rvol <- series(x, i)
+            ROIVector(space(x), coords=coords(rvol), data=as.matrix(values(rvol)))
           })
           
 
@@ -775,6 +801,15 @@ setMethod("series", signature(x="BrainVector", i="LogicalBrainVolume"),
 
 #' @rdname series-methods
 #' @export
+setMethod("series_roi", signature(x="BrainVector", i="LogicalBrainVolume"),
+          def=function(x,i) {
+            mat <- as.matrix(series(x, i))
+            ROIVector(space(x), coords=indexToGrid(which(i == TRUE), idx), data=as.matrix(mat))
+            
+          })
+
+#' @rdname series-methods
+#' @export
 setMethod("series", signature(x="BrainVector", i="numeric"),
 		def=function(x, i, j, k) {	
 			if (missing(j) && missing(k)) {
@@ -785,6 +820,23 @@ setMethod("series", signature(x="BrainVector", i="numeric"),
 				x[i,j,k,]	
 			}
 		})
+
+
+#' @rdname series-methods
+#' @export
+setMethod("series_roi", signature(x="BrainVector", i="numeric"),
+          def=function(x, i, j, k) {	
+            mat <- if (missing(j) && missing(k)) {
+              vdim <- dim(x)[1:3]
+              vox <- arrayInd(i, vdim)
+              apply(vox, 1, function(i) x[i[1], i[2], i[3],])			
+            } else {
+              vox <- cbind(i,j,k)
+              x[i,j,k,]	
+            }
+            
+            ROIVector(space(x), coords=vox, data=as.matrix(mat))
+          })
 
 
 
@@ -833,6 +885,7 @@ setAs(from="DenseBrainVector", to="matrix",
 
 
 #' convert a \code{BrainVector} to \code{list} of volumes. 
+#' 
 #' @rdname as.list-methods
 #' @param x the object
 #' @export 

@@ -11,7 +11,7 @@ loadSurfaceData(geometry, surfaceDataName, indices = NULL)
 
 \item{surfaceDataName}{the name of the file containing the values to be mapped to the surface.}
 
-\item{column}{indices to load (optional)}
+\item{indices}{indices to load (optional)}
 }
 \value{
 an instance of the class \code{\linkS4class{BrainSurface}} or \code{\linkS4class{BrainSurfaceVector}}

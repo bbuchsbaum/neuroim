@@ -7,8 +7,8 @@
 \alias{image,Overlay-method}
 \title{image}
 \usage{
-\S4method{image}{BrainVolume}(x, slice, col = gray((0:255)/255, alpha = 1),
-  zero.col = "#000000", axis = 3, ...)
+\S4method{image}{BrainVolume}(x, slice = dim(vol)[3]/2,
+  col = gray((0:255)/255, alpha = 1), zero.col = "#000000", axis = 3, ...)
 
 \S4method{image}{Overlay}(x, zpos, axis = 3)
 

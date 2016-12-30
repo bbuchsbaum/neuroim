@@ -4,7 +4,8 @@
 #' 
 #' @param surfaceName the name of the file containing the surface geometry.
 #' @param surfaceDataName the name of the file containing the values to be mapped to the surface (optional).
-#' @param column indices to load (optional)
+#' @param indices indices to be used (optional), only if \code{surfaceDataName = NULL}
+#' @param keepZero NOT USED!!
 #' @return an instance of the class:
 #'  \code{\linkS4class{SurfaceGeometry}} 
 #'  or \code{\linkS4class{BrainSurface}} 
@@ -23,7 +24,7 @@ loadSurface  <- function(surfaceName, surfaceDataName=NULL, indices=NULL, keepZe
 #' load surface data and attach to \code{\linkS4class{SurfaceGeometry}}
 #' @param geometry a \code{\linkS4class{SurfaceGeometry}} instance
 #' @param surfaceDataName the name of the file containing the values to be mapped to the surface.
-#' @param column indices to load (optional)
+#' @param indices indices to load (optional)
 #' @return an instance of the class \code{\linkS4class{BrainSurface}} or \code{\linkS4class{BrainSurfaceVector}} 
 #' @export loadSurfaceData
 loadSurfaceData  <- function(geometry, surfaceDataName, indices=NULL) {
@@ -103,6 +104,7 @@ setMethod(f="vertices", signature=c("BrainSurface"),
           })
 
 #' @rdname vertices-methods
+#' @param indices a vector of indices specifying the valid surface nodes.  
 #' @export
 setMethod(f="vertices", signature=c("BrainSurfaceVector"),
           def=function(x, indices) {
@@ -138,14 +140,30 @@ setMethod(f="nodes", signature=c("BrainSurface"),
           })
 
 #' @rdname series-methods
+<<<<<<< HEAD
 #' @importFrom Matrix Matrix
+=======
+#' @importFrom Matrix t
+#' @return a class of type \code{Matrix}
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
           def=function(x, i) {	
             Matrix::t(x@data[i,])
           })
 
+
 #' @rdname series-methods
+#' @return a class of type \code{ROISurfaceVector}
+#' @export
+setMethod("series_roi", signature(x="BrainSurfaceVector", i="numeric"),
+          def=function(x, i) {	
+            m <- as.matrix(series(x,i))
+            ROISurfaceVector(geometry=x@geometry, indices=i, data=m)
+          })
+
+#' @rdname series-methods
+<<<<<<< HEAD
 #' @importFrom Matrix Matrix
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="integer"),
@@ -154,6 +172,8 @@ setMethod("series", signature(x="BrainSurfaceVector", i="integer"),
           })
 
 #' @rdname series-methods
+=======
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="ROISurface"),
           def=function(x, i) {	
@@ -162,10 +182,17 @@ setMethod("series", signature(x="BrainSurfaceVector", i="ROISurface"),
 
 #' @rdname series-methods
 #' @export
+setMethod("series_roi", signature(x="BrainSurfaceVector", i="ROISurface"),
+          def=function(x, i) {	
+            mat <- series(x, indices(i))
+            ROISurfaceVector(x@geometry, indices(i), as.matrix(mat))
+          })
+
+#' @rdname series-methods
+#' @export
 setMethod("series", signature(x="BrainSurface", i="numeric"),
           def=function(x, i) {	
             stop("not implemented")
-            
           })
 
 #' @rdname graph-methods
@@ -225,7 +252,10 @@ setMethod(f="show", signature=signature("BrainSurfaceVector"),
 
 #' load a BrainSurfaceVector
 #' @export loadData
+<<<<<<< HEAD
 #' @importFrom Matrix Matrix
+=======
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"), 
           def=function(x) {
@@ -291,10 +321,15 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
 #' construct a graph from a set of vertices and nodes faces.
 #' 
 #' @export
-#' @param N-by-3 matrix of vertices 
-#' @param matrix of node faces, where each row is a set of three vertex indices.
+#' @param vertices N-by-3 matrix of vertices 
+#' @param nodes matrix of node faces, where each row is a set of three vertex indices.
 #' @return an \code{igraph} instance representing th mesh connectivity.
+<<<<<<< HEAD
 #' @importFrom igraph set.vertex.attribute simplify get.edgelist
+=======
+#' @importFrom igraph graph_from_edgelist get.edgelist set.vertex.attribute 
+#' @importFrom igraph simplify graph.adjacency
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 meshToGraph <- function(vertices, nodes) {
   edge1 <- as.matrix(nodes[,1:2 ])
   edge2 <- as.matrix(nodes[,2:3 ])
@@ -346,6 +381,7 @@ setMethod(f="loadData", signature=c("FreesurferSurfaceGeometryMetaInfo"),
 #' @param metaInfo instance of type \code{FreesurferSurfaceGeometryMetaInfo}
 #' @details requires rgl library
 #' @return a class of type \code{BrainSurface}
+#' @importFrom plyr rbind.fill.matrix
 #' @export
 loadFSSurface <- function(metaInfo) {
   if (!requireNamespace("rgl", quietly = TRUE)) {
@@ -408,34 +444,57 @@ findAllNeighbors <- function(g, radius, edgeWeights, nodes=NULL) {
 
 
 #' @rdname neighborGraph-methods
+#' @importFrom grDevices rainbow
 #' @export
+<<<<<<< HEAD
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
                                          edgeWeights="missing", 
                                          nodes="missing"),
+=======
+#' @aliases neighborGraph,igraph,numeric,missing,missing
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="missing"),
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x, radius ) {
             edgeWeights=igraph::E(x)$dist    
             findAllNeighbors(x, radius, as.vector(edgeWeights))
 })
 
 #' @rdname neighborGraph-methods
+<<<<<<< HEAD
 #' @export
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
                                          edgeWeights="numeric", nodes="missing"),
+=======
+#' @aliases neighborGraph,igraph,numeric,numeric,missing
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="missing"),
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x, radius, edgeWeights) {
             stopifnot(length(edgeWeights) == length(igraph::E(x))) 
             findAllNeighbors(x, radius, edgeWeights)
           })
 
+<<<<<<< HEAD
 
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
                                          edgeWeights="numeric", nodes="integer"),
+=======
+#' @rdname neighborGraph-methods
+#' @aliases neighborGraph,igraph,numeric,numeric,integer
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="integer"),
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x,radius, edgeWeights, nodes) {
             stopifnot(length(edgeWeights) == length(igraph::E(x)))
             findAllNeighbors(x,radius, edgeWeights, nodes)
           })
 
+<<<<<<< HEAD
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
                                          edgeWeights="missing", nodes="integer"),
+=======
+#' @rdname neighborGraph-methods
+#' @aliases neighborGraph,igraph,numeric,missing,integer
+setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="integer"),
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x,radius, nodes) {
             findAllNeighbors(x, radius, igraph::E(x)$dist, nodes) 
           })

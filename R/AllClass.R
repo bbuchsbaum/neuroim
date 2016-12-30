@@ -180,6 +180,15 @@ setMethod(f="show",
 				cat("meta info is null \n")
 			})
 	
+
+#' BaseSource
+#' 
+#' This is a base class to represent a data source
+#' @rdname BaseSource-class
+#' @slot metaInfo meta information for the data source
+#' @exportClass BaseSource
+setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
+
 #' SurfaceGeometry
 #' 
 #' a three-dimensional surface consisting of a set of triangle vertices
@@ -339,14 +348,6 @@ setClass("NIfTIMetaInfo",
 setClass("AFNIMetaInfo",
     representation=(afni_header="list"),
 		contains=c("FileMetaInfo"))
-
-#' BaseSource
-#' 
-#' This is a base class to represent a data source
-#' @rdname BaseSource-class
-#' @slot metaInfo meta information for the data source
-#' @exportClass BaseSource
-setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
 
 
 NullSource <- function() {
@@ -684,21 +685,57 @@ setClass("SparseBrainVectorSource", representation=
 
 setClassUnion("numericOrMatrix", c("numeric", "matrix"))
 
+#' ROI
+#' 
+#' Base marker class for a region of interest (ROI)
+setClass("ROI", contains="VIRTUAL")
+
+
+
 #' ROIVolume
 #' 
 #' A class that represents a volumetric region of interest
 #' 
 #' @rdname ROIVolume-class
-#' @slot data the \code{numeric} or \code{matrix} data stored in ROI
+#' @slot data the \code{numeric} data stored in ROI
 #' @slot coords the voxel coordinates of the ROI
 #' @exportClass ROIVolume
 setClass("ROIVolume", 
-		representation=representation(data="numericOrMatrix", coords="matrix"), contains=c("BrainData"),
+		representation=representation(data="numeric", coords="matrix"), contains=c("ROI", "BrainData"),
          validity = function(object) {
            if (ncol(object@coords) != 3) {
              stop("coords slot must be a matrix with 3 columns")
            }
+           if (!is.vector(data)) {
+             stop("'data' must be a vector")
+           }
+           if (length(data) != nrow(coords)) {
+             stop("length of data vector must equal 'nrow(coords)'")
+           }
          })
+
+#' ROIVector
+#' 
+#' A class that represents a vector-valued volumetric region of interest
+#' 
+#' @rdname ROIVector-class
+#' @slot data the \code{matrix} data stored in ROI
+#' @slot coords the voxel coordinates of the ROI
+#' @exportClass ROIVector
+setClass("ROIVector", 
+         representation=representation(data="matrix", coords="matrix"), contains=c("ROI","BrainData"),
+         validity = function(object) {
+           if (ncol(object@coords) != 3) {
+             stop("coords slot must be a matrix with 3 columns")
+           }
+           if (!is.matrix(object@data)) {
+             stop("'data' must be a matrix")
+           }
+           if (ncol(object@data) != nrow(object@coords)) {
+             stop("'ncol(data)' must equal 'nrow(coords)'")
+           }
+         })
+
 
 
 
@@ -707,13 +744,13 @@ setClass("ROIVolume",
 #' A class that respresents a surface-based region of interest
 #' 
 #' @slot geometry the geometry of the parent surface: a \code{SurfaceGeometry} instance
-#' @slot data the \code{numeric} or \code{matrix} data stored in ROI
+#' @slot data the vector-valued \code{numeric} data stored in ROI
 #' @slot coords the surface-based coordinates of the data
 #' @slot indices the node indices of the parent surface stored in the \code{geometry} field.
 #' @exportClass ROISurface
 #' @rdname ROISurface-class
 setClass("ROISurface", 
-  representation=representation(geometry="SurfaceGeometry", data="numericOrMatrix", 
+  representation=representation(geometry="SurfaceGeometry", data="numeric", 
                                 coords="matrix", indices="integer"),
   validity = function(object) {
     if (ncol(object@coords) != 3) {
@@ -722,7 +759,33 @@ setClass("ROISurface",
     if (nrow(object@coords) != length(object@indices)) {
       stop("length of indices must equal nrow(coords)")
     }
-})
+}, contains="ROI")
+
+#' ROISurfaceVector
+#' 
+#' A class that respresents a surface-based region of interest
+#' 
+#' @slot geometry the geometry of the parent surface: a \code{SurfaceGeometry} instance
+#' @slot data \code{matrix} data stored in ROI with number of columns equal to number of coordinates in ROI.
+#' @slot coords the surface-based coordinates of the data
+#' @slot indices the node indices of the parent surface stored in the \code{geometry} field.
+#' @exportClass ROISurfaceVector
+#' @rdname ROISurfaceVector-class
+setClass("ROISurfaceVector", 
+         representation=representation(geometry="SurfaceGeometry", data="numericOrMatrix", 
+                                       coords="matrix", indices="integer"),
+         validity = function(object) {
+           if (ncol(object@coords) != 3) {
+             stop("coords slot must be a matrix with 3 columns")
+           }
+           if (nrow(object@coords) != length(object@indices)) {
+             stop("length of indices must equal nrow(coords)")
+           }
+           
+           if (ncol(object@data) != nrow(object@coords)) {
+             stop("'ncol(data)' must equal 'nrow(coords)'")
+           }
+         }, contains="ROI")
 
 
 #' Kernel
@@ -774,7 +837,10 @@ setClass("BrainSurfaceVector",
                                        indices="integer", data="Matrix"))
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' BrainBucket
 #' 
 #' a four-dimensional image that conists of a sequence of labeled image volumes backed by a list
