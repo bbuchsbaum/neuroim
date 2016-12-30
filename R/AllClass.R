@@ -709,7 +709,7 @@ setClass("ROIVolume",
            if (!is.vector(object@data)) {
              stop("'data' must be a vector")
            }
-           if (length(data) != nrow(coords)) {
+           if (length(object@data) != nrow(object@coords)) {
              stop("length of data vector must equal 'nrow(coords)'")
            }
          })
