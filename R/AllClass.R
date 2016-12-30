@@ -706,7 +706,7 @@ setClass("ROIVolume",
            if (ncol(object@coords) != 3) {
              stop("coords slot must be a matrix with 3 columns")
            }
-           if (!is.vector(data)) {
+           if (!is.vector(object@data)) {
              stop("'data' must be a vector")
            }
            if (length(data) != nrow(coords)) {
