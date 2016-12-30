@@ -15,7 +15,7 @@
 #' @rdname ROIVolume
 #' @export
 ROIVolume <- function(vspace, coords, data=rep(nrow(coords),1)) {
-  new("ROIVolume", space=vspace, coords=coords, data=data)
+  new("ROIVolume", space=vspace, coords=coords, data=as.vector(data))
 }
 
 #' Create an instance of class \code{\linkS4class{ROIVector}}
