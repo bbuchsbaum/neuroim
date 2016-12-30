@@ -357,9 +357,9 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   
   if (nonzero) {
     keep <- vals != 0 
-    new("ROIVolume", space = bspace, data = vals[keep], coords = grid[keep, ,drop=FALSE])
+    ROIVolume(space = bspace, data = vals[keep], coords = grid[keep, ,drop=FALSE])
   } else {
-    new("ROIVolume", space = bspace, data = vals, coords = grid)
+    ROIVolume(space = bspace, data = vals, coords = grid)
   }
   
 }
