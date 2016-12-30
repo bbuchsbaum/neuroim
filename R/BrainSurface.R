@@ -140,12 +140,9 @@ setMethod(f="nodes", signature=c("BrainSurface"),
           })
 
 #' @rdname series-methods
-<<<<<<< HEAD
 #' @importFrom Matrix Matrix
-=======
 #' @importFrom Matrix t
 #' @return a class of type \code{Matrix}
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="numeric"),
           def=function(x, i) {	
@@ -163,7 +160,6 @@ setMethod("series_roi", signature(x="BrainSurfaceVector", i="numeric"),
           })
 
 #' @rdname series-methods
-<<<<<<< HEAD
 #' @importFrom Matrix Matrix
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="integer"),
@@ -172,8 +168,6 @@ setMethod("series", signature(x="BrainSurfaceVector", i="integer"),
           })
 
 #' @rdname series-methods
-=======
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @export
 setMethod("series", signature(x="BrainSurfaceVector", i="ROISurface"),
           def=function(x, i) {	
@@ -252,10 +246,7 @@ setMethod(f="show", signature=signature("BrainSurfaceVector"),
 
 #' load a BrainSurfaceVector
 #' @export loadData
-<<<<<<< HEAD
 #' @importFrom Matrix Matrix
-=======
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainSurfaceVectorSource"), 
           def=function(x) {
@@ -324,12 +315,9 @@ setMethod(f="loadData", signature=c("BrainSurfaceSource"),
 #' @param vertices N-by-3 matrix of vertices 
 #' @param nodes matrix of node faces, where each row is a set of three vertex indices.
 #' @return an \code{igraph} instance representing th mesh connectivity.
-<<<<<<< HEAD
 #' @importFrom igraph set.vertex.attribute simplify get.edgelist
-=======
 #' @importFrom igraph graph_from_edgelist get.edgelist set.vertex.attribute 
 #' @importFrom igraph simplify graph.adjacency
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 meshToGraph <- function(vertices, nodes) {
   edge1 <- as.matrix(nodes[,1:2 ])
   edge2 <- as.matrix(nodes[,2:3 ])
@@ -446,55 +434,38 @@ findAllNeighbors <- function(g, radius, edgeWeights, nodes=NULL) {
 #' @rdname neighborGraph-methods
 #' @importFrom grDevices rainbow
 #' @export
-<<<<<<< HEAD
-setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
-                                         edgeWeights="missing", 
-                                         nodes="missing"),
-=======
 #' @aliases neighborGraph,igraph,numeric,missing,missing
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="missing"),
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x, radius ) {
             edgeWeights=igraph::E(x)$dist    
             findAllNeighbors(x, radius, as.vector(edgeWeights))
 })
 
 #' @rdname neighborGraph-methods
-<<<<<<< HEAD
 #' @export
-setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
-                                         edgeWeights="numeric", nodes="missing"),
-=======
 #' @aliases neighborGraph,igraph,numeric,numeric,missing
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="missing"),
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x, radius, edgeWeights) {
             stopifnot(length(edgeWeights) == length(igraph::E(x))) 
             findAllNeighbors(x, radius, edgeWeights)
           })
 
-<<<<<<< HEAD
 
-setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
-                                         edgeWeights="numeric", nodes="integer"),
-=======
+
 #' @rdname neighborGraph-methods
+#' @export
 #' @aliases neighborGraph,igraph,numeric,numeric,integer
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="numeric", nodes="integer"),
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
+
           def=function(x,radius, edgeWeights, nodes) {
             stopifnot(length(edgeWeights) == length(igraph::E(x)))
             findAllNeighbors(x,radius, edgeWeights, nodes)
           })
 
-<<<<<<< HEAD
-setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", 
-                                         edgeWeights="missing", nodes="integer"),
-=======
 #' @rdname neighborGraph-methods
+#' @export
 #' @aliases neighborGraph,igraph,numeric,missing,integer
 setMethod(f="neighborGraph", signature=c(x="igraph", radius="numeric", edgeWeights="missing", nodes="integer"),
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
           def=function(x,radius, nodes) {
             findAllNeighbors(x, radius, igraph::E(x)$dist, nodes) 
           })

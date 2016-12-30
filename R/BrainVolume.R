@@ -457,17 +457,17 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
               stop("fill: lookup matrix have at least one row")
             }
             
-<<<<<<< HEAD
-            out <- array(0, dim(x))
-            spl <- split(1:length(vol), as.integer(as.vector(vol)))
-            keys <- as.character(lookup[,1])
-            for (i in 1:nrow(lookup)) {
-              idx <- spl[[keys[[i]]]]
-              if (!is.null(spl[[keys[i]]])) {
-                out[idx] <- as.vector(lookup[i,2])
-              }
-            }
-=======
+
+#             out <- array(0, dim(x))
+#             spl <- split(1:length(vol), as.integer(as.vector(vol)))
+#             keys <- as.character(lookup[,1])
+#             for (i in 1:nrow(lookup)) {
+#               idx <- spl[[keys[[i]]]]
+#               if (!is.null(spl[[keys[i]]])) {
+#                 out[idx] <- as.vector(lookup[i,2])
+#               }
+#             }
+
             
             m <- match(as.vector(x), lookup[,1])
             outv <- lookup[m,2]
@@ -477,8 +477,7 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
             #  idx <- which(x == lookup[i,1])
             #  out[idx] <- as.vector(lookup[i,2])             
             #}
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
-            
+
             outv[is.na(outv)] <- 0
             BrainVolume(array(outv, dim(x)), space(x))
           })

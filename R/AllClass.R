@@ -837,10 +837,7 @@ setClass("BrainSurfaceVector",
                                        indices="integer", data="Matrix"))
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> d4b5fe65ce91ab11db63e024bd7211da0f30703b
 #' BrainBucket
 #' 
 #' a four-dimensional image that conists of a sequence of labeled image volumes backed by a list

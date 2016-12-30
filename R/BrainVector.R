@@ -159,7 +159,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			} else {
 			  
 			  ## use RNifti
-			  arr <- RNifti::readNifti("test_data/epivector.nii")
+			  arr <- RNifti::readNifti(meta@dataFile)
 			  
 			  #### old R-level File IO
 			  #reader <- dataReader(meta, 0)	
