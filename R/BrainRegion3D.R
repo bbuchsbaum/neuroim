@@ -8,7 +8,7 @@
 
 #' Create an instance of class \code{\linkS4class{ROIVolume}}
 #' 
-#' @param vspace an instance of class \code{BrainSpace}
+#' @param space an instance of class \code{BrainSpace}
 #' @param coords matrix of voxel coordinates
 #' @param data the data values, numeric vector
 #' @return an instance of class \code{ROIVolume}
@@ -184,7 +184,7 @@ RegionSquare <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE, fix
   }
   
   ### add central voxel
-  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[keep, ])
+  ROIVolume(space(bvol), data = vals[keep], coords = grid[keep, ])
   
 }
 
@@ -237,7 +237,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   }
   
   ### add central voxel
-  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[keep, ])
+  ROIVolume(space(bvol), data = vals[keep], coords = grid[keep, ])
   
 }
 
@@ -357,9 +357,9 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=FALSE) {
   
   if (nonzero) {
     keep <- vals != 0 
-    ROIVolume(space = bspace, data = vals[keep], coords = grid[keep, ,drop=FALSE])
+    ROIVolume(bspace, data = vals[keep], coords = grid[keep, ,drop=FALSE])
   } else {
-    ROIVolume(space = bspace, data = vals, coords = grid)
+    ROIVolume(bspace, data = vals, coords = grid)
   }
   
 }

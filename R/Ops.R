@@ -37,7 +37,7 @@ setMethod(f="Arith", signature=signature(e1="ROIVolume", e2="ROIVolume"),
             v2[indices %in% idx2] <- e2@data
             res <- callGeneric(v1,v2)   
           
-            new("ROIVolume", space=space(e1), data=res, coords = indexToGrid(space(e1), indices))
+            ROIVolume(space(e1), data=res, coords = indexToGrid(space(e1), indices))
             
           })
 
