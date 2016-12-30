@@ -65,6 +65,16 @@ readAFNIHeader <- function(fileName) {
 	header
 	
 }
+
+readAFNISurfaceHeader <- function(fileName) {
+  dmat <- read.table(fileName)
+  list(headerFile=fileName, dataFile=fileName, 
+       nodeCount=nrow(dmat), nels=ncol(dmat)-1, 
+       label=stripExtension(AFNI_SURFACE_DSET, basename(fileName)),
+       data=as.matrix(dmat[,2:ncol(dmat)]), nodes=as.vector(dmat[,1]))
+  
+}
+
 #' readNIMLSurfaceHeader
 #
 #' @param fileName the name of the NIML file

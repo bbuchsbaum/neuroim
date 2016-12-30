@@ -441,7 +441,7 @@ setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolum
 #' @param x four-dimensional image
 #' @param i the indices of the volume(s) to extract
 #' @param ... additional arguments
-#' @return a  \code{BrainVector} object that is a sub-vector of the supplied object.
+#' @return a  \code{BrainVector} object that is a sub-sequence of the supplied object.
 #' @export 
 #' @examples 
 #' bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))

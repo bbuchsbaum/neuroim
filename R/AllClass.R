@@ -10,6 +10,7 @@ setOldClass("raster")
 setOldClass("rastergrob")
 setOldClass("gList")
 setOldClass("igraph")
+setOldClass("mesh3d")
 .package_env <- new.env()
 
 #' Base
@@ -127,6 +128,14 @@ setClass("AFNIFileDescriptor", contains=c("BrainFileDescriptor"))
 #' @rdname NIMLSurfaceFileDescriptor-class
 #' @export
 setClass("NIMLSurfaceFileDescriptor", contains=c("BrainFileDescriptor"))
+
+#' AFNISurfaceFileDescriptor
+#' 
+#' This class supports the AFNI 1D file format for surface-based data
+#' @rdname AFNISurfaceFileDescriptor-class
+#' @export
+setClass("AFNISurfaceFileDescriptor", contains=c("BrainFileDescriptor"))
+
 
 #' FresurferAsciiSurfaceFileDescriptor
 #' 
@@ -252,6 +261,7 @@ setClass("NIMLSurfaceDataMetaInfo",
              data="matrix",
              nodeIndices="integer"),
          contains=c("SurfaceDataMetaInfo"))
+
 
 #' BrainMetaInfo
 #' 	
@@ -743,7 +753,9 @@ setClass("Kernel",
 #' @slot data the 1-D vector of data value at each vertex of the mesh
 #' @export
 setClass("BrainSurface", 
-         representation=representation(source="BaseSource", geometry="SurfaceGeometry", data="numeric"))
+         representation=representation(source="BaseSource", 
+                                       geometry="SurfaceGeometry", 
+                                       data="numeric"))
 
 #' BrainSurfaceVector
 #' 
@@ -760,6 +772,8 @@ setClass("BrainSurfaceVector",
          representation=representation(source="BaseSource", 
                                        geometry="SurfaceGeometry", 
                                        indices="integer", data="Matrix"))
+
+
 
 #' BrainBucket
 #' 

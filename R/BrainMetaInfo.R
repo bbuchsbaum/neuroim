@@ -173,7 +173,6 @@ SurfaceDataMetaInfo <- function(descriptor, header) {
 
 
 
-
 #' Constructor for \code{\linkS4class{NIMLSurfaceDataMetaInfo}} class
 #' @param descriptor the file descriptor
 #' @param header a \code{list} containing header information
@@ -191,6 +190,26 @@ NIMLSurfaceDataMetaInfo <- function(descriptor, header) {
       data=header$data,
       nodeIndices=header$nodes)
 }
+
+
+#' Constructor for \code{\linkS4class{AFNISurfaceDataMetaInfo}} class
+#' @param descriptor the file descriptor
+#' @param header a \code{list} containing header information
+#' 
+AFNISurfaceDataMetaInfo <- function(descriptor, header) {
+  stopifnot(is.numeric(header$nodes))
+  
+  new("NIMLSurfaceDataMetaInfo",
+      headerFile=header$headerFile,
+      dataFile=header$dataFile,
+      fileDescriptor=descriptor,
+      nodeCount=as.integer(header$nodeCount),
+      nels=as.integer(header$nels),
+      label=as.character(header$label),
+      data=header$data,
+      nodeIndices=header$nodes)
+}
+
 
 #' Constructor for \code{\linkS4class{NIfTIMetaInfo}} class
 #' @param descriptor an instance of class \code{\linkS4class{NIfTIFileDescriptor}}

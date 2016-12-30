@@ -95,6 +95,13 @@ setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
 			
 		})
 
+#' @rdname readMetaInfo-methods
+#' @export
+setMethod(f="readMetaInfo",signature=signature(x= "AFNISurfaceFileDescriptor"),
+          def=function(x, fileName) {
+            .readMetaInfo(x, fileName, readAFNISurfaceHeader, AFNISurfaceDataMetaInfo)
+          })
+
 
 #' @rdname readMetaInfo-methods
 #' @export
@@ -120,6 +127,7 @@ findDescriptor <- function(fileName) {
 	else if (fileMatches(AFNI_GZ, fileName)) AFNI_GZ
   else if (fileMatches(NIML_SURFACE_DSET, fileName)) NIML_SURFACE_DSET
   else if (fileMatches(FREESURFER_ASCII_SURFACE_DSET, fileName)) FREESURFER_ASCII_SURFACE_DSET
+  else if (fileMatches(AFNI_SURFACE_DSET, fileName)) AFNI_SURFACE_DSET
 	else NULL
 }
 
@@ -171,6 +179,13 @@ NIML_SURFACE_DSET <- new("NIMLSurfaceFileDescriptor",
                      headerExtension="niml.dset",
                      dataEncoding="raw",
                      dataExtension="niml.dset")
+
+AFNI_SURFACE_DSET <- new("AFNISurfaceFileDescriptor",
+                         fileFormat="1D",
+                         headerEncoding="raw",
+                         headerExtension="1D.dset",
+                         dataEncoding="raw",
+                         dataExtension="1D.dset")
 
 FREESURFER_ASCII_SURFACE_DSET <- new("FreesurferAsciiSurfaceFileDescriptor",
                          fileFormat="Freesurfer_ASCII",

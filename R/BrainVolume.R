@@ -456,10 +456,13 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
             }
             
             out <- array(0, dim(x))
-            
+            spl <- split(1:length(vol), as.integer(as.vector(vol)))
+            keys <- as.character(lookup[,1])
             for (i in 1:nrow(lookup)) {
-              idx <- which(x == lookup[i,1])
-              out[idx] <- as.vector(lookup[i,2])             
+              idx <- spl[[keys[[i]]]]
+              if (!is.null(spl[[keys[i]]])) {
+                out[idx] <- as.vector(lookup[i,2])
+              }
             }
             
             BrainVolume(out, space(x))

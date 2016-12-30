@@ -81,36 +81,56 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", FUN="function"),
           def=function(x, fac, FUN) {
-            if (length(fac) != prod(dim(x)[1:3])) {
-              stop(paste("fac must have as many elements as the number of voxels"))
+            if (length(fac) == prod(dim(x)[1:3])) {
+              split_by_voxel <- TRUE
+            } else if (length(fac) == dim(x)[4]) {
+              split_by_row <- TRUE
+            } else {
+              stop(paste("length of 'fac' must be equal to number of voxels or to number of volumes"))
             }
             
-            ind <- split(seq_along(fac), fac)
-            out <- do.call(rbind, lapply(names(ind), function(lev) {
-              #idx <- which(fac == lev)
-              mat <- series(x, ind[[lev]])
-              apply(mat, 1, FUN)
-            }))
+            if (split_by_voxel) {
             
-            row.names(out) <- levels(fac)           
-            out
+              ind <- split(seq_along(fac), fac)
+              out <- do.call(rbind, lapply(names(ind), function(lev) {
+                #idx <- which(fac == lev)
+                mat <- series(x, ind[[lev]])
+                apply(mat, 1, FUN)
+              }))
+            
+              row.names(out) <- levels(fac)           
+              out
+            } else {
+              m <- as.matrix(x)
+              callGeneric(m, fac, FUN)
+            }
           })
 
 #' @export
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "BrainVector", fac="factor", FUN="missing"),
           def=function(x, fac, FUN) {
-            if (length(fac) != prod(dim(x)[1:3])) {
-              stop(paste("fac must have as many elements as the number of voxels"))
+            if (length(fac) == prod(dim(x)[1:3])) {
+              split_by_voxel <- TRUE
+            } else if (length(fac) == dim(x)[4]) {
+              split_by_row <- TRUE
+            } else {
+              stop(paste("length of 'fac' must be equal to number of voxels or to number of volumes"))
             }
             
-            ind <- split(seq_along(fac), fac)
-            out <- do.call(rbind, lapply(names(ind), function(lev) {
-              rowMeans(series(x, ind[[lev]]))
-            }))
+            if (split_by_voxel) {
             
-            row.names(out) <- levels(fac)           
-            out
+              ind <- split(seq_along(fac), fac)
+              out <- do.call(rbind, lapply(names(ind), function(lev) {
+                rowMeans(series(x, ind[[lev]]))
+              }))
+            
+              row.names(out) <- levels(fac)           
+              out
+            } else {
+              m <- as.matrix(x)
+              callGeneric(m, fac)
+            }
           })
 
 
