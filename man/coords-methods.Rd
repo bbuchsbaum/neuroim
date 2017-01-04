@@ -4,7 +4,6 @@
 \name{coords}
 \alias{coords}
 \alias{coords,IndexLookupVolume-method}
-\alias{coords,ROISurface-method}
 \alias{coords,ROIVolume-method}
 \alias{coords,SparseBrainVector-method}
 \title{Extract coordinates}
@@ -12,8 +11,6 @@
 coords(x, ...)
 
 \S4method{coords}{ROIVolume}(x, real = FALSE)
-
-\S4method{coords}{ROISurface}(x)
 
 \S4method{coords}{SparseBrainVector}(x, i)
 

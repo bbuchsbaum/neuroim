@@ -3,18 +3,12 @@
 \docType{methods}
 \name{length,ROIVolume-method}
 \alias{length,BrainVector-method}
-\alias{length,ROISurface-method}
 \alias{length,ROIVolume-method}
 \title{Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)}
 \usage{
 \S4method{length}{ROIVolume}(x)
 
-\S4method{length}{ROISurface}(x)
-
 \S4method{length}{BrainVector}(x)
-}
-\arguments{
-\item{x}{the object to get \code{length}}
 }
 \description{
 Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)

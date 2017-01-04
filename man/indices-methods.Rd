@@ -4,8 +4,6 @@
 \name{indices}
 \alias{indices}
 \alias{indices,IndexLookupVolume-method}
-\alias{indices,ROISurface-method}
-\alias{indices,ROISurfaceVector-method}
 \alias{indices,ROIVector-method}
 \alias{indices,ROIVolume-method}
 \alias{indices,SparseBrainVector-method}
@@ -16,10 +14,6 @@ indices(x)
 \S4method{indices}{ROIVolume}(x)
 
 \S4method{indices}{ROIVector}(x)
-
-\S4method{indices}{ROISurface}(x)
-
-\S4method{indices}{ROISurfaceVector}(x)
 
 \S4method{indices}{SparseBrainVector}(x)
 
