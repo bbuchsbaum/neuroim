@@ -11,7 +11,7 @@ ROISurface(geometry, indices, data)
 
 \item{indices}{the parent surface indices}
 
-\item{data}{the data values, numeric \code{vector} or \code{matrix}}
+\item{data}{the data values, numeric \code{vector}}
 }
 \value{
 an instance of class \code{ROISurface}

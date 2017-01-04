@@ -2,22 +2,10 @@
 % Please edit documentation in R/BrainRegion3D.R
 \docType{methods}
 \name{[,ROISurface,numeric,missing,ANY-method}
-\alias{[,ROISurface,logical,logical,ANY-method}
-\alias{[,ROISurface,logical,missing,ANY-method}
-\alias{[,ROISurface,missing,numeric,ANY-method}
 \alias{[,ROISurface,numeric,missing,ANY-method}
-\alias{[,ROISurface,numeric,numeric,ANY-method}
 \title{subset an \code{ROISurface}}
 \usage{
 \S4method{[}{ROISurface,numeric,missing,ANY}(x, i, j, drop)
-
-\S4method{[}{ROISurface,numeric,numeric,ANY}(x, i, j, drop)
-
-\S4method{[}{ROISurface,missing,numeric,ANY}(x, i, j, drop)
-
-\S4method{[}{ROISurface,logical,logical,ANY}(x, i, j, drop)
-
-\S4method{[}{ROISurface,logical,missing,ANY}(x, i, j, drop)
 }
 \arguments{
 \item{x}{the object}

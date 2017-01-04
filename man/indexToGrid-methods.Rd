@@ -6,7 +6,9 @@
 \alias{indexToGrid,BrainSlice,index-method}
 \alias{indexToGrid,BrainSpace,index-method}
 \alias{indexToGrid,BrainVector,index-method}
+\alias{indexToGrid,BrainVector,integer-method}
 \alias{indexToGrid,BrainVolume,index-method}
+\alias{indexToGrid,BrainVolume,integer-method}
 \title{Generic function to convert 1D indices to N-dimensional grid coordinates}
 \usage{
 indexToGrid(x, idx)
@@ -17,7 +19,11 @@ indexToGrid(x, idx)
 
 \S4method{indexToGrid}{BrainVector,index}(x, idx)
 
+\S4method{indexToGrid}{BrainVector,integer}(x, idx)
+
 \S4method{indexToGrid}{BrainVolume,index}(x, idx)
+
+\S4method{indexToGrid}{BrainVolume,integer}(x, idx)
 }
 \arguments{
 \item{x}{the object}

@@ -14,7 +14,7 @@ SurfaceDisk(surf, index, radius, max_order = NULL)
 \item{radius}{the size in mm of the geodesic radius}
 
 \item{max_order}{maximum number of edges to traverse. 
-default is computed based on averaged edge length.}
+default is computed based on average edge length.}
 }
 \description{
 Creates a Region on a Surface from a radius and surface

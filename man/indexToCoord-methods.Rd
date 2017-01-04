@@ -3,7 +3,7 @@
 \docType{methods}
 \name{indexToCoord}
 \alias{indexToCoord}
-\alias{indexToCoord,BrainSpace,index-method}
+\alias{indexToCoord,BrainSpace,numeric-method}
 \alias{indexToCoord,BrainSurface,index-method}
 \alias{indexToCoord,BrainVolume,index-method}
 \title{Generic function to convert 1D indices to N-dimensional real world coordinates}
@@ -12,7 +12,7 @@ indexToCoord(x, idx)
 
 \S4method{indexToCoord}{BrainSurface,index}(x, idx)
 
-\S4method{indexToCoord}{BrainSpace,index}(x, idx)
+\S4method{indexToCoord}{BrainSpace,numeric}(x, idx)
 
 \S4method{indexToCoord}{BrainVolume,index}(x, idx)
 }

@@ -7,11 +7,11 @@
 ROIVolume(vspace, coords, data = rep(nrow(coords), 1))
 }
 \arguments{
-\item{vspace}{an instance of class \code{BrainSpace}}
-
 \item{coords}{matrix of voxel coordinates}
 
-\item{data}{the data values, numeric vector or matrix}
+\item{data}{the data values, numeric vector}
+
+\item{space}{an instance of class \code{BrainSpace}}
 }
 \value{
 an instance of class \code{ROIVolume}

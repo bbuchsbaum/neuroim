@@ -4,12 +4,12 @@
 \alias{BootstrapSearchlight}
 \title{Create a spherical searchlight iterator that samples regions from within a mask.}
 \usage{
-BootstrapSearchlight(mask, radius, iter = 100)
+BootstrapSearchlight(mask, radius = 8, iter = 100)
 }
 \arguments{
 \item{mask}{an image volume containing valid central voxels for roving searchlight}
 
-\item{radius}{in mm of spherical searchlight}
+\item{radius}{in mm of spherical searchlight (can be a vector which is randomly sampled)}
 
 \item{iter}{the total number of searchlights to sample (default is 100).}
 }

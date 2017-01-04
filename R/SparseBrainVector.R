@@ -300,18 +300,6 @@ setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"),
             
 
 
-#setMethod(f="series", signature=signature(x="TiledBrainVector", i="numeric"),
-#	def=function(x,i, j, k) {
-#		stop()         
-#      })
-              
-
-#setMethod(f="series", signature=signature(x="TiledBrainVector", i="matrix"),
-#         def=function(x,i) {
-#          idx <- gridToIndex(x@mask, i)
-#           callGeneric(x,idx)
-#         })
-  
  
 #' @export
 #' @rdname series-methods 
@@ -583,5 +571,17 @@ setMethod("show",
 #		      })
             
 
-          
+
+#setMethod(f="series", signature=signature(x="TiledBrainVector", i="numeric"),
+#	def=function(x,i, j, k) {
+#		stop()         
+#      })
+
+
+#setMethod(f="series", signature=signature(x="TiledBrainVector", i="matrix"),
+#         def=function(x,i) {
+#          idx <- gridToIndex(x@mask, i)
+#           callGeneric(x,idx)
+#         })
+
           

@@ -21,7 +21,7 @@ subVector(x, i, ...)
 \item{...}{additional arguments}
 }
 \value{
-a  \code{BrainVector} object that is a sub-vector of the supplied object.
+a  \code{BrainVector} object that is a sub-sequence of the supplied object.
 }
 \description{
 Generic function to extract a sub-vector from a \code{BrainVector} object.

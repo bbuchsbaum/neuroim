@@ -4,6 +4,8 @@
 \name{values}
 \alias{values}
 \alias{values,ROISurface-method}
+\alias{values,ROISurfaceVector-method}
+\alias{values,ROIVector-method}
 \alias{values,ROIVolume-method}
 \title{Generic function to extract data values of object}
 \usage{
@@ -11,7 +13,11 @@ values(x, ...)
 
 \S4method{values}{ROIVolume}(x, ...)
 
+\S4method{values}{ROIVector}(x, ...)
+
 \S4method{values}{ROISurface}(x, ...)
+
+\S4method{values}{ROISurfaceVector}(x, ...)
 }
 \arguments{
 \item{x}{the object to get values from}
