@@ -532,6 +532,8 @@ setClassUnion("numericOrMatrix", c("numeric", "matrix"))
 #' ROI
 #' 
 #' Base marker class for a region of interest (ROI)
+#' 
+#' @export
 setClass("ROI", contains="VIRTUAL")
 
 
