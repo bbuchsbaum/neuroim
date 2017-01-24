@@ -21,7 +21,7 @@ setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReade
 #' dim of \code{FileMetaInfo}
 #' @param x the object
 #' @export
-setMethod(f="dim", signature=signature("FileMetaInfo"), 
+setMethod(f="dim", signature=signature("FileMetaInfo"),
 		def=function(x) {
 			x@Dim
 		})
@@ -32,24 +32,24 @@ setMethod(f="dim", signature=signature("FileMetaInfo"),
 
 
 #' @rdname dataReader-methods
-setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
+setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"),
 		def=function(x, offset=0) {
 			if (x@fileDescriptor@dataEncoding == "gzip") {
-				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)	
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			} else {
 				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			}
 		})
 
 #' @rdname dataReader-methods
-setMethod(f="dataReader", signature=signature("AFNIMetaInfo"), 
+setMethod(f="dataReader", signature=signature("AFNIMetaInfo"),
 		def=function(x, offset=0) {
 			if (x@fileDescriptor@dataEncoding == "gzip") {
-				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)	
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			} else {
 				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			}
-		})		
+		})
 
 
 #' @rdname readColumns-methods
@@ -57,19 +57,19 @@ setMethod(f="readColumns", signature=signature(x="ColumnReader", columnIndices="
           def=function(x,columnIndices) {
             x@reader(columnIndices)
           })
-          
-            
+
+
 #' @rdname trans-methods
-setMethod(f="trans", signature=signature("BrainMetaInfo"), 
+setMethod(f="trans", signature=signature("BrainMetaInfo"),
 		def=function(x) {
 			D <- min(length(x@Dim), 3)
 			trans <- diag(c(x@spacing,1))
-			trans[1:D,D+1] <- x@origin	
+			trans[1:D,D+1] <- x@origin
 			trans
 		})
 
 #' @rdname trans-methods
-setMethod(f="trans", signature=signature("NIfTIMetaInfo"), 
+setMethod(f="trans", signature=signature("NIfTIMetaInfo"),
 		def=function(x) {
 			x@header$qform
 		})
@@ -88,7 +88,7 @@ niftiDim <- function(nifti_header) {
 #' @param spacing voxel dimensions
 #' @param origin coordinate origin
 #' @param dataType the type of the data (e.g. "FLOAT")
-#' @param label name(s) of images 
+#' @param label name(s) of images
 #' @param spatialAxes image axes for spatial dimensions (x,y,z)
 #' @param additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
 #' @return an instance of class \code{\linkS4class{BrainMetaInfo}}
@@ -103,7 +103,7 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 			label=label,
 			spatialAxes=spatialAxes,
 			additionalAxes=additionalAxes)
-}						
+}
 
 
 
@@ -115,7 +115,7 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 #' @rdname NIfTIMetaInfo-class
 NIfTIMetaInfo <- function(descriptor, nifti_header) {
 	stopifnot(!is.null(nifti_header$fileType) || (nifti_header$fileType == "NIfTI"))
-	
+
 
 	new("NIfTIMetaInfo",
 			headerFile=headerFile(descriptor, nifti_header$fileName),
@@ -141,7 +141,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 #' show a \code{FileMetaInfo}
 #' @param object the object
 #' @export
-setMethod(f="show", signature=signature("FileMetaInfo"), 
+setMethod(f="show", signature=signature("FileMetaInfo"),
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 			cat("headerFile:", "\t", object@headerFile, "\n")
@@ -155,13 +155,13 @@ setMethod(f="show", signature=signature("FileMetaInfo"),
 			cat("label(s):", "\t", object@label, "\n")
 			cat("intercept:", "\t", object@intercept, "\n")
 			cat("slope:", "\t\t", object@slope, "\n\n")
-			
-			cat("additional format-specific info may be contained in @header slot", "\n")			
+
+			cat("additional format-specific info may be contained in @header slot", "\n")
 		})
 
 
-#' AFNIMetaInfo 
-#' 
+#' AFNIMetaInfo
+#'
 #' Constructor for \code{\linkS4class{AFNIMetaInfo}} class
 #' @param descriptor an instance of class \code{\linkS4class{AFNIFileDescriptor}}
 #' @param afni_header a \code{list} returned by \code{readAFNIHeader}
@@ -171,23 +171,23 @@ setMethod(f="show", signature=signature("FileMetaInfo"),
 AFNIMetaInfo <- function(descriptor, afni_header) {
 		.Dim <- afni_header$DATASET_DIMENSIONS$content[afni_header$DATASET_DIMENSIONS$content > 0]
 		if (afni_header$DATASET_RANK$content[2] > 1) {
-			.Dim <- c(.Dim, afni_header$DATASET_RANK$content[2])			
+			.Dim <- c(.Dim, afni_header$DATASET_RANK$content[2])
 		}
-		
-		
+
+
 		labs <- if (is.null(afni_header$BRICK_LABS$content)) {
 			labs <- paste("#", seq(0, afni_header$DATASET_RANK$content[2]), sep="")
 		} else {
 			afni_header$BRICK_LABS$content
 		}
-    
-    
+
+
     ## AFNI contains a transform from IJK to dicom (RAI) space.
     ## We want the transform to go from IJK to nifti (LPI) space
 		Tdicom <- matrix(afni_header$IJK_TO_DICOM$content, 3,4, byrow=TRUE)
     Tdicom <- rbind(Tdicom, c(0,0,0,1))
 		TLPI <- diag(c(-1,-1,1,1)) %*% Tdicom
-		
+
 		new("AFNIMetaInfo",
 			headerFile=headerFile(descriptor, afni_header$fileName),
 			dataFile=dataFile(descriptor, afni_header$fileName),
@@ -206,21 +206,21 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 			slope=ifelse(afni_header$BRICK_FLOAT_FACS$content == 0, 1, afni_header$BRICK_FLOAT_FACS$content),
 			header=afni_header)
 }
-			
-			
+
+
 #' read header information of an image file
 #'
 #'
 #' @param fileName the name of the file to read
-#' @return an instance of class \code{\linkS4class{FileMetaInfo}} 
+#' @return an instance of class \code{\linkS4class{FileMetaInfo}}
 #' @export readHeader
 readHeader <- function(fileName) {
-	desc <- findDescriptor(fileName) 
+	desc <- findDescriptor(fileName)
 	if (is.null(desc)) {
 		stop(paste("could not find reader for file: ", fileName))
 	}
-	
-	readMetaInfo(desc, fileName)			
+
+	readMetaInfo(desc, fileName)
 }
 
 setAs(from="BrainMetaInfo", to="NIfTIMetaInfo", def=function(from) {
@@ -231,7 +231,7 @@ setAs(from="BrainMetaInfo", to="NIfTIMetaInfo", def=function(from) {
 				desc <- findDescriptor(hdr$fileName)
 				NIfTIMetaInfo(desc, hdr)
 			}
-						
+
 		})
 
 
