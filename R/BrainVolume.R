@@ -790,6 +790,7 @@ setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="
           
 
 #' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
+#' 
 #' @param method clustering method
 #' @import parallel
 #' @importFrom stats kmeans
@@ -822,6 +823,7 @@ setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeri
           })            
             
 #' find connected components in BrainVolume
+#' 
 #' @export
 #' @param threshold threshold defining lower intensity bound for image mask
 #' @param clusterTable return clusterTable

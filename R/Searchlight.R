@@ -82,27 +82,48 @@ BootstrapSearchlight <- function(mask, radius=8, iter=100) {
 
 
 #' Create an exhaustive searchlight iterator
+#' 
 #' @param mask an image volume containing valid central voxels for roving searchlight
 #' @param radius in mm of spherical searchlight
 #' @return an \code{iter} class 
+#' @importFrom rflann RadiusSearch
 #' @export
-Searchlight <- function(mask, radius) {
+Searchlight <- function(mask, radius, eager=FALSE) {
   mask.idx <- which(mask != 0)
   grid <- indexToGrid(mask, mask.idx)
   index <- 0
   
   prog <- function() { index/length(mask.idx) }
   
-  nextEl <- function() {
-    if (index < nrow(grid)) { 
-      index <<- index + 1
-      search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
-      vox <- coords(search)
-      attr(vox, "center") <- grid[index,]
-      attr(vox, "center.index") <- mask.idx[index]
-      vox
-    } else {
-      stop('StopIteration')
+  if (eager) {
+    cds <- indexToCoord(mask, as.numeric(mask.idx))
+    nabelist <- rflann::RadiusSearch(cds, cds, radius^2, max_neighbour=1000)
+  }
+  
+  nextEl <- if (!eager) {
+    function() {
+      if (index < nrow(grid)) { 
+        index <<- index + 1
+        search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
+        vox <- coords(search)
+        attr(vox, "center") <- grid[index,]
+        attr(vox, "center.index") <- mask.idx[index]
+        vox
+      } else {
+        stop('StopIteration')
+      }
+    }
+  } else {
+    function() {
+      if (index < nrow(grid)) { 
+        index <<- index + 1
+        vox <- grid[nabe$indices[[index]],]
+        attr(vox, "center") <- grid[index,]
+        attr(vox, "center.index") <- mask.idx[index]
+        vox
+      } else {
+        stop('StopIteration')
+      }
     }
   }
   
