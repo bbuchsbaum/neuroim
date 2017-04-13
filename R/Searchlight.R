@@ -25,6 +25,7 @@ RandomSearchlight <- function(mask, radius) {
       attr(vox, "center") <- grid[center,]
       attr(vox, "center.index") <- mask.idx[center]
       attr(vox, "indices") <- gridToIndex(mask, vox)
+      attr(vox, "length") <- nrow(vox)
       vox
       
     } else {
@@ -64,8 +65,8 @@ BootstrapSearchlight <- function(mask, radius=8, iter=100) {
       vox <- search@coords
       attr(vox, "center") <- grid[cenidx,]
       attr(vox, "center.index") <- mask.idx[cenidx]
-      #attr(ret, "mask_indices") <- mask.idx[ind]
-      #attr(ret, "indices") <- ind
+      attr(ret, "indices") <-  gridToIndex(mask, vox)
+      attr(ret, "length") <- nrow(vox)
       vox
     } else {
       stop('StopIteration')
@@ -108,6 +109,7 @@ Searchlight <- function(mask, radius, eager=FALSE) {
         vox <- coords(search)
         attr(vox, "center") <- grid[index,]
         attr(vox, "center.index") <- mask.idx[index]
+        attr(vox, "length") <- nrow(vox)
         vox
       } else {
         stop('StopIteration')
@@ -120,6 +122,7 @@ Searchlight <- function(mask, radius, eager=FALSE) {
         vox <- grid[nabe$indices[[index]],]
         attr(vox, "center") <- grid[index,]
         attr(vox, "center.index") <- mask.idx[index]
+        attr(vox, "length") <- nrow(vox)
         vox
       } else {
         stop('StopIteration')
@@ -159,6 +162,7 @@ ClusteredSearchlight <- function(mask, csize) {
       ret <- vox[index_list[[index]],]
       attr(ret, "mask_indices") <- mask.idx[ind]
       attr(ret, "indices") <- ind
+      attr(ret, "length") <- length(ind)
       ret
     } else {
       stop('StopIteration')
