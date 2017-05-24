@@ -18,7 +18,10 @@ parse_niml_element <- function(el) {
 
 
 read_niml_data <- function(fconn, meta) {
+  
   dtype <- meta$ni_type
+  
+  ## fails when data_type is Node_Bucket_node_indices
   dtype <- strsplit(as.character(dtype), "\\*")[[1]]
   
   if (length(dtype) == 2) {
@@ -85,6 +88,7 @@ parse_niml_header <- function(fconn) {
 parse_niml_next <- function(fconn) {
   header <- parse_niml_header(fconn)
   if (!is.null(header$attr) && (header$label == "SPARSE_DATA" || header$label == "INDEX_LIST")) {
+    print(str(header$attr))
     header$data <- read_niml_data(fconn, header$attr)
     #while (readChar(fconn,1) != ">") { next }
   }
