@@ -829,13 +829,16 @@ setMethod("series_roi", signature(x="BrainVector", i="numeric"),
             mat <- if (missing(j) && missing(k)) {
               vdim <- dim(x)[1:3]
               vox <- arrayInd(i, vdim)
-              apply(vox, 1, function(i) x[i[1], i[2], i[3],])			
+              #apply(vox, 1, function(ind) x[ind[1], ind[2], ind[3],])	
+              callGeneric(x, vox)
             } else {
               vox <- cbind(i,j,k)
-              x[i,j,k,]	
+              callGeneric(x, as.matrix(vox))
+              #ROIVector(space(x), coords=vox, data=as.matrix(mat))
+              #x[i,j,k,]	
             }
             
-            ROIVector(space(x), coords=vox, data=as.matrix(mat))
+            
           })
 
 
