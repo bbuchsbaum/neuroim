@@ -535,6 +535,13 @@ setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.spar
 setGeneric(name="as.mask", def=function(x, indices) standardGeneric("as.mask"))
 
 
+#' patchSet
+#' @param x the object to extract patches from
+#' @param dims a vector indicating the dimensions of the patches
+#' @param mask mask indicating the valid patch area
+setGeneric(name="patchSet", def=function(x, dims, mask, ...) standardGeneric("patchSet"))
+
+
 #' tesselate
 #' @param x the object to tesselate
 #' @param K the number of partitions

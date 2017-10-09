@@ -1,7 +1,8 @@
 #' Create an spherical random searchlight iterator
 #' 
-#' @param mask an volumetric image mask of type \code{\linkS4class{BrainVolume}} containing valid searchlight voxel set.
-#' @param radius in mm of spherical searchlight
+#' @param mask an volumetric image mask of type \code{\linkS4class{BrainVolume}} 
+#'        containing valid searchlight voxel set.
+#' @param radius width in mm of spherical searchlight
 #' @export
 RandomSearchlight <- function(mask, radius) {
   
@@ -10,7 +11,6 @@ RandomSearchlight <- function(mask, radius) {
   mask.idx <- which(mask != 0)
   
   grid <- indexToGrid(mask, as.numeric(mask.idx))
-  
   
   prog <- function() { sum(done)/length(mask.idx) }
   

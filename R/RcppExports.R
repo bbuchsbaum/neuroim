@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 gridToIndex3DCpp <- function(array_dim, voxmat) {
-    .Call('neuroim_gridToIndex3DCpp', PACKAGE = 'neuroim', array_dim, voxmat)
+    .Call('_neuroim_gridToIndex3DCpp', PACKAGE = 'neuroim', array_dim, voxmat)
 }
 
 indexToGridCpp <- function(idx, array_dim) {
-    .Call('neuroim_indexToGridCpp', PACKAGE = 'neuroim', idx, array_dim)
+    .Call('_neuroim_indexToGridCpp', PACKAGE = 'neuroim', idx, array_dim)
 }
 

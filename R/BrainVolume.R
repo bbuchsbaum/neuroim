@@ -665,6 +665,49 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
+setMethod(f="patchSet", signature=signature(x="BrainVolume", 
+                                            dims="numeric", 
+                                            mask="LogicalBrainVolume"),
+          def=function(x, dims, mask, ...) {
+            if (!all(dims > 0)) {
+              stop("all 'dims' must be greater than zero")
+            }
+            
+            if (!all(dims %% 2 == 1)) {
+              stop("all 'dims' must be odd numbers")
+            }
+            
+            
+            template <- as.matrix(expand.grid(x=seq(seq(ceiling(-dims[1]/2),floor(dims[1]/2))), 
+                                    y=seq(seq(ceiling(-dims[2]/2),floor(dims[2]/2))), 
+                                    z=seq(seq(ceiling(-dims[3]/2),floor(dims[3]/2)))))
+            
+            xdim <- dim(x)
+            grid <- indexToGrid(mask, which(mask>0))
+            patches <- lapply(1:nrow(grid), function(i) {
+              
+              g <- grid[i,]
+              m <- sweep(template, 2, g, "+")
+              m[,1] <- pmax(pmin(m[,1], xdim[1]), 1)
+              m[,2] <- pmax(pmin(m[,2], xdim[2]), 1)
+              m[,3] <- pmax(pmin(m[,3], xdim[3]), 1)
+              x[m]
+            })
+            
+            list(patches=patches, centers=grid, get_patch_coords = function(i) {
+              g <- grid[i,]
+              m <- sweep(template, 2, g, "+")
+              m[,1] <- pmax(pmin(m[,1], xdim[1]), 1)
+              m[,2] <- pmax(pmin(m[,2], xdim[2]), 1)
+              m[,3] <- pmax(pmin(m[,3], xdim[3]), 1)
+              m
+              
+            })
+          })
+
+            
+
+
 #' apply a kernel function to a \code{\linkS4class{BrainVolume}}
 #' 
 #' @rdname map-methods
