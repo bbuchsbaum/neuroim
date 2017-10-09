@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // gridToIndex3DCpp
 IntegerVector gridToIndex3DCpp(IntegerVector array_dim, NumericMatrix voxmat);
-RcppExport SEXP neuroim_gridToIndex3DCpp(SEXP array_dimSEXP, SEXP voxmatSEXP) {
+RcppExport SEXP _neuroim_gridToIndex3DCpp(SEXP array_dimSEXP, SEXP voxmatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // indexToGridCpp
 NumericMatrix indexToGridCpp(IntegerVector idx, IntegerVector array_dim);
-RcppExport SEXP neuroim_indexToGridCpp(SEXP idxSEXP, SEXP array_dimSEXP) {
+RcppExport SEXP _neuroim_indexToGridCpp(SEXP idxSEXP, SEXP array_dimSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -28,4 +28,15 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(indexToGridCpp(idx, array_dim));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_neuroim_gridToIndex3DCpp", (DL_FUNC) &_neuroim_gridToIndex3DCpp, 2},
+    {"_neuroim_indexToGridCpp", (DL_FUNC) &_neuroim_indexToGridCpp, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_neuroim(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }
