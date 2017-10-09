@@ -1,6 +1,7 @@
 roxygen <- function() NULL
 
 #' Generic function to print an object 
+#' 
 #' @param x the object to print
 #' @param ... additional arguments
 #' @export 
@@ -8,6 +9,7 @@ roxygen <- function() NULL
 setGeneric(name="print", def=function(x, ...) standardGeneric("print"))
 
 #' Generic function to extract data values of object 
+#' 
 #' @param x the object to get values from
 #' @param ... additional arguments
 #' @export 
@@ -24,6 +26,7 @@ setGeneric(name="values", def=function(x, ...) standardGeneric("values"))
 setGeneric(name="loadData", def=function(x, ...) standardGeneric("loadData"))
 
 #' Generic function to apply a function to an object
+#' 
 #' @param x the object that is mapped
 #' @param m the mapping object
 #' @param ... additional arguments
@@ -47,6 +50,7 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
 #' Generic function to add a dimension to an object
+#' 
 #' @param x a dimensioned object
 #' @param n the size of the dimension to add
 #' @export 
@@ -59,6 +63,7 @@ setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 
 #' Generic function to drop a dimension from an object
+#' 
 #' @param x a dimensioned object
 #' @param dimnum the index of the dimension to drop
 #' @export 
@@ -71,7 +76,8 @@ setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 setGeneric(name="dropDim", def=function(x, dimnum) standardGeneric("dropDim"))
 
 #' Generic function to extract geometric properties of an image.
-#' @param x the object to query, e.g. an instance of \code{BrainVolume} or \code{BrainVector}
+#' 
+#' @param x the object to query, e.g. an instance of \code{\linkS4class{BrainVolume}} or \code{\linkS4class{BrainVector}}
 #' @param ... additional arguments
 #' @return an object representing the geometric space of the image of type \code{\linkS4class{BrainSpace}}
 #' @export space
@@ -84,6 +90,7 @@ setGeneric(name="dropDim", def=function(x, dimnum) standardGeneric("dropDim"))
 setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 
 #' Generic function to fill disjoint sets of values with the output of a function
+#' 
 #' @param x the object to split
 #' @param fac the factor to split by
 #' @param FUN the function to summarize the the sets
@@ -106,6 +113,7 @@ setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
 
 #' Generic function to map values from one set to another using a user-supplied lookup table
+#' 
 #' @param x the object to map values from
 #' @param lookup the lookup table. The first column is the "key" the second column is the "value".
 #' @return a new object where the original values have been filled in with the values in the lookup table
