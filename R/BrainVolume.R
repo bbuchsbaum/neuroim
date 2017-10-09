@@ -456,8 +456,7 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="matrix"),
             } else if (nrow(lookup) < 1) {
               stop("fill: lookup matrix have at least one row")
             }
-            
-
+          
 #             out <- array(0, dim(x))
 #             spl <- split(1:length(vol), as.integer(as.vector(vol)))
 #             keys <- as.character(lookup[,1])
