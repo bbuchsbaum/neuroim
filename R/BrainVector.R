@@ -752,8 +752,15 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 setMethod("series", signature(x="BrainVector", i="matrix"),
 		def=function(x,i) {
 			assertthat::assert_that(ncol(i) == 3)
-			apply(i, 1, function(i) x[i[1], i[2], i[3],])
-	
+		  
+		  # old, slower method
+			#apply(i, 1, function(i) x[i[1], i[2], i[3],])
+		  
+		  d4 <- dim(x)[4]
+		  expanded <- i[rep(1:nrow(i), each=d4),]
+		  expanded <- cbind(expanded, 1:4)
+	    vec <- x[expanded]
+	    matrix(vec, d4, nrow(i))
 		})
 
 
