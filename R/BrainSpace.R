@@ -157,7 +157,7 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
  
 #' @export 
 #' @rdname indexToGrid-methods
-setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
+setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="numeric"),
           def=function(x, idx) {
             array.dim <- dim(x)          
             .indexToGrid(idx, array.dim)        
@@ -165,7 +165,7 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
 
 #' @export 
 #' @rdname indexToCoord-methods
-setMethod(f="indexToCoord", signature=signature(x="BrainSurface", idx="index"),
+setMethod(f="indexToCoord", signature=signature(x="BrainSurface", idx="numeric"),
           def=function(x, idx) {
             x@mesh$vb[1:3, idx]
           })
