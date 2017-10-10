@@ -241,41 +241,67 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   
 }
 
-
+#' @importFrom rflann RadiusSearch
 .makeSphericalGrid <- function(bvol, centroid, radius) {
+  
   vspacing <- spacing(bvol)
+  
+  if (radius < min(vspacing)) {
+    stop("'radius' is too small; must be greater than at least one voxel dimension in image")
+  }
+  
   vdim <- dim(bvol)
   centroid <- as.integer(centroid)
-  mcentroid <- ((centroid-1) * vspacing + vspacing/2)
-  cubedim <- ceiling(radius/vspacing)
-  
-  nsamples <- max(cubedim) * 2 + 1
-  vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
-    round(seq(cdim[2] - cdim[1], cdim[2] + cdim[1], length.out=nsamples))
-  })
-  
-  vlist <- lapply(1:NCOL(vmat), function(i) {
-    v <- vmat[,i]
-    unique(v[v >= 1 & v <= vdim[i]])
-  })
   
   
-  if (all(sapply(vlist, length) == 0)) {
-    stop(paste("invalid sphere for centroid", paste(centroid, collapse=" "), " with radius",
-               radius))
-  }
-
- 
-  grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
+  cube <- as.matrix(expand.grid(
+    seq(centroid[1] - round(radius/vspacing[1]), centroid[1] + round(radius/vspacing[1])),
+    seq(centroid[2] - round(radius/vspacing[2]), centroid[2] + round(radius/vspacing[2])),
+    seq(centroid[3] - round(radius/vspacing[3]), centroid[3] + round(radius/vspacing[3]))))
   
-  dvals <- apply(grid, 1, function(gvals) {
-    coord <- (gvals-1) * vspacing + vspacing/2
-    sqrt(sum((coord - mcentroid)^2))
-  })
   
-  grid[which(dvals <= radius),]
+  coords <- t(t(cube) * vspacing)
   
+  res <- rflann::RadiusSearch(matrix(centroid * vspacing, ncol=3), coords, radius=radius^2, max_neighbour=nrow(cube))
+  
+  cube[res$indices[[1]],]
+        
 }
+
+# .makeSphericalGrid <- function(bvol, centroid, radius) {
+#   vspacing <- spacing(bvol)
+#   vdim <- dim(bvol)
+#   centroid <- as.integer(centroid)
+#   mcentroid <- ((centroid-1) * vspacing + vspacing/2)
+#   cubedim <- ceiling(radius/vspacing)
+#   
+#   nsamples <- max(cubedim) * 2 + 1
+#   vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
+#     round(seq(cdim[2] - cdim[1], cdim[2] + cdim[1], length.out=nsamples))
+#   })
+#   
+#   vlist <- lapply(1:NCOL(vmat), function(i) {
+#     v <- vmat[,i]
+#     unique(v[v >= 1 & v <= vdim[i]])
+#   })
+#   
+#   
+#   if (all(sapply(vlist, length) == 0)) {
+#     stop(paste("invalid sphere for centroid", paste(centroid, collapse=" "), " with radius",
+#                radius))
+#   }
+# 
+#  
+#   grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
+#   
+#   dvals <- apply(grid, 1, function(gvals) {
+#     coord <- (gvals-1) * vspacing + vspacing/2
+#     sqrt(sum((coord - mcentroid)^2))
+#   })
+#   
+#   grid[which(dvals <= radius),]
+#   
+# }
 
 
 

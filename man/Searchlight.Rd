@@ -4,7 +4,7 @@
 \alias{Searchlight}
 \title{Create an exhaustive searchlight iterator}
 \usage{
-Searchlight(mask, radius)
+Searchlight(mask, radius, eager = FALSE)
 }
 \arguments{
 \item{mask}{an image volume containing valid central voxels for roving searchlight}

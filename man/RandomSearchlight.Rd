@@ -7,9 +7,10 @@
 RandomSearchlight(mask, radius)
 }
 \arguments{
-\item{mask}{an volumetric image mask of type \code{\linkS4class{BrainVolume}} containing valid searchlight voxel set.}
+\item{mask}{an volumetric image mask of type \code{\linkS4class{BrainVolume}} 
+containing valid searchlight voxel set.}
 
-\item{radius}{in mm of spherical searchlight}
+\item{radius}{width in mm of spherical searchlight}
 }
 \description{
 Create an spherical random searchlight iterator

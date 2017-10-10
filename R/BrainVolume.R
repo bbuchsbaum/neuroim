@@ -1,6 +1,6 @@
 #' @importFrom assertthat assert_that
 #' @importFrom Matrix sparseVector
-#' @importFrom yaImpute ann
+#' @importFrom rflann Neighbour
 NULL
 
 #' @include AllClass.R
@@ -632,6 +632,8 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
           })  
 
 
+
+#' @importFrom rflann Neighbour
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {
 
 	if (NROW(coord.set) == 1) {
@@ -642,9 +644,9 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 		if (length(keepIndices) == 1) {
 			keepIndices
 		} else {
-			ret <- yaImpute::ann(coord.set[keepIndices,], coord.set[keepIndices,], verbose=F,  k=2)$knn
-			ind <- ret[, 2]
-			ds <- sqrt(ret[, 4])
+			ret <- rflann::Neighbour(coord.set[keepIndices,], coord.set[keepIndices,], k=2)
+			ind <- ret$indices[, 2]
+			ds <- sqrt(ret$distances[, 2])
 			v <- vals[keepIndices] 
 			ovals <- v[ind]		
 			pruneSet <- ifelse(ds < mindist & ovals > v,  TRUE, FALSE)

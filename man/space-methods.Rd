@@ -17,7 +17,7 @@ space(x, ...)
 \S4method{space}{IndexLookupVolume}(x)
 }
 \arguments{
-\item{x}{the object to query, e.g. an instance of \code{BrainVolume} or \code{BrainVector}}
+\item{x}{the object to query, e.g. an instance of \code{\linkS4class{BrainVolume}} or \code{\linkS4class{BrainVector}}}
 
 \item{...}{additional arguments}
 }

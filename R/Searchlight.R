@@ -119,7 +119,7 @@ Searchlight <- function(mask, radius, eager=FALSE) {
     function() {
       if (index < nrow(grid)) { 
         index <<- index + 1
-        vox <- grid[nabe$indices[[index]],]
+        vox <- grid[nabelist$indices[[index]],]
         attr(vox, "center") <- grid[index,]
         attr(vox, "center.index") <- mask.idx[index]
         attr(vox, "length") <- nrow(vox)

@@ -1,7 +1,7 @@
 Package: neuroim
 Imports:
     Matrix,
-    yaImpute,
+    rflann,
     Rcpp,
     iterators,
     abind,
