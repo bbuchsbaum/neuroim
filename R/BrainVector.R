@@ -738,6 +738,34 @@ setMethod(f="scaleSeries", signature=signature(x="BrainVector", center="logical"
             callGeneric(x, center, TRUE)
           })
 
+#' @export
+#' @rdname splitScale-methods
+#' @importFrom abind abind
+setMethod(f="splitScale", signature=signature(x = "DenseBrainVector", f="factor", center="missing", scale="missing"),
+          def=function(x, f) {
+            callGeneric(x, f, TRUE, TRUE)
+            
+          })
+
+#' @export
+#' @rdname splitScale-methods
+#' @importFrom abind abind
+setMethod(f="splitScale", signature=signature(x = "DenseBrainVector", f="factor", center="logical", scale="missing"),
+          def=function(x, f, center) {
+            callGeneric(x, f, center, TRUE)
+            
+          })
+
+#' @export
+#' @rdname splitScale-methods
+#' @importFrom abind abind
+setMethod(f="splitScale", signature=signature(x = "DenseBrainVector", f="factor", center="logical", scale="logical"),
+          def=function(x, f, center) {
+            m <- callGeneric(t(as.matrix(x)), f, center, scale)
+            BrainVector(m, space(x))
+          })
+
+
 
 #' @rdname concat-methods
 #' @export

@@ -727,7 +727,7 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
               if (!all.equal(dim(mask), dim(ovol))) {
                 stop(paste("mask must have same dimensions as input volume"))
               }
-              # TODO check that mask is same shape as volume
+              
               grid <- indexToGrid(mask, which(mask != 0))
             } else {
               grid <- as.matrix(expand.grid(i=hwidth[1]:(xdim - hwidth[1]), 
@@ -736,7 +736,7 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
             }
                       
             res <- apply(grid, 1, function(vox) {
-              loc <- sweep(m@voxmat, 2, vox, "+")
+              loc <- sweep(m@voxels, 2, vox, "+")
               ivals <- x[loc]
               if (all(ivals == 0)) {
                 0
