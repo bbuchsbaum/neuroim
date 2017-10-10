@@ -493,7 +493,53 @@ setMethod("show", signature=signature(object = "ROIVolume"),
 }
 
 
-#' Create a Kernel object
+
+# GradientKernel <- function(direction=c("x", "y", "z")) {
+#   direction <- match.arg(direction)
+#   grid.vec <- lapply(1:3, function(sv) seq(-1, 1))
+#   
+#   # compute relative voxel locations (i.e. centered at 0,0,0)
+#   voxel.ind <- as.matrix(do.call("expand.grid", grid.vec))
+#   
+#   # fractional voxel locations so that the location of a voxel coordinate is centered within the voxel
+#   cvoxel.ind <- t(apply(voxel.ind, 1, function(vals) sign(vals)* ifelse(vals == 0, 0, abs(vals)-.5)))
+#   
+#   ## the coordinates of the voxels (i.e. after multiplying by pixel dims)
+#   coords <- t(apply(cvoxel.ind, 1, function(v) (v * vdim)))
+#   
+#   if (direction == "x") {
+#     gdim <- 1
+#     odim <- 2:3
+#   } else if (direction == "y") {
+#     gdim <- 2
+#     odim <- c(1,3)
+#   } else {
+#     gdim <- 3
+#     odim <- c(1,2)
+#   }
+#   
+#     
+#   wts <- apply(coords, 1, function(r) {
+#     if (r[gdim] == 0) {
+#       0
+#     } else if (r[gdim] < 0 && all(r[odim] == 0)) {
+#       -2
+#     } else if (r[gdim] > 0 && all(r[odim] == 0)) {
+#       2
+#     } else if (r[gdim] < 0) {
+#       -1
+#     } else {
+#       1
+#     }
+#   })
+#   
+#   new("Kernel", width=c(3,3,3), weights=wts, voxels=voxel.ind, coords=coords)
+#       
+# }
+#   
+  
+#' Create a Kernel object from a function of distance from kernel center
+#' 
 #' @param kerndim the dimensions in voxels of the kernel
 #' @param vdim the dimensions of the voxels in real units
 #' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel

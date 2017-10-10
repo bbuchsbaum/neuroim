@@ -730,7 +730,9 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
               # TODO check that mask is same shape as volume
               grid <- indexToGrid(mask, which(mask != 0))
             } else {
-              grid <- as.matrix(expand.grid(i=hwidth[1]:(xdim - hwidth[1]), j=hwidth[2]:(ydim - hwidth[2]), k=hwidth[3]:(zdim - hwidth[3])))
+              grid <- as.matrix(expand.grid(i=hwidth[1]:(xdim - hwidth[1]), 
+                                            j=hwidth[2]:(ydim - hwidth[2]), 
+                                            k=hwidth[3]:(zdim - hwidth[3])))
             }
                       
             res <- apply(grid, 1, function(vox) {
@@ -742,8 +744,8 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
                 sum(ivals * m@weights)
               }
             })
+            
             ovol[grid] <- res                  
-      
             BrainVolume(ovol, space(x))
           })
 
