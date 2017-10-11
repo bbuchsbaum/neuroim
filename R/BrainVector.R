@@ -175,9 +175,6 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
         }
 			}
       
-		
-			#arr <- abind(datlist, along=4)			
-			
       bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)),meta@spacing, meta@origin, meta@spatialAxes, trans(meta))
 			DenseBrainVector(arr[,,,ind,drop=FALSE], bspace, x)
 			
@@ -410,7 +407,7 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
 }
 
-#' loadVolList
+#' loadVolumeList
 #' 
 #' load a list of image volumes and return a \code{\linkS4class{BrainVector}} instance
 #' 
@@ -760,7 +757,7 @@ setMethod(f="splitScale", signature=signature(x = "DenseBrainVector", f="factor"
 #' @rdname splitScale-methods
 #' @importFrom abind abind
 setMethod(f="splitScale", signature=signature(x = "DenseBrainVector", f="factor", center="logical", scale="logical"),
-          def=function(x, f, center) {
+          def=function(x, f, center, scale) {
             m <- callGeneric(t(as.matrix(x)), f, center, scale)
             BrainVector(m, space(x))
           })
