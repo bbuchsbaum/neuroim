@@ -146,6 +146,8 @@ setMethod(f="union", signature=signature(x = "BrainSpace", y="BrainSpace"),
             if (length(s1) != length(s2) || !all(s1==s2)) {
               stop("union requires argument with the same dimensionality and axis orientation")
             }
+            
+            ### TODO bounds is broken
             bds1 <- bounds(x)
             bds2 <- bounds(y)
             direc <- sign(diag(trans(x))[1:ndim(x)])
@@ -297,8 +299,9 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
               }
               out
             }))
-            vox <- t(cbind(vox, rep(1, nrow(vox))))
-            t(tx %*% vox)
+            vox <- cbind(vox, rep(1, nrow(vox)))
+            browser()
+            t(vox) %*% t(tx)
           })
 
 
@@ -368,12 +371,12 @@ setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"
             ## from voxel space to new orient
             tx <- zapsmall(MASS::ginv(rbind(itx, c(0,0,0,1))))
             
-            perm <- pmat_new %*% MASS::ginv(pmat_orig)
-            newdim <- abs(perm %*% dim(x))[,1]
-            newspacing <- abs(perm %*% spacing(x))[,1]
+            #perm <- pmat_new %*% MASS::ginv(pmat_orig)
+            #newdim <- abs(perm %*% dim(x))[,1]
+            #newspacing <- abs(perm %*% spacing(x))[,1]
             
-            BrainSpace(newdim, newspacing, axes=x@axes, trans=tx, 
-                       origin=tx[1:(ndim(x)) ,ndim(x)+1])
+            BrainSpace(dim(x), spacing(x), axes=x@axes, trans=tx, 
+                       origin=tx[1:(ndim(x)), ndim(x)+1])
        
           })
 
