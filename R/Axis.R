@@ -21,11 +21,17 @@ SUP_INF    <- new("NamedAxis", axis="Superior-to-Inferior", direction=c(0,0,-1))
 matchAxis <- function(firstAxis) {
   switch(toupper(firstAxis),
          "LEFT"=LEFT_RIGHT,
+         "L"=LEFT_RIGHT,
          "RIGHT"=RIGHT_LEFT,
+         "R"=RIGHT_LEFT,
          "ANTERIOR"=ANT_POST,
+         "A"=ANT_POST,
          "POSTERIOR"=POST_ANT,
+         "P"=POST_ANT,
          "INFERIOR"=INF_SUP,
-         "SUPERIOR"=SUP_INF)
+         "I"=INF_SUP,
+         "SUPERIOR"=SUP_INF,
+         "S"=SUP_INF)
          
 }
 
@@ -53,6 +59,26 @@ setMethod(f="permMat", signature=signature(x = "AxisSet2D"),
           def=function(x, ...) { 
             cbind(x@i@direction, x@j@direction)
           })
+
+#' permMat
+#' @export
+#' @rdname permMat-methods
+setMethod(f="permMat", signature=signature(x = "AxisSet3D"),
+          def=function(x, ...) { 
+            cbind(x@i@direction, x@j@direction, x@k@direction)
+          })
+
+
+#' permMat
+#' @export
+#' @rdname permMat-methods
+setMethod(f="permMat", signature=signature(x = "BrainSpace"),
+          def=function(x, ...) { 
+            callGeneric(x@axes)
+          })
+
+
+
 
 
 
@@ -280,7 +306,14 @@ OrientationList3D <- list(
 	AXIAL_PRS = AxisSet3D(POST_ANT,   RIGHT_LEFT, SUP_INF))
 	
 	
-	
+findAnatomy3D <- function(axis1="L", axis2="P", axis3="I") {
+  res <- lapply(list(axis1, axis2, axis3), function(x) {
+    matchAxis(x)
+  })
+  
+  matchAnatomy3D(res[[1]], res[[2]], res[[3]])
+  
+}
 #' given three named axes return AxisSet3D singleton
 #' @param axis1 the first axis
 #' @param axis2 the second axis

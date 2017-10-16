@@ -57,6 +57,7 @@ Collate:
     'Display.R'
     'IndexLookupVolume.R'
     'Ops.R'
+    'OrthoPlot.R'
     'RcppExports.R'
     'Searchlight.R'
     'conncomp.R'

@@ -212,7 +212,7 @@ setGeneric(name="spacing", def=function(x) standardGeneric("spacing"))
 
 #' Generic function to extract the spatial bounds (origin + dim * spacing) of an image
 #' param x the object
-#' @export
+
 #' @param x the object with \code{bounds} property
 #' @return a \code{matrix} where each row contains the min (column 1) and max (column 2) bounds of the image dimension from 1 to \code{ndim(image)}.
 #' @examples 
@@ -239,6 +239,20 @@ setGeneric(name="axes",  def=function(x) standardGeneric("axes"))
 #' 
 #' @rdname origin-methods
 setGeneric(name="origin", def=function(x) standardGeneric("origin"))
+
+
+#' Compute the union, for example of two \code{BrainSpace} objects
+#' @param x the first element
+#' @param y the second element
+#' @export 
+#' @examples 
+#' bspace1 <- BrainSpace(c(10,10,10), c(2,2,2), origin=c(-25,5,12))
+#' bspace2 <- BrainSpace(c(15, 8,25), c(2,2,2))
+#' union(bspace1, bspace2)
+#' 
+#' @rdname origin-methods
+setGeneric(name="origin", def=function(x) standardGeneric("origin"))
+
 
 #' Generic getter to extract image coordinate transformation
 #' @param x an object with a transformation
@@ -336,6 +350,13 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
+#' Generic function to remap the grid-to-world coordinates mapping of an image.
+#' @param x the object
+#' @param orient the orientation code indcating the "remapped" axes.
+#' @return a reoriented space
+#' @export 
+setGeneric(name="reorient", def=function(x, orient) standardGeneric("reorient"))
+
 
 #' Generic function to convert 1D indices to N-dimensional grid coordinates
 #' @param x the object
@@ -392,9 +413,18 @@ setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordT
 #' @rdname gridToCoord-methods
 setGeneric(name="gridToCoord",   def=function(x, coords) standardGeneric("gridToCoord"))
 
+#' Generic function to convert voxel coordinates in the reference space (LPI) to native array space.
+#' 
+#' @param x the object
+#' @param coords a matrix of LPI voxel coordinates
+#' @return a matrix of native voxel coordinates
+#' @export 
+#' @rdname gridToCoord-methods
+setGeneric(name="gridToGrid",   def=function(x, vox) standardGeneric("gridToGrid"))
 
 
-#' Generic function to convert 1-dimensional real axis coordinates along a single axis dimension to an 1D index along the same axis
+#' Convert 1-dimensional real axis coordinates along a single axis dimension 
+#' to a 1D index along the same axis.
 #' @param x the object
 #' @param real the axis coordinates
 #' @param dimNum the dimension number of the axis (e.g.  1, 2, 3)
@@ -402,6 +432,17 @@ setGeneric(name="gridToCoord",   def=function(x, coords) standardGeneric("gridTo
 #' @export 
 #' @rdname axisToIndex-methods
 setGeneric(name="axisToIndex",   def=function(x, real, dimNum) standardGeneric("axisToIndex"))
+
+
+#' Convert 1-dimensional index to a coordinate value along the same axis.
+#' @param x the object
+#' @param index the axis index
+#' @param dimNum the dimension number of the axis (e.g.  1, 2, 3)
+#' @return a vector of axis indices
+#' @export 
+#' @rdname axisToIndex-methods
+setGeneric(name="indexToAxis",   def=function(x, index, dimNum) standardGeneric("indexToAxis"))
+
 
 #' Generic function to convert N-dimensional grid coordinate to 1D indices
 #' @param x the object, typically a \code{BrainVolume} or \code{BrainSpace} instance.

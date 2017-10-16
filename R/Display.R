@@ -81,6 +81,7 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' Layer
 #' 
 #' create a \code{\linkS4class{Layer}} object
+#' 
 #' @param vol volume instance of \code{\linkS4class{BrainVolume}}
 #' @param colorMap a lookup table defining mapping from image intensity values to colors.
 #' @param thresh a range (min,max) defining the threshold window for determining image opacity.
@@ -91,8 +92,23 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' @export
 #' @rdname Layer
 #' @importFrom grDevices gray
-Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), axis=3, zero.col="#000000", alpha=1) {
-  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, zero.col=zero.col, alpha=alpha)
+Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), view="LPI", 
+                  zero.col="#000000", alpha=1) {
+  
+  
+  
+  bds <- bounds(space(vol))
+  xy_axis <- sort(seq(1,3)[!(1:3 %in% axis)])
+  bbox <- list(
+    x=bds[xy_axis[1],1],
+    y=bds[xy_axis[2],1],
+    width=abs(bds[xy_axis[1],2] - bds[xy_axis[1],1]),
+    height=abs(bds[xy_axis[2],2] - bds[xy_axis[2],1]))
+  
+  xyspace <- dropDim(space(vol), axis)
+  
+  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, 
+      xy_axis=xy_axis, bbox=bbox, xy_space=xyspace,zero.col=zero.col, alpha=alpha)
 }
 
 
@@ -133,13 +149,27 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
 
 
 
+
+Overlay <- function(...) {
+  layers <- list(...)
+  lapply(layers, function(x) stopifnot(inherits(x, "Layer")))
+  
+  axisnum <- sapply(layers, function(x) x@axis)
+  assertthat::assert_that(all(axisnum == axisnum[1]))
+  
+  uspace <- Reduce("union", lapply(layers, function(layer) space(space(vol))))
+  new("Overlay", layers=layers, uspace=uspace, axis=axisnum)
+}
+  
 #' overlay
 #' 
+#' @param x the x layer
+#' @param y the y layer
 #' @export 
 #' @rdname overlay-methods
 setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
           def=function(x, y) {  
-            new("Overlay", layers=list(x,y))  
+            Overlay(layers=list(x,y))  
           })
 
 
@@ -150,17 +180,18 @@ setMethod(f="overlay", signature=signature(x = "Layer", y="Layer"),
 #' @export 
 setMethod(f="+", signature=signature(e1 = "Overlay", e2="Layer"),
           def=function(e1, e2) {  
-            new("Overlay", layers=c(e1@layers, e2))
+            Overlay(layers=c(e1@layers, e2))
           })
 
 #' @export 
 #' @rdname overlay-methods
 setMethod(f="+", signature=signature(e1 = "Layer", e2="Layer"),
           def=function(e1, e2) {  
-            new("Overlay", layers=list(e1, e2))
+            Overlay(layers=list(e1, e2))
           })
 
 #' image
+#' 
 #' @param x the object to display
 #' @param zpos the z coordinate
 #' @param axis the axis index
@@ -185,16 +216,19 @@ setMethod(f="image", signature=signature(x = "Layer"),
             grid.raster(ras, interpolate=TRUE)
           })
 
-
-
 #' @rdname renderSlice-methods
+#' 
+#' 
 #' @param zero.col color used when background intensity is 0.
 #' @param units grid unit type, e.g. "mm", "inches"
 #' @export
-setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
-          def=function(x, zpos, width, height, zero.col="#000000FF", units="mm") {
+setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", 
+                                               width="numeric", height="numeric", 
+                                               colmap="missing"),
+          def=function(x, zpos, width, height, zero.col="#000000FF", units="points") {
             sliceList <- lapply(x@layers, function(layer) {
-              renderSlice(layer, zpos=zpos, width=width, height=height, zero.col=zero.col, units=units)
+              renderSlice(layer, zpos=zpos, width=width, height=height, 
+                          zero.col=zero.col, units=units)
             })
             
             slices <- lapply(sliceList, function(x) x@slice)
@@ -208,10 +242,15 @@ setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", widt
 
 #' @export
 #' @rdname renderSlice-methods
-setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", width="numeric", height="numeric", colmap="missing"),
-          def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="mm") {
+setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", 
+                                               width="numeric", height="numeric", colmap="missing"),
+          def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="points") {
             slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
-            grob <- render(slice, width, height, colmap=x@colorMap, zero.col=zero.col, alpha=x@alpha, units=units)
+            grob <- render(slice, width, height, 
+                           colmap=x@colorMap, 
+                           zero.col=zero.col, 
+                           alpha=x@alpha, 
+                           units=units)
             
             new("RenderedSlice", slice=slice, width=width, height=height, raster=grob)
           })
@@ -222,12 +261,15 @@ setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", width=
 #' @param alpha transparency multiplier
 #' @param units grid unit type, e.g. "mm", "inches"
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
-          def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="mm") {
+          def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="points") {
             imslice <- t(x[nrow(x):1, ncol(x):1,drop=FALSE])    
             imcols <- mapToColors(imslice, colmap, zero.col, alpha=alpha)
             ras <- as.raster(imcols)
   
-            grob <- rasterGrob(ras, width=unit(width, units), height=unit(height, units), interpolate=TRUE)
+            grob <- rasterGrob(ras, 
+                               width=unit(width, units), 
+                               height=unit(height, units), 
+                               interpolate=TRUE)
     
           })
 
@@ -305,5 +347,5 @@ imageGrid <- function(layer, gridDim=c(3,3), zstart, zend, panelSize=3, panelUni
   }
   
 }
-          
+
 
