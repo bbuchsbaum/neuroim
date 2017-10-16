@@ -286,19 +286,45 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
             nd <- ndim(x)
             stopifnot(ncol(vox) == nd)
             ## todo permMat doesn't work when reference space is not LPI
-            
-            itx <- inverseTrans(x)[1:nd,1:nd]
-            tx <- t(apply(itx, 2, function(r) {
-              id <- which.max(abs(r))
-              out <- numeric(length(r)+1)
-              out[id] <- sign(r[id])
-              if (out[id] < 0) {
-                out[length(r)+1] <- dim(x)[id] + 1
+            #browser()
+            tx <- inverseTrans(x)[1:nd, 1:nd]
+            ovox <- vox %*% tx[1:nd, 1:nd]
+            offset <- sapply(1:ncol(tx), function(i) {
+              if (any(tx[,i] < 0)) {
+                dim(x)[i] + 1
+              } else {
+                0
               }
-              out
-            }))
-            vox <- t(cbind(vox, rep(1, nrow(vox))))
-            t(tx %*% vox)
+            })
+            
+            sweep(ovox, 2,offset, "+")
+            
+            # browser()
+            # itx <- inverseTrans(x)[1:nd,1:nd]
+            # #browser()
+            # tx <- t(apply(itx, 2, function(r) {
+            #   id <- which.max(abs(r))
+            #   out <- numeric(length(r))
+            #   out[id] <- sign(r[id])
+            #   
+            #   #if (out[id] < 0) {
+            #   #  out[length(r)+1] <- dim(x)[id] + 1
+            #   #}
+            #   out
+            # }))
+            # 
+            # direc <- apply(tx[,1:ndim(x)], 2, function(x) any(x < 0))
+            # offset <- sapply(1:length(direc), function(i) if (direc[i]) dim(x)[i]+1 else 0)
+            # tx <- rbind(tx, offset)
+            # tx <- cbind(tx, c(rep(0, ndim(x)),1))
+            # print(tx)
+            #browser()
+            #tx <- rbind(tx, c(0,0,0,1))
+            
+            # vox <- cbind(vox, rep(1, nrow(vox)))
+            # 
+            # ret1 <- vox %*% tx
+            # ret1[,1:3]
           })
 
 
@@ -362,17 +388,19 @@ setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"
             pmat_orig <- permMat(x)
             pmat_new <- permMat(anat)
             
-            ## from orient to original voxel space
-            itx <- pmat_new %*% inverseTrans(x)[1:ndim(x), 1:(ndim(x)+1)]
-            
+            pmat_new <- cbind(pmat_new, c(0,0,0))
+            pmat_new <- rbind(pmat_new, c(0,0,0,1))
+            tx <- trans(x) %*% pmat_new
+          
+            itx <- zapsmall(MASS::ginv(tx))
             ## from voxel space to new orient
-            tx <- zapsmall(MASS::ginv(rbind(itx, c(0,0,0,1))))
+            #tx <- zapsmall(MASS::ginv(itx))
             
-            perm <- pmat_new %*% MASS::ginv(pmat_orig)
-            newdim <- abs(perm %*% dim(x))[,1]
-            newspacing <- abs(perm %*% spacing(x))[,1]
+            #perm <- pmat_new %*% MASS::ginv(pmat_orig)
+            #newdim <- abs(perm %*% dim(x))[,1]
+            #newspacing <- abs(perm %*% spacing(x))[,1]
             
-            BrainSpace(newdim, newspacing, axes=x@axes, trans=tx, 
+            BrainSpace(dim(x), spacing=spacing(x), axes=x@axes, trans=tx, 
                        origin=tx[1:(ndim(x)) ,ndim(x)+1])
        
           })
