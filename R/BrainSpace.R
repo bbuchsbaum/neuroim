@@ -299,32 +299,6 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
             
             sweep(ovox, 2,offset, "+")
             
-            # browser()
-            # itx <- inverseTrans(x)[1:nd,1:nd]
-            # #browser()
-            # tx <- t(apply(itx, 2, function(r) {
-            #   id <- which.max(abs(r))
-            #   out <- numeric(length(r))
-            #   out[id] <- sign(r[id])
-            #   
-            #   #if (out[id] < 0) {
-            #   #  out[length(r)+1] <- dim(x)[id] + 1
-            #   #}
-            #   out
-            # }))
-            # 
-            # direc <- apply(tx[,1:ndim(x)], 2, function(x) any(x < 0))
-            # offset <- sapply(1:length(direc), function(i) if (direc[i]) dim(x)[i]+1 else 0)
-            # tx <- rbind(tx, offset)
-            # tx <- cbind(tx, c(rep(0, ndim(x)),1))
-            # print(tx)
-            #browser()
-            #tx <- rbind(tx, c(0,0,0,1))
-            
-            # vox <- cbind(vox, rep(1, nrow(vox)))
-            # 
-            # ret1 <- vox %*% tx
-            # ret1[,1:3]
           })
 
 
