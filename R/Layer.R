@@ -41,6 +41,15 @@ Layer <- R6Class("Layer",
                 
                  slice <- slice(self$vol, zpos, self$view_space, self$view_axes)
                  browser()
+                 bds <- permMat(space(vol)) %*% bounds(self$view_space)
+                
+                 dnum1 <- which_dim(self$view_space, self$view_space@axes@i)
+                 dnum2 <- which_dim(self$view_space, self$view_space@axes@j)
+                 
+                 bds <- bds[c(dnum1, dnum2),]
+                 
+                 
+                 
                  if (is.null(width) && is.null(height)) {
                    width <- dim(slice)[1]
                    height <- dim(slice)[2]
@@ -62,7 +71,7 @@ Layer <- R6Class("Layer",
                                 alpha=self$alpha, 
                                 units="points")
                  
-                 new("RenderedSlice", slice=slice, width=width, height=height, raster=grob)
+                 new("RenderedSlice", slice=slice, width=width, height=height, xbounds=bds[1,], ybounds=bds[2,], raster=grob)
                }
              )
 )
