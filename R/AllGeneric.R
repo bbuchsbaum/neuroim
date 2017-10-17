@@ -50,6 +50,7 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
 setGeneric(name="dim_of", def=function(x, axis) standardGeneric("dim_of"))
+setGeneric(name="which_dim", def=function(x, axis) standardGeneric("which_dim"))
 
 #' Generic function to add a dimension to an object
 #' 

@@ -652,12 +652,16 @@ setClass("RenderedSlice",
          representation=representation(slice="BrainSlice",
                                        width="numeric",
                                        height="numeric",
+                                       xbounds="numeric",
+                                       ybounds="numeric",
                                        raster="rastergrob"))
 #' RenderedSliceStack
 setClass("RenderedSliceStack",
          representation=representation(slices="list",
                                        width="numeric",
                                        height="numeric",
+                                       xbounds="numeric",
+                                       ybounds="numeric",
                                        grob="gList"))
 
 

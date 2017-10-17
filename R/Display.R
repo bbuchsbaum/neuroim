@@ -266,7 +266,7 @@ setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric",
 #' @rdname render-methods
 #' @param zero.col color used when background intensity is 0.
 #' @param alpha transparency multiplier
-#' @param units grid unit type, e.g. "mm", "inches"
+#' @param units grid unit type, e.g. "points", "mm", "inches"
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
           def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="points") {
             imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 

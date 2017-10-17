@@ -146,18 +146,26 @@ setMethod(f="dim_of", signature=signature(x = "BrainSpace", axis="NamedAxis"),
             function(x, axis) {
   dir <- abs(axis@direction)
   
-  dnum = if(all(abs(x@axes@i@direction) == dir)) {
-    1
-  } else if (all(abs(x@axes@j@direction) == dir)) {
-    2
-  } else if (all(abs(x@axes@k@direction) == dir)) {
-    3
-  } else {
-    stop(paste("cannot find matching axis of: ", axis))
-  }
-  
+  dnum <- which_dim(x,axis)
   dim(x)[dnum]
 })
+
+setMethod(f="which_dim", signature=signature(x = "BrainSpace", axis="NamedAxis"), 
+          function(x, axis) {
+            dir <- abs(axis@direction)
+            
+            dnum = if(all(abs(x@axes@i@direction) == dir)) {
+              1
+            } else if (all(abs(x@axes@j@direction) == dir)) {
+              2
+            } else if (all(abs(x@axes@k@direction) == dir)) {
+              3
+            } else {
+              stop(paste("cannot find matching axis of: ", axis))
+            }
+            
+            dnum
+          })
 
 # @export
 # @rdname union-methods
