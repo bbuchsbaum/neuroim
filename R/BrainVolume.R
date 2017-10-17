@@ -530,18 +530,19 @@ setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", alon
 setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", along="BrainSpace", 
                                          orientation="AxisSet3D"),
           def=function(x, zlevel, along, orientation) {
+          
             xdim <- dim_of(along, orientation@i)
             ydim <- dim_of(along, orientation@j)
             message("zlevel: ", zlevel)
             message("xdim: ", xdim)
-            message("ydim: ", xdim)
-            vox <- as.matrix(fast.expand.grid(seq(1,xdim), seq(1,ydim), zlevel))
+            message("ydim: ", ydim)
+            vox <- as.matrix(expand.grid(seq(1,xdim), seq(1,ydim), zlevel))
             
             gg <- gridToGrid(along, vox)
             print(range(gg))
             imslice <- x[gg]
             
-            BrainSlice(imslice, dropDim(along))
+            BrainSlice(matrix(imslice, xdim,ydim), dropDim(along,3))
             
             
           })

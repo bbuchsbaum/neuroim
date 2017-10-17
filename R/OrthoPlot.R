@@ -17,7 +17,7 @@ create_overlay <- function(...) {
       overlay=overlay,
       zrange=range,
       start_slice= median(seq(range[1], range[2])),
-      vrange=c(1, dim_of(overlay@uspace, vspace))
+      vrange=c(1, dim_of(overlay@uspace, vspace@axes@k))
     )
       
   }
@@ -80,7 +80,7 @@ ortho_plot <- function(...) {
       renderPlot({
         ind <- input[[slider_id]]
         zpos <- indexToAxis(vspace, ind, 3)
-        slice <- renderSlice(view$overlay, zpos, 1,1, units="npc")
+        slice <- renderSlice(view$overlay, ind, 1,1, units="npc")
         rval(slice)
         grid.draw(slice@grob)
       })

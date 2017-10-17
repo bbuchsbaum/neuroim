@@ -269,7 +269,10 @@ setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric",
 #' @param units grid unit type, e.g. "mm", "inches"
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
           def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="points") {
-            imslice <- t(x[nrow(x):1, ncol(x):1,drop=FALSE])    
+            imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 
+            #imslice <- t(x[nrow(x):1, ncol(x):1,drop=FALSE]) 
+            #imslice <- t(as.matrix(x))
+            #imslice <- x
             imcols <- mapToColors(imslice, colmap, zero.col, alpha=alpha)
             ras <- as.raster(imcols)
   

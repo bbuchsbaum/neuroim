@@ -97,9 +97,13 @@ setMethod(f="dropDim", signature=signature(x="BrainSpace", dimnum="numeric"),
             if (ndim(x) > 3) {
               BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=axes(x), trans=trans(x))
             } else {
+              
               tx <- trans(x)
-              tx <- rbind(cbind(tx[Dind,Dind], origin(x)[Dind]), c(rep(0, length(Dind)), 1))
-              BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x), dimnum), trans=tx)
+              keep_col <- Dind
+              keep_row <- which(apply(tx[,Dind], 1, function(x) !all(x==0)))
+              tx <- rbind(cbind(tx[keep_row,keep_col], origin(x)[keep_row]), c(rep(0, length(Dind)), 1))
+              
+              BrainSpace(D[keep_row], origin=origin(x)[keep_row], spacing=spacing(x)[keep_row], axes=dropDim(axes(x), dimnum), trans=tx)
             }
             
           })
