@@ -29,11 +29,11 @@ sliceData <- function(vol, slice, axis=3) {
 #' @importFrom grDevices heat.colors
 #' @param imslice vector or matrix of intensity values
 #' @param col a color map
-#' @param zero.col the background color.
+#' @param zero_col the background color.
 #' @param alpha transparency multiplier
 #' @importFrom grDevices col2rgb
 #' @export
-mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#00000000", alpha=1) {
+mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero_col = "#00000000", alpha=1) {
   vrange <- range(imslice)
   imcols <- col[as.integer((imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1)]
   
@@ -41,7 +41,7 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
     dim(imcols) <- dim(imslice)
   }
   
-  imcols[imslice == 0] <- zero.col
+  imcols[imslice == 0] <- zero_col
   
   if (alpha < 1) {
     rgbmat <- col2rgb(imcols, alpha=TRUE)
@@ -63,17 +63,17 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 #' 
 #' @param slice the voxel index of the slice to display
 #' @param col a color map
-#' @param zero.col the color to use when the value is 0 (e.g background color)
+#' @param zero_col the color to use when the value is 0 (e.g background color)
 #' @param ... extra arguments to passed to \code{grid.raster}
 #' @export
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
           def=function(x, slice=dim(vol)[3]/2, col=gray((0:255)/255, alpha=1), 
-                       zero.col = "#000000", axis=3, ...) {    
+                       zero_col = "#000000", axis=3, ...) {    
             imslice <- sliceData(x, slice, axis)
-            imcols <- mapToColors(imslice, col, zero.col)
+            imcols <- mapToColors(imslice, col, zero_col)
             ras <- as.raster(imcols)
-            ras[imslice == 0] <- zero.col
+            ras[imslice == 0] <- zero_col
             
             grid.newpage()
             grid.raster(ras, ...)
@@ -84,17 +84,17 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 #' create a \code{\linkS4class{Layer}} object
 #' 
 #' @param vol volume instance of \code{\linkS4class{BrainVolume}}
-#' @param colorMap a lookup table defining mapping from image intensity values to colors.
+#' @param color_map a lookup table defining mapping from image intensity values to colors.
 #' @param thresh a range (min,max) defining the threshold window for determining image opacity.
 #' @param axis the axis index of the axis perpendicular to the xy plane (options: 1,2,3; default is 3)
-#' @param zero.col the color used when the value is zero.
+#' @param zero_col the color used when the value is zero.
 #' @param alpha transparency multiplier, vlaue between 0 and 1.
 #' @return an object of class \code{Layer}
 #' @export
 #' @rdname Layer
 #' @importFrom grDevices gray
-Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), view="LPI", 
-                  zero.col="#000000", alpha=1) {
+Layer <- function(vol, color_map=gray((0:255)/255, alpha=1), thresh=c(0,0), view="LPI", 
+                  zero_col="#000000", alpha=1) {
   
   if (length(view) == 1) {
     assertthat::assert_that(nchar(view) == 3)
@@ -107,7 +107,7 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), view=
   
   aview <- findAnatomy3D(view[1], view[2], view[3])
   orient <- reorient(space(vol), view)
-  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, view=aview, view_space=orient, zero.col=zero.col, alpha=alpha)
+  new("Layer", vol=vol, color_map=color_map, thresh=thresh, view=aview, view_space=orient, zero_col=zero_col, alpha=alpha)
 }
 
 
@@ -126,14 +126,14 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
             
             thresh <- x@thresh
             
-            lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@colorMap) -1) + 1
-            imcols <- x@colorMap[lookup]
+            lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@color_map) -1) + 1
+            imcols <- x@color_map[lookup]
             
             if (length(thresh) == 1) {
               thresh <- c(-Inf, thresh)
             }
                       
-            imcols[imslice == 0] <- x@zero.col
+            imcols[imslice == 0] <- x@zero_col
             
             if (diff(thresh) > 0) {
               imcols[(imslice >= thresh[1] & imslice <= thresh[2])] <- "#00000000"
@@ -141,7 +141,7 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
             
             dim(imcols) <- dim(imslice)
             ras <- as.raster(imcols)
-            #ras[imslice == 0] <- zero.col            
+            #ras[imslice == 0] <- zero_col            
             ras
           })
 
@@ -226,16 +226,16 @@ setMethod(f="image", signature=signature(x = "Layer"),
 #' @rdname renderSlice-methods
 #' 
 #' 
-#' @param zero.col color used when background intensity is 0.
+#' @param zero_col color used when background intensity is 0.
 #' @param units grid unit type, e.g. "mm", "inches"
 #' @export
 setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric", 
                                                width="numeric", height="numeric", 
                                                colmap="missing"),
-          def=function(x, zpos, width, height, zero.col="#000000FF", units="points") {
+          def=function(x, zpos, width, height, zero_col="#000000FF", units="points") {
             sliceList <- lapply(x@layers, function(layer) {
               renderSlice(layer, zpos=zpos, width=width, height=height, 
-                          zero.col=zero.col, units=units)
+                          zero_col=zero_col, units=units)
             })
             
             slices <- lapply(sliceList, function(x) x@slice)
@@ -251,11 +251,11 @@ setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric",
 #' @rdname renderSlice-methods
 setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", 
                                                width="numeric", height="numeric", colmap="missing"),
-          def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="points") {
+          def=function(x, zpos, width, height, colmap, zero_col="#000000FF", units="points") {
             slice <- slice(x@vol, zpos, x@view_space, x@view)
             grob <- render(slice, width, height, 
-                           colmap=x@colorMap, 
-                           zero.col=zero.col, 
+                           colmap=x@color_map, 
+                           zero_col=zero_col, 
                            alpha=x@alpha, 
                            units=units)
             
@@ -264,16 +264,16 @@ setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric",
 
 #' @export
 #' @rdname render-methods
-#' @param zero.col color used when background intensity is 0.
+#' @param zero_col color used when background intensity is 0.
 #' @param alpha transparency multiplier
 #' @param units grid unit type, e.g. "mm", "inches"
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
-          def=function(x, width, height, colmap, zero.col="#000000FF", alpha=1, units="points") {
+          def=function(x, width, height, colmap, zero_col="#000000FF", alpha=1, units="points") {
             imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 
             #imslice <- t(x[nrow(x):1, ncol(x):1,drop=FALSE]) 
             #imslice <- t(as.matrix(x))
             #imslice <- x
-            imcols <- mapToColors(imslice, colmap, zero.col, alpha=alpha)
+            imcols <- mapToColors(imslice, colmap, zero_col, alpha=alpha)
             ras <- as.raster(imcols)
   
             grob <- rasterGrob(ras, 

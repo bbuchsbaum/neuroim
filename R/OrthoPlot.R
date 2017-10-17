@@ -32,8 +32,8 @@ create_overlay <- function(...) {
 ortho_plot <- function(...) {
   overlay_set <- create_overlay(...)
   
-  height <- 256
-  
+  height <- 300
+  #width <- "100%"
   gen_slice_box <- function(title, id, view, sid) {
     box(title, plotOutput(id, height = height, click = "plot_click"), 
         sliderInput(sid, "Slice:", 
@@ -41,7 +41,7 @@ ortho_plot <- function(...) {
                     view$vrange[2],
                     median(round(c(view$vrange[1], 
                                    view$vrange[2])))), width=4, 
-        solidHeader=TRUE, status="primary")
+        solidHeader=TRUE, status="primary", background="black", align="center")
   }
    
   body <- dashboardBody(
@@ -61,8 +61,8 @@ ortho_plot <- function(...) {
   )
   
   
-  server <- function(input, output) {
-    
+  server <- function(input, output, session) {
+
     axial_slice <- reactiveVal()
     coronal_slice <- reactiveVal()
     sagittal_slice <- reactiveVal()
@@ -74,7 +74,7 @@ ortho_plot <- function(...) {
     })
     
     
-    gen_render_plot <- function(view, slider_id, rval) {
+    gen_render_plot <- function(view, slider_id, rval, plot_id) {
       vspace=view$overlay@layers[[1]]@view_space
       
       renderPlot({
@@ -83,12 +83,21 @@ ortho_plot <- function(...) {
         slice <- renderSlice(view$overlay, ind, 1,1, units="npc")
         rval(slice)
         grid.draw(slice@grob)
+      }, height = function() {
+          if (plot_id == "coronal_plot") {
+            .6 * session$clientData[[paste0("output_", plot_id, "_width")]]
+          } else {
+            session$clientData[[paste0("output_", plot_id, "_width")]]
+          }
+          
+          #print(input)
+          #256
       })
     }
       
-    output$axial_plot <- gen_render_plot(overlay_set$axial, "ax_slider", axial_slice)
-    output$coronal_plot <- gen_render_plot(overlay_set$coronal, "cor_slider", coronal_slice)
-    output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice)
+    output$axial_plot <- gen_render_plot(overlay_set$axial, "ax_slider", axial_slice, "axial_plot")
+    output$coronal_plot <- gen_render_plot(overlay_set$coronal, "cor_slider", coronal_slice, "coronal_plot")
+    output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice, "sagittal_plot")
   }
   
   # Preview the UI in the console
