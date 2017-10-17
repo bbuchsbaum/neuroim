@@ -68,7 +68,8 @@ mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero.col = "#0
 #' @export
 #' @rdname image-methods
 setMethod(f="image", signature=signature(x = "BrainVolume"),
-          def=function(x, slice=dim(vol)[3]/2, col=gray((0:255)/255, alpha=1), zero.col = "#000000", axis=3, ...) {    
+          def=function(x, slice=dim(vol)[3]/2, col=gray((0:255)/255, alpha=1), 
+                       zero.col = "#000000", axis=3, ...) {    
             imslice <- sliceData(x, slice, axis)
             imcols <- mapToColors(imslice, col, zero.col)
             ras <- as.raster(imcols)
@@ -95,20 +96,18 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), view="LPI", 
                   zero.col="#000000", alpha=1) {
   
+  if (length(view) == 1) {
+    assertthat::assert_that(nchar(view) == 3)
+    view <- sapply(1:3, function(i) substr(view, i,i))
+  } else {
+    assertthat::assert_that(length(view) == 3)
+  }
   
   
-  bds <- bounds(space(vol))
-  xy_axis <- sort(seq(1,3)[!(1:3 %in% axis)])
-  bbox <- list(
-    x=bds[xy_axis[1],1],
-    y=bds[xy_axis[2],1],
-    width=abs(bds[xy_axis[1],2] - bds[xy_axis[1],1]),
-    height=abs(bds[xy_axis[2],2] - bds[xy_axis[2],1]))
   
-  xyspace <- dropDim(space(vol), axis)
-  
-  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, axis=axis, 
-      xy_axis=xy_axis, bbox=bbox, xy_space=xyspace,zero.col=zero.col, alpha=alpha)
+  aview <- findAnatomy3D(view[1], view[2], view[3])
+  orient <- reorient(space(vol), view)
+  new("Layer", vol=vol, colorMap=colorMap, thresh=thresh, view=aview, view_space=orient, zero.col=zero.col, alpha=alpha)
 }
 
 
@@ -121,8 +120,8 @@ Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0), view=
 #' @rdname as.raster-methods
 setMethod(f="as.raster", signature=signature(x = "Layer"),
           def=function(x, zpos) {  
-            slice <- axisToIndex(space(x@vol), zpos, x@axis)
-            imslice <- sliceData(x@vol, slice, x@axis)     
+            slice <- axisToIndex(x@view_space, zpos, 3)
+            imslice <- sliceData(x@vol, slice, 3)     
             vrange <- range(imslice)
             
             thresh <- x@thresh
@@ -154,11 +153,19 @@ Overlay <- function(...) {
   layers <- list(...)
   lapply(layers, function(x) stopifnot(inherits(x, "Layer")))
   
-  axisnum <- sapply(layers, function(x) x@axis)
-  assertthat::assert_that(all(axisnum == axisnum[1]))
+  splist <- lapply(layers, function(layer) space(layer@vol))
+  axes <- sapply(splist, function(x) x@axes)
+  bds <- lapply(splist, function(x) signif(dim(x) * spacing(x),3))
+  orgs <- do.call(rbind, lapply(splist, function(x) signif(origin(x),3)))
+  dorgs <- apply(orgs, 2, function(x) max(abs(diff(x))))
+  views <- lapply(layers, function(x) x@view)
   
-  uspace <- Reduce("union", lapply(layers, function(layer) space(space(vol))))
-  new("Overlay", layers=layers, uspace=uspace, axis=axisnum)
+  assertthat::assert_that(length(unique(views)) == 1)
+  assertthat::assert_that(length(unique(axes)) == 1)
+  assertthat::assert_that(length(unique(bds)) == 1)
+  assertthat::assert_that(all(dorgs < 2))
+  
+  new("Overlay", layers=layers, uspace=splist[[1]], view=views[[1]])
 }
   
 #' overlay
@@ -245,7 +252,7 @@ setMethod(f="renderSlice", signature=signature(x="Overlay", zpos="numeric",
 setMethod(f="renderSlice", signature=signature(x="Layer", zpos="numeric", 
                                                width="numeric", height="numeric", colmap="missing"),
           def=function(x, zpos, width, height, colmap, zero.col="#000000FF", units="points") {
-            slice <- slice(x@vol, axisToIndex(space(x@vol), zpos, x@axis), x@axis, "")
+            slice <- slice(x@vol, zpos, x@view_space, x@view)
             grob <- render(slice, width, height, 
                            colmap=x@colorMap, 
                            zero.col=zero.col, 

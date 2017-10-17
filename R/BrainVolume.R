@@ -503,6 +503,12 @@ setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN=
 					
 		})
 
+
+fast.expand.grid <- function(seq1,seq2, constant) { 
+  cbind(Var1 = rep.int(seq1, length(seq2)), 
+        Var2 = rep.int(seq2, rep.int(length(seq1),length(seq2))),
+        Var3=constant)
+}
  
 #' @export 
 #' @rdname slice-methods
@@ -515,6 +521,27 @@ setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", alon
                               "3"=x[,,zlevel])
             
             BrainSlice(imslice, dropDim(space(x), along))
+            
+            
+          })
+
+#' @export 
+#' @rdname slice-methods
+setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", along="BrainSpace", 
+                                         orientation="AxisSet3D"),
+          def=function(x, zlevel, along, orientation) {
+            xdim <- dim_of(along, orientation@i)
+            ydim <- dim_of(along, orientation@j)
+            message("zlevel: ", zlevel)
+            message("xdim: ", xdim)
+            message("ydim: ", xdim)
+            vox <- as.matrix(fast.expand.grid(seq(1,xdim), seq(1,ydim), zlevel))
+            
+            gg <- gridToGrid(along, vox)
+            print(range(gg))
+            imslice <- x[gg]
+            
+            BrainSlice(imslice, dropDim(along))
             
             
           })
