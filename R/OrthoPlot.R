@@ -1,26 +1,31 @@
 
+
+
+
 create_overlay <- function(...) {
   
   vlist <- list(...)
   
-  axial_overlay <- do.call(Overlay, lapply(vlist, Layer, axis=3))
-  coronal_overlay <- do.call(Overlay, lapply(vlist, Layer, axis=2))
-  sagittal_overlay <- do.call(Overlay, lapply(vlist, Layer, axis=1))
+  axial_overlay <- do.call(Overlay, lapply(vlist, Layer, view="LPI"))
+  coronal_overlay <- do.call(Overlay, lapply(vlist, Layer, view="LIP"))
+  sagittal_overlay <- do.call(Overlay, lapply(vlist, Layer, view="AIL"))
   
-  gen_el <- function(overlay, axis) {
-    range <- bounds(overlay@uspace)[axis,]
+  gen_el <- function(overlay) {
+    vspace <- overlay@layers[[1]]@view_space
+    range <- bounds(vspace)[3,]
     list(
       overlay=overlay,
       zrange=range,
       start_slice= median(seq(range[1], range[2])),
-      vrange=c(1, dim(overlay@uspace)[axis])
+      vrange=c(1, dim_of(overlay@uspace, vspace@axes@k))
     )
       
   }
+  
   list(
-    axial=gen_el(axial_overlay, 3),
-    coronal=gen_el(coronal_overlay, 2),
-    sagittal=gen_el(sagittal_overlay,1)
+    axial=gen_el(axial_overlay),
+    coronal=gen_el(coronal_overlay),
+    sagittal=gen_el(sagittal_overlay)
   )
 }
 
@@ -70,10 +75,12 @@ ortho_plot <- function(...) {
     
     
     gen_render_plot <- function(view, slider_id, rval) {
+      vspace=view$overlay@layers[[1]]@view_space
+      
       renderPlot({
         ind <- input[[slider_id]]
-        zpos <- indexToAxis(view$overlay@uspace, ind, view$overlay@axis)
-        slice <- renderSlice(view$overlay, zpos, 1,1, units="npc")
+        zpos <- indexToAxis(vspace, ind, 3)
+        slice <- renderSlice(view$overlay, ind, 1,1, units="npc")
         rval(slice)
         grid.draw(slice@grob)
       })

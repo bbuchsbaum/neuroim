@@ -97,9 +97,13 @@ setMethod(f="dropDim", signature=signature(x="BrainSpace", dimnum="numeric"),
             if (ndim(x) > 3) {
               BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=axes(x), trans=trans(x))
             } else {
+              
               tx <- trans(x)
-              tx <- rbind(cbind(tx[Dind,Dind], origin(x)[Dind]), c(rep(0, length(Dind)), 1))
-              BrainSpace(D[Dind], origin=origin(x)[Dind], spacing=spacing(x)[Dind], axes=dropDim(axes(x), dimnum), trans=tx)
+              keep_col <- Dind
+              keep_row <- which(apply(tx[,Dind], 1, function(x) !all(x==0)))
+              tx <- rbind(cbind(tx[keep_row,keep_col], origin(x)[keep_row]), c(rep(0, length(Dind)), 1))
+              
+              BrainSpace(D[keep_row], origin=origin(x)[keep_row], spacing=spacing(x)[keep_row], axes=dropDim(axes(x), dimnum), trans=tx)
             }
             
           })
@@ -137,30 +141,50 @@ setMethod(f="dim", signature=signature(x = "BrainSpace"),
 setMethod(f="ndim", signature=signature(x = "BrainSpace"),
 		def=function(x) length(x@Dim))
 
-#' @export
-#' @rdname union-methods
-setMethod(f="union", signature=signature(x = "BrainSpace", y="BrainSpace"),
-          def=function(x, y) {
-            s1 <- sign(diag(trans(x)))
-            s2 <- sign(diag(trans(y)))
-            if (length(s1) != length(s2) || !all(s1==s2)) {
-              stop("union requires argument with the same dimensionality and axis orientation")
-            }
-            bds1 <- bounds(x)
-            bds2 <- bounds(y)
-            direc <- sign(diag(trans(x))[1:ndim(x)])
-            ubounds <- t(sapply(1:nrow(bds1), function(i) {
-              if (direc[i] < 0) {
-                c(max(bds1[i,1], bds2[i,1]), min(bds1[i,2], bds2[i,2]))
-              } else {
-                c(min(bds1[i,1], bds2[i,1]), max(bds1[i,2], bds2[i,2]))
-              }
-            }))
-            uspacing <- pmin(spacing(x), spacing(y))
-            udim <- pmax(dim(x), dim(y))
-            
-            BrainSpace(udim, spacing=uspacing, origin=ubounds[,1], axes=x@axes)
-          })
+
+setMethod(f="dim_of", signature=signature(x = "BrainSpace", axis="NamedAxis"), 
+            function(x, axis) {
+  dir <- abs(axis@direction)
+  
+  dnum = if(all(abs(x@axes@i@direction) == dir)) {
+    1
+  } else if (all(abs(x@axes@j@direction) == dir)) {
+    2
+  } else if (all(abs(x@axes@k@direction) == dir)) {
+    3
+  } else {
+    stop(paste("cannot find matching axis of: ", axis))
+  }
+  
+  dim(x)[dnum]
+})
+
+# @export
+# @rdname union-methods
+# setMethod(f="union", signature=signature(x = "BrainSpace", y="BrainSpace"),
+#           def=function(x, y) {
+#             s1 <- sign(diag(trans(x)))
+#             s2 <- sign(diag(trans(y)))
+#             if (length(s1) != length(s2) || !all(s1==s2)) {
+#               stop("union requires argument with the same dimensionality and axis orientation")
+#             }
+#             
+#             ### TODO bounds is broken
+#             bds1 <- bounds(x)
+#             bds2 <- bounds(y)
+#             direc <- sign(diag(trans(x))[1:ndim(x)])
+#             ubounds <- t(sapply(1:nrow(bds1), function(i) {
+#               if (direc[i] < 0) {
+#                 c(max(bds1[i,1], bds2[i,1]), min(bds1[i,2], bds2[i,2]))
+#               } else {
+#                 c(min(bds1[i,1], bds2[i,1]), max(bds1[i,2], bds2[i,2]))
+#               }
+#             }))
+#             uspacing <- pmin(spacing(x), spacing(y))
+#             udim <- pmax(dim(x), dim(y))
+#             
+#             BrainSpace(udim, spacing=uspacing, origin=ubounds[,1], axes=x@axes)
+#           })
 
 #' spacing
 #' 
@@ -175,12 +199,14 @@ setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 #' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {
+
 		  c1 <- gridToCoord(x, c(1,1,1))
 		  c2 <- gridToCoord(x, c(dim(x)[1], dim(x)[2], dim(x)[3]))
       #direc <- diag(trans(x))
       #direc <- sign(direc[1:(length(direc)-1)])
 			#mat <- cbind(x@origin, x@origin+(spacing(x)*dim(x)*direc))
-			mat <- cbind(x@origin, x@origin+(spacing(x)*dim(x)))
+			#mat <- cbind(x@origin, x@origin+(spacing(x)*dim(x)))
+		  mat <- cbind(as.vector(c1),as.vector(c2))
 			return(mat)
 		}
 )
@@ -240,8 +266,6 @@ setMethod(f="indexToAxis", signature=signature(x="BrainSpace", index="numeric", 
             vd <- spacing(x)[dimNum]  
             offset <- origin(x)[dimNum]
             ((index - .5) * vd) + offset
-            
-            
           })
 
 
@@ -251,7 +275,7 @@ setMethod(f="indexToAxis", signature=signature(x="BrainSpace", index="numeric", 
 setMethod(f="coordToGrid", signature=signature(x="BrainSpace", coords="matrix"),
           def=function(x, coords) {
             grid = t(inverseTrans(x) %*% t(cbind(coords, rep(1, nrow(coords)))))
-            grid[,1:3]+ 1
+            grid[,1:3] + 1
           })
 
  
@@ -285,6 +309,10 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
           def=function(x, vox) {
             nd <- ndim(x)
             stopifnot(ncol(vox) == nd)
+<<<<<<< HEAD
+=======
+            ## todo permMat doesn't work when reference space is not LPI
+>>>>>>> 23c62f0a577330ce925da185c0b4f041489065a8
             tx <- inverseTrans(x)[1:nd, 1:nd]
             ovox <- vox %*% tx[1:nd, 1:nd]
             offset <- sapply(1:ncol(tx), function(i) {
@@ -293,9 +321,11 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
               } else {
                 0
               }
+
             })
             
             sweep(ovox, 2,offset, "+")
+<<<<<<< HEAD
           })
 
 #' @export 
@@ -315,6 +345,8 @@ setMethod(f="gridToGrid", signature=signature(x="matrix", vox="matrix"),
             })
             
             sweep(ovox, 2,offset, "+")
+=======
+>>>>>>> 23c62f0a577330ce925da185c0b4f041489065a8
           })
 
 
@@ -379,10 +411,11 @@ setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"
             pmat_orig <- permMat(x)
             pmat_new <- permMat(anat)
             
-            pmat_new <- cbind(pmat_new, c(0,0,0))
-            pmat_new <- rbind(pmat_new, c(0,0,0,1))
-            tx <- trans(x) %*% pmat_new
-          
+            #pmat_new <- cbind(pmat_new, c(0,0,0))
+            #pmat_new <- rbind(pmat_new, c(0,0,0,1))
+            #tx <- trans(x) %*% pmat_new
+            tx <- pmat_new %*% trans(x)[1:ndim(x),]
+            tx <- rbind(tx,c(rep(0, ndim(x)),1))
             itx <- zapsmall(MASS::ginv(tx))
             ## from voxel space to new orient
             #tx <- zapsmall(MASS::ginv(itx))
@@ -391,10 +424,10 @@ setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"
             #newdim <- abs(perm %*% dim(x))[,1]
             #newspacing <- abs(perm %*% spacing(x))[,1]
             
-            BrainSpace(dim(x), spacing=spacing(x), axes=x@axes, trans=tx, 
-                       origin=tx[1:(ndim(x)) ,ndim(x)+1])
-       
-          })
+       BrainSpace(dim(x), spacing=spacing(x), axes=x@axes, trans=tx, 
+                          origin=tx[1:(ndim(x)) ,ndim(x)+1])
+
+    })
 
 #' @export
 #' @rdname origin-methods

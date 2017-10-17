@@ -49,6 +49,8 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 #' @rdname ndim-methods
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
+setGeneric(name="dim_of", def=function(x, axis) standardGeneric("dim_of"))
+
 #' Generic function to add a dimension to an object
 #' 
 #' @param x a dimensioned object
@@ -241,17 +243,17 @@ setGeneric(name="axes",  def=function(x) standardGeneric("axes"))
 setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 
 
-#' Compute the union, for example of two \code{BrainSpace} objects
-#' @param x the first element
-#' @param y the second element
-#' @export 
-#' @examples 
-#' bspace1 <- BrainSpace(c(10,10,10), c(2,2,2), origin=c(-25,5,12))
-#' bspace2 <- BrainSpace(c(15, 8,25), c(2,2,2))
-#' union(bspace1, bspace2)
-#' 
-#' @rdname origin-methods
-setGeneric(name="origin", def=function(x) standardGeneric("origin"))
+# Compute the union, for example of two \code{BrainSpace} objects
+# @param x the first element
+# @param y the second element
+# @export 
+# @examples 
+# bspace1 <- BrainSpace(c(10,10,10), c(2,2,2), origin=c(-25,5,12))
+# bspace2 <- BrainSpace(c(15, 8,25), c(2,2,2))
+# union(bspace1, bspace2)
+# 
+# @rdname origin-methods
+#setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 
 
 #' Generic getter to extract image coordinate transformation
