@@ -285,8 +285,6 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
           def=function(x, vox) {
             nd <- ndim(x)
             stopifnot(ncol(vox) == nd)
-            ## todo permMat doesn't work when reference space is not LPI
-            #browser()
             tx <- inverseTrans(x)[1:nd, 1:nd]
             ovox <- vox %*% tx[1:nd, 1:nd]
             offset <- sapply(1:ncol(tx), function(i) {
@@ -298,8 +296,27 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
             })
             
             sweep(ovox, 2,offset, "+")
-            
           })
+
+#' @export 
+#' @rdname gridToGrid-methods
+setMethod(f="gridToGrid", signature=signature(x="matrix", vox="matrix"),
+          def=function(x, vox) {
+            nd <- ncol(x)-1
+            stopifnot(ncol(vox) == nd)
+            tx <- x[1:nd, 1:nd]
+            ovox <- vox %*% tx[1:nd, 1:nd]
+            offset <- sapply(1:ncol(tx), function(i) {
+              if (any(tx[,i] < 0)) {
+                dim(x)[i] + 1
+              } else {
+                0
+              }
+            })
+            
+            sweep(ovox, 2,offset, "+")
+          })
+
 
 
 #' @export 
