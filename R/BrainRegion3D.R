@@ -51,42 +51,6 @@ setMethod(f="as.matrix", signature=signature(x = "ROIVector"), def=function(x) {
 
 
 
-#' Create an instance of class \code{\linkS4class{ROISurface}}
-#' 
-#' @param geometry the parent geometry: an instance of class \code{SurfaceGeometry}
-#' @param indices the parent surface indices
-#' @param data the data values, numeric \code{vector}
-#' @return an instance of class \code{ROISurface}
-#' @rdname ROISurface
-#' @export
-ROISurface <- function(geometry, indices, data) {
-  vert <- vertices(geometry, indices)
-  new("ROISurface", geometry=geometry, data=data, coords=vert, indices=indices)
-}
-
-#' Create an instance of class \code{\linkS4class{ROISurfaceVector}}
-#' 
-#' @param geometry the parent geometry: an instance of class \code{SurfaceGeometry}
-#' @param indices the parent surface indices
-#' @param data the data values, a \code{matrix}
-#' @return an instance of class \code{ROISurfaceVector}
-#' @rdname ROISurfaceVector
-#' @export
-ROISurfaceVector <- function(geometry, indices, data) {
-  vert <- vertices(geometry, indices)
-  new("ROISurfaceVector", geometry=geometry, data=data, coords=vert, indices=indices)
-}
-
-#' convert a \code{ROISurfaceVector} to an augmented matrix
-#' 
-#' @rdname as.matrix-methods
-#' @param x the object
-#' @export 
-setMethod(f="as.matrix", signature=signature(x = "ROISurfaceVector"), def=function(x) {
-  as(x, "matrix")						
-})
-
-
 .makeSquareGrid <- function(bvol, centroid, surround, fixdim=3) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)

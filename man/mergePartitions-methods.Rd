@@ -24,4 +24,3 @@ mergePartitions
 
 merge partititons in a ClusteredBrainVolume
 }
-

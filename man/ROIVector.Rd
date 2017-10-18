@@ -19,4 +19,3 @@ an instance of class \code{ROIVector}
 \description{
 Create an instance of class \code{\linkS4class{ROIVector}}
 }
-

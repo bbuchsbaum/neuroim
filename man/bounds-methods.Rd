@@ -3,8 +3,8 @@
 \docType{methods}
 \name{bounds}
 \alias{bounds}
-\alias{bounds,BrainData-method}
 \alias{bounds,BrainSpace-method}
+\alias{bounds,BrainData-method}
 \title{Generic function to extract the spatial bounds (origin + dim * spacing) of an image
 param x the object}
 \usage{
@@ -32,4 +32,3 @@ b <- bounds(bspace)
 nrow(b) == ndim(bspace)
 ncol(b) == 2
 }
-

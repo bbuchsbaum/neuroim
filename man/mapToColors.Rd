@@ -5,18 +5,17 @@
 \title{mapToColors}
 \usage{
 mapToColors(imslice, col = heat.colors(128, alpha = 1),
-  zero.col = "#00000000", alpha = 1)
+  zero_col = "#00000000", alpha = 1)
 }
 \arguments{
 \item{imslice}{vector or matrix of intensity values}
 
 \item{col}{a color map}
 
-\item{zero.col}{the background color.}
+\item{zero_col}{the background color.}
 
 \item{alpha}{transparency multiplier}
 }
 \description{
 map an matrix of intensity values to a matrix of color values.
 }
-

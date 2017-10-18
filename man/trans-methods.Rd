@@ -3,10 +3,10 @@
 \docType{methods}
 \name{trans}
 \alias{trans}
-\alias{trans,BrainData-method}
 \alias{trans,BrainMetaInfo-method}
-\alias{trans,BrainSpace-method}
 \alias{trans,NIfTIMetaInfo-method}
+\alias{trans,BrainSpace-method}
+\alias{trans,BrainData-method}
 \title{Generic getter to extract image coordinate transformation}
 \usage{
 trans(x)
@@ -36,4 +36,3 @@ bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 trans(bspace)
 all.equal(dim(trans(bspace)), c(4,4))
 }
-

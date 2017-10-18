@@ -23,4 +23,3 @@ Generic function to read a sequence of elements from an input source
 
 readElements
 }
-

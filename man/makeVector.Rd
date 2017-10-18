@@ -21,4 +21,3 @@ makeVector(data, refdata, source = NULL, label = "")
 \description{
 Construct a \code{\linkS4class{BrainVector}} instance, using default (dense) implementation
 }
-

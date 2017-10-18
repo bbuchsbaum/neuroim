@@ -15,4 +15,3 @@ containing valid searchlight voxel set.}
 \description{
 Create an spherical random searchlight iterator
 }
-

@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVector.R
 \docType{class}
 \name{BrainBucketSource-class}
-\alias{BrainBucketSource}
 \alias{BrainBucketSource-class}
+\alias{BrainBucketSource}
 \title{BrainBucketSource}
 \usage{
 BrainBucketSource(fileName, pattern = NULL, indices = NULL)

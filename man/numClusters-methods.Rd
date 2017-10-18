@@ -18,4 +18,3 @@ numClusters
 
 get number of clusters in a ClusteredBrainVolume
 }
-

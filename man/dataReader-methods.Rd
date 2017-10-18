@@ -3,8 +3,8 @@
 \docType{methods}
 \name{dataReader}
 \alias{dataReader}
-\alias{dataReader,AFNIMetaInfo-method}
 \alias{dataReader,NIfTIMetaInfo-method}
+\alias{dataReader,AFNIMetaInfo-method}
 \title{Generic function to create data reader}
 \usage{
 dataReader(x, offset)
@@ -21,4 +21,3 @@ dataReader(x, offset)
 \description{
 Generic function to create data reader
 }
-

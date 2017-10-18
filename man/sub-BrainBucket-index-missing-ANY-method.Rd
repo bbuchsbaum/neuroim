@@ -15,4 +15,3 @@
 \description{
 extract labeled volume from \code{BrainBucket}
 }
-

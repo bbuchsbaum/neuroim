@@ -16,4 +16,3 @@ BootstrapSearchlight(mask, radius = 8, iter = 100)
 \description{
 searchlight centers are sampled without replacement, but the same surround voxel can belong to multiple searchlight samples.
 }
-

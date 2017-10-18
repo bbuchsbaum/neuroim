@@ -22,4 +22,3 @@ dat <- array(rnorm(64*64), c(64,64))
 bslice <- BrainSlice(dat,bspace)
 print(bslice) 
 }
-

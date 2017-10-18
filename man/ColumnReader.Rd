@@ -16,4 +16,3 @@ ColumnReader(nrow, ncol, reader)
 \description{
 Constructor for  \code{\linkS4class{ColumnReader}} class
 }
-

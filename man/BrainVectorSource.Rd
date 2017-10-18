@@ -22,4 +22,3 @@ Construct a \code{\linkS4class{BrainVectorSource}} object
 \details{
 If a \code{mask} is supplied then it should be a \code{\linkS4class{LogicalBrainVolume}} or \code{\linkS4class{BrainVolume}} instance. If the latter, then the mask will be defined by nonzero elements of the volume.
 }
-

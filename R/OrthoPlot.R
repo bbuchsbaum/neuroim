@@ -6,18 +6,18 @@ create_overlay <- function(...) {
   
   vlist <- list(...)
   
-  axial_overlay <- do.call(Overlay, lapply(vlist, Layer, view="LPI"))
-  coronal_overlay <- do.call(Overlay, lapply(vlist, Layer, view="LIP"))
-  sagittal_overlay <- do.call(Overlay, lapply(vlist, Layer, view="AIL"))
+  axial_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="LPI"))
+  coronal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="LIP"))
+  sagittal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="AIL"))
   
   gen_el <- function(overlay) {
-    vspace <- overlay@layers[[1]]@view_space
+    vspace <- overlay$view_space
     range <- bounds(vspace)[3,]
     list(
       overlay=overlay,
       zrange=range,
       start_slice= median(seq(range[1], range[2])),
-      vrange=c(1, dim_of(overlay@uspace, vspace@axes@k))
+      vrange=c(1, overlay$zdim())
     )
       
   }
@@ -42,6 +42,21 @@ ortho_plot <- function(...) {
                     median(round(c(view$vrange[1], 
                                    view$vrange[2])))), width=4, 
         solidHeader=TRUE, status="primary", background="black", align="center")
+
+  }
+  
+  gen_background_panel <- function() {
+    menuItem("Background",icon=icon("adjust"),
+             sliderInput("background_range", "Intensity Range", min=0, max=200, value=c(-100,100)),
+             sliderInput("background_threshold", "Threshold", min=0, max=200, value=c(-100,100)))
+                 
+  }
+  
+  gen_foreground_panel <- function() {
+    menuItem("Foreground",icon=icon("adjust"),
+             sliderInput("foreground_range", "Intensity Range", min=0, max=200, value=c(-100,100)),
+             sliderInput("foreground_threshold", "Threshold", min=0, max=200, value=c(-100,100)),
+             plotOutput("foreground_colorbar", width="100%", height=50))
   }
    
   body <- dashboardBody(
@@ -52,11 +67,14 @@ ortho_plot <- function(...) {
     )
   )
 
-  
+
   # We'll save it in a variable `ui` so that we can preview it in the console
-  ui <- dashboardPage(
-    dashboardHeader(title = "Column layout"),
-    dashboardSidebar(),
+  ui <- dashboardPage(title = "Orthogonal Slice View",
+    dashboardHeader(),
+    dashboardSidebar(
+      sidebarMenu(
+        selectInput("layer_selection", "Overlay Image: ", overlay_set$axial$overlay$names(), selected=overlay_set$axial$overlay$names()[1])
+      )),
     body
   )
   
@@ -70,18 +88,26 @@ ortho_plot <- function(...) {
     observeEvent(input$plot_click, {
       message("click x", input$plot_click$x)
       message("click y", input$plot_click$y)
-      print(mean(axial_slice()@slices[[1]]))
+      #print(mean(axial_slice()@slices[[1]]))
     })
     
     
     gen_render_plot <- function(view, slider_id, rval, plot_id) {
-      vspace=view$overlay@layers[[1]]@view_space
+      vspace=view$overlay$view_space
       
       renderPlot({
+        width <- session$clientData[[paste0("output_", plot_id, "_width")]]
+        height <- session$clientData[[paste0("output_", plot_id, "_height")]]
+        
+        print(width)
+        print(height)
         ind <- input[[slider_id]]
-        zpos <- indexToAxis(vspace, ind, 3)
-        slice <- renderSlice(view$overlay, ind, 1,1, units="npc")
+        print(paste("index: ", ind))
+        zpos <- view$overlay$layers[[1]]$get_zpos(ind)
+        print(paste("zpos: ", zpos))
+        slice <- view$overlay$render_slice(zpos, width, height)
         rval(slice)
+
         grid.draw(slice@grob)
       }, height = function() {
           if (plot_id == "coronal_plot") {
@@ -90,14 +116,22 @@ ortho_plot <- function(...) {
             session$clientData[[paste0("output_", plot_id, "_width")]]
           }
           
-          #print(input)
-          #256
+  
+        slice$draw()
       })
     }
       
     output$axial_plot <- gen_render_plot(overlay_set$axial, "ax_slider", axial_slice, "axial_plot")
     output$coronal_plot <- gen_render_plot(overlay_set$coronal, "cor_slider", coronal_slice, "coronal_plot")
     output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice, "sagittal_plot")
+
+    
+    output$foreground_colorbar <- renderPlot({
+      width <- session$clientData[[paste0("output_foreground_colorbar_width")]]
+      height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
+      color_bar(rainbow(25), width, height)
+    })
+
   }
   
   # Preview the UI in the console
@@ -105,14 +139,25 @@ ortho_plot <- function(...) {
 }
 
 # Function to plot color bar
-# color.bar <- function(lut, min, max=-min, nticks=11, ticks=seq(min, max, len=nticks), title='') {
-#   scale = (length(lut)-1)/(max-min)
-#   
-#   dev.new(width=1.75, height=5)
-#   plot(c(0,10), c(min,max), type='n', bty='n', xaxt='n', xlab='', yaxt='n', ylab='', main=title)
-#   axis(2, ticks, las=1)
-#   for (i in 1:(length(lut)-1)) {
-#     y = (i-1)/scale + min
-#     rect(0,y,10,y+1/scale, col=lut[i], border=NA)
-#   }
-# }
+color_bar <- function(lut, width=100, height=20) {
+  print("color bar")
+  print(width)
+  print(height)
+  
+  #outfile=tempfile(fileext='.png')
+  #png(outfile, width=width, height=height)
+  grid.newpage()
+  grid.rect(x=0, y=0, width=unit(width, "points"), height=unit(height, "points"), gp=gpar(fill="black"))
+  
+  strip_w <- width/(length(lut)-1)
+  
+  for (i in 1:length(lut)) {
+     grid.rect(x= unit((i-1)*strip_w, "points"), y=unit(.5,"npc"), width=unit(strip_w, "points"), height=unit(1, "npc"), gp=gpar(fill=lut[i]))
+  }
+  
+  #dev.off()
+  
+  #list(src=outfile, alt="color bar")
+  
+}
+

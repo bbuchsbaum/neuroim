@@ -17,4 +17,3 @@ an \code{iter} class
 \description{
 Create a clustered Searchlight iterator
 }
-

@@ -15,4 +15,3 @@
 \description{
 print a \code{AxisSet3D} instance
 }
-

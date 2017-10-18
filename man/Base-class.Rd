@@ -7,4 +7,3 @@
 \description{
 Generic S4 Base class
 }
-

@@ -16,4 +16,3 @@ sliceData(vol, slice, axis = 3)
 \description{
 extract a 2D slice from a \code{BrainVolume} instance.
 }
-

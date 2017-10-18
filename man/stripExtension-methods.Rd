@@ -21,4 +21,3 @@ fileName without extension
 \description{
 Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
 }
-

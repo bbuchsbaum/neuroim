@@ -19,4 +19,3 @@ Convert BrainVolume to \code{linkS4class{LogicalBrainVolume}}
 \details{
 the image values will be converted to using R base function \code{as.logical} and wrapped in \code{LogicalBrainVolume}
 }
-

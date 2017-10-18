@@ -515,6 +515,9 @@ fast.expand.grid <- function(seq1,seq2, constant) {
 setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", along="numeric", 
                                          orientation="missing"),
           def=function(x, zlevel, along, orientation) {
+            stopifnot(along >= 1 && along <=3)
+            stopifnot(zlevel >= 1 && zlevel <= dim(x)[along])
+            
             imslice <- switch(as.character(along),
                               "1"=x[zlevel,,],
                               "2"=x[,zlevel,],
@@ -530,16 +533,20 @@ setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", alon
 setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", along="BrainSpace", 
                                          orientation="AxisSet3D"),
           def=function(x, zlevel, along, orientation) {
-          
+            
+
             xdim <- dim_of(along, orientation@i)
             ydim <- dim_of(along, orientation@j)
-            message("zlevel: ", zlevel)
-            message("xdim: ", xdim)
-            message("ydim: ", ydim)
-            vox <- as.matrix(expand.grid(seq(1,xdim), seq(1,ydim), zlevel))
+            zdim <- dim_of(along, orientation@k)
+            
+            #browser()
+            
+            stopifnot(zlevel >= 1 && zlevel <= zdim)
+            
+            vox <- as.matrix(fast.expand.grid(seq(1,xdim), seq(1,ydim), zlevel))
             
             gg <- gridToGrid(along, vox)
-            print(range(gg))
+           
             imslice <- x[gg]
             
             BrainSlice(matrix(imslice, xdim,ydim), dropDim(along,3))

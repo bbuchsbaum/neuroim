@@ -21,4 +21,3 @@ BinaryReader(input, byteOffset, dataType, bytesPerElement,
 \description{
 Constructor for  \code{\linkS4class{BinaryReader}} class
 }
-

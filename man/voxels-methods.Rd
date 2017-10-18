@@ -20,4 +20,3 @@ voxels(x, ...)
 \description{
 extract voxel coordinates
 }
-

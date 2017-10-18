@@ -7,4 +7,3 @@
 \description{
 This is a base class to represent meta information
 }
-

@@ -21,4 +21,3 @@ a \code{matrix} consisting of the requested column vectors
 \description{
 Generic function to read a set of column vector from an input source (e.g. \code{ColumnReader})
 }
-

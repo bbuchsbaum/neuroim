@@ -12,4 +12,3 @@ data(MNI_SPACE_1MM)
 This is a \code{BrainSpace} object encoding the geometry of the MNI_1MM template.
 }
 \keyword{datasets}
-

@@ -32,4 +32,3 @@ Creates a Spherical ROI based on a Centroid.
  cube1 <- RegionSphere(sp1, c(5,5,5), 3.5, fill=6)
  all(cube1@data == 6)
 }
-

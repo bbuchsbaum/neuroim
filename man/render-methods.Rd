@@ -9,7 +9,7 @@
 render(x, width, height, colmap, ...)
 
 \S4method{render}{BrainSlice,numeric,numeric,character}(x, width, height,
-  colmap, zero.col = "#000000FF", alpha = 1, units = "mm")
+  colmap, zero_col = "#000000FF", alpha = 1, units = "points")
 }
 \arguments{
 \item{x}{the object, e.g. an instance of type \code{BrainSlice}}
@@ -22,13 +22,12 @@ render(x, width, height, colmap, ...)
 
 \item{...}{additional arguments}
 
-\item{zero.col}{color used when background intensity is 0.}
+\item{zero_col}{color used when background intensity is 0.}
 
 \item{alpha}{transparency multiplier}
 
-\item{units}{grid unit type, e.g. "mm", "inches"}
+\item{units}{grid unit type, e.g. "points", "mm", "inches", "npc"}
 }
 \description{
 Render an image to create a drawable image.
 }
-

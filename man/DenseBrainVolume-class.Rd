@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVolume.R
 \docType{class}
 \name{DenseBrainVolume-class}
-\alias{DenseBrainVolume}
 \alias{DenseBrainVolume-class}
+\alias{DenseBrainVolume}
 \title{DenseBrainVolume}
 \usage{
 DenseBrainVolume(data, space, source = NULL, label = "", indices = NULL)
@@ -27,4 +27,3 @@ Three-dimensional brain image, backed by an \code{array}
 
 Construct a \code{\linkS4class{DenseBrainVolume}} instance
 }
-

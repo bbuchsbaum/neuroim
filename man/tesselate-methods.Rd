@@ -27,4 +27,3 @@ tesselate
 
 tesselate a LogicalBrainVolume into K spatial disjoint components using \code{kmeans} clustering.
 }
-

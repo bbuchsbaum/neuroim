@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/IndexLookupVolume.R
 \docType{class}
 \name{IndexLookupVolume-class}
-\alias{IndexLookupVolume}
 \alias{IndexLookupVolume-class}
+\alias{IndexLookupVolume}
 \title{IndexLookupVolume}
 \usage{
 IndexLookupVolume(space, indices)
@@ -19,4 +19,3 @@ Currently used in the \code{\linkS4class{SparseBrainVector}} class.
 
 IndexLookupVolume
 }
-

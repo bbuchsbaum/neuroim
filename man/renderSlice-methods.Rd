@@ -3,17 +3,17 @@
 \docType{methods}
 \name{renderSlice}
 \alias{renderSlice}
-\alias{renderSlice,Layer,numeric,numeric,numeric,missing-method}
 \alias{renderSlice,Overlay,numeric,numeric,numeric,missing-method}
+\alias{renderSlice,Layer,numeric,numeric,numeric,missing-method}
 \title{Render a slice at z coordinate}
 \usage{
 renderSlice(x, zpos, width, height, colmap, ...)
 
 \S4method{renderSlice}{Overlay,numeric,numeric,numeric,missing}(x, zpos, width,
-  height, zero.col = "#000000FF", units = "mm")
+  height, zero_col = "#000000FF", units = "points")
 
 \S4method{renderSlice}{Layer,numeric,numeric,numeric,missing}(x, zpos, width,
-  height, colmap, zero.col = "#000000FF", units = "mm")
+  height, colmap, zero_col = "#000000FF", units = "points")
 }
 \arguments{
 \item{x}{the object, e.g. an instance of type \code{Layer} or \code{Overlay}}
@@ -28,11 +28,10 @@ renderSlice(x, zpos, width, height, colmap, ...)
 
 \item{...}{additional arguments}
 
-\item{zero.col}{color used when background intensity is 0.}
+\item{zero_col}{color used when background intensity is 0.}
 
 \item{units}{grid unit type, e.g. "mm", "inches"}
 }
 \description{
 Render a slice at z coordinate
 }
-

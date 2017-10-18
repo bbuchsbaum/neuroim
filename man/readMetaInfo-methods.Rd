@@ -3,8 +3,8 @@
 \docType{methods}
 \name{readMetaInfo}
 \alias{readMetaInfo}
-\alias{readMetaInfo,AFNIFileDescriptor-method}
 \alias{readMetaInfo,NIfTIFileDescriptor-method}
+\alias{readMetaInfo,AFNIFileDescriptor-method}
 \title{Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.}
 \usage{
 readMetaInfo(x, fileName)
@@ -21,4 +21,3 @@ readMetaInfo(x, fileName)
 \description{
 Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
 }
-

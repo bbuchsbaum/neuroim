@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVector.R
 \docType{class}
 \name{DenseBrainVector-class}
-\alias{DenseBrainVector}
 \alias{DenseBrainVector-class}
+\alias{DenseBrainVector}
 \title{DenseBrainVector}
 \usage{
 DenseBrainVector(data, space, source = NULL, label = "")
@@ -25,4 +25,3 @@ Four-dimensional brain image, backed by an array
 
 constructor function for class \code{\linkS4class{DenseBrainVector}}
 }
-

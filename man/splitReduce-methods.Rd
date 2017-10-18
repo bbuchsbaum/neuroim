@@ -3,12 +3,12 @@
 \docType{methods}
 \name{splitReduce}
 \alias{splitReduce}
-\alias{splitReduce,BrainVector,factor,function-method}
-\alias{splitReduce,BrainVector,factor,missing-method}
-\alias{splitReduce,matrix,factor,function-method}
-\alias{splitReduce,matrix,factor,missing-method}
 \alias{splitReduce,matrix,integer,function-method}
 \alias{splitReduce,matrix,integer,missing-method}
+\alias{splitReduce,matrix,factor,missing-method}
+\alias{splitReduce,matrix,factor,function-method}
+\alias{splitReduce,BrainVector,factor,function-method}
+\alias{splitReduce,BrainVector,factor,missing-method}
 \title{Generic function to summarize subsets of an object by first splitting by row and then "reducing" by a summary \code{function}}
 \usage{
 splitReduce(x, fac, FUN)
@@ -67,4 +67,3 @@ all.equal(row.names(ms), levels(fac))
 all.equal(ms,ms2)
 
 }
-

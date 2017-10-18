@@ -12,4 +12,3 @@ readAFNIHeader(fileName)
 \description{
 readAFNIHeader
 }
-

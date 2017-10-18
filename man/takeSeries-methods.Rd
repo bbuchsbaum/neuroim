@@ -16,4 +16,3 @@ takeSeries(x, indices, ...)
 \description{
 Generic function to extract a set of series from a 4D image
 }
-

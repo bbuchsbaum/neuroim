@@ -13,4 +13,3 @@
 \description{
 show an \code{AxisSet4D}
 }
-

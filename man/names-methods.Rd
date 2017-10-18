@@ -2,8 +2,8 @@
 % Please edit documentation in R/BrainVector.R
 \docType{methods}
 \name{names,BrainBucketSource-method}
-\alias{names,BrainBucket-method}
 \alias{names,BrainBucketSource-method}
+\alias{names,BrainBucket-method}
 \title{names}
 \usage{
 \S4method{names}{BrainBucketSource}(x)
@@ -16,4 +16,3 @@
 \description{
 names
 }
-

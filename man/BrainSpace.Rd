@@ -35,4 +35,3 @@ origin(bspace)
 axes(bspace)
 trans(bspace)
 }
-

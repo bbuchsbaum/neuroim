@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVolume.R
 \docType{class}
 \name{SparseBrainVolume-class}
-\alias{SparseBrainVolume}
 \alias{SparseBrainVolume-class}
+\alias{SparseBrainVolume}
 \title{SparseBrainVolume}
 \usage{
 SparseBrainVolume(data, space, indices = NULL, source = NULL, label = "")
@@ -35,6 +35,7 @@ Image data is backed by \code{Matrix::sparseVector}.
 \describe{
 \item{\code{data}}{a \code{sparseVector} instance}
 }}
+
 \examples{
 data <- 1:10
 indices <- seq(1,1000, length.out=10)
@@ -46,4 +47,3 @@ sum(sparsevol) == sum(densevol)
 
 
 }
-

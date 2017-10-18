@@ -13,4 +13,3 @@
 \description{
 dim of \code{BrainData} object
 }
-

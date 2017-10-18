@@ -2,8 +2,8 @@
 % Please edit documentation in R/SparseBrainVector.R, R/BrainVector.R
 \docType{methods}
 \name{as.list,SparseBrainVector-method}
-\alias{as.list,BrainVector-method}
 \alias{as.list,SparseBrainVector-method}
+\alias{as.list,BrainVector-method}
 \title{as.list}
 \usage{
 \S4method{as.list}{SparseBrainVector}(x)
@@ -18,4 +18,3 @@ convert SparseBrainVector to list of \code{\linkS4class{DenseBrainVolume}}
 
 convert a \code{BrainVector} to \code{list} of volumes.
 }
-

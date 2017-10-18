@@ -20,4 +20,3 @@ clusterCenters(x, features, FUN)
 \description{
 clusterCenters
 }
-
