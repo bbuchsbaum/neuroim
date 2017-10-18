@@ -7,4 +7,3 @@
 \description{
 Two-dimensional brain image
 }
-

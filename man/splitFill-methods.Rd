@@ -13,7 +13,7 @@ splitFill(x, fac, FUN)
 \arguments{
 \item{x}{the object to split}
 
-\item{fac}{the factor to split by}
+\item{fac}{the \code{factor} to split by}
 
 \item{FUN}{the function to summarize the the sets}
 }
@@ -39,4 +39,3 @@ length(unique(as.vector(ovol.mean))) == 10
 ## transform by reversing vector -- FUN returns a vector.
 ovol2 <- splitFill(vol, fac, rev)
 }
-

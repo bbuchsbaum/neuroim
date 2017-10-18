@@ -14,4 +14,3 @@ matchAnatomy2D(axis1, axis2)
 \description{
 given two named axes return AxisSet2D singleton
 }
-

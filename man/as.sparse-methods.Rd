@@ -41,4 +41,3 @@ svol <- as.sparse(bvol, indmask)
 mask <- LogicalBrainVolume(runif(length(indmask)), space=space(bvol), indices=indmask)
 sum(mask) == 100
 }
-

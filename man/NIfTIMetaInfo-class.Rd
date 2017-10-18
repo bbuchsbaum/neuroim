@@ -17,4 +17,3 @@ an instance of class \code{\linkS4class{NIfTIMetaInfo}}
 \description{
 Constructor for \code{\linkS4class{NIfTIMetaInfo}} class
 }
-

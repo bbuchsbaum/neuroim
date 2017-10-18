@@ -13,4 +13,3 @@
 \description{
 show a \code{BrainVectorSource}
 }
-

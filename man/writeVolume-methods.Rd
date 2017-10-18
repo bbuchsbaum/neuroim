@@ -3,10 +3,10 @@
 \docType{methods}
 \name{writeVolume}
 \alias{writeVolume}
-\alias{writeVolume,BrainVolume,character,character,missing-method}
-\alias{writeVolume,BrainVolume,character,missing,character-method}
 \alias{writeVolume,BrainVolume,character,missing,missing-method}
 \alias{writeVolume,ClusteredBrainVolume,character,missing,missing-method}
+\alias{writeVolume,BrainVolume,character,character,missing-method}
+\alias{writeVolume,BrainVolume,character,missing,character-method}
 \title{Generic function to write a 3D image volume to disk}
 \usage{
 writeVolume(x, fileName, format, dataType)
@@ -52,4 +52,3 @@ writeVolume(bvol, "out.nii")
 writeVolume(bvol, "out.nii.gz")
 }
 }
-

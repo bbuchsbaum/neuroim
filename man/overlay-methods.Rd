@@ -2,10 +2,10 @@
 % Please edit documentation in R/AllGeneric.R, R/Display.R
 \docType{methods}
 \name{overlay}
-\alias{+,Layer,Layer-method}
-\alias{+,Overlay,Layer-method}
 \alias{overlay}
 \alias{overlay,Layer,Layer-method}
+\alias{+,Overlay,Layer-method}
+\alias{+,Layer,Layer-method}
 \title{overlay two objects}
 \usage{
 overlay(x, y, ...)
@@ -26,10 +26,13 @@ overlay(x, y, ...)
 \item{e1}{the left operand}
 
 \item{e2}{the right operand}
+
+\item{x}{the x layer}
+
+\item{y}{the y layer}
 }
 \description{
 overlay two objects
 
 overlay
 }
-

@@ -16,4 +16,3 @@ patchSet(x, dims, mask, ...)
 \description{
 patchSet
 }
-

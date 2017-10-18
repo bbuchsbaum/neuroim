@@ -17,4 +17,3 @@ an instance of class \code{\linkS4class{AFNIMetaInfo}}
 \description{
 Constructor for \code{\linkS4class{AFNIMetaInfo}} class
 }
-

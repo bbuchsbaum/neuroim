@@ -27,4 +27,3 @@ imageGrid(layer, gridDim = c(3, 3), zstart, zend, panelSize = 3,
 \description{
 Display a set of images slices in a 2D montage
 }
-

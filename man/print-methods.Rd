@@ -14,4 +14,3 @@ print(x, ...)
 \description{
 Generic function to print an object
 }
-

@@ -28,4 +28,3 @@ spacing
 bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 all.equal(spacing(bspace), c(2,2,2))
 }
-

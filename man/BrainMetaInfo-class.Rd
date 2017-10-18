@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainMetaInfo.R
 \docType{class}
 \name{BrainMetaInfo-class}
-\alias{BrainMetaInfo}
 \alias{BrainMetaInfo-class}
+\alias{BrainMetaInfo}
 \title{BrainMetaInfo
 	
 This class contains meta information from an image}

@@ -16,7 +16,7 @@ This class represents the geometry of a brain image
 
 \item{\code{spacing}}{the dimensions (in mm) of the grid units (voxels)}
 
-\item{\code{axes}}{the set of named spatial axes}
+\item{\code{axes}}{the set of named spatial axes in the untransformed native grid space.}
 
 \item{\code{trans}}{an affine transformation matrix that moves from grid -> real world coordinates}
 

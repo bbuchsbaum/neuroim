@@ -9,4 +9,3 @@ Base class for image representing 3D volumetric data.}
 BrainVolume
 Base class for image representing 3D volumetric data.
 }
-

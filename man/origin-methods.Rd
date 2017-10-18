@@ -3,8 +3,8 @@
 \docType{methods}
 \name{origin}
 \alias{origin}
-\alias{origin,BrainData-method}
 \alias{origin,BrainSpace-method}
+\alias{origin,BrainData-method}
 \title{Generic getter to extract image origin}
 \usage{
 origin(x)
@@ -24,4 +24,3 @@ bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 origin(bspace)
 
 }
-

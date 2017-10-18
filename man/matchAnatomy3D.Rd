@@ -16,4 +16,3 @@ matchAnatomy3D(axis1, axis2, axis3)
 \description{
 given three named axes return AxisSet3D singleton
 }
-

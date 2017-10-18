@@ -3,12 +3,16 @@
 \docType{methods}
 \name{slice}
 \alias{slice}
-\alias{slice,BrainVolume,numeric,numeric,character-method}
+\alias{slice,BrainVolume,numeric,numeric,missing-method}
+\alias{slice,BrainVolume,numeric,BrainSpace,AxisSet3D-method}
 \title{Extract a 2D slice from an image volume}
 \usage{
 slice(x, zlevel, along, orientation, ...)
 
-\S4method{slice}{BrainVolume,numeric,numeric,character}(x, zlevel, along,
+\S4method{slice}{BrainVolume,numeric,numeric,missing}(x, zlevel, along,
+  orientation)
+
+\S4method{slice}{BrainVolume,numeric,BrainSpace,AxisSet3D}(x, zlevel, along,
   orientation)
 }
 \arguments{
@@ -25,4 +29,3 @@ slice(x, zlevel, along, orientation, ...)
 \description{
 Extract a 2D slice from an image volume
 }
-

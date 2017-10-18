@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVector.R
 \docType{class}
 \name{BrainVector-class}
-\alias{BrainVector}
 \alias{BrainVector-class}
+\alias{BrainVector}
 \title{BrainVector}
 \usage{
 BrainVector(data, space = NULL, mask = NULL, source = NULL, label = "")
@@ -30,4 +30,3 @@ Four-dimensional brain image
 
 constructor function for virtual class \code{\linkS4class{BrainVector}}
 }
-

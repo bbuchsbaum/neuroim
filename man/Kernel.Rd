@@ -2,7 +2,7 @@
 % Please edit documentation in R/BrainRegion3D.R
 \name{Kernel}
 \alias{Kernel}
-\title{Create a Kernel object}
+\title{Create a Kernel object from a function of distance from kernel center}
 \usage{
 Kernel(kerndim, vdim, FUN = dnorm, ...)
 }
@@ -16,6 +16,5 @@ Kernel(kerndim, vdim, FUN = dnorm, ...)
 \item{...}{additional parameters to the kernel FUN}
 }
 \description{
-Create a Kernel object
+Create a Kernel object from a function of distance from kernel center
 }
-

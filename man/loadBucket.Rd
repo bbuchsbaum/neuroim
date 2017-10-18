@@ -16,4 +16,3 @@ loadBucket(fileName, pattern = NULL, indices = NULL)
 \description{
 load a BrainBucket object from file
 }
-

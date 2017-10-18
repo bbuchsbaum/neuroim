@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVolume.R
 \docType{class}
 \name{BrainVolumeSource-class}
-\alias{BrainVolumeSource}
 \alias{BrainVolumeSource-class}
+\alias{BrainVolumeSource}
 \title{BrainVolumeSource
 		
 A class is used to produce a \code{\linkS4class{BrainVolume}} instance}

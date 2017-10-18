@@ -2,8 +2,8 @@
 % Please edit documentation in R/BrainRegion3D.R
 \docType{methods}
 \name{[,ROIVolume,numeric,missing,ANY-method}
-\alias{[,ROIVolume,logical,missing,ANY-method}
 \alias{[,ROIVolume,numeric,missing,ANY-method}
+\alias{[,ROIVolume,logical,missing,ANY-method}
 \title{subset an \code{ROIVolume}}
 \usage{
 \S4method{[}{ROIVolume,numeric,missing,ANY}(x, i, j, drop)
@@ -22,4 +22,3 @@
 \description{
 subset an \code{ROIVolume}
 }
-

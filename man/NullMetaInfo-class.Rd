@@ -7,4 +7,3 @@
 \description{
 This is class is used to denote the absense of meta information
 }
-

@@ -29,4 +29,3 @@ Find connected components
 
 find connected components in BrainVolume
 }
-

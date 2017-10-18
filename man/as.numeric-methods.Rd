@@ -13,4 +13,3 @@
 \description{
 Convert SparseBrainVolume to numeric
 }
-

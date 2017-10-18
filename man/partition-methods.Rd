@@ -27,4 +27,3 @@ partition
 
 partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
 }
-

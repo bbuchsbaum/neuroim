@@ -3,8 +3,8 @@
 \docType{methods}
 \name{inverseTrans}
 \alias{inverseTrans}
-\alias{inverseTrans,BrainData-method}
 \alias{inverseTrans,BrainSpace-method}
+\alias{inverseTrans,BrainData-method}
 \title{Generic getter to extract inverse image coordinate transformation}
 \usage{
 inverseTrans(x)
@@ -24,4 +24,3 @@ bspace <- BrainSpace(c(10,10,10), c(2,2,2))
 itrans <- inverseTrans(bspace)
 identical(trans(bspace) \%*\% inverseTrans(bspace), diag(4))
 }
-

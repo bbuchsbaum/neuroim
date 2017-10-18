@@ -33,4 +33,3 @@ Create a square region of interest where the z-dimension is fixed at one voxel c
  ## a 3 X 3 X 1 grid
  nrow(vox) == 9
 }
-

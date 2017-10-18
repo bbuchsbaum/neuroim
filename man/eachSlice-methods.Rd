@@ -3,8 +3,8 @@
 \docType{methods}
 \name{eachSlice}
 \alias{eachSlice}
-\alias{eachSlice,BrainVolume,function,logical-method}
 \alias{eachSlice,BrainVolume,function,missing-method}
+\alias{eachSlice,BrainVolume,function,logical-method}
 \title{Generic functions to apply a function to each (2D) slice of an image}
 \usage{
 eachSlice(x, FUN, withIndex, ...)
@@ -25,4 +25,3 @@ eachSlice(x, FUN, withIndex, ...)
 \description{
 Generic functions to apply a function to each (2D) slice of an image
 }
-

@@ -29,4 +29,3 @@ dat <- array(rnorm(64*64*64), c(64,64,64))
 bvol <- BrainVolume(dat,bspace, label="test")
 print(bvol) 
 }
-

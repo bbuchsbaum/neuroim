@@ -4,9 +4,9 @@
 \name{scaleSeries}
 \alias{scaleSeries}
 \alias{scaleSeries,BrainVector,logical,logical-method}
-\alias{scaleSeries,BrainVector,logical,missing-method}
 \alias{scaleSeries,BrainVector,missing,logical-method}
 \alias{scaleSeries,BrainVector,missing,missing-method}
+\alias{scaleSeries,BrainVector,logical,missing-method}
 \title{Generic functions to scale (center and/or normalize by standard deviation) each series of a 4D image
 That is, if the 4th dimension is 'time' each series is a 1D time series.}
 \usage{
@@ -35,4 +35,3 @@ That is, if the 4th dimension is 'time' each series is a 1D time series.
 bvec <- BrainVector(array(rnorm(24*24*24*24), c(24,24,24,24)), BrainSpace(c(24,24,24,24), c(1,1,1)))
 res <- scaleSeries(bvec, TRUE, TRUE)
 }
-

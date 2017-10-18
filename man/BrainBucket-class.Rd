@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVector.R
 \docType{class}
 \name{BrainBucket-class}
-\alias{BrainBucket}
 \alias{BrainBucket-class}
+\alias{BrainBucket}
 \title{BrainBucket}
 \usage{
 BrainBucket(volumeList)
@@ -28,6 +28,7 @@ Constructor function for \code{\linkS4class{BrainBucket}} class
 
 \item{\code{data}}{a list of \code{\linkS4class{BrainVolume}} instances with names corresponding to volume labels}
 }}
+
 \examples{
 vol1 <- BrainVolume(rnorm(24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
 vol2 <- BrainVolume(rnorm(24*24*24), BrainSpace(c(24,24,24), c(1,1,1)))
@@ -37,4 +38,3 @@ names(vlist) <- paste0("V", 1:3)
 bucket <- BrainBucket(vlist)
 all.equal(dim(bucket[[1]]), dim(vol1))
 }
-

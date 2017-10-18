@@ -23,4 +23,3 @@ a \code{list} of \code{BrainVolume} instances, one for each column of \code{mat}
 matrixToVolumeList
 converts a matrix to a list of BrainVolumes with values filled at grid coordinates determined by the \code{vox} argument.
 }
-

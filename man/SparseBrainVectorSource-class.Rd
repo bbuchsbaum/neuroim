@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/SparseBrainVector.R
 \docType{class}
 \name{SparseBrainVectorSource-class}
-\alias{SparseBrainVectorSource}
 \alias{SparseBrainVectorSource-class}
+\alias{SparseBrainVectorSource}
 \title{SparseBrainVectorSource}
 \usage{
 SparseBrainVectorSource(metaInfo, indices, mask)

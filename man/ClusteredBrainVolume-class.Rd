@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BrainVolume.R
 \docType{class}
 \name{ClusteredBrainVolume-class}
-\alias{ClusteredBrainVolume}
 \alias{ClusteredBrainVolume-class}
+\alias{ClusteredBrainVolume}
 \title{ClusteredBrainVolume}
 \usage{
 ClusteredBrainVolume(mask, clusters, labelMap = NULL, source = NULL,
@@ -36,4 +36,3 @@ kres <- kmeans(grid, centers=10)
 mask <- BrainVolume(rep(1, 16^3),bspace)
 clusvol <- ClusteredBrainVolume(mask, kres$cluster)
 }
-

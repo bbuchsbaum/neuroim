@@ -3,12 +3,12 @@
 \docType{methods}
 \name{dropDim}
 \alias{dropDim}
-\alias{dropDim,AxisSet2D,missing-method}
 \alias{dropDim,AxisSet2D,numeric-method}
-\alias{dropDim,AxisSet3D,missing-method}
+\alias{dropDim,AxisSet2D,missing-method}
 \alias{dropDim,AxisSet3D,numeric-method}
-\alias{dropDim,BrainSpace,missing-method}
+\alias{dropDim,AxisSet3D,missing-method}
 \alias{dropDim,BrainSpace,numeric-method}
+\alias{dropDim,BrainSpace,missing-method}
 \title{Generic function to drop a dimension from an object}
 \usage{
 dropDim(x, dimnum)
@@ -39,4 +39,3 @@ x1 <- dropDim(x)
 ndim(x1) == 2
 dim(x1)[2] == 10
 }
-

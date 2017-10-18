@@ -42,6 +42,8 @@ BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 		trans[1:D,D+1] <- origin
 	}
   
+  trans <- signif(trans,3)
+  
 	if (is.null(axes) && length(Dim) >= 3) {
 	  axes <- .nearestAnatomy(trans)
 	} else if (is.null(axes) && length(Dim) == 2) {
@@ -51,11 +53,11 @@ BrainSpace <- function(Dim, spacing=NULL, origin=NULL, axes=NULL, trans=NULL) {
 	}
 	
 	new("BrainSpace", Dim=as.integer(Dim),
-			origin=origin,
-			spacing=spacing,
+			origin=signif(origin,3),
+			spacing=signif(spacing,3),
 			axes=axes,
 			trans=trans,
-			inverseTrans=solve(trans))
+			inverseTrans=signif(solve(trans)))
 }
 
 #' show a \code{BrainSpace}
@@ -315,13 +317,16 @@ setMethod(f="coordToGrid", signature=signature(x="BrainSpace", coords="numeric")
 #' @rdname gridToGrid-methods
 setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
           def=function(x, vox) {
+         
             nd <- ndim(x)
             stopifnot(ncol(vox) == nd)
-
-            tx <- inverseTrans(x)[1:nd, 1:nd]
-            ovox <- vox %*% tx[1:nd, 1:nd]
-            offset <- sapply(1:ncol(tx), function(i) {
-              if (any(tx[,i] < 0)) {
+          
+            tx <- inverseTrans(x)[1:nd,1:nd]
+            idx <- which(tx != 0, arr.ind=TRUE)
+            tx[idx] <- 1 * sign(tx[idx])
+            ovox <- tx %*% t(vox)
+            offset <- sapply(1:nrow(tx), function(i) {
+              if (any(tx[i,] < 0)) {
                 dim(x)[i] + 1
               } else {
                 0
@@ -329,7 +334,7 @@ setMethod(f="gridToGrid", signature=signature(x="BrainSpace", vox="matrix"),
 
             })
             
-            sweep(ovox, 2,offset, "+")
+            t(sweep(ovox, 1,offset, "+"))
           })
 
 #' @export 
@@ -410,6 +415,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="numeric")
 #' @rdname reorient-methods
 setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"),
           def=function(x, orient) {
+        
             anat <- findAnatomy3D(orient[1], orient[2], orient[3])
             pmat_orig <- permMat(x)
             pmat_new <- permMat(anat)
@@ -417,7 +423,7 @@ setMethod(f="reorient", signature=signature(x = "BrainSpace", orient="character"
             #pmat_new <- cbind(pmat_new, c(0,0,0))
             #pmat_new <- rbind(pmat_new, c(0,0,0,1))
             #tx <- trans(x) %*% pmat_new
-            tx <- pmat_new %*% trans(x)[1:ndim(x),]
+            tx <- t(pmat_new) %*% trans(x)[1:ndim(x),]
             tx <- rbind(tx,c(rep(0, ndim(x)),1))
             itx <- zapsmall(MASS::ginv(tx))
             ## from voxel space to new orient

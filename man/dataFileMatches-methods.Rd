@@ -23,4 +23,3 @@ TRUE for match, FALSE otherwise
 Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
 Will test for match to data file only
 }
-

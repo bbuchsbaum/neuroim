@@ -4,11 +4,17 @@
 \name{permMat}
 \alias{permMat}
 \alias{permMat,AxisSet2D-method}
+\alias{permMat,AxisSet3D-method}
+\alias{permMat,BrainSpace-method}
 \title{Extract permutation matrix}
 \usage{
 permMat(x, ...)
 
 \S4method{permMat}{AxisSet2D}(x, ...)
+
+\S4method{permMat}{AxisSet3D}(x, ...)
+
+\S4method{permMat}{BrainSpace}(x, ...)
 }
 \arguments{
 \item{x}{the object}
@@ -19,5 +25,8 @@ permMat(x, ...)
 Extract permutation matrix
 
 permMat
-}
 
+permMat
+
+permMat
+}

@@ -15,4 +15,3 @@ an instance of class \code{\linkS4class{FileMetaInfo}}
 \description{
 read header information of an image file
 }
-

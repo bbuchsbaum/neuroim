@@ -3,8 +3,8 @@
 \docType{methods}
 \name{axes}
 \alias{axes}
-\alias{axes,BrainData-method}
 \alias{axes,BrainSpace-method}
+\alias{axes,BrainData-method}
 \title{Generic getter function to extract image axes}
 \usage{
 axes(x)
@@ -19,4 +19,3 @@ axes(x)
 \description{
 Generic getter function to extract image axes
 }
-

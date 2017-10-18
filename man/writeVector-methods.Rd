@@ -3,10 +3,10 @@
 \docType{methods}
 \name{writeVector}
 \alias{writeVector}
-\alias{writeVector,BrainVector,character,character,missing-method}
-\alias{writeVector,BrainVector,character,missing,character,ANY-method}
-\alias{writeVector,BrainVector,character,missing,character-method}
 \alias{writeVector,BrainVector,character,missing,missing-method}
+\alias{writeVector,BrainVector,character,character,missing-method}
+\alias{writeVector,BrainVector,character,missing,character-method}
+\alias{writeVector,BrainVector,character,missing,character,ANY-method}
 \title{Generic function to write a 4D image vector to disk}
 \usage{
 writeVector(x, fileName, format, dataType)
@@ -42,4 +42,3 @@ writeVector(bvec, "out.nii")
 writeVector(bvec, "out.nii.gz")
 }
 }
-

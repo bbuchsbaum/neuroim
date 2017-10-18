@@ -3,8 +3,8 @@
 \docType{methods}
 \name{values}
 \alias{values}
-\alias{values,ROIVector-method}
 \alias{values,ROIVolume-method}
+\alias{values,ROIVector-method}
 \title{Generic function to extract data values of object}
 \usage{
 values(x, ...)
@@ -21,4 +21,3 @@ values(x, ...)
 \description{
 Generic function to extract data values of object
 }
-

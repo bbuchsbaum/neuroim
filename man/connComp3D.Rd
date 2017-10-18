@@ -17,4 +17,3 @@ The second element \code{size} is a 3D array consisting of the size of the conne
 \description{
 Extract connected components from a 3D mask
 }
-

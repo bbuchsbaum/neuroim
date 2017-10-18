@@ -21,4 +21,3 @@ an \code{\linkS4class{BrainVector}} object
 \description{
 load an image volume from a file
 }
-

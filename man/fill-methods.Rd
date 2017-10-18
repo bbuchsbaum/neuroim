@@ -39,4 +39,3 @@ ovol2 <- fill(vol, lookup.mat)
 all.equal(as.vector(ovol2), as.vector(ovol))
 
 }
-

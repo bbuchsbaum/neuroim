@@ -4,13 +4,10 @@
 \name{indexToCoord}
 \alias{indexToCoord}
 \alias{indexToCoord,BrainSpace,numeric-method}
-\alias{indexToCoord,BrainSurface,index-method}
 \alias{indexToCoord,BrainVolume,index-method}
 \title{Generic function to convert 1D indices to N-dimensional real world coordinates}
 \usage{
 indexToCoord(x, idx)
-
-\S4method{indexToCoord}{BrainSurface,index}(x, idx)
 
 \S4method{indexToCoord}{BrainSpace,numeric}(x, idx)
 
@@ -34,4 +31,3 @@ g <- indexToCoord(bvol, idx)
 idx2 <- coordToIndex(bvol, g)
 all.equal(idx, idx2)
 }
-

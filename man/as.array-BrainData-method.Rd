@@ -13,4 +13,3 @@
 \description{
 convert \code{BrainData} instance to array
 }
-

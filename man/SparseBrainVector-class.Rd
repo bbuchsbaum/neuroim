@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/SparseBrainVector.R
 \docType{class}
 \name{SparseBrainVector-class}
-\alias{SparseBrainVector}
 \alias{SparseBrainVector-class}
+\alias{SparseBrainVector}
 \title{SparseBrainVector}
 \usage{
 SparseBrainVector(data, space, mask, source = NULL, label = "")
@@ -34,6 +34,7 @@ constructs a SparseBrainVector object
 
 \item{\code{map}}{instance of class \code{\linkS4class{IndexLookupVolume}} is used to map between spatial and index/row coordinates}
 }}
+
 \examples{
 
 bspace <- BrainSpace(c(10,10,10,100), c(1,1,1))
@@ -42,4 +43,3 @@ mat <- matrix(rnorm(sum(mask)), 100, sum(mask))
 svec <- SparseBrainVector(mat, bspace,mask)
 length(indices(svec)) == sum(mask)
 }
-

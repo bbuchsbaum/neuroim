@@ -2,8 +2,8 @@
 % Please edit documentation in R/BrainRegion3D.R, R/BrainVector.R
 \docType{methods}
 \name{length,ROIVolume-method}
-\alias{length,BrainVector-method}
 \alias{length,ROIVolume-method}
+\alias{length,BrainVector-method}
 \title{Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)}
 \usage{
 \S4method{length}{ROIVolume}(x)
@@ -13,4 +13,3 @@
 \description{
 Get length of \code{BrainVector}. This is the numbe rof volumes in the volume vector (e.g. the 4th image dimension)
 }
-

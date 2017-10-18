@@ -21,4 +21,3 @@ the correct header name
 \description{
 Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
 }
-

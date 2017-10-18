@@ -16,4 +16,3 @@ pick(x, mask, ...)
 \description{
 pick
 }
-

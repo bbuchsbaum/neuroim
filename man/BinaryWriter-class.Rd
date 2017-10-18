@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R, R/BinaryIO.R
 \docType{class}
 \name{BinaryWriter-class}
-\alias{BinaryWriter}
 \alias{BinaryWriter-class}
+\alias{BinaryWriter}
 \title{BinaryWriter}
 \usage{
 BinaryWriter(output, byteOffset, dataType, bytesPerElement,

@@ -35,4 +35,3 @@ indices = seq(1,1000, length.out=10)
 bvol3 <- makeVolume(data,bvol,indices=indices)
 sum(bvol3) == sum(data)
 }
-

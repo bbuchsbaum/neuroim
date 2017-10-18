@@ -2,7 +2,7 @@
 % Please edit documentation in R/BrainVector.R
 \name{loadVolumeList}
 \alias{loadVolumeList}
-\title{loadVolList}
+\title{loadVolumeList}
 \usage{
 loadVolumeList(fileNames, mask = NULL)
 }
@@ -17,4 +17,3 @@ an instance of class \code{\linkS4class{BrainVector}}
 \description{
 load a list of image volumes and return a \code{\linkS4class{BrainVector}} instance
 }
-

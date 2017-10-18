@@ -3,12 +3,12 @@
 \docType{methods}
 \name{image,BrainVolume-method}
 \alias{image,BrainVolume-method}
-\alias{image,Layer-method}
 \alias{image,Overlay-method}
+\alias{image,Layer-method}
 \title{image}
 \usage{
 \S4method{image}{BrainVolume}(x, slice = dim(vol)[3]/2,
-  col = gray((0:255)/255, alpha = 1), zero.col = "#000000", axis = 3, ...)
+  col = gray((0:255)/255, alpha = 1), zero_col = "#000000", axis = 3, ...)
 
 \S4method{image}{Overlay}(x, zpos, axis = 3)
 
@@ -21,7 +21,7 @@
 
 \item{col}{a color map}
 
-\item{zero.col}{the color to use when the value is 0 (e.g background color)}
+\item{zero_col}{the color to use when the value is 0 (e.g background color)}
 
 \item{axis}{the axis index}
 
@@ -34,4 +34,3 @@ image
 
 image
 }
-
