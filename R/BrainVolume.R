@@ -549,7 +549,7 @@ setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", alon
            
             imslice <- x[gg]
             
-            BrainSlice(matrix(imslice, xdim,ydim), dropDim(along,3))
+            BrainSlice(matrix(imslice, xdim,ydim), dropDim(along,which_dim(along, orientation@k)))
             
             
           })

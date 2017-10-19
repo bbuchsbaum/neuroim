@@ -105,7 +105,7 @@ setMethod(f="dropDim", signature=signature(x="BrainSpace", dimnum="numeric"),
               keep_row <- which(apply(tx[,Dind], 1, function(x) !all(x==0)))
               tx <- rbind(cbind(tx[keep_row,keep_col], origin(x)[keep_row]), c(rep(0, length(Dind)), 1))
               
-              BrainSpace(D[keep_row], origin=origin(x)[keep_row], spacing=spacing(x)[keep_row], axes=dropDim(axes(x), dimnum), trans=tx)
+              BrainSpace(D[-dimnum], origin=origin(x)[-dimnum], spacing=spacing(x)[-dimnum], axes=dropDim(axes(x), dimnum), trans=tx)
             }
             
           })

@@ -38,7 +38,7 @@ ortho_plot <- function(...) {
   overlay_set <- create_overlay(...)
   axial_overlay <- overlay_set$axial$overlay
   
-  height <- 256
+  height <- 300
   #width <- "100%"
   gen_slice_box <- function(title, id, view, sid) {
     box(title, plotOutput(id, height=height, click = "plot_click"), 
@@ -82,11 +82,11 @@ ortho_plot <- function(...) {
       minval <- min(vol)
       menuItem("Foreground",icon=icon("adjust"),
                  
-             wrap_slider("foreground_range", "Intensity Range", ticks=FALSE, 
+             wrap_slider(inputId="foreground_range", label="Intensity Range", ticks=FALSE, 
                          min=minval, max=maxval, value=c(minval, maxval)),
-             wrap_slider("foreground_threshold", "Threshold", ticks=FALSE, 
+             wrap_slider(inputId="foreground_threshold", label="Threshold", ticks=FALSE, 
                          min=minval, max=maxval, value=c((minval+maxval)/2, (minval+maxval)/2)),
-             wrap_slider("foreground_opacity", "Opacity", ticks=FALSE, 
+             wrap_slider(inputId="foreground_opacity", label="Opacity", ticks=FALSE, 
                          min=0, max=1, value=1),
              div(style="display: inline-block;vertical-align:top; width: 130px;",
                  selectInput("foreground_col", "Color Map:",color_map$get_map_names(), "rainbow")),
@@ -113,7 +113,7 @@ ortho_plot <- function(...) {
     fluidRow(
       gen_slice_box("Axial", "axial_plot", overlay_set$axial, "ax_slider"),
       gen_slice_box("Coronal", "coronal_plot", overlay_set$coronal, "cor_slider"),
-      gen_slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal, "sag_slider"),
+      gen_slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal, "sag_slider")
 
     )
   )
@@ -147,6 +147,8 @@ ortho_plot <- function(...) {
       vspace=view$overlay$view_space
       
       renderPlot({
+        
+        #browser()
         width <- session$clientData[[paste0("output_", plot_id, "_width")]]
         height <- session$clientData[[paste0("output_", plot_id, "_height")]]
         
@@ -171,7 +173,7 @@ ortho_plot <- function(...) {
           view$overlay$set_alpha(2, input[["foreground_opacity"]])
         }
         
-        slice <- view$overlay$render_slice(zpos, width, height)
+        slice <- view$overlay$render_slice(zpos, 1:view$overlay$length(), width, height)
         rval(slice)
         slice$draw()
       })

@@ -25,6 +25,10 @@ BrainSlice <- function(data, space, indices=NULL) {
 			data <- matrix(data, dim(space)[1], dim(space)[2])
 		} 
 	  
+	  #if (! all(dim(data) == dim(space))) {
+	  #   browser()
+	  #}
+	  
 	  stopifnot(all(dim(data) == dim(space)))
 		new("BrainSlice", .Data=data, space=space)
 	

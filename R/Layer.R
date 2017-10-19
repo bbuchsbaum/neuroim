@@ -98,8 +98,8 @@ Layer <- R6Class("Layer",
                  }
                  
                  
-                 
-                 bds <- t(apply(bds,1,sort))[1:2,]
+                 #browser()
+                 #bds <- t(apply(bds,1,sort))[1:2,]
                 
                  slice <- slice(self$vol, zlevel, self$view_space, self$view_axes)
               
@@ -112,8 +112,9 @@ Layer <- R6Class("Layer",
                  aspect_ratio <- wi/hi
                  
                  if (is.null(width) && is.null(height)) {
-                   width <- dim(slice)[1]
-                   height <- dim(slice)[2]
+                   width <- dim(slice)[1] * spacing(slice)[1]
+                   height <- dim(slice)[2] * spacing(slice)[2]
+                   
                  } else if (is.null(width)) {
                    wx <- dim(slice)[1] * spacing(slice)[1]
                    wy <- dim(slice)[2] * spacing(slice)[2]
