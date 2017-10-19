@@ -4,6 +4,8 @@
 ## proper color bar
 ## cross hair
 ## layout options ('triangle', '1row')
+## reusable components
+## break out into neuroviz package
 
 create_overlay <- function(...) {
   
