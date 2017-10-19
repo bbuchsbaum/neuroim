@@ -32,15 +32,29 @@ sliceData <- function(vol, slice, axis=3) {
 #' @param alpha transparency multiplier
 #' @importFrom grDevices col2rgb
 #' @export
-mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), zero_col = "#00000000", alpha=1) {
-  vrange <- range(imslice)
-  imcols <- col[as.integer((imslice - vrange[1])/diff(vrange) * (length(col) -1) + 1)]
+mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), 
+                        zero_col = "#00000000", 
+                        alpha=1, irange=range(imslice), threshold=c(0,0)) {
+  #browser()
+  
+  print(paste("map colors", threshold))
+  assertthat::assert_that(diff(irange) >= 0)
+  drange <- diff(irange)
+  
+  mcols <- (imslice - irange[1])/diff(irange) * (length(col) -1) + 1
+  mcols[mcols <1] <- 1
+  mcols[mcols > length(col)] <- length(col)
+  imcols <- col[mcols]
   
   if (!is.vector(imslice)) {
     dim(imcols) <- dim(imslice)
   }
   
   imcols[imslice == 0] <- zero_col
+  
+  if (diff(threshold) > 0) {
+    imcols[(imslice >= threshold[1]) & (imslice <= threshold[2])] <- "#00000000"
+  }
   
   if (alpha < 1) {
     rgbmat <- col2rgb(imcols, alpha=TRUE)
@@ -150,9 +164,11 @@ setMethod(f="image", signature=signature(x = "Layer"),
 #' @param units grid unit type, e.g. "points", "mm", "inches", "npc"
 #' 
 setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
-          def=function(x, width, height, colmap, zero_col="#00000000", alpha=1, units="points") {
+          def=function(x, width, height, colmap, zero_col="#00000000", alpha=1, units="points", 
+                       irange=range(x), threshold=c(0,0)) {
             imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 
-            imcols <- mapToColors(imslice, colmap, zero_col, alpha=alpha)
+            imcols <- mapToColors(imslice, colmap, zero_col, alpha=alpha, 
+                                  irange=irange, threshold=threshold)
             ras <- as.raster(imcols)
   
             grob <- rasterGrob(ras, 

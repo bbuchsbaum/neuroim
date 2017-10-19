@@ -1,6 +1,9 @@
 
-
-
+## TODO
+## proper selection of foreground layer
+## proper color bar
+## cross hair
+## layout options ('triangle', '1row')
 
 create_overlay <- function(...) {
   
@@ -31,49 +34,95 @@ create_overlay <- function(...) {
 
 ortho_plot <- function(...) {
   overlay_set <- create_overlay(...)
+  axial_overlay <- overlay_set$axial$overlay
   
-  height <- 300
+  height <- 256
   #width <- "100%"
   gen_slice_box <- function(title, id, view, sid) {
-    box(title, plotOutput(id, height = height, click = "plot_click"), 
+    box(title, plotOutput(id, height=height, click = "plot_click"), 
         sliderInput(sid, "Slice:", 
                     view$vrange[1],
                     view$vrange[2],
+                    ticks=FALSE,
                     median(round(c(view$vrange[1], 
                                    view$vrange[2])))), width=4, 
         solidHeader=TRUE, status="primary", background="black", align="center")
 
   }
   
-  gen_background_panel <- function() {
-    menuItem("Background",icon=icon("adjust"),
-             sliderInput("background_range", "Intensity Range", min=0, max=200, value=c(-100,100)),
-             sliderInput("background_threshold", "Threshold", min=0, max=200, value=c(-100,100)))
+  color_map <- ColorMaps$new()
+  
+  gen_background_panel <- function(vol) {
+    maxval <- max(vol)
+    minval <- min(vol)
+    menuItem("Background",icon=icon("adjust"), startExpanded=TRUE,
+             sliderInput("background_range", "Intensity Range", ticks=FALSE, 
+                         min=minval, max=maxval, value=c(minval, maxval)),
+             div(style="display: inline-block;vertical-align:top; width: 130px;",
+                 selectInput("background_col", "Color Map:",color_map$get_map_names(), "grayscale")),
+             div(style="display: inline-block;vertical-align:top; width: 100px;",
+                 numericInput(inputId="background_col_size", label="Size: ", value = 256, min=2, max=256))
+          
+    )
                  
   }
   
-  gen_foreground_panel <- function() {
-    menuItem("Foreground",icon=icon("adjust"),
-             sliderInput("foreground_range", "Intensity Range", min=0, max=200, value=c(-100,100)),
-             sliderInput("foreground_threshold", "Threshold", min=0, max=200, value=c(-100,100)),
-             plotOutput("foreground_colorbar", width="100%", height=50))
+  wrap_slider <- function(...) {
+    div(style = "height: 85px; padding: 0px 0px; font-size: 12px;",  
+       sliderInput(...))
   }
-   
+  
+  gen_foreground_panel <- function() {
+    
+    if (axial_overlay$length() > 1) {
+      vol <- axial_overlay$layers[[2]]$vol
+      maxval <- max(vol)
+      minval <- min(vol)
+      menuItem("Foreground",icon=icon("adjust"),
+                 
+             wrap_slider("foreground_range", "Intensity Range", ticks=FALSE, 
+                         min=minval, max=maxval, value=c(minval, maxval)),
+             wrap_slider("foreground_threshold", "Threshold", ticks=FALSE, 
+                         min=minval, max=maxval, value=c((minval+maxval)/2, (minval+maxval)/2)),
+             wrap_slider("foreground_opacity", "Opacity", ticks=FALSE, 
+                         min=0, max=1, value=1),
+             div(style="display: inline-block;vertical-align:top; width: 130px;",
+                 selectInput("foreground_col", "Color Map:",color_map$get_map_names(), "rainbow")),
+             div(style="display: inline-block;vertical-align:top; width: 100px;",
+                 numericInput(inputId="foreground_col_size", label="Size: ", value = 20, min=2, max=256)),
+             
+             plotOutput("foreground_colorbar", width="100%", height=50))
+    } else {
+      NULL
+    }
+  }
+  
+  gen_layer_selection <- function() {
+    if (axial_overlay$length() > 2) {
+      selectInput("layer_selection", "Overlay Image: ", axial_overlay$names(), 
+                  selected=overlay_set$axial$overlay$names()[1])
+    } else {
+      NULL
+    }
+    
+  }
+  
   body <- dashboardBody(
     fluidRow(
       gen_slice_box("Axial", "axial_plot", overlay_set$axial, "ax_slider"),
       gen_slice_box("Coronal", "coronal_plot", overlay_set$coronal, "cor_slider"),
-      gen_slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal, "sag_slider")
+      gen_slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal, "sag_slider"),
+
     )
   )
-
-
-  # We'll save it in a variable `ui` so that we can preview it in the console
-  ui <- dashboardPage(title = "Orthogonal Slice View",
-    dashboardHeader(),
+  
+  ui <- dashboardPage(
+    dashboardHeader(title = "Column layout"),
     dashboardSidebar(
       sidebarMenu(
-        selectInput("layer_selection", "Overlay Image: ", overlay_set$axial$overlay$names(), selected=overlay_set$axial$overlay$names()[1])
+        gen_background_panel(axial_overlay$layers[[1]]$vol),
+        gen_foreground_panel(),
+        gen_layer_selection()
       )),
     body
   )
@@ -88,7 +137,7 @@ ortho_plot <- function(...) {
     observeEvent(input$plot_click, {
       message("click x", input$plot_click$x)
       message("click y", input$plot_click$y)
-      #print(mean(axial_slice()@slices[[1]]))
+     
     })
     
     
@@ -99,24 +148,29 @@ ortho_plot <- function(...) {
         width <- session$clientData[[paste0("output_", plot_id, "_width")]]
         height <- session$clientData[[paste0("output_", plot_id, "_height")]]
         
-        print(width)
-        print(height)
         ind <- input[[slider_id]]
-        print(paste("index: ", ind))
-        zpos <- view$overlay$layers[[1]]$get_zpos(ind)
-        print(paste("zpos: ", zpos))
+       
+        zpos <- view$overlay$get_zpos(ind)
+        
+        view$overlay$set_irange(1, input[["background_range"]])
+        csize1 <- input[["background_col_size"]]
+        cols1 <- color_map$get_colors(input[["background_col"]], as.numeric(csize1))
+        view$overlay$set_color_map(1, cols1)
+        
+        if (view$overlay$length() > 1) {
+        
+          view$overlay$set_irange(2, input[["foreground_range"]])
+          view$overlay$set_threshold(2, input[["foreground_threshold"]])
+        
+          csize2 <- input[["foreground_col_size"]]
+          cols2 <- color_map$get_colors(input[["foreground_col"]], as.numeric(csize2))
+  
+          view$overlay$set_color_map(2, cols2)
+          view$overlay$set_alpha(2, input[["foreground_opacity"]])
+        }
+        
         slice <- view$overlay$render_slice(zpos, width, height)
         rval(slice)
-
-        grid.draw(slice@grob)
-      }, height = function() {
-          if (plot_id == "coronal_plot") {
-            .6 * session$clientData[[paste0("output_", plot_id, "_width")]]
-          } else {
-            session$clientData[[paste0("output_", plot_id, "_width")]]
-          }
-          
-  
         slice$draw()
       })
     }
@@ -156,8 +210,9 @@ color_bar <- function(lut, width=100, height=20) {
   }
   
   #dev.off()
-  
   #list(src=outfile, alt="color bar")
   
 }
+
+
 

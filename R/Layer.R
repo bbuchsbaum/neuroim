@@ -5,7 +5,8 @@ Layer <- R6Class("Layer",
              public = list(
                vol = NULL,
                color_map=NULL,
-               thresh=NULL,
+               threshold=NULL,
+               irange=NULL,
                view=NULL,
                zero_col=NULL,
                alpha=NULL,
@@ -13,14 +14,15 @@ Layer <- R6Class("Layer",
                view_axes=NULL,
                desc=NULL,
                
-               initialize = function(vol, color_map=gray((0:255)/255, alpha=1), thresh=c(0,0), 
+               initialize = function(vol, color_map=gray((0:255)/255, alpha=1), threshold=c(0,0), irange=range(vol),
                                      view="LPI", zero_col="#000000FF", alpha=1, desc="") {
-                 self$vol <- vol
-                 self$color_map <- color_map
-                 self$thresh=thresh
+                 self$vol=vol
+                 self$color_map=color_map
+                 self$threshold=threshold
                  self$view=view
                  self$zero_col=zero_col
                  self$alpha=alpha
+                 self$irange=irange
                  
                  view <- if (length(view) == 1 && nchar(view) == 3) {
                    sapply(1:3, function(i) substr(view, i,i))
@@ -36,6 +38,23 @@ Layer <- R6Class("Layer",
                
                slice=function(zpos) {
                  slice(self$vol, zpos, self$view_space, self$view_axes)
+               },
+               set_irange = function(new_range) {
+                 self$irange = new_range
+               },
+               set_color_map = function(cmap) {
+                 self$color_map = cmap
+               },
+               
+               set_alpha = function(alpha) {
+                 assertthat::assert_that(alpha>= 0 && alpha <=1)
+                 self$alpha=alpha
+               },
+               
+               set_threshold = function(threshold) {
+                 assertthat::assert_that(length(threshold) == 2)
+                 assertthat::assert_that(diff(threshold) >= 0)
+                 self$threshold=threshold
                },
                
                get_zpos = function(zlevel) {
@@ -119,9 +138,12 @@ Layer <- R6Class("Layer",
                                 colmap=self$color_map, 
                                 zero_col=self$zero_col, 
                                 alpha=self$alpha, 
+                                irange=self$irange,
+                                threshold=self$threshold,
                                 units="points")
                  
-                 RenderedSlice$new(slice=slice, width=width, height=height, xbounds=bds[1,], ybounds=bds[2,], raster=grob)
+                 RenderedSlice$new(slice=slice, width=width, height=height, 
+                                   xbounds=bds[1,], ybounds=bds[2,], raster=grob)
                }
              )
 )
@@ -171,13 +193,34 @@ Overlay <- R6Class("Overlay",
                    
                    zdim = function() { self$layers[[1]]$zdim() },
                    
-                   get_zpos = function(zlevel) { self$layers[[1]]$get_zpos() },
+                   get_zpos = function(zlevel) { self$layers[[1]]$get_zpos(zlevel) },
                    
                    names = function() { self$layer_names },
                    
                    length = function() { length(self$layers) },
                    
-                   render_slice=function(zpos, width=NULL, height=NULL) {
+                   set_irange = function(layer_index, new_range) {
+                     self$layers[[layer_index]]$set_irange(new_range)
+                   },
+                   
+                   set_color_map = function(layer_index, cmap) {
+                     self$layers[[layer_index]]$set_color_map(cmap)
+                   },
+                   
+                   set_threshold = function(layer_index, threshold) {
+                     assertthat::assert_that(length(threshold) == 2)
+                     assertthat::assert_that(diff(threshold) >= 0)
+                     self$layers[[layer_index]]$set_threshold(threshold)
+                   },
+                   
+                   set_alpha = function(layer_index, alpha) {
+                     self$layers[[layer_index]]$set_alpha(alpha)
+                   },
+                   
+                   render_slice=function(zpos, selected=NULL, width=NULL, height=NULL) {
+                     if (is.null(selected)) {
+                       selected <- 1:length(self$layers)
+                     }
                      
                      sliceList <- lapply(self$layers, function(layer) {
                        layer$render_slice(zpos=zpos, width=width, height=height)
@@ -255,5 +298,27 @@ RenderedSliceStack <- R6Class("RenderedSliceStack",
                                 
                               )
 )
-                       
+
+
+ColorMaps <- R6Class("ColorMaps",
+                     portable=TRUE,
+                     public=list(
+                       map_names=c("grayscale", "rainbow", "heat", "topo"),
+                                   ##"spectral", "yellow_red",
+                                   ##"green_blue", "purples"),
+              
+                      get_colors = function(name, ncolors=10) {
+                        switch(name,
+                              "grayscale"=gray(seq(0,1,length.out=ncolors)),
+                              "rainbow"=rainbow(ncolors),
+                              "heat"=heat.colors(ncolors),
+                              "topo"=topo.colors(ncolors))
+                      },
+                     
+                      get_map_names = function() self$map_names
+                    )
+)
+
+
+                     
 
