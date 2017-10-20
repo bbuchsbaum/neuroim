@@ -163,7 +163,8 @@ setMethod(f="image", signature=signature(x = "Layer"),
 #' @param alpha transparency multiplier
 #' @param units grid unit type, e.g. "points", "mm", "inches", "npc"
 #' 
-setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", colmap="character"),
+setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", height="numeric", 
+                                          colmap="character"),
           def=function(x, width, height, colmap, zero_col="#00000000", alpha=1, units="points", 
                        irange=range(x), threshold=c(0,0)) {
             imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 

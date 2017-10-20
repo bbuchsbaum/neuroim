@@ -466,7 +466,11 @@ setClass("LogicalBrainVolume",
 #' @rdname ClusteredBrainVolume-class
 #' @export
 setClass("ClusteredBrainVolume",   
-         representation=representation(mask="LogicalBrainVolume", clusters="integer", centers="matrix", labelMap="list", clusterMap="hash"),
+         representation=representation(mask="LogicalBrainVolume", 
+                                       clusters="integer", 
+                                       centers="matrix", 
+                                       labelMap="list", 
+                                       clusterMap="hash"),
          contains=c("BrainVolume"))
 
 

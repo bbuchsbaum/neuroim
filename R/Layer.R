@@ -12,6 +12,7 @@ Layer <- R6Class("Layer",
                alpha=NULL,
                view_space=NULL,
                view_axes=NULL,
+               value_range=NULL,
                desc=NULL,
                
                initialize = function(vol, color_map=gray((0:255)/255, alpha=1), threshold=c(0,0), irange=range(vol),
@@ -23,6 +24,7 @@ Layer <- R6Class("Layer",
                  self$zero_col=zero_col
                  self$alpha=alpha
                  self$irange=irange
+                 self$value_range=range(vol)
                  
                  view <- if (length(view) == 1 && nchar(view) == 3) {
                    sapply(1:3, function(i) substr(view, i,i))
@@ -56,6 +58,8 @@ Layer <- R6Class("Layer",
                  assertthat::assert_that(diff(threshold) >= 0)
                  self$threshold=threshold
                },
+               
+               get_color_map = function() { self$color_map },
                
                get_zpos = function(zlevel) {
                  zprop <- zlevel/self$zdim()
@@ -165,11 +169,12 @@ Overlay <- R6Class("Overlay",
                       splist <- lapply(layers, function(layer) space(layer$vol))
                       axes <- sapply(splist, function(x) x@axes)
                       bds <- lapply(splist, function(x) signif(dim(x) * spacing(x),3))
-                      views <- lapply(layers, function(x) x$view_anat)
+                      views <- lapply(layers, function(x) x$view_axes)
                       
                       if (length(layers) > 1) {
                         orgs <- do.call(rbind, lapply(splist, function(x) signif(origin(x),3)))
                         dorgs <- apply(orgs, 2, function(x) max(abs(diff(x))))
+                        #browser()
                         assertthat::assert_that(all(dorgs < 2))
                       }
                       
@@ -200,6 +205,8 @@ Overlay <- R6Class("Overlay",
                    
                    length = function() { length(self$layers) },
                    
+                   get_layer = function(i) self$layers[[i]],
+                   
                    set_irange = function(layer_index, new_range) {
                      self$layers[[layer_index]]$set_irange(new_range)
                    },
@@ -216,6 +223,17 @@ Overlay <- R6Class("Overlay",
                    
                    set_alpha = function(layer_index, alpha) {
                      self$layers[[layer_index]]$set_alpha(alpha)
+                   },
+                   
+                   convert_coordinate = function(xy) {
+                     layer <- self$layers[[1]]
+                     #bds <- bounds(self$layers[[1]]$view_space)
+                     #xr <- abs(diff(bds[1,]))
+                     #yr <- abs(diff(bds[2,]))
+                     #px <- xy[1] * xr
+                     #py <- xy[2] * yr
+                     #browser()
+                     
                    },
                    
                    render_slice=function(zpos, selected=NULL, width=NULL, height=NULL) {
