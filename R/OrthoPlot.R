@@ -113,6 +113,10 @@ ortho_plot <- function(..., height=300) {
       slice_box("Axial", "axial_plot", overlay_set$axial$vrange, "ax_slider"),
       slice_box("Coronal", "coronal_plot", overlay_set$coronal$vrange, "cor_slider"),
       slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal$vrange, "sag_slider")
+    ),
+    fluidRow(
+      box(title="Yolo", height=4),
+      box(title="Yolo2", height=4)
     )
   )
   
