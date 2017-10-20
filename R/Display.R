@@ -35,9 +35,8 @@ sliceData <- function(vol, slice, axis=3) {
 mapToColors <- function(imslice, col=heat.colors(128, alpha = 1), 
                         zero_col = "#00000000", 
                         alpha=1, irange=range(imslice), threshold=c(0,0)) {
-  #browser()
-  
-  print(paste("map colors", threshold))
+
+  #print(paste("map colors", threshold))
   assertthat::assert_that(diff(irange) >= 0)
   drange <- diff(irange)
   
@@ -130,29 +129,11 @@ setMethod(f="as.raster", signature=signature(x = "Layer"),
 
 
 
-#' image
-#' 
-#' @param x the object to display
-#' @param zpos the z coordinate
-#' @param axis the axis index
-#' @export
-#' @rdname image-methods
-setMethod(f="image", signature=signature(x = "Overlay"),
-          def=function(x, zpos, axis=3) {  
-            #grid.newpage()
-            for (layer in x@layers) {
-              ras <- as.raster(layer, zpos, layer@thresh, axis=axis) 
-              grid.raster(ras, interpolate=TRUE)
-            }             
-          })
-
-
 #' @rdname image-methods
 #' @export
 setMethod(f="image", signature=signature(x = "Layer"),
           def=function(x, zpos, axis=3) {  
             ras <- as.raster(x, zpos, x@thresh,axis=axis)      
-            #grid.newpage()
             grid.raster(ras, interpolate=TRUE)
           })
 
@@ -167,16 +148,17 @@ setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", heigh
                                           colmap="character"),
           def=function(x, width, height, colmap, zero_col="#00000000", alpha=1, units="points", 
                        irange=range(x), threshold=c(0,0)) {
+            
             imslice <- t(x[1:nrow(x), ncol(x):1,drop=FALSE]) 
             imcols <- mapToColors(imslice, colmap, zero_col, alpha=alpha, 
                                   irange=irange, threshold=threshold)
+            
             ras <- as.raster(imcols)
-  
-            grob <- rasterGrob(ras, 
-                               width=unit(width, units), 
-                               height=unit(height, units), 
-                               interpolate=TRUE)
-    
+            #grob <- rasterGrob(ras, 
+            #                   width=unit(width, units), 
+            #                   height=unit(height, units), 
+            #                   interpolate=TRUE)
+            #
           })
 
 

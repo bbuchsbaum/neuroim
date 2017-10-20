@@ -7,6 +7,8 @@
 ## reusable components
 ## break out into neuroviz package
 
+color_map <- ColorMaps$new()
+
 wrap_slider <- function(...) {
   div(style = "height: 85px; padding: 0px 0px; font-size: 12px;",  
       sliderInput(...))
@@ -48,8 +50,8 @@ foreground_panel <- function(vol) {
 
 
 
-slice_box <- function(title, id, slice_range, sid) {
-  box(title, plotOutput(id, height=height, click = "plot_click"), 
+slice_box <- function(title, id, slice_range, sid, height=300) {
+  box(title, plotOutput(id, height=height, click = paste0(id, "_click")), 
       sliderInput(sid, "Slice:", 
                   slice_range[1],
                   slice_range[2],
@@ -70,21 +72,23 @@ create_overlay <- function(...) {
   coronal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="LIP"))
   sagittal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="AIL"))
   
-  gen_el <- function(overlay) {
+  gen_el <- function(overlay, vname, num) {
     vspace <- overlay$view_space
     range <- bounds(vspace)[3,]
     list(
       overlay=overlay,
       zrange=range,
       start_slice= median(seq(range[1], range[2])),
-      vrange=c(1, overlay$zdim())
+      vrange=c(1, overlay$zdim()),
+      view_name=vname,
+      view_num=num
     )
   }
   
   list(
-    axial=gen_el(axial_overlay),
-    coronal=gen_el(coronal_overlay),
-    sagittal=gen_el(sagittal_overlay)
+    axial=gen_el(axial_overlay, "axial", 3),
+    coronal=gen_el(coronal_overlay, "coronal", 2),
+    sagittal=gen_el(sagittal_overlay, "sagittal", 1)
   )
 }
 
@@ -93,7 +97,7 @@ ortho_plot <- function(..., height=300) {
   overlay_set <- create_overlay(...)
   axial_overlay <- overlay_set$axial$overlay
   
-  color_map <- ColorMaps$new()
+ 
 
   gen_layer_selection <- function() {
     if (axial_overlay$length() > 2) {
@@ -102,11 +106,13 @@ ortho_plot <- function(..., height=300) {
     } 
   }
   
+ 
+ 
   body <- dashboardBody(
     fluidRow(
-      slice_box("Axial", "axial_plot", overlay_set$axial, view$vrange, "ax_slider"),
-      slice_box("Coronal", "coronal_plot", overlay_set$coronal, view$vrange, "cor_slider"),
-      slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal, view$vrange, "sag_slider")
+      slice_box("Axial", "axial_plot", overlay_set$axial$vrange, "ax_slider"),
+      slice_box("Coronal", "coronal_plot", overlay_set$coronal$vrange, "cor_slider"),
+      slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal$vrange, "sag_slider")
     )
   )
   
@@ -115,24 +121,79 @@ ortho_plot <- function(..., height=300) {
     dashboardSidebar(
       sidebarMenu(
         background_panel(axial_overlay$layers[[1]]$vol),
-        if (length(axial_overlay$layers) > 1) gen_foreground_panel()  else NULL,
-        gen_layer_selection()
-      )
-    ),
+        if (length(axial_overlay$layers) > 1) foreground_panel(axial_overlay$layers[[2]]$vol)  
+      )),
     body
   )
   
   
   server <- function(input, output, session) {
-
-    axial_slice <- reactiveVal()
-    coronal_slice <- reactiveVal()
-    sagittal_slice <- reactiveVal()
     
-    observeEvent(input$plot_click, {
-      message("click x", input$plot_click$x)
-      message("click y", input$plot_click$y)
+    rvs <- reactiveValues(
+      axial_slice = NULL,
+      coronal_slice = NULL,
+      sagittal_slice = NULL,
+      axial_plot_click = NULL,
+      coronal_plot_click = NULL,
+      sagittal_plot_click = NULL,
+      axial_frame=NULL,
+      sagittal_frame=NULL,
+      coronal_frame=NULL,
+      crosshair=c(0,0,0)
+    )
+    
+    click_to_z <- function(x,y, d, ov_source, ov_dest) {
+      vox <- c(x,y)  * d
+      
+      ## convert from view_space to voxel space 
+      gg_native <- gridToGrid(ov_source$view_space, matrix(c(vox,0), ncol=3))
+    
+      ## convert view space of destination
+      gg_coord <- gridToCoord(ov_dest$view_space, gg_native)
+      
+      ## convert back to voxel space of destination
+      gg_vox <- coordToGrid(ov_dest$view_space, gg_coord)
+      
+      ## get the coordinate of the z-axis
+      gg_vox[which_dim(ov_dest$view_space, ov_dest$layers[[1]]$view_axes@k)]
+    }
+    
+    convert_click <- function(x,y, cfun, slice) {
+      xy <- cfun$convert_xy(x,y)
+      d <- dim(slice)
+      list(x=xy[1],y=xy[2], d=d)
+    }
+    
+    observeEvent(input$axial_plot_click, {
+      
+      xyd <- convert_click(input$axial_plot_click$x, input$axial_plot_click$y, rvs$axial_frame, rvs$axial_slice$slices[[1]]$slice)
+    
+      z_sag <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$axial$overlay, overlay_set$sagittal$overlay)
+      z_cor <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$axial$overlay, overlay_set$coronal$overlay)
+      
+      updateSliderInput(session, "sag_slider", value = z_sag)
+      updateSliderInput(session, "cor_slider", value = z_cor)
+    })
+    
+    observeEvent(input$coronal_plot_click, {
+      xyd <- convert_click(input$coronal_plot_click$x, input$coronal_plot_click$y,rvs$coronal_frame, rvs$coronal_slice$slices[[1]]$slice)
+      
+      z_ax <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$coronal$overlay, overlay_set$axial$overlay)
+      z_sag <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$coronal$overlay, overlay_set$sagittal$overlay)
+      
+      updateSliderInput(session, "ax_slider", value = z_ax)
+      updateSliderInput(session, "sag_slider", value = z_sag)
+    })
+    
+    observeEvent(input$sagittal_plot_click, {
+      xyd <- convert_click(input$sagittal_plot_click$x, input$sagittal_plot_click$y,rvs$sagittal_frame, rvs$sagittal_slice$slices[[1]]$slice)
+      
+      z_ax <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$sagittal$overlay, overlay_set$axial$overlay)
+      z_cor <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$sagittal$overlay, overlay_set$coronal$overlay)
      
+      updateSliderInput(session, "ax_slider", value = z_ax)
+      updateSliderInput(session, "cor_slider", value = z_cor)
+
     })
     
     gen_render_plot <- function(view, slider_id, rval, plot_id) {
@@ -150,10 +211,11 @@ ortho_plot <- function(..., height=300) {
         view$overlay$set_irange(1, input[["background_range"]])
         csize1 <- input[["background_col_size"]]
         cols1 <- color_map$get_colors(input[["background_col"]], as.numeric(csize1))
+        
         view$overlay$set_color_map(1, cols1)
         
         if (view$overlay$length() > 1) {
-        
+          
           view$overlay$set_irange(2, input[["foreground_range"]])
           view$overlay$set_threshold(2, input[["foreground_threshold"]])
         
@@ -165,35 +227,47 @@ ortho_plot <- function(..., height=300) {
         }
         
         slice <- view$overlay$render_slice(zpos, 1:view$overlay$length(), width, height)
-        rval(slice)
-        slice$draw()
+        rvs[[paste0(view$view_name, "_slice")]] <- slice
+        rvs$crosshair[view$view_num] <- slice$zpos
+        
+        info <- slice$draw()
+        rvs[[paste0(view$view_name, "_frame")]] <- info
+        #browser()
+        
       })
     }
       
     output$axial_plot <- gen_render_plot(overlay_set$axial, "ax_slider", axial_slice, "axial_plot")
     output$coronal_plot <- gen_render_plot(overlay_set$coronal, "cor_slider", coronal_slice, "coronal_plot")
     output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice, "sagittal_plot")
+    
+    output$foreground_colorbar <- renderPlot({
+      width <- session$clientData[[paste0("output_foreground_colorbar_width")]]
+      height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
+      color_bar(rainbow(25), c(-3,3))
+    })
+    
+    
 
   }
   
-  # Preview the UI in the console
   shinyApp(ui = ui, server = server)
 }
 
 # Function to plot color bar
-color_bar <- function(lut, xrange=c(0,100)) {
+color_bar <- function(lut, yrange=c(0,100)) {
   
   par(bg="black")
-  par(mar = c(0,0,0,0))
+  par(mar = c(2,4,2,2))
   plot.new()
-  plot.window(xlim=xrange, ylim=c(0,1))
-  #axis(1, seq(xrange[1],xrange[2], by=.5), col="white", col.axis="white")
+  plot.window(xlim=c(0,1), ylim=yrange, xaxs="i", yaxs="i") 
+  axis(2, signif(seq(yrange[1],yrange[2], length.out=4),3), col="white", col.axis="white", cex.axis=1.5)
   
-  strip_w <- (xrange[2] - xrange[1])/length(lut) 
+  strip_h <- (yrange[2] - yrange[1])/length(lut) 
   
   for (i in 1:length(lut)) {
-    xmin <- xrange[1] + ((i-1) * strip_w)
-    rect(xleft=xmin, ybottom=0, ytop=1, xright=xmin+strip_w, col=lut[i], border=lut[i])
+    ymin <- yrange[1] + ((i-1) * strip_h)
+    rect(xleft=0, ybottom=ymin, ytop=ymin+strip_h, xright=1, col=lut[i], border=lut[i])
      #grid.rect(x= unit((i-1)*strip_w, "points"), y=unit(.5,"npc"), width=unit(strip_w, "points"), height=unit(1, "npc"), gp=gpar(fill=lut[i]))
   }
   

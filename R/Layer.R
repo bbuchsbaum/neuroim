@@ -15,7 +15,8 @@ Layer <- R6Class("Layer",
                value_range=NULL,
                desc=NULL,
                
-               initialize = function(vol, color_map=gray((0:255)/255, alpha=1), threshold=c(0,0), irange=range(vol),
+               initialize = function(vol, color_map=gray((0:255)/255, alpha=1), threshold=c(0,0), 
+                                     irange=range(vol),
                                      view="LPI", zero_col="#000000FF", alpha=1, desc="") {
                  self$vol=vol
                  self$color_map=color_map
@@ -68,7 +69,12 @@ Layer <- R6Class("Layer",
                  zoffset <- zprop * diff(zr)
                  
                  zoffset + zr[1]
-                 
+               },
+               
+               get_zlevel = function(zpos) {
+                 bds <- bounds(self$view_space)
+                 zdiff <- zpos - bds[3,1] 
+                 round(zdiff/self$zspacing())
                },
                
                zdim=function() { dim_of(space(self$vol), self$view_axes@k) },
@@ -83,7 +89,7 @@ Layer <- R6Class("Layer",
                  spacing(self$vol)[dnum]
                },
                
-               render_slice=function(zpos, width=NULL, height=NULL) {
+               render_slice=function(zpos) {
                  bds <- bounds(self$view_space)
                  zran <- self$zrange()
                  
@@ -98,57 +104,58 @@ Layer <- R6Class("Layer",
                  } else if (zlevel >= zdim && zlevel <= (zdim+1)) {
                    zlevel <- zdim
                  } else {
+                   #browser()
                    stop(paste("zpos outside z bounds: ", zpos, " bounds: ", zran))
                  }
                  
-                 
-                 #browser()
-                 #bds <- t(apply(bds,1,sort))[1:2,]
-                
+    
                  slice <- slice(self$vol, zlevel, self$view_space, self$view_axes)
+                 imslice <- t(slice[1:nrow(slice), ncol(slice):1,drop=FALSE]) 
+                 imcols <- mapToColors(imslice, self$color_map, self$zero_col, alpha=self$alpha, 
+                                       irange=self$irange, threshold=self$threshold)
+                 
+                 ras <- as.raster(imcols)
               
-                 bds <- bounds(self$view_space)
-                 bds <- t(apply(bds,1,sort))[1:2,]
+                 # bds <- bounds(self$view_space)
+                 # bds <- t(apply(bds,1,sort))[1:2,]
+                 # 
+                 # wi <- diff(bds[1,])
+                 # hi <- diff(bds[2,])
+                 # aspect_ratio <- wi/hi
+                 # 
+                 # if (is.null(width) && is.null(height)) {
+                 #   width <- dim(slice)[1] * spacing(slice)[1]
+                 #   height <- dim(slice)[2] * spacing(slice)[2]
+                 # } else if (is.null(width)) {
+                 #   wx <- dim(slice)[1] * spacing(slice)[1]
+                 #   wy <- dim(slice)[2] * spacing(slice)[2]
+                 #   rat <-  wx/wy
+                 #   width <- height * rat
+                 # } else if (is.null(height)) {
+                 #   wx <- dim(slice)[1] * spacing(slice)[1]
+                 #   wy <- dim(slice)[2] * spacing(slice)[2]
+                 #   rat <-  wy/wx
+                 #   height <- width * rat
+                 # } else {
+                 #   rs <- width/height
+                 #   if (rs > aspect_ratio) {
+                 #     width <- wi * height/hi
+                 #   } else {
+                 #     height <- hi * width/wi
+                 #   }
+                 # }
+                 # 
+                 # 
+                 # grob <- render(slice, width, height, 
+                 #                colmap=self$color_map, 
+                 #                zero_col=self$zero_col, 
+                 #                alpha=self$alpha, 
+                 #                irange=self$irange,
+                 #                threshold=self$threshold,
+                 #                units="points")
                  
-                 
-                 wi <- diff(bds[1,])
-                 hi <- diff(bds[2,])
-                 aspect_ratio <- wi/hi
-                 
-                 if (is.null(width) && is.null(height)) {
-                   width <- dim(slice)[1] * spacing(slice)[1]
-                   height <- dim(slice)[2] * spacing(slice)[2]
-                   
-                 } else if (is.null(width)) {
-                   wx <- dim(slice)[1] * spacing(slice)[1]
-                   wy <- dim(slice)[2] * spacing(slice)[2]
-                   rat <-  wx/wy
-                   width <- height * rat
-                 } else if (is.null(height)) {
-                   wx <- dim(slice)[1] * spacing(slice)[1]
-                   wy <- dim(slice)[2] * spacing(slice)[2]
-                   rat <-  wy/wx
-                   height <- width * rat
-                 } else {
-                   rs <- width/height
-                   if (rs > aspect_ratio) {
-                     width <- wi * height/hi
-                   } else {
-                     height <- hi * width/wi
-                   }
-                 }
-                 
-                 
-                 grob <- render(slice, width, height, 
-                                colmap=self$color_map, 
-                                zero_col=self$zero_col, 
-                                alpha=self$alpha, 
-                                irange=self$irange,
-                                threshold=self$threshold,
-                                units="points")
-                 
-                 RenderedSlice$new(slice=slice, width=width, height=height, 
-                                   xbounds=bds[1,], ybounds=bds[2,], raster=grob)
+                 RenderedSlice$new(slice=slice, width=dim(slice)[1], height=dim(slice)[2], 
+                                   xbounds=bds[1,], ybounds=bds[2,], raster=ras, zpos=zpos, zlevel=zlevel)
                }
              )
 )
@@ -172,16 +179,16 @@ Overlay <- R6Class("Overlay",
                       views <- lapply(layers, function(x) x$view_axes)
                       
                       if (length(layers) > 1) {
-                        orgs <- do.call(rbind, lapply(splist, function(x) signif(origin(x),3)))
-                        dorgs <- apply(orgs, 2, function(x) max(abs(diff(x))))
+                        #orgs <- do.call(rbind, lapply(splist, function(x) signif(origin(x),3)))
+                        #dorgs <- apply(orgs, 2, function(x) max(abs(diff(x))))
                         #browser()
-                        assertthat::assert_that(all(dorgs < 2))
+                        #assertthat::assert_that(all(dorgs < 2))
                       }
                       
                       
                       assertthat::assert_that(length(unique(views)) == 1)
                       assertthat::assert_that(length(unique(axes)) == 1)
-                      assertthat::assert_that(length(unique(bds)) == 1)
+                      #assertthat::assert_that(length(unique(bds)) == 1)
                       
                      
                       self$view_space=layers[[1]]$view_space
@@ -237,21 +244,43 @@ Overlay <- R6Class("Overlay",
                    },
                    
                    render_slice=function(zpos, selected=NULL, width=NULL, height=NULL) {
+                   
                      if (is.null(selected)) {
                        selected <- 1:length(self$layers)
                      }
                      
+                    
+                     
+                     bds <- bounds(self$view_space)
+                     bds <- t(apply(bds,1,sort))[1:2,]
+                      
+                     wi <- diff(bds[1,])
+                     hi <- diff(bds[2,])
+                     aspect_ratio <- wi/hi
+                     
+                     rs <- width/height
+                     if (rs > aspect_ratio) {
+                      width <- wi * height/hi
+                     } else {
+                      height <- hi * width/wi
+                     }
+                     
+                     sx <- width/diff(bds[1,])
+                     sy <- height/diff(bds[2,])
+                     
                      sliceList <- lapply(self$layers, function(layer) {
-                       layer$render_slice(zpos=zpos, width=width, height=height)
+                       layer$render_slice(zpos=zpos)
                      })
                      
                      slices <- lapply(sliceList, function(x) x$slice)
-                     grobs <- lapply(sliceList, function(x) x$raster)
-                     gl <- do.call(gList, grobs)
+                     grobList <- lapply(sliceList, function(x) x$get_grob(sx,sy))
                      
-                     RenderedSliceStack$new(slices=slices, width=width, height=height, 
+                     gl <- do.call(gList, grobList)
+                     
+                     RenderedSliceStack$new(slices=sliceList, width=width, height=height, 
                                             xbounds=sliceList[[1]]$xbounds, 
-                                            ybounds=sliceList[[1]]$ybounds, rasterList=gl)
+                                            ybounds=sliceList[[1]]$ybounds, grobList=gl, 
+                                            zpos=sliceList[[1]]$zpos)
                      
                      
                    }
@@ -269,20 +298,35 @@ RenderedSlice <- R6Class("RenderedSlice",
                            xbounds=NULL, 
                            ybounds=NULL, 
                            raster=NULL,
-                           
-                           initialize = function(slice, width,height, xbounds,  ybounds, raster) {
+                           zpos=NULL,
+                           zlevel=NULL,
+                           initialize = function(slice, width, height, xbounds,  ybounds, raster, zpos, zlevel) {
                              self$slice=slice
                              self$width=width
                              self$height=height
                              self$xbounds=xbounds
                              self$ybounds=ybounds
                              self$raster=raster
+                             self$zpos=zpos
+                             self$zlevel=zlevel
                            },
                            
-                           draw = function() {
-                             grid.newpage()
-                             grid.rect(gp=gpar(fill="black"))
-                             grid.draw(self$raster)
+                           get_grob = function(sx=1, sy=1) {
+                             #browser()
+                             grob <- rasterGrob(self$raster, 
+                                                width=unit(spacing(self$slice)[1] * dim(self$slice)[1] * sx, "points"), 
+                                                height=unit(spacing(self$slice)[2] * dim(self$slice)[2] * sy, "points"), 
+                                                interpolate=TRUE)
+                           },
+                           
+                           draw = function(width, height) {
+                             #grid.newpage()
+                             #grid.rect(gp=gpar(fill="black"))
+                             grob <- rasterGrob(self$raster, 
+                                                width=width, 
+                                                height=height, 
+                                                interpolate=TRUE)
+                             grid.draw(grob)
                            }
                            
                          )
@@ -298,21 +342,51 @@ RenderedSliceStack <- R6Class("RenderedSliceStack",
                                 height=NULL, 
                                 xbounds=NULL, 
                                 ybounds=NULL, 
-                                rasterList=NULL,
+                                grobList=NULL,
+                                zpos=NULL,
                                 
-                                initialize = function(slices, width,height, xbounds,  ybounds, rasterList) {
+                                initialize = function(slices, width,height, xbounds,  ybounds, grobList, zpos) {
                                   self$slices=slices
                                   self$width=width
                                   self$height=height
                                   self$xbounds=xbounds
                                   self$ybounds=ybounds
-                                  self$rasterList=rasterList
+                                  self$grobList=grobList
+                                  self$zpos=zpos
                                 },
                                 
-                                draw = function() {
+                                draw = function(marker_pos=NULL, marker_col="white") {
+                               
                                   grid.newpage()
-                                  grid.rect(gp=gpar(fill="black"))
-                                  grid.draw(self$rasterList)
+                                  grid.rect(gp=gpar(fill="black"), name="background_fill")
+                                  if (!is.null(marker_pos)) {
+                                    grid.lines(x=c(0,1), y=c(marker_pos[2], marker_pos[2]))
+                                    grid.lines(x=c(marker_pos[1], marker_pos[1]), y=c(0,1))
+                                  }
+                                  
+                                  grid.draw(self$grobList)
+                                  
+                                  frame_width <- as.numeric(convertX(grobWidth(grid.get("background_fill")), "points"))
+                                  frame_height <- as.numeric(convertX(grobHeight(grid.get("background_fill")), "points"))
+                                  image_width <- as.numeric(convertX(grobWidth(grid.get(self$grobList[[1]]$name)), "points"))
+                                  image_height <- as.numeric(convertX(grobHeight(grid.get(self$grobList[[1]]$name)), "points"))
+                                  xoffset <- (frame_width - image_width)/2
+                                  yoffset <- (frame_height - image_height)/2
+                                  
+                                  convert_xy <- function(x,y) {
+                                    x0 <- (x * frame_width) - xoffset
+                                    y0 <- (y * frame_height) - yoffset
+                                    c(x0/image_width,y0/image_height)
+                                  }
+                                  
+                                  list(frame_width=frame_width,
+                                       frame_height=frame_height,
+                                       image_width=image_width,
+                                       image_height=image_height,
+                                       xoffset=xoffset,
+                                       yoffset=yoffset,
+                                       convert_xy=convert_xy)
+                                  
                                 }
                                 
                               )
