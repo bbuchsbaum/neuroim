@@ -50,14 +50,14 @@ foreground_panel <- function(vol) {
 
 
 
-slice_box <- function(title, id, slice_range, sid, height=300) {
+slice_box <- function(title, id, slice_range, sid, height=225, width=4) {
   box(title, plotOutput(id, height=height, click = paste0(id, "_click")), 
       sliderInput(sid, "Slice:", 
                   slice_range[1],
                   slice_range[2],
                   ticks=FALSE,
                   median(round(c(slice_range[1], 
-                                 slice_range[2])))), width=4, 
+                                 slice_range[2])))), width=width, 
       
       solidHeader=TRUE, status="primary", background="black", align="center")
   
@@ -70,7 +70,7 @@ create_overlay <- function(...) {
   
   axial_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="LPI"))
   coronal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="LIP"))
-  sagittal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="AIL"))
+  sagittal_overlay <- do.call(Overlay$new, lapply(vlist, Layer$new, view="PIL"))
   
   gen_el <- function(overlay, vname, num) {
     vspace <- overlay$view_space
@@ -109,25 +109,30 @@ ortho_plot <- function(..., height=300) {
  
  
   body <- dashboardBody(
+    
     fluidRow(
-      slice_box("Axial", "axial_plot", overlay_set$axial$vrange, "ax_slider"),
-      slice_box("Coronal", "coronal_plot", overlay_set$coronal$vrange, "cor_slider"),
-      slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal$vrange, "sag_slider")
+      slice_box("Axial", "axial_plot", overlay_set$axial$vrange, "ax_slider", width=6),
+      slice_box("Sagittal", "sagittal_plot", overlay_set$sagittal$vrange, "sag_slider", width=6)
     ),
     fluidRow(
-      box(title="Yolo", height=4),
-      box(title="Yolo2", height=4)
+      slice_box("Coronal", "coronal_plot", overlay_set$coronal$vrange, "cor_slider",width=6),
+      box(title="Color", width=2, solidHeader=TRUE, status="primary", background="black", align="center"),
+      box(title="Info", width=4, solidHeader=TRUE, status="primary", background="black", align="center",
+          textOutput("crosshair_loc"))
     )
   )
   
   ui <- dashboardPage(
+    
     dashboardHeader(title = "Ortho Plot"),
+    
     dashboardSidebar(
       sidebarMenu(
         background_panel(axial_overlay$layers[[1]]$vol),
         if (length(axial_overlay$layers) > 1) foreground_panel(axial_overlay$layers[[2]]$vol)  
       )),
     body
+    
   )
   
   
@@ -152,7 +157,7 @@ ortho_plot <- function(..., height=300) {
       ## convert from view_space to voxel space 
       gg_native <- gridToGrid(ov_source$view_space, matrix(c(vox,0), ncol=3))
     
-      ## convert view space of destination
+      ## convert to view space of destination
       gg_coord <- gridToCoord(ov_dest$view_space, gg_native)
       
       ## convert back to voxel space of destination
@@ -169,8 +174,8 @@ ortho_plot <- function(..., height=300) {
     }
     
     observeEvent(input$axial_plot_click, {
-      
-      xyd <- convert_click(input$axial_plot_click$x, input$axial_plot_click$y, rvs$axial_frame, rvs$axial_slice$slices[[1]]$slice)
+      xyd <- convert_click(input$axial_plot_click$x, input$axial_plot_click$y, 
+                           rvs$axial_frame, rvs$axial_slice$slices[[1]]$slice)
     
       z_sag <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$axial$overlay, overlay_set$sagittal$overlay)
       z_cor <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$axial$overlay, overlay_set$coronal$overlay)
@@ -180,7 +185,8 @@ ortho_plot <- function(..., height=300) {
     })
     
     observeEvent(input$coronal_plot_click, {
-      xyd <- convert_click(input$coronal_plot_click$x, input$coronal_plot_click$y,rvs$coronal_frame, rvs$coronal_slice$slices[[1]]$slice)
+      xyd <- convert_click(input$coronal_plot_click$x, input$coronal_plot_click$y,
+                           rvs$coronal_frame, rvs$coronal_slice$slices[[1]]$slice)
       
       z_ax <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$coronal$overlay, overlay_set$axial$overlay)
       z_sag <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$coronal$overlay, overlay_set$sagittal$overlay)
@@ -190,7 +196,8 @@ ortho_plot <- function(..., height=300) {
     })
     
     observeEvent(input$sagittal_plot_click, {
-      xyd <- convert_click(input$sagittal_plot_click$x, input$sagittal_plot_click$y,rvs$sagittal_frame, rvs$sagittal_slice$slices[[1]]$slice)
+      xyd <- convert_click(input$sagittal_plot_click$x, input$sagittal_plot_click$y,
+                           rvs$sagittal_frame, rvs$sagittal_slice$slices[[1]]$slice)
       
       z_ax <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$sagittal$overlay, overlay_set$axial$overlay)
       z_cor <- click_to_z(xyd$x,xyd$y,xyd$d,overlay_set$sagittal$overlay, overlay_set$coronal$overlay)
@@ -209,8 +216,6 @@ ortho_plot <- function(..., height=300) {
         height <- session$clientData[[paste0("output_", plot_id, "_height")]]
         
         ind <- input[[slider_id]]
-       
-        zpos <- view$overlay$get_zpos(ind)
         
         view$overlay$set_irange(1, input[["background_range"]])
         csize1 <- input[["background_col_size"]]
@@ -230,11 +235,29 @@ ortho_plot <- function(..., height=300) {
           view$overlay$set_alpha(2, input[["foreground_opacity"]])
         }
         
-        slice <- view$overlay$render_slice(zpos, 1:view$overlay$length(), width, height)
-        rvs[[paste0(view$view_name, "_slice")]] <- slice
-        rvs$crosshair[view$view_num] <- slice$zpos
+        #browser()
+        ## ind is in grid space of RPI, need to convert to view_space
+        dnum <- which_dim(space(view$overlay$layers[[1]]$vol), view$overlay$view_axes@k)
+        vox <- rep(0,3)
+        vox[dnum] <-ind
+        coord <- gridToCoord(view$overlay$view_space, vox)
+        zpos <- coord[3]
         
-        info <- slice$draw()
+        
+        #bds <- bounds(view$overlay$view_space)
+        #zval <- (ind * spacing(view$overlay$view_space)[3]) + sort(bds[3,])[1]
+       # browser()
+        
+        rvs$crosshair[view$view_num] <- zpos
+        
+        slice <- view$overlay$render_slice(zpos, 1:view$overlay$length(), width, height)
+        
+        rvs[[paste0(view$view_name, "_slice")]] <- slice
+        
+        
+        print(paste("crosshair: ", rvs$crosshair))
+        
+        info <- slice$draw(marker_pos=rvs$crosshair)
         rvs[[paste0(view$view_name, "_frame")]] <- info
         #browser()
         
@@ -250,6 +273,11 @@ ortho_plot <- function(..., height=300) {
       height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
       color_bar(rainbow(25), c(-3,3))
     })
+    
+    output$crosshair_loc <- renderText({ paste0("cross:", 
+                                               "(", rvs$crosshair[1],
+                                               ",", rvs$crosshair[2],
+                                               ",", rvs$crosshair[3], ")") })
     
     
 

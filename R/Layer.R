@@ -166,7 +166,7 @@ Overlay <- R6Class("Overlay",
                    public = list(
                      layers=NULL,
                      view_space=NULL,
-                     view_anat=NULL,
+                     view_axes=NULL,
                      layer_names=NULL,
                      
                      initialize = function(...) {
@@ -192,7 +192,7 @@ Overlay <- R6Class("Overlay",
                       
                      
                       self$view_space=layers[[1]]$view_space
-                      self$view_anat=layers[[1]]$view_anat
+                      self$view_axes=layers[[1]]$view_axes
                       
                       lnames <- names(layers)
                       
@@ -232,25 +232,15 @@ Overlay <- R6Class("Overlay",
                      self$layers[[layer_index]]$set_alpha(alpha)
                    },
                    
-                   convert_coordinate = function(xy) {
-                     layer <- self$layers[[1]]
-                     #bds <- bounds(self$layers[[1]]$view_space)
-                     #xr <- abs(diff(bds[1,]))
-                     #yr <- abs(diff(bds[2,]))
-                     #px <- xy[1] * xr
-                     #py <- xy[2] * yr
-                     #browser()
-                     
-                   },
+            
                    
                    render_slice=function(zpos, selected=NULL, width=NULL, height=NULL) {
                    
                      if (is.null(selected)) {
                        selected <- 1:length(self$layers)
                      }
-                     
                     
-                     
+         
                      bds <- bounds(self$view_space)
                      bds <- t(apply(bds,1,sort))[1:2,]
                       
@@ -277,7 +267,9 @@ Overlay <- R6Class("Overlay",
                      
                      gl <- do.call(gList, grobList)
                      
-                     RenderedSliceStack$new(slices=sliceList, width=width, height=height, 
+                     RenderedSliceStack$new(slices=sliceList, view_space=self$view_space,
+                                            view_axes=self$view_axes,
+                                            width=width, height=height, 
                                             xbounds=sliceList[[1]]$xbounds, 
                                             ybounds=sliceList[[1]]$ybounds, grobList=gl, 
                                             zpos=sliceList[[1]]$zpos)
@@ -334,63 +326,123 @@ RenderedSlice <- R6Class("RenderedSlice",
 )
 
 
-RenderedSliceStack <- R6Class("RenderedSliceStack",
-                              portable=TRUE,
-                              public = list(
-                                slices=NULL,
-                                width=NULL, 
-                                height=NULL, 
-                                xbounds=NULL, 
-                                ybounds=NULL, 
-                                grobList=NULL,
-                                zpos=NULL,
-                                
-                                initialize = function(slices, width,height, xbounds,  ybounds, grobList, zpos) {
-                                  self$slices=slices
-                                  self$width=width
-                                  self$height=height
-                                  self$xbounds=xbounds
-                                  self$ybounds=ybounds
-                                  self$grobList=grobList
-                                  self$zpos=zpos
-                                },
-                                
-                                draw = function(marker_pos=NULL, marker_col="white") {
-                               
-                                  grid.newpage()
-                                  grid.rect(gp=gpar(fill="black"), name="background_fill")
-                                  if (!is.null(marker_pos)) {
-                                    grid.lines(x=c(0,1), y=c(marker_pos[2], marker_pos[2]))
-                                    grid.lines(x=c(marker_pos[1], marker_pos[1]), y=c(0,1))
-                                  }
-                                  
-                                  grid.draw(self$grobList)
-                                  
-                                  frame_width <- as.numeric(convertX(grobWidth(grid.get("background_fill")), "points"))
-                                  frame_height <- as.numeric(convertX(grobHeight(grid.get("background_fill")), "points"))
-                                  image_width <- as.numeric(convertX(grobWidth(grid.get(self$grobList[[1]]$name)), "points"))
-                                  image_height <- as.numeric(convertX(grobHeight(grid.get(self$grobList[[1]]$name)), "points"))
-                                  xoffset <- (frame_width - image_width)/2
-                                  yoffset <- (frame_height - image_height)/2
-                                  
-                                  convert_xy <- function(x,y) {
-                                    x0 <- (x * frame_width) - xoffset
-                                    y0 <- (y * frame_height) - yoffset
-                                    c(x0/image_width,y0/image_height)
-                                  }
-                                  
-                                  list(frame_width=frame_width,
-                                       frame_height=frame_height,
-                                       image_width=image_width,
-                                       image_height=image_height,
-                                       xoffset=xoffset,
-                                       yoffset=yoffset,
-                                       convert_xy=convert_xy)
-                                  
-                                }
-                                
-                              )
-)
+
+RenderedSliceStack <-
+  R6Class(
+    "RenderedSliceStack",
+    portable = TRUE,
+    public = list(
+      slices = NULL,
+      width = NULL,
+      height = NULL,
+      xbounds = NULL,
+      ybounds = NULL,
+      grobList = NULL,
+      zpos = NULL,
+      view_space=NULL,
+      view_axes=NULL,
+      initialize = function(slices,
+                            view_space,
+                            view_axes,
+                            width,
+                            height,
+                            xbounds,
+                            ybounds,
+                            grobList,
+                            zpos) {
+        self$slices = slices
+        self$view_space=view_space
+        self$view_axes=view_axes
+        self$width = width
+        self$height = height
+        self$xbounds = xbounds
+        self$ybounds = ybounds
+        self$grobList = grobList
+        self$zpos = zpos
+      },
+      
+      draw = function(marker_pos = NULL,
+                      marker_col = "white") {
+        
+        grid.newpage()
+        grid.rect(gp = gpar(fill = "black"), name =
+                    "background_fill")
+        
+        
+        
+        grid.draw(self$grobList)
+        
+        frame_width <-
+          as.numeric(convertX(grobWidth(grid.get(
+            "background_fill"
+          )), "points"))
+        frame_height <-
+          as.numeric(convertX(grobHeight(grid.get(
+            "background_fill"
+          )), "points"))
+        image_width <-
+          as.numeric(convertX(grobWidth(grid.get(
+            self$grobList[[1]]$name
+          )), "points"))
+        image_height <-
+          as.numeric(convertX(grobHeight(grid.get(
+            self$grobList[[1]]$name
+          )), "points"))
+        
+        xoffset <- (frame_width - image_width) / 2
+        
+        yoffset <- (frame_height - image_height) / 2
+        
+        convert_xy <- function(x, y) {
+          x0 <- (x * frame_width) - xoffset
+          y0 <- (y * frame_height) - yoffset
+          c(x0 / image_width, y0 / image_height)
+        }
+        
+        if (!is.null(marker_pos)) {
+          ## go from 
+          
+          #browser()
+          marker_pos <- t(permMat(self$view_axes)) %*% marker_pos
+          #marker_pos <- gridToCoord(self$view_space, vcoord)
+          bds <- bounds(self$view_space)
+          bds <- t(apply(bounds(self$view_space), 1, sort))
+          xc <- xoffset + (marker_pos[1] - bds[1,1])/diff(bds[1,]) * image_width
+          yc <- yoffset + (marker_pos[2] - bds[2,1])/diff(bds[2,]) * image_height
+          
+          if (self$view_axes@i@axis == "Left-to-Right" && 
+              self$view_axes@j@axis == "Posterior-to-Anterior" && marker_pos[1] < -90) {
+            print(paste("marker_pos", marker_pos[1], marker_pos[2], marker_pos[3]))
+            print(paste("xc: ", xc))
+            print(paste("yc: ", yc))
+            #browser()
+          }
+          
+          
+
+          grid.lines(x=unit(c(xoffset, xoffset+image_width),"points"), 
+                     y=unit(c(yc,yc),"points"),
+                     gp=gpar(col="white", lwd=4))
+          
+          grid.lines(x=unit(c(xc, xc),"points"), 
+                     y=unit(c(yoffset,yoffset+image_height),"points"),
+                     gp=gpar(col="white", lwd=4))
+        }
+        
+        list(
+          frame_width = frame_width,
+          frame_height = frame_height,
+          image_width = image_width,
+          image_height = image_height,
+          xoffset = xoffset,
+          yoffset = yoffset,
+          convert_xy = convert_xy
+        )
+        
+      }
+      
+    )
+  )
 
 
 ColorMaps <- R6Class("ColorMaps",
