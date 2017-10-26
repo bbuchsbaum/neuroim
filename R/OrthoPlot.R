@@ -97,8 +97,6 @@ ortho_plot <- function(..., height=300) {
   overlay_set <- create_overlay(...)
   axial_overlay <- overlay_set$axial$overlay
   
- 
-
   gen_layer_selection <- function() {
     if (axial_overlay$length() > 2) {
       selectInput("layer_selection", "Overlay Image: ", axial_overlay$names(), 
@@ -106,7 +104,6 @@ ortho_plot <- function(..., height=300) {
     } 
   }
   
- 
  
   body <- dashboardBody(
     
@@ -124,7 +121,8 @@ ortho_plot <- function(..., height=300) {
             #box(title="Info", width=4, solidHeader=TRUE, status="primary", background="black", align="center",
              div(style="text-align:left; padding:0px;width:100%;", 
                verbatimTextOutput("crosshair_loc"),
-               verbatimTextOutput("voxel_loc")))
+               verbatimTextOutput("voxel_loc"),
+               verbatimTextOutput("bg_val")))
       )
       
     )
@@ -277,7 +275,9 @@ ortho_plot <- function(..., height=300) {
     }
       
     output$axial_plot <- gen_render_plot(overlay_set$axial, "ax_slider", axial_slice, "axial_plot")
+    
     output$coronal_plot <- gen_render_plot(overlay_set$coronal, "cor_slider", coronal_slice, "coronal_plot")
+    
     output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice, "sagittal_plot")
     
     output$foreground_colorbar <- renderPlot({
@@ -295,6 +295,8 @@ ortho_plot <- function(..., height=300) {
                                                 "(", rvs$voxel[1],
                                                 ",", rvs$voxel[2],
                                                 ",", rvs$voxel[3], ")") })
+    
+    output$bg_val <- renderText({ paste0("[bg]:", axial_overlay$layers[[1]]$vol[rvs$voxel])})
     
     
 
