@@ -50,8 +50,8 @@ foreground_panel <- function(vol) {
 
 
 
-slice_box <- function(title, id, slice_range, sid, height=225, width=4) {
-  box(title, plotOutput(id, height=height, click = paste0(id, "_click")), 
+slice_box <- function(title, id, slice_range, sid, height=300, width=4) {
+  box(title=title, plotOutput(id, height=height, click = paste0(id, "_click")), 
       sliderInput(sid, "Slice:", 
                   slice_range[1],
                   slice_range[2],
@@ -116,9 +116,17 @@ ortho_plot <- function(..., height=300) {
     ),
     fluidRow(
       slice_box("Coronal", "coronal_plot", overlay_set$coronal$vrange, "cor_slider",width=6),
-      box(title="Color", width=2, solidHeader=TRUE, status="primary", background="black", align="center"),
-      box(title="Info", width=4, solidHeader=TRUE, status="primary", background="black", align="center",
-          textOutput("crosshair_loc"))
+      box(title="Color", width=6, solidHeader=TRUE, status="primary", background="black", align="center",
+          column(5,
+            #box(title="Color", width=2, solidHeader=TRUE, status="primary", background="black", align="center",
+            plotOutput("foreground_colorbar")),
+          column(7, offset=0,
+            #box(title="Info", width=4, solidHeader=TRUE, status="primary", background="black", align="center",
+             div(style="text-align:left; padding:0px;width:100%;", 
+               verbatimTextOutput("crosshair_loc"),
+               verbatimTextOutput("voxel_loc")))
+      )
+      
     )
   )
   
@@ -148,7 +156,8 @@ ortho_plot <- function(..., height=300) {
       axial_frame=NULL,
       sagittal_frame=NULL,
       coronal_frame=NULL,
-      crosshair=c(0,0,0)
+      crosshair=c(0,0,0),
+      voxel=c(0,0,0)
     )
     
     click_to_z <- function(x,y, d, ov_source, ov_dest) {
@@ -238,8 +247,10 @@ ortho_plot <- function(..., height=300) {
         #browser()
         ## ind is in grid space of RPI, need to convert to view_space
         dnum <- which_dim(space(view$overlay$layers[[1]]$vol), view$overlay$view_axes@k)
-        vox <- rep(0,3)
-        vox[dnum] <-ind
+        vox <- rvs[["voxel"]]
+        vox[dnum] <- ind
+        rvs[["voxel"]] <- vox
+        
         coord <- gridToCoord(view$overlay$view_space, vox)
         zpos <- coord[3]
         
@@ -274,10 +285,15 @@ ortho_plot <- function(..., height=300) {
       color_bar(rainbow(25), c(-3,3))
     })
     
-    output$crosshair_loc <- renderText({ paste0("cross:", 
-                                               "(", rvs$crosshair[1],
-                                               ",", rvs$crosshair[2],
-                                               ",", rvs$crosshair[3], ")") })
+    output$crosshair_loc <- renderText({ paste0("[xyz]:", 
+                                               "(", round(rvs$crosshair[1]),
+                                               ",", round(rvs$crosshair[2]),
+                                               ",", round(rvs$crosshair[3]), ")") })
+    
+    output$voxel_loc <- renderText({ paste0("[ijk]:", 
+                                                "(", rvs$voxel[1],
+                                                ",", rvs$voxel[2],
+                                                ",", rvs$voxel[3], ")") })
     
     
 
@@ -290,10 +306,11 @@ ortho_plot <- function(..., height=300) {
 color_bar <- function(lut, yrange=c(0,100)) {
   
   par(bg="black")
-  par(mar = c(2,4,2,2))
+  #par(mar = c(5.1,4.1,4.1,2.1))
+  par(mar = c(2,2.5,2.5,1.4))
   plot.new()
   plot.window(xlim=c(0,1), ylim=yrange, xaxs="i", yaxs="i") 
-  axis(2, signif(seq(yrange[1],yrange[2], length.out=4),3), col="white", col.axis="white", cex.axis=1.5)
+  axis(2, signif(seq(yrange[1],yrange[2], length.out=4),3), col="white", col.axis="white", cex.axis=1)
   
   strip_h <- (yrange[2] - yrange[1])/length(lut) 
   
