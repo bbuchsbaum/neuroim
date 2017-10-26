@@ -137,7 +137,8 @@ ortho_plot <- function(..., height=300) {
     dashboardSidebar(
       sidebarMenu(
         background_panel(axial_overlay$layers[[1]]$vol),
-        if (length(axial_overlay$layers) > 1) foreground_panel(axial_overlay$layers[[2]]$vol)  
+        if (length(axial_overlay$layers) > 1) foreground_panel(axial_overlay$layers[[2]]$vol),
+        if (length(axial_overlay$layers) > 2) gen_layer_selection()
       )),
     body
     
