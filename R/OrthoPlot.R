@@ -182,6 +182,8 @@ ortho_plot <- function(..., height=300) {
     }
     
     observeEvent(input$axial_plot_click, {
+      print(paste("X:", input$axial_plot_click$x))
+      print(paste("Y:", input$axial_plot_click$y))
       xyd <- convert_click(input$axial_plot_click$x, input$axial_plot_click$y, 
                            rvs$axial_frame, rvs$axial_slice$slices[[1]]$slice)
     
@@ -265,7 +267,7 @@ ortho_plot <- function(..., height=300) {
         rvs[[paste0(view$view_name, "_slice")]] <- slice
         
         
-        print(paste("crosshair: ", rvs$crosshair))
+        #print(paste("crosshair: ", rvs$crosshair))
         
         info <- slice$draw(marker_pos=rvs$crosshair)
         rvs[[paste0(view$view_name, "_frame")]] <- info
@@ -296,10 +298,8 @@ ortho_plot <- function(..., height=300) {
                                                 ",", rvs$voxel[2],
                                                 ",", rvs$voxel[3], ")") })
     
-    output$bg_val <- renderText({ paste0("[bg]:", axial_overlay$layers[[1]]$vol[rvs$voxel])})
-    
-    
-
+    output$bg_val <- renderText({ paste0("[bg]:", 
+                                                    axial_overlay$layers[[1]]$vol[rvs$voxel[1], rvs$voxel[2], rvs$voxel[3]]) })
   }
   
   shinyApp(ui = ui, server = server)
@@ -308,7 +308,7 @@ ortho_plot <- function(..., height=300) {
 # Function to plot color bar
 color_bar <- function(lut, yrange=c(0,100)) {
   
-  par(bg="black")
+  par(bg="gray6")
   #par(mar = c(5.1,4.1,4.1,2.1))
   par(mar = c(2,2.5,2.5,1.4))
   plot.new()

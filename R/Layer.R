@@ -365,10 +365,12 @@ RenderedSliceStack <-
                       marker_col = "white") {
         
         grid.newpage()
+        
         grid.rect(gp = gpar(fill = "black"), name =
                     "background_fill")
         
-        
+        #grid.xaxis(at=seq(.1, .9, length=5), gp=gpar(col="white"))
+        #grid.yaxis(at=seq(.1, .9, length=5), gp=gpar(col="white"))
         
         grid.draw(self$grobList)
         
@@ -377,7 +379,7 @@ RenderedSliceStack <-
             "background_fill"
           )), "points"))
         frame_height <-
-          as.numeric(convertX(grobHeight(grid.get(
+          as.numeric(convertY(grobHeight(grid.get(
             "background_fill"
           )), "points"))
         image_width <-
@@ -385,7 +387,7 @@ RenderedSliceStack <-
             self$grobList[[1]]$name
           )), "points"))
         image_height <-
-          as.numeric(convertX(grobHeight(grid.get(
+          as.numeric(convertY(grobHeight(grid.get(
             self$grobList[[1]]$name
           )), "points"))
         
@@ -394,8 +396,9 @@ RenderedSliceStack <-
         yoffset <- (frame_height - image_height) / 2
         
         convert_xy <- function(x, y) {
-          x0 <- (x * frame_width) - xoffset
-          y0 <- (y * frame_height) - yoffset
+          ## fudge to deal with shiny negative mouse coordinates...
+          x0 <- ( (x - -.04)/1.0764 * frame_width) - xoffset
+          y0 <- ( (y - -.04)/1.0764 * frame_height) - yoffset
           c(x0 / image_width, y0 / image_height)
         }
         
@@ -422,11 +425,11 @@ RenderedSliceStack <-
 
           grid.lines(x=unit(c(xoffset, xoffset+image_width),"points"), 
                      y=unit(c(yc,yc),"points"),
-                     gp=gpar(col="white", lwd=4))
+                     gp=gpar(col="green", lwd=2, lty=2))
           
           grid.lines(x=unit(c(xc, xc),"points"), 
                      y=unit(c(yoffset,yoffset+image_height),"points"),
-                     gp=gpar(col="white", lwd=4))
+                     gp=gpar(col="green", lwd=2, lty=2))
         }
         
         list(
