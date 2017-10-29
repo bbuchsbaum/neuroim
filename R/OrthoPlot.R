@@ -116,13 +116,14 @@ ortho_plot <- function(..., height=300) {
       box(title="Color", width=6, solidHeader=TRUE, status="primary", background="black", align="center",
           column(5,
             #box(title="Color", width=2, solidHeader=TRUE, status="primary", background="black", align="center",
-            plotOutput("foreground_colorbar")),
+            plotOutput("colorbar")),
           column(7, offset=0,
             #box(title="Info", width=4, solidHeader=TRUE, status="primary", background="black", align="center",
              div(style="text-align:left; padding:0px;width:100%;", 
                verbatimTextOutput("crosshair_loc"),
                verbatimTextOutput("voxel_loc"),
-               verbatimTextOutput("bg_val")))
+               verbatimTextOutput("bg_val"),
+               verbatimTextOutput("fg_val")))
       )
       
     )
@@ -156,7 +157,10 @@ ortho_plot <- function(..., height=300) {
       sagittal_frame=NULL,
       coronal_frame=NULL,
       crosshair=c(0,0,0),
-      voxel=c(0,0,0)
+      voxel=c(1,1,1),
+      fg_voxel=c(1,1,1),
+      bg_colormap=NULL,
+      fg_colormap=NULL
     )
     
     click_to_z <- function(x,y, d, ov_source, ov_dest) {
@@ -180,6 +184,11 @@ ortho_plot <- function(..., height=300) {
       d <- dim(slice)
       list(x=xy[1],y=xy[2], d=d)
     }
+    
+    #observeEvent(input$foreground_col, {
+    #  rvs$fg_colormap  
+    #  
+    #})
     
     observeEvent(input$axial_plot_click, {
       print(paste("X:", input$axial_plot_click$x))
@@ -225,6 +234,7 @@ ortho_plot <- function(..., height=300) {
         width <- session$clientData[[paste0("output_", plot_id, "_width")]]
         height <- session$clientData[[paste0("output_", plot_id, "_height")]]
         
+        ## the voxel index of background volume to display
         ind <- input[[slider_id]]
         
         view$overlay$set_irange(1, input[["background_range"]])
@@ -245,7 +255,6 @@ ortho_plot <- function(..., height=300) {
           view$overlay$set_alpha(2, input[["foreground_opacity"]])
         }
         
-        #browser()
         ## ind is in grid space of RPI, need to convert to view_space
         dnum <- which_dim(space(view$overlay$layers[[1]]$vol), view$overlay$view_axes@k)
         vox <- rvs[["voxel"]]
@@ -254,24 +263,20 @@ ortho_plot <- function(..., height=300) {
         
         coord <- gridToCoord(view$overlay$view_space, vox)
         zpos <- coord[3]
-        
-        
-        #bds <- bounds(view$overlay$view_space)
-        #zval <- (ind * spacing(view$overlay$view_space)[3]) + sort(bds[3,])[1]
-       # browser()
-        
         rvs$crosshair[view$view_num] <- zpos
         
         slice <- view$overlay$render_slice(zpos, 1:view$overlay$length(), width, height)
-        
         rvs[[paste0(view$view_name, "_slice")]] <- slice
         
-        
-        #print(paste("crosshair: ", rvs$crosshair))
-        
+        if (length(slice$slices) > 1) {
+          fgvol = view$overlay$layers[[2]]$vol
+          vox <- round(coordToGrid(space(fgvol), rvs$crosshair))
+          rvs[["fg_voxel"]] <- vox
+        }
+         
         info <- slice$draw(marker_pos=rvs$crosshair)
         rvs[[paste0(view$view_name, "_frame")]] <- info
-        #browser()
+
         
       })
     }
@@ -282,11 +287,21 @@ ortho_plot <- function(..., height=300) {
     
     output$sagittal_plot <- gen_render_plot(overlay_set$sagittal, "sag_slider", sagittal_slice, "sagittal_plot")
     
-    output$foreground_colorbar <- renderPlot({
-      width <- session$clientData[[paste0("output_foreground_colorbar_width")]]
-      height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
-      color_bar(rainbow(25), c(-3,3))
-    })
+    output$colorbar <- if (length(axial_overlay$layers) > 1) {
+      renderPlot({
+        width <- session$clientData[[paste0("output_foreground_colorbar_width")]]
+        height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
+        cmap <- color_map$get_colors(input[["foreground_col"]], input[["foreground_col_size"]])
+        color_bar(cmap, input[["foreground_range"]])
+      })
+    } else {
+      renderPlot({
+        width <- session$clientData[[paste0("output_foreground_colorbar_width")]]
+        height <- session$clientData[[paste0("output_foreground_colorbar_height")]]
+        cmap <- color_map$get_colors(input[["background_col"]], input[["background_col_size"]])
+        color_bar(cmap, input[["background_range"]])
+      })
+    }
     
     output$crosshair_loc <- renderText({ paste0("[xyz]:", 
                                                "(", round(rvs$crosshair[1]),
@@ -298,8 +313,12 @@ ortho_plot <- function(..., height=300) {
                                                 ",", rvs$voxel[2],
                                                 ",", rvs$voxel[3], ")") })
     
-    output$bg_val <- renderText({ paste0("[bg]:", 
-                                                    axial_overlay$layers[[1]]$vol[rvs$voxel[1], rvs$voxel[2], rvs$voxel[3]]) })
+    output$bg_val <- renderText({ paste0("[bg]:", axial_overlay$layers[[1]]$vol[rvs$voxel[1], rvs$voxel[2], rvs$voxel[3]]) })
+    
+    output$fg_val <- if (length(axial_overlay$layers) > 1) {
+                        renderText({ paste0("[fg]:", 
+                                         signif(axial_overlay$layers[[2]]$vol[rvs$fg_voxel[1], rvs$fg_voxel[2], rvs$fg_voxel[3]],3)) })
+    } else { renderText({ paste0("[fg]: --") }) }
   }
   
   shinyApp(ui = ui, server = server)

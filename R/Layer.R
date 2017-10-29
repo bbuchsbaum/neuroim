@@ -89,71 +89,39 @@ Layer <- R6Class("Layer",
                  spacing(self$vol)[dnum]
                },
                
+               ## render nearest discrete slice, given a z-coordinate
                render_slice=function(zpos) {
+                 
                  bds <- bounds(self$view_space)
                  zran <- self$zrange()
                  
                  zlevel <- (zpos - zran[1])/self$zspacing()
                  zdim <- self$zdim()
                 
-                 
                  if (zlevel >= 1 && zlevel <= zdim) {
                    zlevel <- round(zlevel)
                  } else if (zlevel >= 0 && zlevel <= 1) {
                    zlevel <- 1
-                 } else if (zlevel >= zdim && zlevel <= (zdim+1)) {
+                 } else if (zlevel >= zdim) {
                    zlevel <- zdim
+                 } else if (zlevel < 1) {
+                   zlevel <- 1
                  } else {
-                   #browser()
                    stop(paste("zpos outside z bounds: ", zpos, " bounds: ", zran))
                  }
                  
-    
+                 ## extract slice  
                  slice <- slice(self$vol, zlevel, self$view_space, self$view_axes)
+                 
+                 ## reorder y-axis (needed for correct orientation using grid.raster)
                  imslice <- t(slice[1:nrow(slice), ncol(slice):1,drop=FALSE]) 
+                 ## map intensities to colors
                  imcols <- mapToColors(imslice, self$color_map, self$zero_col, alpha=self$alpha, 
                                        irange=self$irange, threshold=self$threshold)
                  
                  ras <- as.raster(imcols)
               
-                 # bds <- bounds(self$view_space)
-                 # bds <- t(apply(bds,1,sort))[1:2,]
-                 # 
-                 # wi <- diff(bds[1,])
-                 # hi <- diff(bds[2,])
-                 # aspect_ratio <- wi/hi
-                 # 
-                 # if (is.null(width) && is.null(height)) {
-                 #   width <- dim(slice)[1] * spacing(slice)[1]
-                 #   height <- dim(slice)[2] * spacing(slice)[2]
-                 # } else if (is.null(width)) {
-                 #   wx <- dim(slice)[1] * spacing(slice)[1]
-                 #   wy <- dim(slice)[2] * spacing(slice)[2]
-                 #   rat <-  wx/wy
-                 #   width <- height * rat
-                 # } else if (is.null(height)) {
-                 #   wx <- dim(slice)[1] * spacing(slice)[1]
-                 #   wy <- dim(slice)[2] * spacing(slice)[2]
-                 #   rat <-  wy/wx
-                 #   height <- width * rat
-                 # } else {
-                 #   rs <- width/height
-                 #   if (rs > aspect_ratio) {
-                 #     width <- wi * height/hi
-                 #   } else {
-                 #     height <- hi * width/wi
-                 #   }
-                 # }
-                 # 
-                 # 
-                 # grob <- render(slice, width, height, 
-                 #                colmap=self$color_map, 
-                 #                zero_col=self$zero_col, 
-                 #                alpha=self$alpha, 
-                 #                irange=self$irange,
-                 #                threshold=self$threshold,
-                 #                units="points")
-                 
+                
                  RenderedSlice$new(slice=slice, width=dim(slice)[1], height=dim(slice)[2], 
                                    xbounds=bds[1,], ybounds=bds[2,], raster=ras, zpos=zpos, zlevel=zlevel)
                }
@@ -403,9 +371,7 @@ RenderedSliceStack <-
         }
         
         if (!is.null(marker_pos)) {
-          ## go from 
           
-          #browser()
           marker_pos <- t(permMat(self$view_axes)) %*% marker_pos
           #marker_pos <- gridToCoord(self$view_space, vcoord)
           bds <- bounds(self$view_space)
@@ -418,11 +384,11 @@ RenderedSliceStack <-
             print(paste("marker_pos", marker_pos[1], marker_pos[2], marker_pos[3]))
             print(paste("xc: ", xc))
             print(paste("yc: ", yc))
-            #browser()
+          
           }
           
           
-
+          ## crosshair
           grid.lines(x=unit(c(xoffset, xoffset+image_width),"points"), 
                      y=unit(c(yc,yc),"points"),
                      gp=gpar(col="green", lwd=2, lty=2))
@@ -451,21 +417,26 @@ RenderedSliceStack <-
 ColorMaps <- R6Class("ColorMaps",
                      portable=TRUE,
                      public=list(
-                       map_names=c("grayscale", "rainbow", "heat", "topo"),
-                                   ##"spectral", "yellow_red",
-                                   ##"green_blue", "purples"),
+                       map_names=c("grayscale", "rainbow", "heat", "topo",
+                                   "spectral", "yellow_red",
+                                   "green_blue", "purples"),
               
                       get_colors = function(name, ncolors=10) {
                         switch(name,
                               "grayscale"=gray(seq(0,1,length.out=ncolors)),
                               "rainbow"=rainbow(ncolors),
                               "heat"=heat.colors(ncolors),
-                              "topo"=topo.colors(ncolors))
-                      },
+                              "topo"=topo.colors(ncolors),
+                              "spectral"=RColorBrewer::brewer.pal(ncolors, "Spectral"),
+                              "green_blue"=RColorBrewer::brewer.pal(ncolors, "GnBu"),
+                              "yellow_red"=RColorBrewer::brewer.pal(ncolors, "YlOrRd"),
+                              "purples"=RColorBrewer::brewer.pal(ncolors, "Purples")
+                      )},
                      
                       get_map_names = function() self$map_names
                     )
 )
+
 
 
                      
