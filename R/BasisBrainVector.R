@@ -4,6 +4,7 @@
 {}
 
 
+#' @export
 BasisBrainVector <- function(mask, basis, coeffs) {
   mask <- as.logical(mask)
   mask.idx <- which(mask>0)
