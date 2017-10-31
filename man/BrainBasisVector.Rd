@@ -16,5 +16,7 @@ corresponding set of coefficients.
 \item{\code{basis}}{the matrix of bases, were each column is a basis vector.}
 
 \item{\code{coeffs}}{the \code{sparseMatrix} of coefficients}
+
+\item{\code{map}}{instance of class \code{\linkS4class{IndexLookupVolume}} is used to map between spatial and index/row coordinates}
 }}
 

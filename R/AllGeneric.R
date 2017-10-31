@@ -364,6 +364,7 @@ setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) stan
 #' @param x the object
 #' @param orient the orientation code indcating the "remapped" axes.
 #' @return a reoriented space
+#' @rdname reorient-methods
 #' @export 
 setGeneric(name="reorient", def=function(x, orient) standardGeneric("reorient"))
 
@@ -429,7 +430,7 @@ setGeneric(name="gridToCoord",   def=function(x, coords) standardGeneric("gridTo
 #' @param coords a matrix of LPI voxel coordinates
 #' @return a matrix of native voxel coordinates
 #' @export 
-#' @rdname gridToCoord-methods
+#' @rdname gridToGrid-methods
 setGeneric(name="gridToGrid",   def=function(x, vox) standardGeneric("gridToGrid"))
 
 
