@@ -1,3 +1,5 @@
+
+
 #' Create an spherical random searchlight iterator
 #' 
 #' @param mask an volumetric image mask of type \code{\linkS4class{BrainVolume}} 

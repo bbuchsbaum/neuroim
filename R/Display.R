@@ -92,50 +92,8 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
           })
 
 
-#' as.raster
-#' 
-#' @export 
-#' @param x the layer to convert
-#' @param zpos the z coordinate in coordinate space
-#' @rdname as.raster-methods
-setMethod(f="as.raster", signature=signature(x = "Layer"),
-          def=function(x, zpos) {  
-            slice <- axisToIndex(x@view_space, zpos, 3)
-            imslice <- sliceData(x@vol, slice, 3)     
-            vrange <- range(imslice)
-            
-            thresh <- x@thresh
-            
-            lookup <- (imslice - vrange[1])/diff(vrange) * (length(x@color_map) -1) + 1
-            imcols <- x@color_map[lookup]
-            
-            if (length(thresh) == 1) {
-              thresh <- c(-Inf, thresh)
-            }
-                      
-            imcols[imslice == 0] <- x@zero_col
-            
-            if (diff(thresh) > 0) {
-              imcols[(imslice >= thresh[1] & imslice <= thresh[2])] <- "#00000000"
-            }
-            
-            dim(imcols) <- dim(imslice)
-            ras <- as.raster(imcols)
-            #ras[imslice == 0] <- zero_col            
-            ras
-          })
 
 
-
-
-
-#' @rdname image-methods
-#' @export
-setMethod(f="image", signature=signature(x = "Layer"),
-          def=function(x, zpos, axis=3) {  
-            ras <- as.raster(x, zpos, x@thresh,axis=axis)      
-            grid.raster(ras, interpolate=TRUE)
-          })
 
 
 #' @export
@@ -154,11 +112,7 @@ setMethod(f="render", signature=signature(x="BrainSlice", width="numeric", heigh
                                   irange=irange, threshold=threshold)
             
             ras <- as.raster(imcols)
-            #grob <- rasterGrob(ras, 
-            #                   width=unit(width, units), 
-            #                   height=unit(height, units), 
-            #                   interpolate=TRUE)
-            #
+            
           })
 
 

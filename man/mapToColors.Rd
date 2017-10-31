@@ -5,7 +5,8 @@
 \title{mapToColors}
 \usage{
 mapToColors(imslice, col = heat.colors(128, alpha = 1),
-  zero_col = "#00000000", alpha = 1)
+  zero_col = "#00000000", alpha = 1, irange = range(imslice),
+  threshold = c(0, 0))
 }
 \arguments{
 \item{imslice}{vector or matrix of intensity values}

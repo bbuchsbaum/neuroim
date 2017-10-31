@@ -86,7 +86,6 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
-	
 	if (!inherits(mask, "LogicalBrainVolume")) {
 		mspace <- BrainSpace(dim(space)[1:3], spacing(space), origin(space), axes(space), trans(space))
 		mask <- LogicalBrainVolume(as.logical(mask), mspace)

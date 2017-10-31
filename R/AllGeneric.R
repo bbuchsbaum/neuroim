@@ -49,7 +49,11 @@ setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
 #' @rdname ndim-methods
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
+
+
 setGeneric(name="dim_of", def=function(x, axis) standardGeneric("dim_of"))
+
+
 setGeneric(name="which_dim", def=function(x, axis) standardGeneric("which_dim"))
 
 #' Generic function to add a dimension to an object
@@ -353,7 +357,10 @@ setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) stan
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
+
+
 #' Generic function to remap the grid-to-world coordinates mapping of an image.
+#' 
 #' @param x the object
 #' @param orient the orientation code indcating the "remapped" axes.
 #' @return a reoriented space

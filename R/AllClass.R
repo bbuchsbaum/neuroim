@@ -301,8 +301,7 @@ setClass("BrainVectorSource", representation=
 
 
 
-		
-		
+	
 #' BrainBucketSource
 #' 
 #' A class that is used to produce a \code{\linkS4class{BrainBucket}} instance
@@ -518,6 +517,28 @@ setClass("DenseBrainVector",
 setClass("SparseBrainVector", 
 		representation=representation(mask="LogicalBrainVolume",data="matrix", map="IndexLookupVolume"),
 		contains=c("BrainVector")) 
+
+
+
+#' BasisBrainVector
+#' 
+#' a class that stores a represents a 4-dimensional array as a set of basis functions (dictionary) and 
+#' corresponding set of coefficients. 
+#' 
+#' @rdname BrainBasisVector
+#' 
+#' @slot mask the mask defining the sparse domain
+#' @slot basis the matrix of bases, were each column is a basis vector.
+#' @slot coeffs the \code{sparseMatrix} of coefficients 
+#' @slot map instance of class \code{\linkS4class{IndexLookupVolume}} is used to map between spatial and index/row coordinates
+#' @export
+setClass("BasisBrainVector",
+         representation=representation(mask="LogicalBrainVolume",
+                                      basis="Matrix",
+                                      coeffs="Matrix",
+                                      map="IndexLookupVolume")
+)
+
 
 #' SparseBrainVectorSource
 #' 

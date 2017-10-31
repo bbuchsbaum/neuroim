@@ -1,3 +1,4 @@
+
 #' @keywords internal
 #' @importFrom stringr str_split str_trim str_sub
 parseIntAttribute <- function(line){ 
@@ -43,7 +44,6 @@ parseElement <- function(inputLines) {
 #' readAFNIHeader
 #
 #' @param fileName the name of the AFNI header file (ending in .HEAD)
-#' 
 readAFNIHeader <- function(fileName) {
 	inputLines <- scan(fileName, what=character(), sep="\n", blank.lines.skip=FALSE)
 	idx <- which(unlist(lapply(inputLines, function(lin) lin == ""))) + 1

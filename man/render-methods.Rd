@@ -9,7 +9,8 @@
 render(x, width, height, colmap, ...)
 
 \S4method{render}{BrainSlice,numeric,numeric,character}(x, width, height,
-  colmap, zero_col = "#000000FF", alpha = 1, units = "points")
+  colmap, zero_col = "#00000000", alpha = 1, units = "points",
+  irange = range(x), threshold = c(0, 0))
 }
 \arguments{
 \item{x}{the object, e.g. an instance of type \code{BrainSlice}}
