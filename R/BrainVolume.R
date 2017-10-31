@@ -786,42 +786,6 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
           })
 
 
-#' tesselate a LogicalBrainVolume into K spatial disjoint components using \code{kmeans} clustering.
-#' 
-#' @param features an optional matrix of additional features to tesselate volume
-#' @param spatialWeight weight voxels according to distance
-#' @importFrom stats kmeans
-#' @importFrom stats sd var
-#' @rdname tesselate-methods
-setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
-          def=function(x, K, features=NULL, spatialWeight=4) {
-           
-            
-            voxgrid <- indexToGrid(x, which(x == TRUE))
-            voxgrid <- sweep(voxgrid, 2, spacing(x), "*")
-            
-            
-            if (!is.null(features)) {
-              
-              if (nrow(features) == length(x)) {
-                features <- features[which(x == TRUE),]
-              } else {
-                assertthat::assert_that(nrow(features) == nrow(voxgrid))
-              }
-              
-              #features <- apply(features,2, scale)
-              voxVar <- sum(apply(voxgrid,2, var))
-              featureVar <- sum(apply(features , 2, var))
-              featureWeight <- 1/spatialWeight * voxVar/featureVar
-              
-              sfeatures <- featureWeight * featureVar
-              voxgrid <- cbind(voxgrid, sfeatures)
-            }
-    
-            kgrid <- kmeans(voxgrid, centers=K, iter.max=100)
-            ClusteredBrainVolume(x, kgrid$cluster, kgrid$centers)
-          })
-
 
 #' get number of clusters in a ClusteredBrainVolume
 #' @rdname numClusters-methods
@@ -832,77 +796,8 @@ setMethod(f="numClusters", signature=signature(x="ClusteredBrainVolume"),
           })
 
 
-#' @rdname clusterCenters-methods
-#' @import parallel
-#' @export
-setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", features="matrix", FUN="missing"), 
-          def=function(x, features) {
-            cmap <- x@clusterMap
-            res <- parallel::mclapply(sort(as.integer(names(cmap))), function(cnum) {
-              idx <- cmap[[as.character(cnum)]]
-              mat <- features[idx,]
-              colMeans(mat)
-            })
-            
-            
-            mat <- t(do.call(cbind, res))
-            row.names(mat) <- as.character(sort(as.integer(names(cmap))))
-            mat
-          })
 
 
-#' merge partititons in a ClusteredBrainVolume
-#' @rdname mergePartitions-methods
-#' @importFrom stats kmeans
-#' @export
-setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
-          def=function(x, K, features) {
-            centers <- clusterCenters(x, features)
-            kres <- kmeans(centers, centers=K)
-            oclusters <- numeric(prod(dim(x)))
-            for (cnum in 1:nrow(centers)) {
-              idx <- x@clusterMap[[as.character(cnum)]]
-              oclusters[idx] <- kres$cluster[cnum]
-            }
-            
-            oclusters <- oclusters[x@mask == TRUE]
-            ClusteredBrainVolume(x@mask, as.integer(oclusters))
-            
-          })
-          
-
-#' partition a \code{ClusteredBrainVolume} into K spatial disjoint components for every existing partition in the volume
-#' 
-#' @param method clustering method
-#' @import parallel
-#' @importFrom stats kmeans
-#' @rdname partition-methods
-#' @export
-setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
-          def=function(x, K, features, method="kmeans") {
-            cmap <- x@clusterMap
-            cnums <- sort(as.integer(names(cmap)))
-            
-            kres <- parallel::mclapply(cnums, function(cnum) {
-              idx <- cmap[[as.character(cnum)]]
-              fmat <- features[idx,]
-              kmeans(fmat, centers=K)
-            })
-            
-            oclusters <- numeric(prod(dim(x@mask)))
-  
-            for (id in 1:length(kres)) {
-              idx <- cmap[[as.character(id)]]
-              clus <- kres[[id]]$cluster
-              new.clus <- (id-1)*(K) + clus
-              oclusters[idx] <- new.clus
-            }
-            oclusters <- oclusters[x@mask == TRUE]
-            perm.clusters <- sample(unique(oclusters[oclusters!= 0]))
-            oclusters <- perm.clusters[oclusters]
-            ClusteredBrainVolume(x@mask, as.integer(oclusters))
-            
-          })            
             
 #' find connected components in BrainVolume
 #' 

@@ -595,60 +595,18 @@ setGeneric(name="as.mask", def=function(x, indices) standardGeneric("as.mask"))
 
 
 #' patchSet
+#' 
 #' @param x the object to extract patches from
 #' @param dims a vector indicating the dimensions of the patches
 #' @param mask mask indicating the valid patch area
 setGeneric(name="patchSet", def=function(x, dims, mask, ...) standardGeneric("patchSet"))
 
-
-#' tesselate
-#' @param x the object to tesselate
-#' @param K the number of partitions
-#' @param ... extra arguments
-#' @export 
-#' @rdname tesselate-methods
-setGeneric(name="tesselate", def=function(x, K, ...) standardGeneric("tesselate"))
-
-#' partition
-#' @param x the object to partition
-#' @param K the number of partitions
-#' @param features the features used to define the partition
-#' @param ... additional arguments
-#' @export 
-#' @rdname partition-methods
-setGeneric(name="partition", def=function(x, K, features, ...) standardGeneric("partition"))
-
-#' mergePartitions
-#' @param x the object to merge
-#' @param K the number of merged partitions
-#' @param features the features used to define the partition
-#' @param ... additional arguments
-#' @export 
-#' @rdname mergePartitions-methods
-setGeneric(name="mergePartitions", def=function(x, K, features, ...) standardGeneric("mergePartitions"))
-
 #' numClusters
+#' 
 #' @param x the object to extract number of clusters 
 #' @export 
 #' @rdname numClusters-methods
 setGeneric(name="numClusters", def=function(x) standardGeneric("numClusters"))
-
-#' clusterCenters
-#' @param x the object to extract cluster centers from
-#' @param features additional features
-#' @param FUN a user-supplied function
-#' @export 
-#' @rdname clusterCenters-methods
-setGeneric(name="clusterCenters", def=function(x, features, FUN) standardGeneric("clusterCenters"))
-
-
-#' pick
-#' @param x the object to pick from
-#' @param mask a mask object
-#' @param ... addiitonal arguments
-#' @export
-#' @rdname pick-methods
-setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
 
 #' Extract coordinates
@@ -761,6 +719,7 @@ setGeneric(name="concat", def=function(x,y, ...) standardGeneric("concat"))
 #' @export
 #' @rdname connComp-methods
 setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
+
 
 #' seriesIter
 #' 
