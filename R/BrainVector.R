@@ -412,6 +412,21 @@ setMethod(f="subVector", signature=signature(x="DenseBrainVector", i="numeric"),
           })
 
 
+
+#' @rdname BrainVector-methods
+#' @param i the volume index
+#' @export
+setMethod(f="[[", signature=signature(x="BrainVector", i="numeric"),
+          def = function(x, i) {
+            xs <- space(x)
+            dat <- x[,,,i]
+            newdim <- dim(x)[1:3]
+            bspace <- BrainSpace(newdim, spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
+            DenseBrainVolume(dat, bspace)
+          })
+          
+          
+          
 #' @rdname takeVolume-methods
 #' @param merge concatenate extracted volumes
 #' @export
@@ -759,7 +774,7 @@ setMethod(f="as.matrix", signature=signature(x = "DenseBrainVector"), def=functi
 setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="LogicalBrainVolume"),
           def=function(x, mask) {
             assert_that(all(dim(x)[1:3] == dim(mask)))
-            assert_that(all(spacing(x) == spacing(mask)))
+            assert_that(all(spacing(space(x)) == spacing(space(mask))))
             
             vdim <- dim(x)[1:3]
             dat <- as.matrix(x)[mask == TRUE,]
