@@ -558,15 +558,6 @@ setGeneric(name="scaleSeries", def=function(x, center, scale) standardGeneric("s
 
 
 
-#' Generic function to extract a set of series from a 4D image
-#' @param x a four dimensional image
-#' @param indices the indices of the series' to extract
-#' @param ... additional arguments
-#' @export 
-#' @rdname takeSeries-methods
-setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("takeSeries"))
-
-
 
 #' Convert to from dense to sparse representation
 #' 
