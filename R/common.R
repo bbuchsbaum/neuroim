@@ -177,32 +177,26 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 	D <- dim(x)[1:3]
 	
-	lapply(rest, function(z) {
+	rvols <- lapply(rest, function(z) {
 			stopifnot(length(dim(z)) >= 3)
 			stopifnot(identical(D, dim(z)[1:3]))
+			z
 	})
+	
+	out <- cbind(as.matrix(x), as.matrix(y))
+	
+	if (length(rvols) > 0) {
+	  out2 <- do.call(cbind, lapply(rvols, as.matrix))
+	  out <- cbind(out, out2)
+	}
 
-	D4 <- function(vol) { if (length(dim(vol)) == 3) 1 else dim(vol)[4] }
-		
-	NVOLS <- D4(x) + D4(y)
-	
-	ndat <- abind(as.array(x), as.array(y), along=4)
-	
-	new.dim <- c(D, NVOLS)
+	nvols <- ncol(out)
+	new.dim <- c(D, nvols)
 	
 	nspace <- BrainSpace(new.dim, origin=origin(x@space), spacing=spacing(x@space),
 			axes=axes(x@space), trans=trans(x@space))
 	
-	ret <- DenseBrainVector(ndat, nspace)
-	
-  ## TODO fix me ridiculously slow
-	if (length(rest) > 0) {
-		for (i in seq_along(rest)) {
-			ret <- concat(ret, rest[[i]])
-		}
-	}
-	
-	ret
+	DenseBrainVector(out, nspace)
 	
 }
 
