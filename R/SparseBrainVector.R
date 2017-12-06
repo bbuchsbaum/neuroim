@@ -488,7 +488,18 @@ setMethod(f="subVector", signature=signature(x="SparseBrainVector", i="numeric")
             SparseBrainVector(res, bspace, x@mask)
           })
 
-
+#' @rdname BrainVector-methods
+#' @param i the volume index
+#' @export
+setMethod(f="[[", signature=signature(x="SparseBrainVector", i="numeric"),
+          def = function(x, i) {
+            stopifnot(length(i) == 1)
+            xs <- space(x)
+            dat <- x@data[i,]
+            newdim <- dim(xs)[1:3]
+            bspace <- BrainSpace(newdim, spacing=spacing(xs), origin=origin(xs), axes(xs), trans(xs))
+            SparseBrainVolume(dat, bspace, indices=indices(x))
+          })
  
 #' @export
 #' @rdname takeVolume-methods
