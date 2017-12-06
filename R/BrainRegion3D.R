@@ -228,7 +228,8 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
   
   coords <- t(t(cube) * vspacing)
   
-  res <- rflann::RadiusSearch(matrix(centroid * vspacing, ncol=3), coords, radius=radius^2, max_neighbour=nrow(cube), build="kdtree")
+  res <- rflann::RadiusSearch(matrix(centroid * vspacing, ncol=3), coords, radius=radius^2, max_neighbour=nrow(cube), build="kdtree", 
+                              cores=0, checks=1)
   
   cube[res$indices[[1]],]
         
