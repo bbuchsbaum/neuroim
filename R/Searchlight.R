@@ -100,7 +100,7 @@ Searchlight <- function(mask, radius, eager=FALSE) {
   
   if (eager) {
     cds <- indexToCoord(mask, as.numeric(mask.idx))
-    nabelist <- rflann::RadiusSearch(cds, cds, radius^2, max_neighbour=1000)
+    nabelist <- rflann::RadiusSearch(cds, cds, radius^2, max_neighbour=1000, build="kdtree")
   }
   
   nextEl <- if (!eager) {
