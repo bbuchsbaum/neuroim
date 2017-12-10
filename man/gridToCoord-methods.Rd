@@ -3,15 +3,12 @@
 \docType{methods}
 \name{gridToCoord}
 \alias{gridToCoord}
-\alias{gridToGrid}
 \alias{gridToCoord,BrainSpace,matrix-method}
 \alias{gridToCoord,BrainSpace,numeric-method}
 \alias{gridToCoord,BrainVolume,matrix-method}
 \title{Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates}
 \usage{
 gridToCoord(x, coords)
-
-gridToGrid(x, vox)
 
 \S4method{gridToCoord}{BrainSpace,matrix}(x, coords)
 
@@ -23,18 +20,10 @@ gridToGrid(x, vox)
 \item{x}{the object}
 
 \item{coords}{a matrix of grid coordinates}
-
-\item{x}{the object}
-
-\item{coords}{a matrix of LPI voxel coordinates}
 }
 \value{
 a matrix of real coordinates
-
-a matrix of native voxel coordinates
 }
 \description{
 Generic function to convert N-dimensional grid coordinate coordinates to real world coordinates
-
-Generic function to convert voxel coordinates in the reference space (LPI) to native array space.
 }

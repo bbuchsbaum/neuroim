@@ -3,7 +3,6 @@
 \name{.isExtension}
 \alias{.isExtension}
 \alias{.concat4D}
-\alias{.extract.array}
 \alias{.gridToIndex3D}
 \alias{.gridToIndex}
 \alias{.indexToGrid}
@@ -19,8 +18,6 @@
 .isExtension(fname, extension)
 
 .concat4D(x, y, ...)
-
-.extract.array(x, ..., drop = FALSE, indices = list(...))
 
 .gridToIndex3D(dimensions, voxmat)
 
@@ -46,8 +43,6 @@
 .isExtension
 
 .concat4D
-
-.extract.array
 
 .gridToIndex3D
 

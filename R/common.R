@@ -200,44 +200,6 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
 	
 }
 
-#' .extract.array 
-#' @rdname internal-methods
-#' @keywords internal
-.extract.array <- function(x, ..., drop=FALSE, indices=list(...)) {
-  nindices <- length(indices)
-  if (nindices == 0) {
-    stop("Argument 'indices' is empty.")
-  }
-  dims <- names(indices)
-  if (is.null(dims)) {
-    dims <- seq(length = nindices)
-  }
-  
-  ndim <- length(dim(x))
-  if (any(dims < 1 | dims > ndim)) {
-    stop("Argument 'dims' is out of bounds [1,", ndim, "]: ",
-         paste(dims, collapse = ", "))
-  }
-  if (is.null(ndim)) {
-    stop("Argument 'x' is not an array: ", class(x)[1])
-  }
-
-  args <- rep("", ndim)
-  for (kk in seq(length = length(indices))) {
-    dd <- dims[kk]
-    ii <- sprintf("indices[[%d]]", kk)
-    args[dd] <- ii
-  }
-
-  if (ndim > 1) {
-    args <- c(args, "drop=drop")
-  }
-
-  args <- paste(args, collapse = ",")
-  code <- paste("x[", args, "]", sep = "")
-  expr <- parse(text = code)
-  eval(expr)
-}
 
 #' .gridToIndex3D
 #' @rdname internal-methods
