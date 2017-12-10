@@ -223,7 +223,7 @@ RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=FALSE) {
     seq(centroid[2] - round(radius/vspacing[2]), centroid[2] + round(radius/vspacing[2])),
     seq(centroid[3] - round(radius/vspacing[3]), centroid[3] + round(radius/vspacing[3]))))
   
-  keep <- cube[,1] > 0 & cube[,1] <= vdim[1] & cube[,2] > 0 & cube[,1] <= vdim[2] & cube[,3] > 0 & cube[,3] <= vdim[3]
+  keep <- cube[,1] > 0 & cube[,1] <= vdim[1] & cube[,2] > 0 & cube[,2] <= vdim[2] & cube[,3] > 0 & cube[,3] <= vdim[3]
   cube <- cube[keep,,drop=FALSE]
   
   coords <- t(t(cube) * vspacing)
