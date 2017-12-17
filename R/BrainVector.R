@@ -608,7 +608,7 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 		  
 		  d4 <- dim(x)[4]
 		  expanded <- i[rep(1:nrow(i), each=d4),]
-		  expanded <- cbind(expanded, 1:4)
+		  expanded <- cbind(expanded, 1:d4)
 	    vec <- x[expanded]
 	    matrix(vec, d4, nrow(i))
 		})
