@@ -8,7 +8,8 @@ Imports:
     assertthat,
     mmap,
     igraph,
-    plyr
+    plyr,
+    RNifti
 LinkingTo: Rcpp
 License: GPL (>= 2)
 Maintainer: Bradley Buchsbaum <brad.buchsbaum@gmail.com>
