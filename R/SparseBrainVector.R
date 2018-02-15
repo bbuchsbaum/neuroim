@@ -488,6 +488,7 @@ setMethod(f="subVector", signature=signature(x="SparseBrainVector", i="numeric")
             SparseBrainVector(res, bspace, x@mask)
           })
 
+#' extractor
 #' @rdname BrainVector-methods
 #' @param i the volume index
 #' @export

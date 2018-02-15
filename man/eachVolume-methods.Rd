@@ -9,7 +9,6 @@
 \alias{eachVolume,SparseBrainVector,function,missing,LogicalBrainVolume-method}
 \alias{eachVolume,BrainVector,function,missing,missing-method}
 \alias{eachVolume,BrainVector,function,missing,BrainVolume-method}
-\alias{eachVolume,BrainVector,function,missing,missing-method}
 \alias{eachVolume,BrainBucket,function,missing,missing-method}
 \alias{eachVolume,BrainBucket,function,logical,ANY-method}
 \alias{eachVolume,BrainVector,function,logical,ANY-method}

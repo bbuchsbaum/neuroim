@@ -412,7 +412,7 @@ setMethod(f="subVector", signature=signature(x="DenseBrainVector", i="numeric"),
           })
 
 
-
+#' extractor
 #' @rdname BrainVector-methods
 #' @param i the volume index
 #' @export

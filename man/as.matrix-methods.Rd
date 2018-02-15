@@ -4,7 +4,6 @@
 \docType{methods}
 \name{as.matrix,ROIVector-method}
 \alias{as.matrix,ROIVector-method}
-\alias{as.matrix,ROIVector-method}
 \alias{as.matrix,SparseBrainVector-method}
 \alias{as.matrix,DenseBrainVector-method}
 \title{convert a \code{ROIVector} to a matrix}
@@ -25,11 +24,5 @@
 \item{x}{the object}
 }
 \description{
-convert a \code{ROIVector} to a matrix
-
-convert a \code{ROISufaceVector} to a matrix
-
 convert SparseBrainVector to matrix
-
-convert a \code{DenseBrainVector} to a matrix
 }
