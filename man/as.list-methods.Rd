@@ -15,6 +15,4 @@
 }
 \description{
 convert SparseBrainVector to list of \code{\linkS4class{DenseBrainVolume}}
-
-convert a \code{BrainVector} to \code{list} of volumes.
 }

@@ -1,12 +1,22 @@
 #' Extract connected components from a 3D mask
 #' @export
 #' @param mask a 3D binary array
+#' @param connect the connectiivty constraint: "6-connect", "18-connect", or "26-connect"
 #' @return a two-element list of the connected components (cluster \code{index} and cluster \code{size})
 #' The first element \code{index} is a 3D array containing the cluster index of the connected component for each voxel.
 #' The second element \code{size} is a 3D array consisting of the size of the connected component inhabited by each voxel.
 #' 
-connComp3D <- function(mask) {
+#' @examples 
+#' 
+#' dat <- array(as.logical(rnorm(10*10*10)>.5), c(10, 10, 10))
+#' res1 <- connComp3D(dat, connect="6-connect")
+#' res2 <- connComp3D(dat, connect="18-connect")
+#' res3 <- connComp3D(dat, connect="26-connect")
+#' 
+connComp3D <- function(mask, connect=c("6-connect", "18-connect", "26-connect")) {
 	stopifnot(length(dim(mask)) == 3 && is.logical(mask[1]))
+  
+  connect <- match.arg(connect)
 	
 	nodes <- numeric(length(mask)/9)
 	labels <- array(0, dim(mask))
@@ -16,8 +26,24 @@ connComp3D <- function(mask) {
 	ydim <- DIM[2]
 	zdim <- DIM[3]
 	
-	
-	local.mask <- as.matrix(expand.grid(x=c(-1,0,1), y=c(-1,0,1), z=c(-1,0,1)))
+	local.mask <- if (connect == "6-connect") {
+	  as.matrix(
+	    rbind(expand.grid(x=c(-1,0,1), y=0, z=0),
+	      expand.grid(x=0, y=c(-1,1), z=0),
+	      expand.grid(x=0, y=0, z=c(-1,1)))
+	  )
+	} else if (connect == "18-connect") {
+	  as.matrix(rbind(
+	        expand.grid(x=c(-1,0,1), y=0, z=0),
+	        expand.grid(x=0, y=c(-1,1), z=0),
+	        expand.grid(x=0, y=0, z=c(-1,1)),
+	        expand.grid(x=c(-1,1), y=c(-1,1), z=0),
+	        expand.grid(x=c(-1,1), y=0, z=c(-1,1)),
+	        expand.grid(x=0, y=c(-1,1), z=c(-1,1)))
+	  )
+	} else {
+	  as.matrix(expand.grid(x=c(-1,0,1), y=c(-1,0,1), z=c(-1,0,1)))
+	}
 	dimnames(local.mask) <- NULL
 	local.mask <- local.mask[-(ceiling(nrow(local.mask)/2)),]
 	

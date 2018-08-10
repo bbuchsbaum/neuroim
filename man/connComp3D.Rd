@@ -4,10 +4,12 @@
 \alias{connComp3D}
 \title{Extract connected components from a 3D mask}
 \usage{
-connComp3D(mask)
+connComp3D(mask, connect = c("6-connect", "18-connect", "26-connect"))
 }
 \arguments{
 \item{mask}{a 3D binary array}
+
+\item{connect}{the connectiivty constraint: "6-connect", "18-connect", or "26-connect"}
 }
 \value{
 a two-element list of the connected components (cluster \code{index} and cluster \code{size})
@@ -16,4 +18,12 @@ The second element \code{size} is a 3D array consisting of the size of the conne
 }
 \description{
 Extract connected components from a 3D mask
+}
+\examples{
+
+dat <- array(as.logical(rnorm(10*10*10)>.5), c(10, 10, 10))
+res1 <- connComp3D(dat, connect="6-connect")
+res2 <- connComp3D(dat, connect="18-connect")
+res3 <- connComp3D(dat, connect="26-connect")
+
 }

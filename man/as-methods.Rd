@@ -2,14 +2,6 @@
 % Please edit documentation in R/BrainRegion3D.R, R/BrainVolume.R
 \name{as}
 \alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
-\alias{as}
 \title{conversion from DenseBrainVolume to array}
 \description{
 conversion from DenseBrainVolume to array
