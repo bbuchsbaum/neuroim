@@ -295,7 +295,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
     return("INT")
   } else if (code == 16) {
     return("FLOAT")
-  } else if (code == 32) {
+  } else if (code == 64) {
     return("DOUBLE")
   } else {
     stop(paste("nifti(getDataStorage): unsupported data type: ", code))
