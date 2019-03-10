@@ -67,3 +67,5 @@ Collate:
     'neuroim.R'
     'niml_io.R'
 RoxygenNote: 6.0.1.9000
+Remotes: 
+  YeeJeremy/rflann
