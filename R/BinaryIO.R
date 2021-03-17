@@ -31,12 +31,14 @@ ColumnReader <- function(nrow, ncol, reader) {
 #' @param endian endianness of binary input connection
 #' @rdname BinaryReader
 #' @export 
-BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
+BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.Platform$endian, signed=TRUE) {
 	if (is.character(input)) { 
-		new("BinaryReader", input=file(input, open="rb"), byteOffset=as.integer(byteOffset), dataType=dataType, bytesPerElement=as.integer(bytesPerElement), endian=endian)
+		new("BinaryReader", input=file(input, open="rb"), byteOffset=as.integer(byteOffset), 
+		    dataType=dataType, bytesPerElement=as.integer(bytesPerElement), endian=endian, signed=signed)
 	} else {
 		stopifnot(inherits(input, "connection")) 
-		new("BinaryReader", input=input, byteOffset=as.integer(byteOffset), dataType=dataType, bytesPerElement=as.integer(bytesPerElement), endian=endian)		
+		new("BinaryReader", input=input, byteOffset=as.integer(byteOffset), dataType=dataType, 
+		    bytesPerElement=as.integer(bytesPerElement), endian=endian, signed=signed)		
 	}
 
 }
@@ -63,12 +65,13 @@ BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.
 
 ## code duplication, fix me. introduce "BinaryConnection superclass
 setMethod(f="initialize", signature=signature("BinaryReader"), 
-		def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
+		def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian, signed) {
 			.Object@input <- input
 			.Object@byteOffset <- byteOffset
 			.Object@dataType <- dataType
 			.Object@bytesPerElement <- bytesPerElement
 			.Object@endian <- endian
+			.Object@signed <- signed
 			
 			## must be seekable connection, should enforce this
 			## 
@@ -105,7 +108,8 @@ setMethod(f="initialize", signature=signature("BinaryWriter"),
 #' @rdname readElements-methods
 setMethod(f="readElements", signature=signature(x= "BinaryReader", numElements="numeric"),
 		def=function(x, numElements) {
-			readBin(x@input, what=x@dataType, size=x@bytesPerElement, n=numElements, endian=x@endian)		
+		  #print(paste("signed", x@signed))
+			readBin(x@input, what=x@dataType, size=x@bytesPerElement, n=numElements, endian=x@endian, signed=x@signed)		
 		})
 
 #' writeElements

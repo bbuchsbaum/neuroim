@@ -34,20 +34,23 @@ setMethod(f="dim", signature=signature("FileMetaInfo"),
 #' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"),
 		def=function(x, offset=0) {
+		  signed <- if (x@dataType == "UBYTE") FALSE else TRUE
+		  
 			if (x@fileDescriptor@dataEncoding == "gzip") {
-				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian, signed=signed)
 			} else {
-				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian, signed=signed)
 			}
 		})
 
 #' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("AFNIMetaInfo"),
 		def=function(x, offset=0) {
+		  signed <- if (x@dataType == "UBYTE") FALSE else TRUE
 			if (x@fileDescriptor@dataEncoding == "gzip") {
-				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian, signed)
 			} else {
-				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian, signed)
 			}
 		})
 

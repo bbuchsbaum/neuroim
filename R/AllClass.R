@@ -324,13 +324,15 @@ setClass("BrainBucketSource",
 #' @slot dataType the dataType of the binary Elements
 #' @slot bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @slot endian endianness of binary input connection
+#' @slot signed whether data is signed
 #' @export
 setClass("BinaryReader", representation=
 				representation(input="connection",
 							   byteOffset="numeric",
 							   dataType="character",
 							   bytesPerElement="integer",
-							   endian="character"))
+							   endian="character",
+							   signed="logical"))
 
 
 #' ColumnReader
